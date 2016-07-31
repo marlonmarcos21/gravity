@@ -5,7 +5,7 @@
       = menu_item 'Posts', posts_path
     = menu_group pull: :right do
       - if current_user
-        = custom_drop_down "#{fa_icon('user')} #{current_user.name}", class: 'user' do
+        = custom_drop_down "#{fa_icon('user-secret')} #{current_user.name}", class: 'user' do
           - sign_out = link_to(destroy_user_session_path, method: :delete) do
             = fa_icon 'power-off'
             Sign Out
