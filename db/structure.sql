@@ -34,6 +34,43 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: images; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE images (
+    id integer NOT NULL,
+    source_file_name character varying,
+    source_content_type character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone,
+    attachable_id integer,
+    attachable_type character varying,
+    main_image boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
 -- Name: posts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -163,6 +200,13 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
 
 
@@ -178,6 +222,14 @@ ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profile
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY images
+    ADD CONSTRAINT images_pkey PRIMARY KEY (id);
 
 
 --
@@ -202,6 +254,13 @@ ALTER TABLE ONLY user_profiles
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_images_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_images_on_attachable_type_and_attachable_id ON images USING btree (attachable_type, attachable_id);
 
 
 --
@@ -250,4 +309,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160731044836');
 INSERT INTO schema_migrations (version) VALUES ('20160731045808');
 
 INSERT INTO schema_migrations (version) VALUES ('20160731050120');
+
+INSERT INTO schema_migrations (version) VALUES ('20160731104259');
 
