@@ -1,0 +1,17 @@
+.navbar
+  = nav_bar fixed: :top, brand: 'The Marcoses', responsive: true do
+    = menu_group do
+      = menu_divider
+      = menu_item 'Posts', posts_path
+    = menu_group pull: :right do
+      - if current_user
+        = custom_drop_down "#{fa_icon('user')} #{current_user.name}", class: 'user' do
+          - sign_out = link_to(destroy_user_session_path, method: :delete) do
+            = fa_icon 'power-off'
+            Sign Out
+          = menu_item sign_out
+      - else
+        = simple_form_for User.new, as: :user, url: user_session_path, html: { class: ' form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+          %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email'
+          %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password'
+          %p= f.submit 'Sign in', class: 'btn-xs btn-primary'

@@ -19,11 +19,7 @@
 
 
   %body
-    .navbar
-      = nav_bar fixed: :top, brand: 'The Marcoses', responsive: true do
-        = menu_group do
-          = menu_divider
-          = menu_item 'Posts', posts_path
+    = render 'shared/navbar'
 
     .container
       .row
