@@ -10,14 +10,14 @@
   %strong= model_class.human_attribute_name(:body) + ':'
   %br
   = @post.body
+
+%p
+  - @post.images.each do |img|
+    = image_tag img.source.url(:thumb)
 %p
   %strong= model_class.human_attribute_name(:published) + ':'
   %br
   = @post.published
-%p
-  %strong= model_class.human_attribute_name(:user_id) + ':'
-  %br
-  = @post.user_id
 
 
 = link_to t('.back', :default => t("helpers.links.back")), posts_path, :class => 'btn btn-default'

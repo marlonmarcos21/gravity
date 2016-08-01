@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :posts
+  resources :posts do
+    collection do
+      post 'upload_image'
+      delete 'remove_image'
+    end
+  end
   root to: 'posts#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

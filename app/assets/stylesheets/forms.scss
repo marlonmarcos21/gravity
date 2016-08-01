@@ -4,3 +4,42 @@
     margin-right: -10px;
   }
 }
+
+.dropzone-previews {
+  .dz-remove:hover {
+    background: none;
+  }
+  .dz-remove {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    color: red;
+    i {
+      cursor: pointer;
+    }
+  }
+}
+
+.posts {
+  .dropzone-action-buttons {
+    display: inline-block;
+    margin-top: 5px;
+    .start-upload:hover {
+      background: none;
+    }
+    .start-upload {
+      margin-right: 5px;
+      display: inline-block;
+      text-decoration: none;
+      cursor: pointer;
+      span {
+        cursor: pointer;
+        display: block;
+      }
+    }
+  }
+  .form-group.boolean {
+    margin-top: 50px;
+    margin-left: 2px;
+  }
+}
