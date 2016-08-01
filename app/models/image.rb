@@ -1,6 +1,7 @@
 # t.attachment :source
 # t.references :attachable, polymorphic: true
 # t.boolean    :main_image, default: false
+# t.string     :token
 
 class Image < ActiveRecord::Base
   belongs_to :attachable, polymorphic: true

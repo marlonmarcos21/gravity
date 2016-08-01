@@ -47,7 +47,8 @@ CREATE TABLE images (
     attachable_type character varying,
     main_image boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    token character varying
 );
 
 
@@ -311,4 +312,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160731045808');
 INSERT INTO schema_migrations (version) VALUES ('20160731050120');
 
 INSERT INTO schema_migrations (version) VALUES ('20160731104259');
+
+INSERT INTO schema_migrations (version) VALUES ('20160801094451');
 
