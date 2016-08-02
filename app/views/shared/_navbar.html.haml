@@ -11,7 +11,23 @@
             Sign Out
           = menu_item sign_out
       - else
-        = simple_form_for User.new, as: :user, url: user_session_path, html: { class: ' form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
-          %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email'
-          %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password'
-          %p= f.submit 'Sign in', class: 'btn-xs btn-primary'
+        %button.btn-xs.btn-success.log-me-in Sign In
+        .sign-in-form.hidden
+          = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+            %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email'
+            %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password'
+            %p= f.submit 'Sign in', class: 'btn-xs btn-primary'
+            %p
+              %span.btn-xs.btn.cancel-log-in Cancel
+
+:javascript
+  $(document).ready(function() {
+    $('.log-me-in').click(function() {
+      $(this).hide();
+      $('.sign-in-form').removeClass('hidden');
+    });
+    $('.cancel-log-in').click(function() {
+      $('.sign-in-form').addClass('hidden');
+      $('.log-me-in').show();
+    });
+  });
