@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  load_and_authorize_resource
+
   before_action :post, only: [:show, :edit, :update, :destroy]
 
   before_action :prepare_images, only: [:new, :edit]
@@ -22,7 +24,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(sanitized_params)
+    @post = Post.new(post_params)
     @post.user = current_user
     img_token  = params.delete :image_token
 
@@ -37,7 +39,7 @@ class PostsController < ApplicationController
   def update
     img_token = params.delete :image_token
 
-    if @post.update(sanitized_params)
+    if @post.update(post_params)
       attach_images img_token
       redirect_to @post, notice: 'Post was successfully updated.'
     else
@@ -77,7 +79,7 @@ class PostsController < ApplicationController
     @post = Post.includes(:images).find(params[:id])
   end
 
-  def sanitized_params
+  def post_params
     permitted_params = %i(title body published)
     params.require(:post).permit(*permitted_params)
   end

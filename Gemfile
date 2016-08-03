@@ -42,6 +42,7 @@ gem 'dalli'
 gem 'tinymce-rails'
 gem 'simple_form'
 gem 'kaminari'
+gem 'cancancan'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
