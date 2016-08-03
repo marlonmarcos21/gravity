@@ -53,8 +53,16 @@
       dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
     };
 
+    document.querySelector('.cancel-upload').onclick = function() {
+      console.log(dz.files);
+      $.each(dz.files, function(k, v) {
+        if (v.hasOwnProperty('status') && v.status !== 'success') {
+          dz.removeFile(v);
+        }
+      });
+    };
+
     dz.on('removedfile', function(file) {
-      console.log(file);
       $.ajax({
         url: '/posts/remove_image',
         type: 'DELETE',
