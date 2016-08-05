@@ -15,24 +15,16 @@
     = favicon_link_tag 'apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72'
     = favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png'
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
-    = javascript_include_tag "application"
+    %link{ href: 'http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic', rel: 'stylesheet', type: 'text/css' }
+    %link{ href: 'http://fonts.googleapis.com/css?family=Montserrat:400,700', rel: 'stylesheet', type: 'text/css' }
 
-
-  %body
+  %body#page-top{ 'data-spy' => 'scroll', 'data-target' => '.navbar-fixed-top' }
     = render 'shared/navbar'
+    = bootstrap_flash
+    = yield
+    %footer
+      .container.text-center
+        %p Copyright &copy; The Marcoses 2016
 
-    .container
-      .row
-        .col-lg-9
-          = bootstrap_flash
-          = yield
-        .col-lg-3
-          .well.sidebar-nav
-            %h3 Sidebar
-            %ul.nav.nav-list
-              %li.nav-header Sidebar
-              %li= link_to "Link 1", "/path1"
-              %li= link_to "Link 2", "/path2"
-              %li= link_to "Link 3", "/path3"
-      %footer
-        %p &copy; Company 2016
+    = javascript_include_tag 'application'
+    = yield(:footer_scripts) if content_for?(:footer_scripts)

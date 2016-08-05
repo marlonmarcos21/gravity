@@ -12,4 +12,6 @@ class Post < ActiveRecord::Base
   accepts_nested_attributes_for :images, allow_destroy: true
 
   validates :user, presence: true
+
+  scope :recent, ->(limit) { order(:created_at).limit(limit) }
 end
