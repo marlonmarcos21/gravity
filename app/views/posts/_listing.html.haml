@@ -1,6 +1,11 @@
+- home_page = false if local_assigns[:home_page].blank?
+
 %section#posts.container.content-section
   .row
     .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      - if current_user && !home_page
+        = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'
+
       - header_text = 'All Posts' if local_assigns[:header_text].blank?
       %h2.text-center= header_text
       %hr
@@ -13,5 +18,6 @@
           %p.post-meta= post.created_at.strftime '%a, %b %e, %Y %R'
         %hr
 
-      %a.btn.btn-default.pull-right{ href: posts_path }
-        View All Posts
+      - if home_page
+        %a.btn.btn-default.pull-right{ href: posts_path }
+          View All Posts

@@ -254,7 +254,7 @@ a {
 }
 
 .content-section {
-  padding-top: 200px;
+  padding-top: 100px;
 }
 
 .download-section {
@@ -312,6 +312,17 @@ a {
   }
 }
 
+.btn-danger {
+  background-color: transparent;
+  color: #d43f3a;
+  &:hover,
+  &:focus {
+    color: #fff;
+    background-color: #d43f3a;
+    border: 1px solid #d43f3a;
+  }
+}
+
 ul.banner-social-buttons {
   margin-top: 0;
   @media(max-width:1199px) {
@@ -364,4 +375,11 @@ body {
   margin: 70px auto 20px auto !important;
   text-align: center !important;
   width: 25%;
+}
+
+.dropzone {
+  background: #000 !important;
+  .dz-preview.dz-image-preview {
+    background: none !important;
+  }
 }

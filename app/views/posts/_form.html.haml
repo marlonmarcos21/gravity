@@ -26,62 +26,63 @@
   = f.button :submit, class: 'btn-primary'
   = link_to t('.cancel', default: t("helpers.links.cancel")), posts_path, class: 'btn btn-default'
 
-:javascript
-  $(document).ready(function() {
-    Dropzone.autoDiscover = false;
-    var dz = new Dropzone('.dropzone', {
-      url: '/posts/upload_image',
-      previewsContainer: '.dropzone-previews',
-      addRemoveLinks: true,
-      uploadMultiple: true,
-      paramName1: 'post[images_attributes]',
-      paramName2: '[source]',
-      autoQueue: false,
-      acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif',
-      dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop files here to upload',
-      dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
-    });
-
-    var auth_token = $('meta[name=csrf-token]').attr('content');
-    var image_token = '#{raw(@image_token)}';
-    dz.on('sending', function(file, xhr, formData) {
-      formData.append('authenticity_token', auth_token);
-      formData.append('image_token', image_token);
-    });
-
-    document.querySelector('.start-upload').onclick = function() {
-      dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
-    };
-
-    document.querySelector('.cancel-upload').onclick = function() {
-      console.log(dz.files);
-      $.each(dz.files, function(k, v) {
-        if (v.hasOwnProperty('status') && v.status !== 'success') {
-          dz.removeFile(v);
-        }
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      Dropzone.autoDiscover = false;
+      var dz = new Dropzone('.dropzone', {
+        url: '/posts/upload_image',
+        previewsContainer: '.dropzone-previews',
+        addRemoveLinks: true,
+        uploadMultiple: true,
+        paramName1: 'post[images_attributes]',
+        paramName2: '[source]',
+        autoQueue: false,
+        acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif',
+        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop files here to upload',
+        dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
       });
-    };
 
-    dz.on('removedfile', function(file) {
-      $.ajax({
-        url: '/posts/remove_image',
-        type: 'DELETE',
-        data: {
-          image_token: image_token,
-          source_file_name: file.name
-        }
+      var auth_token = $('meta[name=csrf-token]').attr('content');
+      var image_token = '#{raw(@image_token)}';
+      dz.on('sending', function(file, xhr, formData) {
+        formData.append('authenticity_token', auth_token);
+        formData.append('image_token', image_token);
       });
-    });
 
-    var images = '#{raw(@images)}';
-    if (images !== '') {
-      images = JSON.parse('#{raw(@images)}');
-      for (var img in images) {
-        var mockFile = { name: images[img].file_name, size: images[img].size };
-        dz.emit('addedfile', mockFile);
-        dz.emit('thumbnail', mockFile, images[img].img_url);
-        dz.emit('complete', mockFile);
-        dz.files.push(mockFile);
+      document.querySelector('.start-upload').onclick = function() {
+        dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
+      };
+
+      document.querySelector('.cancel-upload').onclick = function() {
+        console.log(dz.files);
+        $.each(dz.files, function(k, v) {
+          if (v.hasOwnProperty('status') && v.status !== 'success') {
+            dz.removeFile(v);
+          }
+        });
+      };
+
+      dz.on('removedfile', function(file) {
+        $.ajax({
+          url: '/posts/remove_image',
+          type: 'DELETE',
+          data: {
+            image_token: image_token,
+            source_file_name: file.name
+          }
+        });
+      });
+
+      var images = '#{raw(@images)}';
+      if (images !== '') {
+        images = JSON.parse('#{raw(@images)}');
+        for (var img in images) {
+          var mockFile = { name: images[img].file_name, size: images[img].size };
+          dz.emit('addedfile', mockFile);
+          dz.emit('thumbnail', mockFile, images[img].img_url);
+          dz.emit('complete', mockFile);
+          dz.files.push(mockFile);
+        }
       }
-    }
-  });
+    });
