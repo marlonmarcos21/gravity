@@ -20,7 +20,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 35px;
+  margin: 0 0 15px;
   font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 700;
   letter-spacing: 1px;
@@ -31,9 +31,32 @@ p {
   font-size: 18px;
   line-height: 1.5;
   @media(min-width:768px) {
-    margin: 0 0 35px;
+    margin: 0 0 20px;
     font-size: 20px;
     line-height: 1.6;
+  }
+}
+
+#posts {
+  .post-title {
+    color: $primary;
+    &:hover,
+    &:focus {
+      cursor: pointer;
+    }
+  }
+  .post-body {
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      color: $tertiary;
+      cursor: pointer;
+    }
+  }
+  .post-meta {
+    font-size: 10px;
   }
 }
 
