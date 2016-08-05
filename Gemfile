@@ -29,7 +29,7 @@ gem 'jquery-ui-rails'
 gem 'turbolinks'
 
 gem 'rack-timeout'
-gem 'puma'
+gem 'puma', '~> 3.6.0'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
