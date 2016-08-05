@@ -38,6 +38,10 @@ p {
 }
 
 #posts {
+  .post-meta {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
   .post-title {
     color: $primary;
     &:hover,
@@ -55,8 +59,8 @@ p {
       cursor: pointer;
     }
   }
-  .post-meta {
-    font-size: 10px;
+  .delete-post {
+    text-align: right;
   }
 }
 
@@ -323,6 +327,10 @@ a {
   }
 }
 
+.btn-trash {
+  border: none;
+}
+
 ul.banner-social-buttons {
   margin-top: 0;
   @media(max-width:1199px) {
@@ -382,4 +390,28 @@ body {
   .dz-preview.dz-image-preview {
     background: none !important;
   }
+}
+
+#confirmationDialog {
+  width: 250px;
+  height: 150px;
+  margin: 0 auto;
+  border: 1px solid $primary;
+  background: #000;
+  position: absolute;
+  top: 200px;
+}
+
+#confirmationDialog {
+  position: fixed;
+}
+
+.modal-body {
+  font-size: 15px;
+  text-align: center;
+  padding-top: 25px;
+}
+
+.modal-footer {
+  border-top: none !important;
 }
