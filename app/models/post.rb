@@ -14,5 +14,23 @@ class Post < ActiveRecord::Base
 
   validates :user, presence: true
 
-  scope :recent, ->(limit) { order(published_at: :desc).limit(limit) }
+  scope :published, -> { where(published: true) }
+  scope :recent,    ->(limit) { published.order(published_at: :desc).limit(limit) }
+
+  before_update :set_published_at, if: :published_changed?
+
+  def publish!
+    update_attribute :published, true
+  end
+
+  def unpublish!
+    update_attribute :published, false
+  end
+
+  private
+
+  def set_published_at
+    return unless published?
+    self.published_at = Time.zone.now
+  end
 end

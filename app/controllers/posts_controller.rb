@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: [:show, :edit, :update, :destroy]
+  before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
   before_action :prepare_images, only: [:new, :edit]
   before_action :image_token,    only: :new
@@ -71,6 +71,16 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     redirect_to posts_url, notice: 'Post was successfully destroyed.'
+  end
+
+  def publish
+    @post.publish!
+    redirect_to @post, notice: 'Post successfully published!'
+  end
+
+  def unpublish
+    @post.unpublish!
+    redirect_to @post, notice: 'Post successfully unpublished!'
   end
 
   private

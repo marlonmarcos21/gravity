@@ -1,25 +1,23 @@
-- model_class = Post
-.page-header
-  %h1=t '.title', :default => model_class.model_name.human.titleize
+.container.content-section
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .post-header
+        - if can? :publish, @post
+          - if @post.published?
+            = link_to 'Unpublish', unpublish_post_path(@post), method: :patch, class: 'btn btn-default'
+          - else
+            = link_to 'Publish', publish_post_path(@post), method: :patch, class: 'btn btn-default'
+          %hr
 
-%p
-  %strong= model_class.human_attribute_name(:title) + ':'
-  %br
-  = @post.title
-%p
-  %strong= model_class.human_attribute_name(:body) + ':'
-  %br
-  = @post.body
+        %p= @post.title
 
-%p
-  - @post.images.each do |img|
-    = image_tag img.source.url(:thumb)
-%p
-  %strong= model_class.human_attribute_name(:published) + ':'
-  %br
-  = @post.published
+      %p= @post.body
+      %p
+        - @post.images.each do |img|
+          = image_tag img.source.url(:thumb)
 
-
-= link_to t('.back', :default => t("helpers.links.back")), posts_path, :class => 'btn btn-default'
-= link_to t('.edit', :default => t("helpers.links.edit")), edit_post_path(@post), :class => 'btn btn-default'
-= link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
+      = link_to t('.back', :default => t("helpers.links.back")), posts_path, :class => 'btn btn-default'
+      
+      - if can? :publish, @post
+        = link_to t('.edit', :default => t("helpers.links.edit")), edit_post_path(@post), :class => 'btn btn-default'
+        = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
