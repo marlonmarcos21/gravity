@@ -2,6 +2,11 @@
   = f.error_notification
   = @user.errors.full_messages.inspect unless @user.errors.empty?
 
+  .row
+    .col-lg-6.col-md-6
+      = f.input :profile_photo, hint: image_tag(@user.profile_photo.url(:thumb))
+      = image_tag '', id: 'preview-container', size: '150x150'
+
   .row-fluid
     .col-lg-6.col-md-6
       = f.input :email, wrapper: :horizontal_form
@@ -37,4 +42,22 @@
       $('#user_user_profile_attributes_country').select2({
         placeholder: 'Select Country'
       });
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $('#preview-container').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      $('#preview-container').hide();
+      $('#user_profile_photo').change(function() {
+        readURL(this);
+        $('.user_profile_photo .help-block img').remove();
+        $('#preview-container').show();
+      });
+
     });

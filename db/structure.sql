@@ -175,7 +175,11 @@ CREATE TABLE users (
     last_sign_in_ip inet,
     active boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    profile_photo_file_name character varying,
+    profile_photo_content_type character varying,
+    profile_photo_file_size integer,
+    profile_photo_updated_at timestamp without time zone
 );
 
 
@@ -317,4 +321,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160731104259');
 INSERT INTO schema_migrations (version) VALUES ('20160801094451');
 
 INSERT INTO schema_migrations (version) VALUES ('20160806023746');
+
+INSERT INTO schema_migrations (version) VALUES ('20160806141904');
 

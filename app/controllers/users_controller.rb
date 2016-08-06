@@ -51,7 +51,7 @@ class UsersController < ApplicationController
     dob = params[:user][:user_profile_attributes][:date_of_birth]
     params[:user][:user_profile_attributes][:date_of_birth] = Date.strptime(dob, '%m/%d/%Y').to_s unless dob.blank?
     permitted_params = [
-      :email, :password, :password_confirmation,
+      :email, :password, :password_confirmation, :profile_photo,
       user_profile_attributes: [
         :id, :first_name, :last_name, :date_of_birth, :street_address1,
         :street_address2, :city, :state, :country, :postal_code,

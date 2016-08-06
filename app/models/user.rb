@@ -1,17 +1,27 @@
-# t.string   :email
-# t.string   :encrypted_password
-# t.string   :reset_password_token
-# t.datetime :reset_password_sent_at
-# t.datetime :remember_created_at
-# t.integer  :sign_in_count,         default: 0
-# t.datetime :current_sign_in_at
-# t.datetime :last_sign_in_at
-# t.inet     :current_sign_in_ip
-# t.inet     :last_sign_in_ip
-# t.boolean  :active,                default: true
+# t.string     :email
+# t.string     :encrypted_password
+# t.string     :reset_password_token
+# t.datetime   :reset_password_sent_at
+# t.datetime   :remember_created_at
+# t.integer    :sign_in_count,         default: 0
+# t.datetime   :current_sign_in_at
+# t.datetime   :last_sign_in_at
+# t.inet       :current_sign_in_ip
+# t.inet       :last_sign_in_ip
+# t.boolean    :active,                default: true
+# t.attachment :profile_photo
 
 class User < ActiveRecord::Base
   has_one :user_profile, dependent: :destroy, inverse_of: :user
+
+  has_attached_file :profile_photo, styles: { thumb:  { geometry: '150x150#',   processors: [:thumbnail] } },
+                                    storage: :s3,
+                                    s3_credentials: "#{Rails.root}/config/s3.yml",
+                                    s3_region: ENV['AWS_S3_REGION'],
+                                    s3_protocol: :https
+
+  validates_attachment_presence :profile_photo
+  validates_attachment_content_type :profile_photo, content_type: /\Aimage\/.*\Z/
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
