@@ -18,7 +18,9 @@ class Ability
   private
 
   def post_permissions
-    can :read, Post
+    can :read, Post do |post|
+      post.published? || post.user == current_user
+    end
     can [:update, :destroy, :publish, :unpublish], Post do |post|
       post.user == current_user
     end

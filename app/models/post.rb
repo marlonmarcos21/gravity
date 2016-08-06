@@ -17,10 +17,15 @@ class Post < ActiveRecord::Base
   scope :published, -> { where(published: true) }
   scope :recent,    ->(limit) { published.order(published_at: :desc).limit(limit) }
 
+  before_save :strip_title,        if: :title_changed?
+  before_save :strip_body,         if: :body_changed?
   before_update :set_published_at, if: :published_changed?
 
   def publish!
-    update_attribute :published, true
+    return update_attribute :published, true if publishable?
+    errors.add(:title, %(can't be blank when publising)) if title.blank?
+    errors.add(:body, %(can't be blank when publising)) if body.blank?
+    false
   end
 
   def unpublish!
@@ -28,6 +33,18 @@ class Post < ActiveRecord::Base
   end
 
   private
+
+  def publishable?
+    !title.blank? && !body.blank?
+  end
+
+  def strip_title
+    title.strip!
+  end
+
+  def strip_body
+    body.strip!
+  end
 
   def set_published_at
     return unless published?

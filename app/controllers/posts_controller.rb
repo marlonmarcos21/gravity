@@ -8,7 +8,7 @@ class PostsController < ApplicationController
 
   def index
     page   = params[:page] || 1
-    @posts = Post.page(page)
+    @posts = Post.published.page(page)
   end
 
   def show
@@ -70,12 +70,15 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to posts_url, notice: 'Post was successfully destroyed.'
+    redirect_to posts_url, notice: 'Post was successfully deleted!'
   end
 
   def publish
-    @post.publish!
-    redirect_to @post, notice: 'Post successfully published!'
+    if @post.publish!
+      redirect_to @post, notice: 'Post successfully published!'
+    else
+      render :edit, alert: 'Error publishing post!'
+    end
   end
 
   def unpublish

@@ -12,7 +12,7 @@
 
       - @posts.each do |post|
         .post-preview
-          %p.post-meta= post.created_at.strftime '%a, %b %e, %Y %R'
+          %p.post-meta= post.published_at.strftime '%a, %b %e, %Y %R'
           %a{ href: post_path(post) }
             %h4.post-title= post.title
             %p.post-body= post.body
