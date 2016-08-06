@@ -2,6 +2,7 @@
 # t.text       :body
 # t.boolean    :published
 # t.references :user
+# t.datetime   :published_at
 
 class Post < ActiveRecord::Base
   belongs_to :user
@@ -13,5 +14,5 @@ class Post < ActiveRecord::Base
 
   validates :user, presence: true
 
-  scope :recent, ->(limit) { order(created_at: :desc).limit(limit) }
+  scope :recent, ->(limit) { order(published_at: :desc).limit(limit) }
 end
