@@ -6,10 +6,6 @@
   =require twitter-bootstrap-static/fontawesome
   */
 
-.sidebar-nav {
-  padding: 9px 0;
-}
-
 .dropdown-menu li a {
   text-align: center;
   color: #00868B;
@@ -21,21 +17,7 @@
   background-color: none;
 }
 
-.dropdown-menu .sub-menu {
-  left: 100%;
-  position: absolute;
-  top: 0;
-  visibility: hidden;
-  margin-top: -1px;
-  color: #00868B;
-}
-
-.dropdown-menu li:hover .sub-menu {
-  visibility: visible;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
+.dropdown-menu {
   background-color: none;
   background: #000;
 }

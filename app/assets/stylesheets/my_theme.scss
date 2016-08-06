@@ -181,6 +181,14 @@ a {
       border-bottom: 1px solid rgba(white, 0.3);
     }
   }
+  @media(max-width:768px) {
+    .navbar-right {
+      .nav-user-dropdown {
+        margin-top: 15px;
+        margin-bottom: 10px;
+      }
+    }
+  }
 }
 
 .intro {
