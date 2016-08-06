@@ -15,5 +15,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require dropzone.min
+//= require jssor.min
 //= require my_theme
 //= require_tree .
