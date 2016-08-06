@@ -22,7 +22,10 @@
 
   .form-actions
     = f.button :submit, class: 'btn-primary'
-    = link_to 'Cancel', posts_path, class: 'btn btn-default'
+    - if @post.persisted?
+      = link_to 'Cancel', post_path(@post), class: 'btn btn-default'
+    - else
+      = link_to 'Cancel', posts_path, class: 'btn btn-default'
 
 - content_for :footer_scripts do
   :javascript

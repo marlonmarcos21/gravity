@@ -1,4 +1,5 @@
-- model_class = Post
-.page-header
-  %h1=t '.title', :default => [:'helpers.titles.edit', 'Edit %{model}'], :model => model_class.model_name.human.titleize
-= render :partial => "form"
+.container.content-section
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      %h1 Edit Post
+      = render 'form'
