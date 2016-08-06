@@ -12,13 +12,16 @@
 # t.attachment :profile_photo
 
 class User < ActiveRecord::Base
+  DEFAULT_AVATAR = 'https://themarcoses-dev.s3-ap-southeast-1.amazonaws.com/dev_files/default-avatar.png'
+
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
   has_attached_file :profile_photo, styles: { thumb:  { geometry: '150x150#',   processors: [:thumbnail] } },
                                     storage: :s3,
                                     s3_credentials: "#{Rails.root}/config/s3.yml",
                                     s3_region: ENV['AWS_S3_REGION'],
-                                    s3_protocol: :https
+                                    s3_protocol: :https,
+                                    default_url: DEFAULT_AVATAR
 
   validates_attachment_presence :profile_photo
   validates_attachment_content_type :profile_photo, content_type: /\Aimage\/.*\Z/
@@ -73,6 +76,6 @@ class User < ActiveRecord::Base
       state,
       country,
       postal_code
-    ].compact.join(' ').gsub(' ,', ',')
+    ].compact.join(' ').gsub(' ,', ',').gsub(/,,|, ,/, ',').gsub(/^ , |^,$/, '')
   end
 end

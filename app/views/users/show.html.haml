@@ -1,8 +1,12 @@
 .container.content-section
   .row
     .col-lg-10.col-lg-offset-2.col-md-10.col-md-offset-2.col-s-10.col-s-offset-2
-      %h2{ style: 'margin-left: -15px;'}
-        = "Welcome, #{@user.name}!"
+      .row
+        .col-lg-10.col-md-10.col-s-10
+          %h2{ style: 'margin-left: -15px; display: inline;' }
+            = "Welcome, #{@user.name}!"
+          %p.pull-right
+            = image_tag @user.profile_photo.url(:thumb), id: 'user-profile-photo'
       .row
         .col-lg-10.col-md-10.col-s-10
           %p{ style: 'display: inline;' } Profile:

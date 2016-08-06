@@ -1,11 +1,17 @@
-.log-me-in {
-  margin-top: 10px;
-}
-
 .navbar-form {
   display: inline-flex;
+  height: 17px;
+  padding-top: 0px;
+  margin-top: 0px;
   .form-group {
     margin-right: -10px;
+    .input-sm {
+      height: 22px !important;
+      padding: 5px 5px !important;
+    }
+  }
+  .nav-form-submit, .nav-form-cancel {
+    margin-top: -8px;
   }
 }
 
