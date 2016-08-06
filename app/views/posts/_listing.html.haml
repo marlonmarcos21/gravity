@@ -17,7 +17,7 @@
             %h4.post-title= post.title
             %p.post-body= post.body
           %p.delete-post
-            - if current_user && post.user == current_user
+            - if current_user && can?(:publish, post)
               = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-trash btn-xs btn-danger' do
                 = fa_icon 'trash'
         %hr
