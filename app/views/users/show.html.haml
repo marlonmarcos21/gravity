@@ -1,0 +1,29 @@
+.container.content-section
+  .row
+    .col-lg-10.col-lg-offset-2.col-md-10.col-md-offset-2.col-s-10.col-s-offset-2
+      %h2{ style: 'margin-left: -15px;'}
+        = "Welcome, #{@user.name}!"
+      .row
+        .col-lg-10.col-md-10.col-s-10
+          %p{ style: 'display: inline;' } Profile:
+          %p.pull-right
+            = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
+
+      .row
+        .col-lg-8.col-md-8
+          %table.table-condensed
+            %tr
+              %td Email:
+              %td= @user.email
+            %tr
+              %td Birthday:
+              %td= @user.date_of_birth.try(:strftime, '%b %e, %Y')
+            %tr
+              %td Address:
+              %td= @user.full_address
+            %tr
+              %td Mobile:
+              %td= @user.mobile_number
+            %tr
+              %td Landline:
+              %td= @user.phone_number

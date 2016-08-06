@@ -9,6 +9,12 @@
   }
 }
 
+.form-group {
+  label {
+    color: #00868B;
+  }
+}
+
 .dropzone-previews {
   .dz-remove:hover {
     background: none;
@@ -44,5 +50,19 @@
   }
   .form-actions {
     margin-top: 60px;
+  }
+}
+
+.select2-container {
+  .select2-dropdown {
+    background: #000 !important;
+    color: #00868B !important;
+  }
+}
+
+.select2-container--default {
+  .select2-results__option--highlighted[aria-selected] {
+    background-color: #00868B;
+    color: #fff; 
   }
 }

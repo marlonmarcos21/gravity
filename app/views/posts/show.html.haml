@@ -9,7 +9,7 @@
             = link_to 'Publish', publish_post_path(@post), method: :patch, class: 'btn btn-default'
           %hr
 
-        %p= @post.title
+        %h3= @post.title
 
       %p= @post.body
       - if @post.images.any?

@@ -14,6 +14,8 @@
 //= require jquery.easing
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require bootstrap-datepicker
+//= require select2
 //= require dropzone.min
 //= require jssor.min
 //= require my_theme

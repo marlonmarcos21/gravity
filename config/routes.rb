@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'sessions' }
+
+  resources :users, except: [:index]
+
   resources :posts do
     collection do
       post 'upload_image'

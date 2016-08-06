@@ -42,6 +42,7 @@ gem 'aws-sdk', '~> 2'
 gem 'dalli'
 gem 'tinymce-rails'
 gem 'simple_form'
+gem 'country_select'
 gem 'kaminari'
 gem 'cancancan'
 

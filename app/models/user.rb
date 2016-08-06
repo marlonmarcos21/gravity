@@ -42,6 +42,8 @@ class User < ActiveRecord::Base
   delegate :phone_number=,    to: :user_profile
   delegate :mobile_number=,   to: :user_profile
 
+  accepts_nested_attributes_for :user_profile
+
   # Overrides devise methods
   def active_for_authentication?
     super && active?
@@ -49,5 +51,18 @@ class User < ActiveRecord::Base
 
   def name
     "#{first_name} #{last_name}".strip
+  end
+
+  def full_address
+    [
+      street_address1,
+      street_address2,
+      ',',
+      city,
+      ',',
+      state,
+      country,
+      postal_code
+    ].compact.join(' ').gsub(' ,', ',')
   end
 end

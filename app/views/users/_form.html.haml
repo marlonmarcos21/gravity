@@ -1,0 +1,40 @@
+= simple_form_for @user, html: { class: 'form-horizontal users' }, multipart: true  do |f|
+  = f.error_notification
+  = @user.errors.full_messages.inspect unless @user.errors.empty?
+
+  .row-fluid
+    .col-lg-6.col-md-6
+      = f.input :email, wrapper: :horizontal_form
+      = f.input :password, wrapper: :horizontal_form
+      = f.input :password_confirmation, wrapper: :horizontal_form, label: 'Confirm Password'
+      = f.simple_fields_for :user_profile, @user.user_profile do |p|
+        = p.input :first_name, wrapper: :horizontal_form
+        = p.input :last_name, wrapper: :horizontal_form
+        = p.input :date_of_birth, wrapper: :horizontal_form, as: :date_picker, label: 'Birthday', input_html: { 'data-provide' => 'datepicker' }
+        = p.input :street_address1, wrapper: :horizontal_form, label: 'Address 1'
+
+  .row-fluid
+    .col-lg-6.col-md-6
+      = f.simple_fields_for :user_profile, @user.user_profile do |p|
+        = p.input :street_address2, wrapper: :horizontal_form, label: 'Address 2'
+        = p.input :city, wrapper: :horizontal_form
+        = p.input :state, wrapper: :horizontal_form
+        = p.input :country, wrapper: :horizontal_form
+        = p.input :postal_code, wrapper: :horizontal_form
+        = p.input :phone_number, wrapper: :horizontal_form
+        = p.input :mobile_number, wrapper: :horizontal_form
+  
+    .col-lg-6.col-md-6.form-actions
+      = f.button :submit, class: 'btn-primary'
+      - if @user.persisted?
+        = link_to 'Cancel', user_path(@user), class: 'btn btn-default'
+      - else
+        = link_to 'Cancel', root_path, class: 'btn btn-default'
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#user_user_profile_attributes_country').select2({
+        placeholder: 'Select Country'
+      });
+    });
