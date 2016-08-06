@@ -4,7 +4,7 @@
       %button.navbar-toggle{ type: 'button', 'data-toggle' => 'collapse', 'data-target' => '.navbar-main-collapse' }
         Menu
         = fa_icon 'bars'
-      %a.navbar-brand{ 'page-scroll' => true, href: '/' }
+      %a.navbar-brand{ 'page-scroll' => true, href: in_homepage? ? '#page-top' : root_path }
         %span.light Home
 
     .collapse.navbar-collapse.navbar-main-collapse
@@ -12,7 +12,7 @@
         %li.hidden
           %a{ href: '#page-top' }
         %li
-          %a.page-scroll{ href: '#posts' }
+          %a.page-scroll{ href: in_homepage? ? '#posts' : posts_path }
             Posts
         %li
           %a.page-scroll{ href: '#about' }
