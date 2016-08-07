@@ -167,6 +167,7 @@ GEM
       activesupport (>= 3.1)
       arel
     phantomjs (1.9.8.0)
+    photoswipe-rails (4.1.1)
     pkg-config (1.1.7)
     pry (0.10.3)
       coderay (~> 1.1.0)
@@ -363,6 +364,7 @@ DEPENDENCIES
   pg (~> 0.15)
   pg_search
   phantomjs (>= 1.8.1.1)
+  photoswipe-rails
   pry-byebug
   pry-rails
   puma (~> 3.6.0)

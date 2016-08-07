@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
-  before_action :prepare_images, only: [:new, :edit]
+  before_action :prepare_images, only: [:show, :new, :edit]
   before_action :image_token,    only: :new
 
   def index
@@ -108,9 +108,12 @@ class PostsController < ApplicationController
     return unless @post.try(:images).try(:any?)
     hash = {}
     @post.images.each do |img|
-      hash[img.id.to_s] = { img_url: img.source.url(:thumb),
+      hash[img.id.to_s] = { img_url: img.source.url,
+                            img_url_thumb: img.source.url(:thumb),
                             size: img.source_file_size,
-                            file_name: img.source_file_name }
+                            file_name: img.source_file_name,
+                            width: img.width,
+                            height: img.height }
     end
     @images = hash.to_json
   end

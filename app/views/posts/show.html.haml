@@ -15,10 +15,12 @@
         %p= auto_link(@post.body)
 
       - if @post.images.any?
-        %p= render 'image_slider', images: @post.images
+        .post-images
+          = render 'image_swiper', images:@post.images, image_hash: @images
 
-      = link_to t('.back', :default => t("helpers.links.back")), posts_path, :class => 'btn btn-default'
-      
-      - if can? :publish, @post
-        = link_to t('.edit', :default => t("helpers.links.edit")), edit_post_path(@post), :class => 'btn btn-default'
-        = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
+      .post-actions
+        = link_to 'Back', posts_path, :class => 'btn btn-default'
+        
+        - if can? :publish, @post
+          = link_to 'Edit', edit_post_path(@post), :class => 'btn btn-default'
+          = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

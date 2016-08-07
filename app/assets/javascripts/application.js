@@ -17,6 +17,6 @@
 //= require bootstrap-datepicker
 //= require select2
 //= require dropzone.min
-//= require jssor.min
+//= require photoswipe
 //= require my_theme
 //= require_tree .

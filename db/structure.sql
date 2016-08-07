@@ -113,7 +113,9 @@ CREATE TABLE images (
     main_image boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    token character varying
+    token character varying,
+    width integer,
+    height integer
 );
 
 
@@ -464,4 +466,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160807033320');
 INSERT INTO schema_migrations (version) VALUES ('20160807051628');
 
 INSERT INTO schema_migrations (version) VALUES ('20160807164700');
+
+INSERT INTO schema_migrations (version) VALUES ('20160807180624');
 

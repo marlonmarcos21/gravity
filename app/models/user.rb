@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
-  has_attached_file :profile_photo, styles: { thumb:  { geometry: '150x150#',   processors: [:thumbnail] } },
+  has_attached_file :profile_photo, styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
                                     storage: :s3,
                                     s3_credentials: "#{Rails.root}/config/s3.yml",
                                     s3_region: ENV['AWS_S3_REGION'],

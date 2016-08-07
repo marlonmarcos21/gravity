@@ -81,7 +81,7 @@
         for (var img in images) {
           var mockFile = { name: images[img].file_name, size: images[img].size };
           dz.emit('addedfile', mockFile);
-          dz.emit('thumbnail', mockFile, images[img].img_url);
+          dz.emit('thumbnail', mockFile, images[img].img_url_thumb);
           dz.emit('complete', mockFile);
           dz.files.push(mockFile);
         }
