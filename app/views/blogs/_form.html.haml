@@ -2,6 +2,7 @@
   = f.error_notification
   = @blog.errors.full_messages.inspect unless @blog.errors.empty?
 
+  = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
   = f.input :title
   = error_span(@blog[:title])
   = f.input :body, input_html: { class: 'tinymce', rows: 30, cols: 120 }
@@ -17,6 +18,7 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      var image_token = '#{raw(@image_token)}';
       function setupEditor(ed) {
         ed.on('init', function() {
           this.getDoc().body.style.fontSize = '16px';
@@ -28,6 +30,7 @@
         toolbar: ['styleselect | bold italic underline | blockquote | undo redo | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link'],
         plugins: 'uploadimage,link',
         uploadimage_form_url: '/blogs/tinymce_assets',
+        uploadimage_hint: image_token,
         setup: setupEditor
       });
     });
