@@ -18,6 +18,8 @@ class Blog < ActiveRecord::Base
   before_save :strip_title,        if: :title_changed?
   before_update :set_published_at, if: :published_changed?
 
+  include BlogView
+
   extend FriendlyId
   friendly_id :title, use: [:slugged, :finders]
 

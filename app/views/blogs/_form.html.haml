@@ -17,10 +17,17 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      function setupEditor(ed) {
+        ed.on('init', function() {
+          this.getDoc().body.style.fontSize = '16px';
+          this.getDoc().body.style.fontFamily = 'Helvetica';
+        });
+      }
       tinymce.init({
         selector: "textarea.tinymce",
-        toolbar: ['styleselect | bold italic underline | blockquote | undo redo | alignleft aligncenter alignright alignjustify','uploadimage | link'],
+        toolbar: ['styleselect | bold italic underline | blockquote | undo redo | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link'],
         plugins: 'uploadimage,link',
-        uploadimage_form_url: '/blogs/tinymce_assets'
+        uploadimage_form_url: '/blogs/tinymce_assets',
+        setup: setupEditor
       });
     });

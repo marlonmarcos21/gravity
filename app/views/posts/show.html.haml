@@ -1,6 +1,6 @@
-.container.content-section
+.container.content-section#post
   .row
-    .col-lg-10.col-lg-offset-1.col-md-10.col-md-offset-1
+    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
       .post-header
         - if can? :publish, @post
           - if @post.published?
@@ -11,7 +11,9 @@
 
         %h3= @post.title
 
-      %p= @post.body
+      #post-body
+        %p= auto_link(@post.body)
+
       - if @post.images.any?
         %p= render 'image_slider', images: @post.images
 

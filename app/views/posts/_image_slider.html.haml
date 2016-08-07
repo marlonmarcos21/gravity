@@ -1,5 +1,5 @@
-#post-images-slider-container{ style: 'position: relative; margin: 0 auto; top: 0px; left: 0px; width: 900px; height: 550px; overflow: hidden; visibility: hidden; background-color: #000;' }
-  %div{ u: 'slides', style: 'cursor: move; position: absolute; overflow: hidden; left: 0; top: 0px; width: 900px; height: 450px;' }
+#post-images-slider-container{ style: 'position: relative; margin: 0 auto; top: 0px; left: 0px; width: 750px; height: 550px; overflow: hidden; visibility: hidden; background-color: #000;' }
+  %div{ u: 'slides', style: 'cursor: move; position: absolute; overflow: hidden; left: 0; top: 0px; width: 750px; height: 450px;' }
     - images.each do |img|
       %div
         = image_tag img.source.url, u: 'image'
@@ -59,7 +59,7 @@
       function ScaleSlider() {
         var refSize = jssor_slider.$Elmt.parentNode.clientWidth;
         if (refSize) {
-          refSize = Math.min(refSize, 900);
+          refSize = Math.min(refSize, 750);
           refSize = Math.max(refSize, 200);
           jssor_slider.$ScaleWidth(refSize);
         }

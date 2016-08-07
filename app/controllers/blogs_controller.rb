@@ -5,7 +5,7 @@ class BlogsController < ApplicationController
 
 def index
     page   = params[:page] || 1
-    @blogs = Blog.published.page(page)
+    @blogs = Blog.includes(:user).published.page(page)
   end
 
   def show
