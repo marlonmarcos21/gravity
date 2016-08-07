@@ -10,8 +10,9 @@
       .row
         .col-lg-10.col-md-10.col-s-10
           %p{ style: 'display: inline;' } Profile:
-          %p.pull-right
-            = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
+          - if can?(:edit, @user)
+            %p.pull-right
+              = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
 
       .row
         .col-lg-8.col-md-8

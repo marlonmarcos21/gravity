@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_profile
 
+  scope :active, -> { where(active: true) }
+
   # Overrides devise methods
   def active_for_authentication?
     super && active?

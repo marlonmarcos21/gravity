@@ -1,3 +1,12 @@
-= render 'listing'
+#posts.container.content-section
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+      - if current_user
+        = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'
+
+      %h2.text-center All Posts
+      %hr
+      = render 'listing'
+
 .pull-right
   = paginate @posts

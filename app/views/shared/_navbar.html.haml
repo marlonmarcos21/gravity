@@ -20,6 +20,13 @@
         %li
           %a.page-scroll{ href: '#contact' }
             Contact
+        - if current_user
+          %li
+            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form' } do |f|
+              %p= f.input :search, wrapper: :horizontal_form, label: false, placeholder: 'Search', input_html: { class: 'form-control input-sm' }
+              .input-group-btn
+                %button.btn.btn-default{ type: 'submit' }
+                  = fa_icon 'search'
       .collapse.navbar-collapse.navbar-right.navbar-main-collapse
         - if current_user
           %li.dropdown.nav-user-dropdown{ role: 'presentation' }
@@ -62,7 +69,7 @@
       if (width < 786) {
         $('.nav-user-dropdown-toggle').click(function() {
           if (clicks === 0) {
-            $('.nav-user-dropdown').css('margin-bottom', '60px');
+            $('.nav-user-dropdown').css('margin-bottom', '70px');
             clicks++;
           } else {
             $('.nav-user-dropdown').css('margin-bottom', '10px');

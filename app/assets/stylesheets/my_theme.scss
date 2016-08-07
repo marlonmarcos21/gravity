@@ -43,8 +43,8 @@ p {
   margin-bottom: 5px;
 }
 
-#posts {
-  .post-meta {
+#posts, #posts-results, #users-results {
+  .post-meta, .user-meta {
     font-size: 11px;
     margin-bottom: 5px;
   }
@@ -468,6 +468,11 @@ body {
 
 #nav-profile-photo {
   width: 25px;
+  border-radius: 100%;
+}
+
+#user-listing-profile-photo {
+  width: 35px;
   border-radius: 100%;
 }
 

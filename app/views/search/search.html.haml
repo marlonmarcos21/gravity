@@ -1,0 +1,26 @@
+.search-results.container.content-section
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+      %h2 Search Results
+      %br
+      %br
+
+      - if @users.any?
+        #users-results
+          - if can?(:create, User)
+            = link_to 'New User', new_user_path, class: 'btn btn-default pull-right'
+
+          %h3.text-center Users
+          %hr
+          = render 'users/listing'
+
+      - if @posts.any?
+        #posts-results
+          - if current_user
+            = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'
+
+          %h3.text-center Matching Posts
+          %hr
+          = render 'posts/listing'
+          %a.btn.btn-default.pull-right{ href: posts_path }
+            View All Posts

@@ -7,8 +7,9 @@
   */
 
 .dropdown-menu li a {
-  text-align: center;
+  text-align: left;
   color: #00868B;
+  margin-left: 9px;
 }
 
 .dropdown-menu li a:hover {

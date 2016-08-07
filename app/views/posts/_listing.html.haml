@@ -1,27 +1,11 @@
-- home_page = false if local_assigns[:home_page].blank?
-
-%section#posts.container.content-section
-  .row
-    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
-      - if current_user && !home_page
-        = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'
-
-      - header_text = 'All Posts' if local_assigns[:header_text].blank?
-      %h2.text-center= header_text
-      %hr
-
-      - @posts.each do |post|
-        .post-preview
-          %p.post-meta= post.published_at.strftime '%a, %b %e, %Y %R'
-          %a{ href: post_path(post) }
-            %h4.post-title= post.title
-            %p.post-body= post.body
-          %p.delete-post
-            - if current_user && can?(:publish, post)
-              = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-trash btn-xs btn-danger' do
-                = fa_icon 'trash'
-        %hr
-
-      - if home_page
-        %a.btn.btn-default.pull-right{ href: posts_path }
-          View All Posts
+- @posts.each do |post|
+  .post-preview
+    %p.post-meta= post.published_at.strftime '%a, %b %e, %Y %R'
+    %a{ href: post_path(post) }
+      %h4.post-title= post.title
+      %p.post-body= post.body
+    %p.delete-post
+      - if current_user && can?(:publish, post)
+        = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-trash btn-xs btn-danger' do
+          = fa_icon 'trash'
+  %hr

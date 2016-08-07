@@ -11,4 +11,11 @@
           %a.btn.btn-circle.page-scroll{ href: '#posts' }
             = fa_icon 'angle-double-down'
 
-= render 'posts/listing', header_text: 'Recent Posts', home_page: true
+%section#posts.container.content-section
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2      
+      %h2.text-center Recent Posts
+      %hr
+      = render 'posts/listing'
+      %a.btn.btn-default.pull-right{ href: posts_path }
+        View All Posts
