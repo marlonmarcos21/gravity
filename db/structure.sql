@@ -74,7 +74,8 @@ CREATE TABLE blogs (
     user_id integer,
     slug character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_name tsvector
 );
 
 
@@ -344,6 +345,13 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: index_blogs_on_tsv_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_blogs_on_tsv_name ON blogs USING gin (tsv_name);
+
+
+--
 -- Name: index_blogs_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -421,6 +429,13 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON user_profiles FOR EACH 
 
 
 --
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -447,4 +462,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160807032607');
 INSERT INTO schema_migrations (version) VALUES ('20160807033320');
 
 INSERT INTO schema_migrations (version) VALUES ('20160807051628');
+
+INSERT INTO schema_migrations (version) VALUES ('20160807164700');
 

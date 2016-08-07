@@ -5,6 +5,10 @@
       %br
       %br
 
+      - if @users.blank? && @posts.blank? && @blogs.blank?
+        #no-search-results-found
+          %p= "No results matched with #{@search_term}"
+
       - if @users.try(:any?)
         #users-results
           - if can?(:create, User)
@@ -13,6 +17,12 @@
           %h3.text-center Users
           %hr
           = render 'users/listing'
+        %br
+        %br
+        %br
+        %br
+        %br
+        %br
 
       - if @posts.try(:any?)
         #posts-results
@@ -24,3 +34,20 @@
           = render 'posts/listing'
           %a.btn.btn-default.pull-right{ href: posts_path }
             View All Posts
+        %br
+        %br
+        %br
+        %br
+        %br
+        %br
+
+      - if @blogs.try(:any?)
+        #blogs-results
+          - if current_user
+            = link_to 'New Blog', new_blog_path, class: 'btn btn-default pull-right'
+
+          %h3.text-center Matching Blogs
+          %hr
+          = render 'blogs/listing'
+          %a.btn.btn-default.pull-right{ href: posts_path }
+            View All Blogs
