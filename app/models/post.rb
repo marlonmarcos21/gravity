@@ -21,6 +21,13 @@ class Post < ActiveRecord::Base
   before_save :strip_body,         if: :body_changed?
   before_update :set_published_at, if: :published_changed?
 
+  include PgSearch
+  pg_search_scope :search,
+                  against: :title,
+                  using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
+                             trigram: { threshold: 0.2 } },
+                  order_within_rank: 'posts.published_at DESC'
+
   def publish!
     return update_attribute :published, true if publishable?
     errors.add(:title, %(can't be blank when publising)) if title.blank?

@@ -27,6 +27,34 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -83,7 +111,8 @@ CREATE TABLE posts (
     user_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    published_at timestamp without time zone
+    published_at timestamp without time zone,
+    tsv_name tsvector
 );
 
 
@@ -134,7 +163,8 @@ CREATE TABLE user_profiles (
     mobile_number character varying,
     user_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_name tsvector
 );
 
 
@@ -270,10 +300,24 @@ CREATE INDEX index_images_on_attachable_type_and_attachable_id ON images USING b
 
 
 --
+-- Name: index_posts_on_tsv_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_posts_on_tsv_name ON posts USING gin (tsv_name);
+
+
+--
 -- Name: index_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_posts_on_user_id ON posts USING btree (user_id);
+
+
+--
+-- Name: index_user_profiles_on_tsv_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_profiles_on_tsv_name ON user_profiles USING gin (tsv_name);
 
 
 --
@@ -305,6 +349,20 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
+
+
+--
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON user_profiles FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -323,4 +381,10 @@ INSERT INTO schema_migrations (version) VALUES ('20160801094451');
 INSERT INTO schema_migrations (version) VALUES ('20160806023746');
 
 INSERT INTO schema_migrations (version) VALUES ('20160806141904');
+
+INSERT INTO schema_migrations (version) VALUES ('20160807032520');
+
+INSERT INTO schema_migrations (version) VALUES ('20160807032607');
+
+INSERT INTO schema_migrations (version) VALUES ('20160807033320');
 
