@@ -90,3 +90,12 @@
     color: #fff; 
   }
 }
+
+.datepicker {
+  color: #555;
+ &.datepicker-dropdown {
+    background: #000;
+    color: $primary;
+    cursor: pointer;
+  }
+}
