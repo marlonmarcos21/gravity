@@ -5,7 +5,7 @@
       %br
       %br
 
-      - if @users.any?
+      - if @users.try(:any?)
         #users-results
           - if can?(:create, User)
             = link_to 'New User', new_user_path, class: 'btn btn-default pull-right'
@@ -14,7 +14,7 @@
           %hr
           = render 'users/listing'
 
-      - if @posts.any?
+      - if @posts.try(:any?)
         #posts-results
           - if current_user
             = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'

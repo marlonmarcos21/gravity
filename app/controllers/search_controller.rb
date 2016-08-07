@@ -5,6 +5,7 @@ class SearchController < ApplicationController
 
   def search
     search_term = sanitize params[:search][:search]
+    return if search_term.blank?
     user_search search_term
     post_search search_term
   end
