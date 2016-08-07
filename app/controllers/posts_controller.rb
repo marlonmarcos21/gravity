@@ -8,7 +8,7 @@ class PostsController < ApplicationController
 
   def index
     page   = params[:page] || 1
-    @posts = Post.includes(:user).published.page(page)
+    @posts = Post.includes(:user).published.descending.page(page)
   end
 
   def show

@@ -322,7 +322,7 @@ a {
 }
 
 .content-section {
-  padding-top: 100px;
+  padding-top: 200px;
 }
 
 .download-section {
@@ -345,7 +345,7 @@ a {
 
 @media(min-width:767px) {
   .content-section {
-    padding-top: 100px;
+    padding-top: 100px !important;
   }
 
   .download-section {

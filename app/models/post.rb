@@ -14,8 +14,9 @@ class Post < ActiveRecord::Base
 
   validates :user, presence: true
 
-  scope :published, -> { where(published: true) }
-  scope :recent,    ->(limit) { published.order(published_at: :desc).limit(limit) }
+  scope :published,  ->{ where(published: true) }
+  scope :recent,     ->(limit) { published.order(published_at: :desc).limit(limit) }
+  scope :descending, ->{ order(published_at: :desc) }
 
   before_save :strip_title,        if: :title_changed?
   before_save :strip_body,         if: :body_changed?
