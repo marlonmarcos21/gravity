@@ -1,0 +1,26 @@
+= simple_form_for @blog, html: { class: 'form-horizontal blogs' }, multipart: true do |f|
+  = f.error_notification
+  = @blog.errors.full_messages.inspect unless @blog.errors.empty?
+
+  = f.input :title
+  = error_span(@blog[:title])
+  = f.input :body, input_html: { class: 'tinymce', rows: 30, cols: 120 }
+  = error_span(@blog[:body])
+
+  .form-actions
+    = f.button :submit, class: 'btn-primary'
+    - if @blog.persisted?
+      = link_to 'Cancel', blog_path(@blog), class: 'btn btn-default'
+    - else
+      = link_to 'Cancel', blogs_path, class: 'btn btn-default'
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      tinymce.init({
+        selector: "textarea.tinymce",
+        toolbar: ['styleselect | bold italic underline | blockquote | undo redo | alignleft aligncenter alignright alignjustify','uploadimage | link'],
+        plugins: 'uploadimage,link',
+        uploadimage_form_url: '/blogs/tinymce_assets'
+      });
+    });

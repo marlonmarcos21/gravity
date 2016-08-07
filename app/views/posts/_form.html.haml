@@ -5,7 +5,7 @@
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
   = f.input :title
   = error_span(@post[:title])
-  = f.input :body
+  = f.input :body, input_html: { rows: 5, cols: 120 }
   = error_span(@post[:body])
 
   %div{ class: 'dropzone' }

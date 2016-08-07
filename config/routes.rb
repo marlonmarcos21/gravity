@@ -15,6 +15,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :blogs do
+    collection do
+      post 'tinymce_assets'
+    end
+
+    member do
+      patch 'publish'
+      patch 'unpublish'
+    end
+  end
+
   get 'search', to: 'search#search'
 
   root to: 'home#index'

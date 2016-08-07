@@ -12,6 +12,7 @@ class Ability
     end
 
     post_permissions
+    blog_permissions
     user_permissions
   end
 
@@ -25,6 +26,18 @@ class Ability
       post.user == current_user
     end
     can [:create, :upload_image, :remove_image], Post do
+      current_user.persisted?
+    end
+  end
+
+  def blog_permissions
+    can :read, Blog do |blog|
+      blog.published? || blog.user == current_user
+    end
+    can [:update, :destroy, :publish, :unpublish], Blog do |blog|
+      blog.user == current_user
+    end
+    can :create, Blog do
       current_user.persisted?
     end
   end
