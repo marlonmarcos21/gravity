@@ -6,7 +6,7 @@
 
       %h2.text-center All Posts
       %hr
-      = render 'listing'
+      = render 'listing', posts: @posts
 
 .pull-right
   = paginate @posts

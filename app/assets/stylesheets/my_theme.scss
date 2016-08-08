@@ -43,32 +43,31 @@ p {
   margin-bottom: 5px;
 }
 
-#posts, #blogs, #posts-results, #blogs-results, #users-results {
-  .post-meta, .blog-meta, .user-meta {
-    font-size: 11px;
-    margin-bottom: 5px;
-  }
-  .post-title, .blog-title {
-    color: $primary;
-    &:hover,
-    &:focus {
-      color: $tertiary;
-      cursor: pointer;
-    }
-  }
-  .post-body, .blog-body {
-    font-size: 15px;
-    color: #fff;
+
+.post-meta, .blog-meta, .user-meta {
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+.post-title, .blog-title {
+  color: $primary;
+  &:hover,
+  &:focus {
+    color: $tertiary;
     cursor: pointer;
-    &:hover,
-    &:focus {
-      color: $tertiary;
-      cursor: pointer;
-    }
   }
-  .delete-post, .delete-blog {
-    text-align: right;
+}
+.post-body, .blog-body {
+  font-size: 15px;
+  color: #fff;
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    color: $tertiary;
+    cursor: pointer;
   }
+}
+.delete-post, .delete-blog {
+  text-align: right;
 }
 
 #blog {

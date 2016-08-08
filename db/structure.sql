@@ -69,7 +69,7 @@ CREATE TABLE blogs (
     id integer NOT NULL,
     title character varying,
     body text,
-    published boolean,
+    published boolean DEFAULT false,
     published_at timestamp without time zone,
     user_id integer,
     slug character varying,
@@ -146,7 +146,7 @@ CREATE TABLE posts (
     id integer NOT NULL,
     title character varying,
     body text,
-    published boolean,
+    published boolean DEFAULT false,
     user_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -468,4 +468,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160807051628');
 INSERT INTO schema_migrations (version) VALUES ('20160807164700');
 
 INSERT INTO schema_migrations (version) VALUES ('20160807180624');
+
+INSERT INTO schema_migrations (version) VALUES ('20160808073114');
 

@@ -12,9 +12,10 @@ class Blog < ActiveRecord::Base
 
   validates :user, presence: true
 
-  scope :published,  ->{ where(published: true) }
-  scope :recent,     ->(limit) { published.order(published_at: :desc).limit(limit) }
-  scope :descending, ->{ order(published_at: :desc) }
+  scope :published,   ->{ where(published: true) }
+  scope :unpublished, ->{ where(published: false) }
+  scope :recent,      ->(limit) { published.order(published_at: :desc).limit(limit) }
+  scope :descending,  ->{ order(published_at: :desc) }
 
   before_save :strip_title,        if: :title_changed?
   before_update :set_published_at, if: :published_changed?
@@ -40,6 +41,11 @@ class Blog < ActiveRecord::Base
 
   def unpublish!
     update_attribute :published, false
+  end
+
+  def date_meta
+    datetime = published_at || updated_at
+    datetime.strftime '%a, %b %e, %Y %R'
   end
 
   private

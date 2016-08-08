@@ -1,11 +1,11 @@
-- @blogs.each do |blog|
+- blogs.each do |blog|
   .blog-preview
     %p.blog-author
       %a{ href: user_path(blog.user) }
         %h4.user-name
           = image_tag blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
           = blog.user.name
-    %p.blog-meta= blog.published_at.strftime '%a, %b %e, %Y %R'
+    %p.blog-meta= blog.date_meta
     %a.blog-link{ href: blog_path(blog) }
       %h3.post-title= blog.title
       %p.blog-body= blog.stripped_teaser

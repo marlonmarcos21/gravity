@@ -1,11 +1,11 @@
-- @posts.each do |post|
+- posts.each do |post|
   .post-preview
     %p.poster
       %a{ href: user_path(post.user) }
         %h4.user-name
           = image_tag post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
           = post.user.name
-    %p.post-meta= post.published_at.strftime '%a, %b %e, %Y %R'
+    %p.post-meta= post.date_meta
     %a{ href: post_path(post) }
       %h4.post-title= post.title
       %p.post-body= post.body

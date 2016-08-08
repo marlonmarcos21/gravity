@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   private
 
   def user
-    @user = User.includes(:user_profile).find(params[:id])
+    @user = User.includes(:user_profile, :posts, :blogs).find(params[:id])
   end
 
   def user_params
