@@ -40,7 +40,13 @@
             %ul.dropdown-menu
               %li
                 %a{ href: user_path(current_user) }
-                  = fa_icon('user-secret') + 'Profile'
+                  = fa_icon('user-secret') + ' Profile'
+              %li
+                %a{ href: new_post_path }
+                  = fa_icon('share-square') + ' New Post'
+              %li
+                %a{ href: new_blog_path }
+                  = fa_icon('newspaper-o') + ' New Blog'
               %li
                 = link_to(destroy_user_session_path, method: :delete) do
                   = fa_icon 'power-off'
@@ -72,7 +78,7 @@
       if (width < 786) {
         $('.nav-user-dropdown-toggle').click(function() {
           if (clicks === 0) {
-            $('.nav-user-dropdown').css('margin-bottom', '70px');
+            $('.nav-user-dropdown').css('margin-bottom', '110px');
             clicks++;
           } else {
             $('.nav-user-dropdown').css('margin-bottom', '10px');
