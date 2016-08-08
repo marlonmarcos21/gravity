@@ -18,5 +18,6 @@
 //= require select2
 //= require dropzone.min
 //= require photoswipe
+//= require jquery.infinitescroll
 //= require my_theme
 //= require_tree .

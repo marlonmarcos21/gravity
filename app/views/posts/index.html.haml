@@ -4,10 +4,10 @@
       - if current_user
         = link_to 'New Post', new_post_path, class: 'btn btn-default pull-right'
 
-    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.posts-container
       %h2.text-center All Posts
       %hr
       = render 'listing', posts: @posts
 
-.pull-right
+.text-center
   = paginate @posts

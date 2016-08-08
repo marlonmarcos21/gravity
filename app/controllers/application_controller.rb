@@ -32,11 +32,13 @@ class ApplicationController < ActionController::Base
     %i(alert notice).each do |type|
       return flash[type] unless flash[type].blank?
     end
+    nil
   end
 
   def flash_type
     %i(alert notice).each do |type|
       return type unless flash[type].blank?
     end
+    nil
   end
 end
