@@ -17,12 +17,31 @@
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
     %link{ href: 'http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic', rel: 'stylesheet', type: 'text/css' }
     %link{ href: 'http://fonts.googleapis.com/css?family=Montserrat:400,700', rel: 'stylesheet', type: 'text/css' }
-    = tinymce_assets
+    = yield(:header_scripts) if content_for?(:header_scripts)
 
   %body#page-top{ 'data-spy' => 'scroll', 'data-target' => '.navbar-fixed-top' }
     = render 'shared/navbar'
-    = bootstrap_flash
-    = yield
+
+    - if in_homepage?
+      %header.intro
+        .intro-body
+          .container
+            .row
+              .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+                %h1.brand-heading The Marcoses
+                %p.intro-text
+                  A free, responsive, one page Bootstrap theme.
+                  %br
+                  Created by Start Bootstrap.
+                %a.btn.btn-circle.page-scroll{ href: '#posts' }
+                  = fa_icon 'angle-double-down'
+
+    .container.content-section
+      .col-md-8.col-md-offset-2
+        = bootstrap_flash
+        #ajax-flash-msg
+      = yield
+
     %footer
       .container.text-center
         %p Copyright &copy; The Marcoses 2016

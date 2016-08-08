@@ -11,6 +11,6 @@
       %p.blog-body= blog.stripped_teaser
     - if current_user && can?(:publish, blog)
       %p.delete-blog
-        = link_to blog_path(blog), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-trash btn-xs btn-danger' do
+        = link_to blog_path(blog), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
           = fa_icon 'trash'
-  %hr
+    %hr

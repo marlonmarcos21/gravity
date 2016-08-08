@@ -31,7 +31,7 @@
 
           %h3.text-center Matching Posts
           %hr
-          = render 'posts/listing'
+          = render 'posts/listing', posts: @posts
           %a.btn.btn-default.pull-right{ href: posts_path }
             View All Posts
         %br
@@ -48,6 +48,6 @@
 
           %h3.text-center Matching Blogs
           %hr
-          = render 'blogs/listing'
+          = render 'blogs/listing', blogs: @blogs
           %a.btn.btn-default.pull-right{ href: posts_path }
             View All Blogs

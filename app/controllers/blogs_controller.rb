@@ -48,7 +48,10 @@ def index
 
   def destroy
     @blog.destroy
-    redirect_to blogs_url, notice: 'Blog was successfully deleted!'
+    respond_to do |format|
+      format.html { redirect_to blogs_url, notice: 'Blog was successfully deleted!' }
+      format.json { render json: { message: 'Post deleted!' } }
+    end
   end
 
   def publish

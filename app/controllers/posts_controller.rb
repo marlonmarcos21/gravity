@@ -71,7 +71,11 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to posts_url, notice: 'Post was successfully deleted!'
+    respond_to do |format|
+      flash[:notice] = 'Post successfully deleted!'
+      format.html { redirect_to posts_url }
+      format.json { render json: { message: 'Post deleted!' } }
+    end
   end
 
   def publish

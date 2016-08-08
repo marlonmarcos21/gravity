@@ -1,17 +1,4 @@
-%header.intro
-  .intro-body
-    .container
-      .row
-        .col-md-8.col-md-offset-2
-          %h1.brand-heading The Marcoses
-          %p.intro-text
-            A free, responsive, one page Bootstrap theme.
-            %br
-            Created by Start Bootstrap.
-          %a.btn.btn-circle.page-scroll{ href: '#posts' }
-            = fa_icon 'angle-double-down'
-
-%section#posts.container.content-section
+%section#posts.container.content-section.home
   .row
     .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2      
       %h2.text-center Recent Posts
@@ -20,7 +7,7 @@
       %a.btn.btn-default.pull-right{ href: posts_path }
         View All Posts
 
-%section#blogs.container.content-section
+%section#blogs.container.content-section.home
   .row
     .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2      
       %h2.text-center Recent Blogs

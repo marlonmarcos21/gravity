@@ -8,8 +8,18 @@ $.rails.allowAction = (link) ->
   false
 
 $.rails.confirmed = (link) ->
+  ajax = link.attr('data-ajax')
   link.removeAttr('data-confirm')
-  link.trigger('click.rails')
+  if (ajax == 'true')
+    $.ajax({
+      url: link.attr('href'),
+      method: 'delete',
+      dataType: 'json'
+    }).done((data) ->
+      link.parent().parent().remove()
+    )
+  else
+    link.trigger('click.rails')
 
 $.rails.showConfirmDialog = (link) ->
   message = link.attr 'data-confirm'
@@ -26,3 +36,17 @@ $.rails.showConfirmDialog = (link) ->
          """
   $(html).modal()
   $('#confirmationDialog .confirm').on 'click', -> $.rails.confirmed(link)
+
+fadeFlash = ->
+  $('#flash-notice').delay(3000).fadeOut('slow')
+  $('#flash-alert').delay(3000).fadeOut('slow')
+
+showAjaxMessage = (msg, type) ->
+  $('#ajax-flash-msg').html('<div id="flash-'+type+'">'+msg+'</div>')
+  fadeFlash()
+
+$(document).ajaxComplete((event, request) ->
+  msg = request.getResponseHeader('X-Message')
+  type = request.getResponseHeader('X-Message-Type')
+  showAjaxMessage(msg, type)
+)

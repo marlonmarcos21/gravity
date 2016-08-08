@@ -1,44 +1,43 @@
-.container.content-section
-  .row
-    .col-lg-10.col-lg-offset-2.col-md-10.col-md-offset-2.col-s-10.col-s-offset-2
-      .row
-        .col-lg-10.col-md-10.col-s-10
-          %h2{ style: 'margin-left: -15px; display: inline;' }
-            = "Welcome, #{@user.name}!"
+.row
+  .col-lg-10.col-lg-offset-2.col-md-10.col-md-offset-2.col-s-10.col-s-offset-2
+    .row
+      .col-lg-10.col-md-10.col-s-10
+        %h2{ style: 'margin-left: -15px; display: inline;' }
+          = "Welcome, #{@user.name}!"
+        %p.pull-right
+          = image_tag @user.profile_photo.url(:thumb), id: 'user-profile-photo'
+    .row
+      .col-lg-10.col-md-10.col-s-10
+        - if can?(:edit, @user)
           %p.pull-right
-            = image_tag @user.profile_photo.url(:thumb), id: 'user-profile-photo'
-      .row
-        .col-lg-10.col-md-10.col-s-10
-          - if can?(:edit, @user)
-            %p.pull-right
-              = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
+            = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
 
-      .row
-        .col-lg-10.col-md-10
-          %ul.nav.nav-tabs
-            %li.active
-              %a#profile-tab-link{ href: '#profile-tab', 'data-toggle' => 'tab' } Profile
+    .row
+      .col-lg-10.col-md-10
+        %ul.nav.nav-tabs
+          %li.active
+            %a#profile-tab-link{ href: '#profile-tab', 'data-toggle' => 'tab' } Profile
+          %li
+            %a#published-posts-link{ href: '#published-posts-tab', 'data-toggle' => 'tab' } Published Posts
+          - if can?(:manage, :all) || current_user == @user
             %li
-              %a#published-posts-link{ href: '#published-posts-tab', 'data-toggle' => 'tab' } Published Posts
-            - if can?(:manage, :all) || current_user == @user
-              %li
-                %a#drafted-posts-link{ href: '#drafted-posts-tab', 'data-toggle' => 'tab' } Drafted Posts
+              %a#drafted-posts-link{ href: '#drafted-posts-tab', 'data-toggle' => 'tab' } Drafted Posts
+          %li
+            %a#published-blogs-link{ href: '#published-blogs-tab', 'data-toggle' => 'tab' } Published Blogs
+          - if can?(:manage, :all) || current_user == @user
             %li
-              %a#published-blogs-link{ href: '#published-blogs-tab', 'data-toggle' => 'tab' } Published Blogs
-            - if can?(:manage, :all) || current_user == @user
-              %li
-                %a#drafted-blogs-link{ href: '#drafted-blogs-tab', 'data-toggle' => 'tab' } Drafted Blogs
+              %a#drafted-blogs-link{ href: '#drafted-blogs-tab', 'data-toggle' => 'tab' } Drafted Blogs
 
-          .tab-content
-            #profile-tab.tab-pane.fade.in.active
-              = render 'profile'
-            #published-posts-tab.tab-pane.fade
-              = render 'posts', posts: @user.posts.published.descending
-            - if can?(:manage, :all) || current_user == @user
-              #drafted-posts-tab.tab-pane.fade
-                = render 'posts', posts: @user.posts.unpublished.order(updated_at: :desc)
-            #published-blogs-tab.tab-pane.fade
-              = render 'blogs', blogs: @user.blogs.published.descending
-            - if can?(:manage, :all) || current_user == @user
-              #drafted-blogs-tab.tab-pane.fade
-                = render 'blogs', blogs: @user.blogs.unpublished.order(updated_at: :desc)
+        .tab-content
+          #profile-tab.tab-pane.fade.in.active
+            = render 'profile'
+          #published-posts-tab.tab-pane.fade
+            = render 'posts', posts: @user.posts.published.descending
+          - if can?(:manage, :all) || current_user == @user
+            #drafted-posts-tab.tab-pane.fade
+              = render 'posts', posts: @user.posts.unpublished.order(updated_at: :desc)
+          #published-blogs-tab.tab-pane.fade
+            = render 'blogs', blogs: @user.blogs.published.descending
+          - if can?(:manage, :all) || current_user == @user
+            #drafted-blogs-tab.tab-pane.fade
+              = render 'blogs', blogs: @user.blogs.unpublished.order(updated_at: :desc)

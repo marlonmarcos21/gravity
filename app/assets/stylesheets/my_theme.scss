@@ -310,7 +310,7 @@ a {
 }
 
 .content-section {
-  padding-top: 200px;
+  padding-top: 100px;
 }
 
 .download-section {
@@ -333,7 +333,11 @@ a {
 
 @media(min-width:767px) {
   .content-section {
-    padding-top: 100px !important;
+    padding-top: 150px !important;
+    &.home {
+      padding-top: 0px !important;
+      margin-bottom: 120px;
+    }
   }
 
   .download-section {
@@ -481,4 +485,21 @@ body {
 #user-profile-photo {
   width: 99px;
   border-radius: 100%;
+}
+
+#ajax-flash-msg {
+  width: 60%;
+  text-align: center;
+  position: fixed;
+  z-index: 99999;
+  @media(max-width:768px) {
+    width: 85%;
+  }
+  #flash-notice {
+    background-color: #d43f3a;
+    border: 1px solid #d43f3a;
+    margin: 50px auto;
+    width: 190px;
+    font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
 }

@@ -1,3 +1,5 @@
+- content_for :header_scripts, tinymce_assets
+
 = simple_form_for @blog, html: { class: 'form-horizontal blogs' }, multipart: true do |f|
   = f.error_notification
   = @blog.errors.full_messages.inspect unless @blog.errors.empty?
