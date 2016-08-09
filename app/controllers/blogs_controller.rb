@@ -58,7 +58,7 @@ def index
 
   def publish
     if @blog.publish!
-      redirect_to @blog, notice: 'Blog successfully published!'
+      redirect_to @blog, notice: 'Blog published!'
     else
       render :edit, alert: 'Error publishing blog!'
     end
@@ -66,7 +66,7 @@ def index
 
   def unpublish
     @blog.unpublish!
-    redirect_to @blog, notice: 'blog successfully unpublished!'
+    redirect_to @blog, alert: 'Blog unpublished!'
   end
 
   def tinymce_assets

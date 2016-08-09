@@ -81,7 +81,7 @@ class PostsController < ApplicationController
 
   def publish
     if @post.publish!
-      redirect_to @post, notice: 'Post successfully published!'
+      redirect_to @post, notice: 'Post published!'
     else
       render :edit, alert: 'Error publishing post!'
     end
@@ -89,7 +89,7 @@ class PostsController < ApplicationController
 
   def unpublish
     @post.unpublish!
-    redirect_to @post, notice: 'Post successfully unpublished!'
+    redirect_to @post, alert: 'Post unpublished!'
   end
 
   private

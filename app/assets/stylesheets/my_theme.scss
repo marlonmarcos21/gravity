@@ -447,7 +447,19 @@ body {
 .alert {
   margin: 70px auto 20px auto !important;
   text-align: center !important;
-  width: 25%;
+  width: 35%;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.alert-success {
+  background-color: $tertiary;
+  border-color: $tertiary;
+}
+
+.alert-danger {
+  background-color: #d43f3a;
+  border-color: #d43f3a;
 }
 
 .dropzone {

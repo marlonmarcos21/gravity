@@ -26,6 +26,9 @@
       %header.intro
         .intro-body
           .container
+            - if bootstrap_flash
+              .col-md-8.col-md-offset-2
+                = bootstrap_flash
             .row
               .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
                 %h1.brand-heading The Marcoses
@@ -36,9 +39,12 @@
                 %a.btn.btn-circle.page-scroll{ href: '#posts' }
                   = fa_icon 'angle-double-down'
 
-    .container.content-section
+    - unless in_homepage? && bootstrap_flash
       .col-md-8.col-md-offset-2
         = bootstrap_flash
+
+    .container.content-section
+      .col-md-8.col-md-offset-2
         #ajax-flash-msg
       = yield
 
