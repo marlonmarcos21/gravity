@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'sessions' }
 
-  resources :users, except: [:index]
+  resources :users, except: [:index] do
+    member do
+      get 'more_published_posts'
+      get 'more_drafted_posts'
+      get 'more_published_blogs'
+      get 'more_drafted_blogs'
+    end
+  end
 
   resources :posts do
     collection do

@@ -4,6 +4,72 @@ class UsersController < ApplicationController
   before_action :user, only: [:show, :edit, :update, :destroy]
 
   def show
+    pp_scope = @user.posts.published.descending
+    dp_scope = @user.posts.unpublished.order(updated_at: :desc)
+    pb_scope = @user.blogs.published.descending
+    db_scope = @user.blogs.unpublished.order(updated_at: :desc)
+
+    @published_posts = pp_scope.page(1)
+    @drafted_posts   = dp_scope.page(1)
+    @published_blogs = pb_scope.page(1)
+    @drafted_blogs   = db_scope.page(1)
+
+    @more_published_posts_results = !pp_scope.page(2).empty?
+    @more_drafted_posts_results   = !dp_scope.page(2).empty?
+    @more_published_blogs_results = !pb_scope.page(2).empty?
+    @more_drafted_blogs_results   = !db_scope.page(2).empty?
+  end
+
+  def more_published_posts
+    pp_scope = @user.posts.published.descending
+    @pppage  = (params[:pppage] || 2).to_i + 1
+
+    @published_posts = pp_scope.page(params[:pppage] || 2)
+    @more_results    = !pp_scope.page(@pppage).empty?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
+  end
+
+  def more_drafted_posts
+    dp_scope = @user.posts.unpublished.order(updated_at: :desc)
+    @dppage  = (params[:dppage] || 2).to_i + 1
+
+    @drafted_posts = dp_scope.page(params[:dppage] || 2)
+    @more_results  = !dp_scope.page(@dppage).empty?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
+  end
+
+  def more_published_blogs
+    pb_scope = @user.blogs.published.descending
+    @pbpage  = (params[:pbpage] || 2).to_i + 1
+
+    @published_blogs = pb_scope.page(params[:pbpage] || 2)
+    @more_results    = !pb_scope.page(@pbpage).empty?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
+  end
+
+  def more_drafted_blogs
+    db_scope = @user.blogs.unpublished.order(updated_at: :desc)
+    @dbpage  = (params[:dbpage] || 2).to_i + 1
+
+    @drafted_blogs = db_scope.page(params[:dbpage] || 2)
+    @more_results  = !db_scope.page(@dbpage).empty?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
   end
 
   def new

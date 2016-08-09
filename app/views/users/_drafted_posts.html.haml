@@ -1,0 +1,19 @@
+.row
+  .col-lg-10.col-lg-offset-1.col-md-10.col-md-offset-1
+    = render 'posts/listing', posts: posts
+    .text-center
+      - if more_results
+        %nav.drafted-posts-pagination
+          %span.drafted-posts-pagination-page
+            %a.drafted-posts-pagination-link{ data: { remote: 'true' }, href: more_drafted_posts_user_path(@user, dppage: @dppage) }
+              %em Load More
+      - else
+        %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#drafted-posts-tab').on('click', '.drafted-posts-pagination-link', function() {
+        $(this).hide();
+      });
+    });

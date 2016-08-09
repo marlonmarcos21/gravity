@@ -61,6 +61,7 @@ $(document).ready(->
     itemSelector: '#posts div.post-preview'
     loading:
       img: imgLoader
+      msgText: '<em>Loading...</em>'
 
   $("#blogs .blogs-container").infinitescroll
     navSelector: 'nav.pagination'
@@ -68,4 +69,5 @@ $(document).ready(->
     itemSelector: '#blogs div.blog-preview'
     loading:
       img: imgLoader
+      msgText: '<em>Loading...</em>'
 )

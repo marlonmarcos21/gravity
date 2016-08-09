@@ -32,12 +32,12 @@
           #profile-tab.tab-pane.fade.in.active
             = render 'profile'
           #published-posts-tab.tab-pane.fade
-            = render 'posts', posts: @user.posts.published.descending
+            = render 'published_posts', posts: @published_posts, more_results: @more_published_posts_results
           - if can?(:manage, :all) || current_user == @user
             #drafted-posts-tab.tab-pane.fade
-              = render 'posts', posts: @user.posts.unpublished.order(updated_at: :desc)
+              = render 'drafted_posts', posts: @drafted_posts, more_results: @more_drafted_posts_results
           #published-blogs-tab.tab-pane.fade
-            = render 'blogs', blogs: @user.blogs.published.descending
+            = render 'published_blogs', blogs: @published_blogs, more_results: @more_published_blogs_results
           - if can?(:manage, :all) || current_user == @user
             #drafted-blogs-tab.tab-pane.fade
-              = render 'blogs', blogs: @user.blogs.unpublished.order(updated_at: :desc)
+              = render 'drafted_blogs', blogs: @drafted_blogs, more_results: @more_drafted_blogs_results

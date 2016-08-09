@@ -1,0 +1,19 @@
+.row
+  .col-lg-10.col-lg-offset-1.col-md-10.col-md-offset-1.blogs-container
+    = render 'blogs/listing', blogs: blogs
+    .text-center
+      - if more_results
+        %nav.published-blogs-pagination
+          %span.published-blogs-pagination-page
+            %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_user_path(@user, pbpage: @pbpage) }
+              %em Load More
+      - else
+        %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#published-blogs-tab').on('click', '.published-blogs-pagination-link', function() {
+        $(this).hide();
+      });
+    });
