@@ -45,8 +45,13 @@ p {
 
 
 .post-meta, .blog-meta, .user-meta {
-  font-size: 11px;
+  font-size: 10px;
   margin-bottom: 5px;
+  color: gray;
+}
+.comment-meta {
+  font-size: 10px !important;
+  color: gray !important;
 }
 .post-title, .blog-title {
   color: $primary;
@@ -496,18 +501,34 @@ body {
   text-align: center;
   position: fixed;
   z-index: 99999;
+  font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
   @media(max-width:768px) {
     width: 85%;
   }
   #flash-notice {
+    background-color: $tertiary;
+    border: 1px solid $tertiary;
+    margin: 50px auto;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+  }
+  #flash-alert {
     background-color: #d43f3a;
     border: 1px solid #d43f3a;
     margin: 50px auto;
-    width: 190px;
-    font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
   }
 }
 
 #infscr-loading {
   text-align: center;
+}
+
+hr {
+  border-top: 1px solid $primary
 }

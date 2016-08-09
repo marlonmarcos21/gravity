@@ -23,7 +23,9 @@
 
       - if @post.images.any?
         .post-images
-          = render 'image_swiper', images:@post.images, image_hash: @images
+          = render 'image_swiper', images: @post.images, image_hash: @images
+
+      = render 'comments/template', commentable: @post, new_comment: @comment
 
       .post-actions
         = link_to 'Back', posts_path, :class => 'btn btn-default'

@@ -30,6 +30,8 @@ class Post < ActiveRecord::Base
                              trigram: { threshold: 0.2 } },
                   order_within_rank: 'posts.published_at DESC'
 
+  acts_as_commentable
+
   def publish!
     return update_attribute :published, true if publishable?
     errors.add(:title, %(can't be blank when publising)) if title.blank?

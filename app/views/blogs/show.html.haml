@@ -21,6 +21,8 @@
       #blog-body
         = @blog.body.html_safe
 
+      = render 'comments/template', commentable: @blog, new_comment: @comment
+
       .blog-actions
         = link_to 'Back', blogs_path, :class => 'btn btn-default'
         

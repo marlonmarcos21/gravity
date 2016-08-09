@@ -1,0 +1,9 @@
+.comments-header
+  %h4
+    = commentable.comment_threads.count == 0 ? 'Be the first to comment!' : "#{commentable.comment_threads.count} Comments"
+
+.comments-container
+  = render 'comments/show', comments: commentable.root_comments.order(:created_at)
+
+.new-comment-form
+  = render 'comments/form', new_comment: new_comment

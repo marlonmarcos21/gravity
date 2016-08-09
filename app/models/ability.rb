@@ -14,6 +14,7 @@ class Ability
     post_permissions
     blog_permissions
     user_permissions
+    comment_permissions
   end
 
   private
@@ -48,6 +49,18 @@ class Ability
     end
     can :update, User do |user|
       user == current_user
+    end
+  end
+
+  def comment_permissions
+    can :read, Blog do |blog|
+      blog.published? || blog.user == current_user
+    end
+    can :destroy, Comment do |comment|
+      comment.user == current_user || comment.commentable.user == current_user
+    end
+    can :create, Comment do
+      current_user.persisted?
     end
   end
 end

@@ -13,6 +13,7 @@ class PostsController < ApplicationController
   end
 
   def show
+    @new_comment = Comment.build_from(@post, current_user.try(:id), nil)
   end
 
   def new
@@ -72,7 +73,7 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     respond_to do |format|
-      flash[:notice] = 'Post successfully deleted!'
+      flash[:alert] = 'Post deleted!'
       format.html { redirect_to posts_url }
       format.json { render json: { message: 'Post deleted!' } }
     end

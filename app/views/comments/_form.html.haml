@@ -1,0 +1,7 @@
+= simple_form_for @new_comment, remote: true do |f|  
+  = f.input :commentable_id, label: false, as: :hidden, value: @new_comment.commentable_id
+  = f.input :commentable_type, label: false, as: :hidden, value: @new_comment.commentable_type
+
+  = f.input :body, label: 'Comment', input_html: { rows: 4, cols: 120 }
+
+  = f.button :submit, 'Post Comment', class: 'btn-primary btn-xs'

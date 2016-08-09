@@ -99,3 +99,45 @@
     cursor: pointer;
   }
 }
+
+.comments-header {
+  border-bottom: 1px dotted $primary;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.new-comment-form {
+  margin-bottom: 20px;
+}
+
+.comments-container {
+  p {
+    margin-bottom: 0px;
+    font-size: 13px;
+    margin-left: 30px;
+  }
+  .comment-nav {
+    margin-left: 5px;
+    margin-bottom: 10px;
+
+    a {
+      font-size: 11px;
+      font-weight: bold;
+      color: #888;
+      cursor: pointer;
+    }
+  }
+}
+
+.reply-form {
+  display: none;
+}
+
+.comments-show {
+  margin-left: 25px;
+}
+
+#comment-reply-form {
+  margin-left: 50px;
+  margin-bottom: 25px;
+}

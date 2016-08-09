@@ -1,0 +1,3 @@
+var parentId = ".comment-<%= @comment.parent_id %>";
+$(parentId).append("<%= escape_javascript(render('comments/show', comments: [@comment])) %>");
+$('.comments-header h4').html("<%= @total_comments %> Comments");
