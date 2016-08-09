@@ -25,11 +25,15 @@
         .post-images
           = render 'image_swiper', images: @post.images, image_hash: @images
 
-      = render 'comments/template', commentable: @post, new_comment: @comment
+      - if current_user
+        = render 'comments/template', commentable: @post, new_comment: @comment
+      - else
+        .comments-header
+          %h5 Sign in to view or read comments
 
       .post-actions
-        = link_to 'Back', posts_path, :class => 'btn btn-default'
+        = link_to 'Back', posts_path, class: 'btn btn-default'
         
         - if can? :publish, @post
-          = link_to 'Edit', edit_post_path(@post), :class => 'btn btn-default'
+          = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'
           = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

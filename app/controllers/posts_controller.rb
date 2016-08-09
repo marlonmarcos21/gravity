@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   end
 
   def show
-    @new_comment = Comment.build_from(@post, current_user.try(:id), nil)
+    @new_comment = Comment.build_from(@post, current_user.id, nil) if current_user
   end
 
   def new

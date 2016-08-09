@@ -11,7 +11,7 @@ def index
   end
 
   def show
-    @new_comment = Comment.build_from(@blog, current_user.try(:id), nil)
+    @new_comment = Comment.build_from(@blog, current_user.id, nil) if current_user
   end
 
   def new
