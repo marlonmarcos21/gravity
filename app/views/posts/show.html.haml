@@ -9,6 +9,13 @@
             = link_to 'Publish', publish_post_path(@post), method: :patch, class: 'btn btn-default'
           %hr
 
+        %p.poster
+          %a{ href: user_path(@post.user) }
+            %h4.user-name
+              = image_tag @post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
+              = @post.user.name
+
+        %p.post-meta= @post.date_meta
         %h3= @post.title
 
       #post-body
