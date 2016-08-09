@@ -542,5 +542,28 @@ body {
 }
 
 hr {
-  border-top: 1px solid $primary
+  border-top: 1px solid $primary;
+}
+
+.nav-tabs {
+  font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+  border-bottom: 1px solid $primary;
+  li {
+    &.active {
+      a {
+        color: #fff !important;
+        border: 1px solid $primary !important;
+        background-color: $primary !important;
+        border-radius: 0px !important;
+      }
+    }
+    a {
+      &:hover {
+        color: #fff !important;
+        border: 1px solid $primary !important;
+        background-color: $primary !important;
+        border-radius: 0px !important;
+      }
+    }
+  }
 }
