@@ -2,6 +2,6 @@
   = f.input :commentable_id, label: false, as: :hidden, value: @new_comment.commentable_id
   = f.input :commentable_type, label: false, as: :hidden, value: @new_comment.commentable_type
 
-  = f.input :body, label: 'Comment', input_html: { rows: 4, cols: 120 }
+  = f.input :body, label: 'Comment', input_html: { class: 'new-comment-body', rows: 4, cols: 120 }
 
-  = f.button :submit, 'Post Comment', class: 'btn-primary btn-xs'
+  = f.button :submit, 'Post Comment', class: 'btn-primary btn-xs submit-new-comment'

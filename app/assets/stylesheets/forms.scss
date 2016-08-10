@@ -108,6 +108,11 @@
 
 .new-comment-form {
   margin-bottom: 20px;
+  .submit-new-comment[disabled] {
+    background-color: gray !important;
+    border-color: $primary !important;
+    color: white !important;
+  }
 }
 
 .comments-container {
@@ -123,7 +128,6 @@
     a {
       font-size: 11px;
       font-weight: bold;
-      color: #888;
       cursor: pointer;
     }
   }
@@ -133,6 +137,16 @@
   display: none;
 }
 
+#new-comment-toggle {
+  margin-bottom: 30px;
+  display: none;
+  a {
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+}
+
 .comments-show {
   margin-left: 25px;
 }
@@ -140,6 +154,11 @@
 #comment-reply-form {
   margin-left: 50px;
   margin-bottom: 25px;
+  .submit-reply-comment[disabled] {
+    background-color: gray !important;
+    border-color: $primary !important;
+    color: white !important;
+  }
 }
 
 #mceu_16 {

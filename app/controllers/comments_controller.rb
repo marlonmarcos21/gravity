@@ -27,11 +27,13 @@ class CommentsController < ApplicationController
 
   def destroy
     comment = Comment.find(params[:id])
+    commentable = comment.commentable
     comment.destroy
+    @total_comments = commentable.comment_threads.count
     respond_to do |format|
       flash[:alert] = 'Comment deleted!'
       format.html { redirect_to :back }
-      format.json { render json: { message: 'Comment deleted!' } }
+      format.json { render json: { message: 'Comment deleted!', total_comments: @total_comments } }
     end
   end
 

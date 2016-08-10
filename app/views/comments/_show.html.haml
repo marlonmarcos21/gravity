@@ -14,6 +14,6 @@
           = f.input :commentable_type, as: :hidden, value: @new_comment.commentable_type
           = f.input :comment_id, as: :fake, label: false, input_html: { class: 'hidden', value: comment.id }
 
-          = f.input :body, label: false, input_html: { rows: 3, cols: 120 }
+          = f.input :body, label: false, input_html: { class: 'reply-comment-body', rows: 3, cols: 120 }
 
-          = f.button :submit, 'Post Reply', class: 'btn-primary btn-xs'
+          = f.button :submit, 'Post Reply', class: 'submit-reply-comment btn-primary btn-xs'
