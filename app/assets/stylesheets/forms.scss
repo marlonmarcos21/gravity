@@ -141,3 +141,13 @@
   margin-left: 50px;
   margin-bottom: 25px;
 }
+
+#mceu_16 {
+  position: fixed;
+  bottom: 0;
+  margin-left: 77px;
+  @media(max-width: 767px) {
+    width: 70%;
+    margin-left: 38px;
+  }
+}
