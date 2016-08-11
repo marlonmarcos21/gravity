@@ -1,5 +1,3 @@
-# t.string     :first_name
-# t.string     :last_name
 # t.date       :date_of_birth
 # t.string     :street_address1
 # t.string     :street_address2
@@ -13,6 +11,5 @@
 
 class UserProfile < ActiveRecord::Base
   belongs_to :user
-
-  validates :user,       presence: true
+  validates :user, presence: true
 end

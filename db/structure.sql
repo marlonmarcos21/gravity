@@ -228,8 +228,6 @@ CREATE TABLE schema_migrations (
 
 CREATE TABLE user_profiles (
     id integer NOT NULL,
-    first_name character varying,
-    last_name character varying,
     date_of_birth date,
     street_address1 character varying,
     street_address2 character varying,
@@ -548,4 +546,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160811163956');
 INSERT INTO schema_migrations (version) VALUES ('20160811164714');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811165102');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811165306');
 
