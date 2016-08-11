@@ -19,7 +19,7 @@
         %h3= @post.title
 
       #post-body
-        %p= auto_link(@post.body)
+        %p= embed_youtube(@post.body).gsub(/\n/, '<br />').html_safe
 
       - if @post.images.any?
         .post-images
