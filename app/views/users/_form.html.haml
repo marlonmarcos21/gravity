@@ -12,9 +12,9 @@
       = f.input :email, wrapper: :horizontal_form
       = f.input :password, wrapper: :horizontal_form
       = f.input :password_confirmation, wrapper: :horizontal_form, label: 'Confirm Password'
+      = f.input :first_name, wrapper: :horizontal_form
+      = f.input :last_name, wrapper: :horizontal_form
       = f.simple_fields_for :user_profile, @user.user_profile do |p|
-        = p.input :first_name, wrapper: :horizontal_form
-        = p.input :last_name, wrapper: :horizontal_form
         = p.input :date_of_birth, wrapper: :horizontal_form, as: :date_picker, label: 'Birthday', input_html: { 'data-provide' => 'datepicker' }
         = p.input :street_address1, wrapper: :horizontal_form, label: 'Address 1'
 

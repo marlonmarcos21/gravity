@@ -287,7 +287,9 @@ CREATE TABLE users (
     profile_photo_file_name character varying,
     profile_photo_content_type character varying,
     profile_photo_file_size integer,
-    profile_photo_updated_at timestamp without time zone
+    profile_photo_updated_at timestamp without time zone,
+    first_name character varying,
+    last_name character varying
 );
 
 
@@ -540,4 +542,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160807180624');
 INSERT INTO schema_migrations (version) VALUES ('20160808073114');
 
 INSERT INTO schema_migrations (version) VALUES ('20160809074722');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811163956');
 

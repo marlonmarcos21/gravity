@@ -10,6 +10,8 @@
 # t.inet       :last_sign_in_ip
 # t.boolean    :active,                default: true
 # t.attachment :profile_photo
+# t.string     :first_name
+# t.string     :last_name
 
 class User < ActiveRecord::Base
   DEFAULT_AVATAR = 'https://themarcoses-dev.s3-ap-southeast-1.amazonaws.com/dev_files/default-avatar.png'
@@ -29,13 +31,14 @@ class User < ActiveRecord::Base
   validates_attachment_presence :profile_photo
   validates_attachment_content_type :profile_photo, content_type: /\Aimage\/.*\Z/
 
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  delegate :first_name,      to: :user_profile, allow_nil: true
-  delegate :last_name,       to: :user_profile, allow_nil: true
   delegate :date_of_birth,   to: :user_profile, allow_nil: true
   delegate :street_address1, to: :user_profile, allow_nil: true
   delegate :street_address2, to: :user_profile, allow_nil: true
@@ -46,8 +49,6 @@ class User < ActiveRecord::Base
   delegate :phone_number,    to: :user_profile, allow_nil: true
   delegate :mobile_number,   to: :user_profile, allow_nil: true
 
-  delegate :first_name=,      to: :user_profile
-  delegate :last_name=,       to: :user_profile
   delegate :date_of_birth=,   to: :user_profile
   delegate :street_address1=, to: :user_profile
   delegate :street_address2=, to: :user_profile
@@ -68,7 +69,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    "#{first_name} #{last_name}".strip
+    "#{first_name} #{last_name}"
   end
 
   def full_address
