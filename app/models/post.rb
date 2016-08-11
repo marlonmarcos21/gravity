@@ -23,6 +23,9 @@ class Post < ActiveRecord::Base
   before_save :strip_body,         if: :body_changed?
   before_update :set_published_at, if: :published_changed?
 
+  extend FriendlyId
+  friendly_id :title
+
   include PgSearch
   pg_search_scope :search,
                   against: :title,
@@ -63,7 +66,13 @@ class Post < ActiveRecord::Base
   end
 
   def set_published_at
+    return if published_at?
     return unless published?
     self.published_at = Time.zone.now
+  end
+
+  def should_generate_new_friendly_id?
+    return if published? && !slug.blank?
+    slug.blank? || title_changed?
   end
 end

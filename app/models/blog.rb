@@ -23,7 +23,7 @@ class Blog < ActiveRecord::Base
   include BlogView
 
   extend FriendlyId
-  friendly_id :title, use: [:slugged, :finders]
+  friendly_id :title
 
   include PgSearch
   pg_search_scope :search,

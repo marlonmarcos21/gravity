@@ -190,7 +190,8 @@ CREATE TABLE posts (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     published_at timestamp without time zone,
-    tsv_name tsvector
+    tsv_name tsvector,
+    slug character varying
 );
 
 
@@ -287,7 +288,8 @@ CREATE TABLE users (
     profile_photo_updated_at timestamp without time zone,
     first_name character varying,
     last_name character varying,
-    tsv_name tsvector
+    tsv_name tsvector,
+    slug character varying
 );
 
 
@@ -398,6 +400,13 @@ ALTER TABLE ONLY user_profiles
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_blogs_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_blogs_on_slug ON blogs USING btree (slug);
 
 
 --
@@ -548,4 +557,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160811164714');
 INSERT INTO schema_migrations (version) VALUES ('20160811165102');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811165306');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811170021');
 

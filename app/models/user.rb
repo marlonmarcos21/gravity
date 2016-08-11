@@ -34,6 +34,9 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  extend FriendlyId
+  friendly_id :slug_candidates
+
   include PgSearch
   pg_search_scope :search,
                   against: [:first_name, :last_name],
@@ -89,5 +92,13 @@ class User < ActiveRecord::Base
       country,
       postal_code
     ].compact.join(' ').gsub(' ,', ',').gsub(/,,|, ,/, ',').gsub(/^ , |^,$/, '')
+  end
+
+  def slug_candidates
+    "#{first_name}-#{last_name}"
+  end
+
+  def should_generate_new_friendly_id?
+    slug.blank? || first_name_changed? || last_name_changed?
   end
 end
