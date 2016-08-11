@@ -161,12 +161,14 @@
   }
 }
 
-#mceu_16 {
+#mceu_18 {
   position: fixed;
   bottom: 0;
-  margin-left: 77px;
+  margin-left: 60px;
+  background-color: black;
+  border: 3px solid $primary;
   @media(max-width: 767px) {
-    width: 70%;
+    width: 79%;
     margin-left: 38px;
   }
 }

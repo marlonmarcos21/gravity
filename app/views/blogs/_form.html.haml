@@ -29,12 +29,13 @@
       }
       tinymce.init({
         selector: 'textarea',
-        toolbar: ['bold italic underline | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link | indent outdent'],
-        plugins: 'uploadimage,link',
+        toolbar: ['bold italic underline | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link | media | indent outdent'],
+        plugins: 'uploadimage,link,media',
         uploadimage_form_url: '/blogs/tinymce_assets',
         uploadimage_hint: image_token,
         menubar: '',
         statusbar: false,
+        media_live_embeds: true,
         setup: setupEditor
       });
     });
