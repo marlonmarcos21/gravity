@@ -289,7 +289,8 @@ CREATE TABLE users (
     profile_photo_file_size integer,
     profile_photo_updated_at timestamp without time zone,
     first_name character varying,
-    last_name character varying
+    last_name character varying,
+    tsv_name tsvector
 );
 
 
@@ -480,6 +481,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (re
 
 
 --
+-- Name: index_users_on_tsv_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_tsv_name ON users USING gin (tsv_name);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -505,6 +513,13 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON user_profiles FOR EACH 
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
+
+
+--
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
 
 
 --
@@ -544,4 +559,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160808073114');
 INSERT INTO schema_migrations (version) VALUES ('20160809074722');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811163956');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811164714');
 

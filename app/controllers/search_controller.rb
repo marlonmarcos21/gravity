@@ -14,9 +14,7 @@ class SearchController < ApplicationController
   private
 
   def user_search(search_term)
-    user_ids = UserProfile.search(search_term).pluck(:user_id)
-    return if user_ids.empty?
-    @users = User.active.where(id: user_ids).order(created_at: :desc)
+    @users = User.active.search(search_term)
   end
 
   def post_search(search_term)

@@ -34,6 +34,12 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  include PgSearch
+  pg_search_scope :search,
+                  against: [:first_name, :last_name],
+                  using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
+                             trigram: { threshold: 0.6 } }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable,
