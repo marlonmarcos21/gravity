@@ -241,8 +241,7 @@ CREATE TABLE user_profiles (
     mobile_number character varying,
     user_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    tsv_name tsvector
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -453,13 +452,6 @@ CREATE INDEX index_posts_on_user_id ON posts USING btree (user_id);
 
 
 --
--- Name: index_user_profiles_on_tsv_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_user_profiles_on_tsv_name ON user_profiles USING gin (tsv_name);
-
-
---
 -- Name: index_user_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -499,13 +491,6 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
-
-
---
--- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON user_profiles FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
 
 
 --
@@ -561,4 +546,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160809074722');
 INSERT INTO schema_migrations (version) VALUES ('20160811163956');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811164714');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811165102');
 
