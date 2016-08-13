@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
 
   accepts_nested_attributes_for :images, allow_destroy: true
 
+  validates :body, presence: true
   validates :user, presence: true
 
   scope :published,   ->{ where(published: true) }
@@ -19,11 +20,10 @@ class Post < ActiveRecord::Base
   scope :recent,      ->(limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  ->{ order(published_at: :desc) }
    
-  before_save   :strip_body,       if: :body_changed?
-  before_update :set_published_at, if: :published_changed?
+  before_save   :strip_body,      if: :body_changed?
+  before_create :set_published_at
 
   include PostView
-
   include PgSearch
   pg_search_scope :search,
                   against: :body,
@@ -60,8 +60,6 @@ class Post < ActiveRecord::Base
   end
 
   def set_published_at
-    return if published_at?
-    return unless published?
     self.published_at = Time.zone.now
   end
 end

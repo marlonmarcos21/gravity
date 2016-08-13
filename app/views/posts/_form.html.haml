@@ -8,9 +8,9 @@
   = f.input :body, label: false, placeholder: "#{current_user.first_name}, What's happening?", input_html: { rows: 3, cols: 120 }
   = error_span(@post[:body])
 
-  %div{ class: 'dropzone' }
+  .dropzone
     .dropzone-previews
-  %div.pull-right.dropzone-action-buttons
+  .pull-right.dropzone-action-buttons
     %a.start-upload
       %span.btn.btn-default.btn-xs
         = fa_icon 'cloud-upload'
@@ -26,7 +26,7 @@
     = f.button :submit, class: 'btn-primary'
     - if @post.persisted?
       = link_to 'Cancel', post_path(@post), class: 'btn btn-default'
-    - elsif current_page?('/posts')
+    - elsif current_page?(posts_path)
       = link_to 'Cancel', '', class: 'btn btn-default cancel-post'
     - else
       = link_to 'Cancel', posts_path, class: 'btn btn-default'

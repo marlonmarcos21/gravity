@@ -1,5 +1,5 @@
 - posts.each do |post|
-  .post-preview
+  .post-preview{ id: "post-#{post.id}" }
     %p.poster
       %a{ href: user_path(post.user) }
         %h4.user-name

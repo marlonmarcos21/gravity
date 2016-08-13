@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish, :editable]
 
   before_action :prepare_images, only: [:new, :edit]
-  before_action :image_token,    only: :new
+  before_action :image_token,    only: [:new, :index]
 
   def index
     @post  = Post.new
@@ -27,16 +27,18 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.user = current_user
+    @new_post = Post.new(post_params)
+    @new_post.user = current_user
     img_token  = params.delete :image_token
-
     respond_to do |format|
-      if @post.save
+      if @new_post.save
         flash[:notice] = 'Post created!'
-        attach_images img_token
+        attach_images img_token, @new_post.id
+        image_token
+        @post = Post.new
+        @post.images.build
 
-        format.html { redirect_to @post }
+        format.html { redirect_to @new_post }
         format.js { render :new_post }
       else
         render :new
@@ -48,7 +50,7 @@ class PostsController < ApplicationController
     img_token = params.delete :image_token
 
     if @post.update(post_params)
-      attach_images img_token
+      attach_images img_token, @post.id
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
@@ -74,7 +76,7 @@ class PostsController < ApplicationController
 
   def upload_image
     image_token = params[:image_token]
-    return unless image_token
+    return if image_token.blank?
     image_params = params[:post][:images_attributes]
     return unless image_params
     image_params.each_value do |img|
@@ -126,10 +128,10 @@ class PostsController < ApplicationController
     params.require(:post).permit(*permitted_params)
   end
 
-  def attach_images(img_token)
+  def attach_images(img_token, post_id)
     return if img_token.blank?
     images = Image.where(token: img_token)
-    images.update_all(attachable_id: @post.id, attachable_type: 'Post') if images.any?
+    images.update_all(attachable_id: post_id, attachable_type: 'Post') if images.any?
   end
 
   def prepare_images
