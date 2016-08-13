@@ -12,13 +12,15 @@
     .dropzone-previews
   %div.pull-right.dropzone-action-buttons
     %a.start-upload
-      %span.btn.btn-default
+      %span.btn.btn-default.btn-xs
         = fa_icon 'cloud-upload'
         Start Upload
     %a.cancel-upload
-      %span.btn.btn-danger
+      %span.btn.btn-danger.btn-xs
         = fa_icon 'ban'
         Cancel Upload
+
+  = f.input :private
 
   .form-actions
     = f.button :submit, class: 'btn-primary'

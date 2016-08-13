@@ -2,6 +2,7 @@
 # t.boolean    :published
 # t.references :user
 # t.datetime   :published_at
+# t.boolean    :private
 
 class Post < ActiveRecord::Base
   belongs_to :user

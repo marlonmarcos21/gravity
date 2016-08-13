@@ -190,7 +190,8 @@ CREATE TABLE posts (
     updated_at timestamp without time zone NOT NULL,
     published_at timestamp without time zone,
     tsv_name tsvector,
-    slug character varying
+    slug character varying,
+    private boolean DEFAULT false
 );
 
 
@@ -562,4 +563,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160811170021');
 INSERT INTO schema_migrations (version) VALUES ('20160813062412');
 
 INSERT INTO schema_migrations (version) VALUES ('20160813063008');
+
+INSERT INTO schema_migrations (version) VALUES ('20160813063449');
 
