@@ -1,9 +1,11 @@
 #posts
-  .row
-    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
-      #post-index-form
-        = render 'form', is_remote: true
-        %hr
+  - if current_user
+    .row
+      .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+        #post-index-form
+          = render 'form', is_remote: true
+          %hr
+
   .row
     .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2#posts-container
       = render 'listing', posts: @posts

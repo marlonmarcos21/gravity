@@ -1,16 +1,19 @@
-.my-gallery {
-  margin-bottom: 30px;
-  width: 100%;
-  float: left;
-  img {
+.post-images {
+  height: auto;
+  .my-gallery {
+    margin-bottom: 30px;
     width: 100%;
-    height: auto;
-  }
-
-  figure {
-    display: block;
     float: left;
-    margin: 0 5px 5px 0;
-    width: 150px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    figure {
+      display: block;
+      float: left;
+      margin: 0 5px 5px 0;
+      width: 150px;
+    }
   }
 }

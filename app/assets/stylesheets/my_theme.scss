@@ -51,6 +51,14 @@ p {
   .poster {
     margin: 0px !important;
   }
+  .row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    p {
+      line-height: 1.2;
+      margin-bottom: 10px !important;
+    }
+  }
 }
 
 .post-meta, .blog-meta, .user-meta {
@@ -545,6 +553,8 @@ body {
 
 hr {
   border-top: 1px solid $primary;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .nav-tabs {
