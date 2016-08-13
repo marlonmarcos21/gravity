@@ -34,12 +34,22 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
-      var editor = new wysihtml5.Editor('post_body');
+      var wysi = $('textarea#post_body').wysihtml5();
+      var editor = $('#post_body').data('wysihtml5').editor;
 
       $('a.cancel-post').click(function(e) {
         e.preventDefault();
         editor.clear();
         editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
+      });
+
+      $('#new_post').submit(function(e) {
+        e.preventDefault();
+        if (!editor.getValue()) {
+          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+          $(html).modal();
+          return false;
+        }
       });
 
       Dropzone.autoDiscover = false;

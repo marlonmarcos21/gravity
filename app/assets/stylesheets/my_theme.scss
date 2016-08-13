@@ -484,9 +484,13 @@ body {
   height: 150px;
   margin: 0 auto;
   border: 1px solid $primary;
-  background: #000;
+  background: #fff;
   position: absolute;
   top: 200px;
+  border-radius: 3px;
+  .blank-post {
+    margin-left: 230px;
+  }
 }
 
 #confirmationDialog {
