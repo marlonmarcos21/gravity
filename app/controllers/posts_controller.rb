@@ -122,7 +122,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    permitted_params = %i(title body published)
+    permitted_params = %i(body published)
     params.require(:post).permit(*permitted_params)
   end
 

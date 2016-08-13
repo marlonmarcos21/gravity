@@ -1,4 +1,3 @@
-# t.string     :title
 # t.text       :body
 # t.boolean    :published
 # t.references :user
@@ -18,19 +17,15 @@ class Post < ActiveRecord::Base
   scope :unpublished, ->{ where(published: false) }
   scope :recent,      ->(limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  ->{ order(published_at: :desc) }
-
-  before_save :strip_title,        if: :title_changed?
-  before_save :strip_body,         if: :body_changed?
+   
+  before_save   :strip_body,       if: :body_changed?
   before_update :set_published_at, if: :published_changed?
 
   include PostView
 
-  extend FriendlyId
-  friendly_id :title
-
   include PgSearch
   pg_search_scope :search,
-                  against: :title,
+                  against: :body,
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
                              trigram: { threshold: 0.2 } },
                   order_within_rank: 'posts.published_at DESC'
@@ -56,11 +51,7 @@ class Post < ActiveRecord::Base
   private
 
   def publishable?
-    !title.blank? && !body.blank?
-  end
-
-  def strip_title
-    title.strip!
+    !body.blank?
   end
 
   def strip_body
@@ -71,10 +62,5 @@ class Post < ActiveRecord::Base
     return if published_at?
     return unless published?
     self.published_at = Time.zone.now
-  end
-
-  def should_generate_new_friendly_id?
-    return if published? && !slug.blank?
-    slug.blank? || title_changed?
   end
 end

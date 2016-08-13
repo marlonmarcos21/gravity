@@ -19,9 +19,6 @@
           = fa_icon 'clock-o'
           = @post.date_meta
 
-        %h3.editable-post-title{ 'data-type' => 'text', 'data-pk' => @post.id, 'data-url' => editable_post_path(@post), name: 'title', value: @post.title, 'data-name' => 'title', name: 'title' }
-          = @post.title
-
       #post-body
         %p= embed_youtube(@post.body).gsub(/\n/, '<br />').html_safe
 
@@ -41,12 +38,3 @@
         - if can? :publish, @post
           = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'
           = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
-
-- content_for :footer_scripts do
-  :javascript
-    $(document).ready(function() {
-      $.fn.editable.defaults.mode = 'inline';
-      $('.editable-post-title').editable({
-        ajaxOptions: { type: 'patch', dataType: 'json' }
-      });
-    });

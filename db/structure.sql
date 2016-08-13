@@ -183,7 +183,6 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 
 CREATE TABLE posts (
     id integer NOT NULL,
-    title character varying,
     body text,
     published boolean DEFAULT false,
     user_id integer,
@@ -497,13 +496,6 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 -- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
-
-
---
--- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
---
-
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
 
 
@@ -512,6 +504,13 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXEC
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
+
+
+--
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'body');
 
 
 --
@@ -559,4 +558,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160811165102');
 INSERT INTO schema_migrations (version) VALUES ('20160811165306');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811170021');
+
+INSERT INTO schema_migrations (version) VALUES ('20160813062412');
+
+INSERT INTO schema_migrations (version) VALUES ('20160813063008');
 
