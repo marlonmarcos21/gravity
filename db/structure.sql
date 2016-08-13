@@ -184,7 +184,7 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 CREATE TABLE posts (
     id integer NOT NULL,
     body text,
-    published boolean DEFAULT false,
+    published boolean DEFAULT true,
     user_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -565,4 +565,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160813062412');
 INSERT INTO schema_migrations (version) VALUES ('20160813063008');
 
 INSERT INTO schema_migrations (version) VALUES ('20160813063449');
+
+INSERT INTO schema_migrations (version) VALUES ('20160813064505');
 
