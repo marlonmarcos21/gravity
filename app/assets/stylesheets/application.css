@@ -15,6 +15,9 @@
  *= require select2
  *= require select2-bootstrap
  *= require bootstrap-datepicker3
+ *= require bootstrap-editable
+ *= require bootstrap-wysihtml5-0.0.2
+ *= require wysiwyg-color
  *= require photoswipe
  *= require_tree .
  *= require_self

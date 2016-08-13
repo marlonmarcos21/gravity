@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     member do
       patch 'publish'
       patch 'unpublish'
+      patch 'editable'
     end
   end
 

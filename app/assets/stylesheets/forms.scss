@@ -172,3 +172,26 @@
     margin-left: 38px;
   }
 }
+
+.wysihtml5-toolbar {
+  display: none !important;
+}
+
+.dropzone {
+  background: none;
+  min-height: 0px;
+  border: none;
+  .dz-preview.dz-image-preview {
+    background: none;
+  }
+}
+
+#post-index-form {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  .post_image_token {
+    display: none;
+  }
+}

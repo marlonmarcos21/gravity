@@ -1,12 +1,13 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
+  before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish, :editable]
 
-  before_action :prepare_images, only: [:show, :new, :edit]
+  before_action :prepare_images, only: [:new, :edit]
   before_action :image_token,    only: :new
 
   def index
+    @post  = Post.new
     page   = params[:page] || 1
     @posts = Post.includes(user: :user_profile)
                .published.descending.page(page)
@@ -30,11 +31,16 @@ class PostsController < ApplicationController
     @post.user = current_user
     img_token  = params.delete :image_token
 
-    if @post.save
-      attach_images img_token
-      redirect_to @post, notice: 'Post was successfully created!'
-    else
-      render :new
+    respond_to do |format|
+      if @post.save
+        flash[:notice] = 'Post created!'
+        attach_images img_token
+
+        format.html { redirect_to @post }
+        format.js { render :new_post }
+      else
+        render :new
+      end
     end
   end
 
@@ -46,6 +52,23 @@ class PostsController < ApplicationController
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
+    end
+  end
+
+  def editable
+    attrs = {}
+    attrs[params[:name]] = params[:value]
+
+    respond_to do |format|
+      if @post.update_attributes(attrs)
+        flash[:notice] = 'Post updated!'
+        format.html { redirect_to @post }
+        format.json { render json: { message: 'success', post_id: post.id, content: @post.embed_youtube }, status: 200 }
+      else
+        flash[:alert] = 'Post update failed!'
+        format.html { redirect_to @post }
+        format.json { render json: { message: 'failed' }, status: 422 }
+      end
     end
   end
 

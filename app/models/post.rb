@@ -23,6 +23,8 @@ class Post < ActiveRecord::Base
   before_save :strip_body,         if: :body_changed?
   before_update :set_published_at, if: :published_changed?
 
+  include PostView
+
   extend FriendlyId
   friendly_id :title
 

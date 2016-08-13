@@ -15,9 +15,12 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require bootstrap-datepicker
+//= require bootstrap-editable
+//= require wysihtml5
+//= require wysihtml5-0.3.0
+//= require bootstrap-wysihtml5-0.0.2
 //= require select2
 //= require dropzone.min
 //= require photoswipe
 //= require jquery.infinitescroll
-//= require my_theme
 //= require_tree .

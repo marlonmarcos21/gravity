@@ -1,11 +1,11 @@
-= simple_form_for @post, html: { class: 'form-horizontal posts' }, multipart: true do |f|
+- is_remote = false if local_assigns[:is_remote].blank?
+
+= simple_form_for @post, remote: is_remote, html: { class: 'form-horizontal posts' }, multipart: true do |f|
   = f.error_notification
   = @post.errors.full_messages.inspect unless @post.errors.empty?
 
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
-  = f.input :title
-  = error_span(@post[:title])
-  = f.input :body, input_html: { rows: 5, cols: 120 }
+  = f.input :body, label: false, placeholder: "#{current_user.first_name}, What's happening?", input_html: { rows: 3, cols: 120 }
   = error_span(@post[:body])
 
   %div{ class: 'dropzone' }
@@ -24,12 +24,22 @@
     = f.button :submit, class: 'btn-primary'
     - if @post.persisted?
       = link_to 'Cancel', post_path(@post), class: 'btn btn-default'
+    - elsif current_page?('/posts')
+      = link_to 'Cancel', '', class: 'btn btn-default cancel-post'
     - else
       = link_to 'Cancel', posts_path, class: 'btn btn-default'
 
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      var editor = new wysihtml5.Editor('post_body');
+
+      $('a.cancel-post').click(function(e) {
+        e.preventDefault();
+        editor.clear();
+        editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
+      });
+
       Dropzone.autoDiscover = false;
       var dz = new Dropzone('.dropzone', {
         url: '/posts/upload_image',
@@ -40,7 +50,7 @@
         paramName2: '[source]',
         autoQueue: false,
         acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif',
-        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop files here to upload',
+        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos here to upload',
         dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
       });
 
@@ -56,7 +66,6 @@
       };
 
       document.querySelector('.cancel-upload').onclick = function() {
-        console.log(dz.files);
         $.each(dz.files, function(k, v) {
           if (v.hasOwnProperty('status') && v.status !== 'success') {
             dz.removeFile(v);

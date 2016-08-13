@@ -5,10 +5,18 @@
         %h4.user-name
           = image_tag post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
           = post.user.name
-    %p.post-meta= post.date_meta
-    %a{ href: post_path(post) }
-      %h4.post-title= post.title
-      %p.post-body= post.body
+
+    %p.post-meta
+      = fa_icon 'clock-o'
+      = post.date_meta
+
+    %p.post-body.editable-post-body{ 'data-type' => 'wysihtml5', 'data-pk' => post.id, 'data-url' => editable_post_path(post), name: 'body', value: post.body, 'data-name' => 'body', 'data-escape' => true, 'data-rows' => 5, class: "post-body-#{post.id}" }
+      = post.embed_youtube.html_safe
+
+    - if post.images.any?
+      .post-images
+        = render 'posts/image_swiper', images: post.images
+
     %p.delete-post
       - if current_user && can?(:publish, post)
         = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
