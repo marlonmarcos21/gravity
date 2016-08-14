@@ -1,16 +1,25 @@
 - blogs.each do |blog|
   .blog-preview
-    %p.blog-author
-      %a{ href: user_path(blog.user) }
-        %h4.user-name
-          = image_tag blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
-          = blog.user.name
-    %p.blog-meta= blog.date_meta
-    %a.blog-link{ href: blog_path(blog) }
-      %h3.post-title= blog.title
-      %p.blog-body= blog.stripped_teaser
+    .row
+      %p.blog-author
+        %a{ href: user_path(blog.user) }
+          %h4.user-name
+            = image_tag blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
+            = blog.user.name
+
+    .row
+      %p.blog-meta
+        = fa_icon 'clock-o'
+        = blog.date_meta
+
+    .row
+      %a.blog-link{ href: blog_path(blog) }
+        %h3.post-title= blog.title
+        %p.blog-body= blog.stripped_teaser
+
     - if current_user && can?(:publish, blog)
-      %p.delete-blog
-        = link_to blog_path(blog), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
-          = fa_icon 'trash'
+      .row
+        %p.delete-blog
+          = link_to blog_path(blog), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
+            = fa_icon 'trash'
     %hr

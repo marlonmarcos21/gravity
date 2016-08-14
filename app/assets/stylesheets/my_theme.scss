@@ -43,12 +43,12 @@ p {
   margin-bottom: 5px;
 }
 
-.post-preview {
+.post-preview, .blog-preview {
   background-color: #fff;
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 3px;
-  .poster {
+  .poster, .blog-author {
     margin: 0px !important;
   }
   .row {
