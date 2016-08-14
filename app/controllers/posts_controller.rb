@@ -47,6 +47,7 @@ class PostsController < ApplicationController
       if @new_post.save
         flash[:notice] = 'Post created!'
         attach_images img_token, @new_post.id
+        attach_videos img_token, @new_post.id
         image_token
         @post = Post.new
         @post.images.build
@@ -64,6 +65,7 @@ class PostsController < ApplicationController
 
     if @post.update(post_params)
       attach_images img_token, @post.id
+      attach_videos img_token, @new_post.id
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
@@ -93,18 +95,30 @@ class PostsController < ApplicationController
     image_params = params[:post][:images_attributes]
     return unless image_params
     image_params.each_value do |img|
-      Image.create(
-        token: image_token,
-        source: img['source']
-      )
+      if img['source'].content_type == 'video/mp4'
+        Video.create(
+          token: image_token,
+          source: img['source']
+        )
+      else
+        Image.create(
+          token: image_token,
+          source: img['source']
+        )
+      end
     end
     render json: {}, status: 200
   end
 
   def remove_image
-    img = Image.where(source_file_name: params[:source_file_name],
-                      token: params[:image_token]).first
+    attrs = {
+      source_file_name: params[:source_file_name],
+      token: params[:image_token]
+    }
+    img = Image.where(attrs).first
+    video = Video.where(attrs).first
     img.try(:destroy)
+    video.try(:destroy)
     render json: {}, status: 200
   end
 
@@ -145,6 +159,12 @@ class PostsController < ApplicationController
     return if img_token.blank?
     images = Image.where(token: img_token)
     images.update_all(attachable_id: post_id, attachable_type: 'Post') if images.any?
+  end
+
+  def attach_videos(img_token, post_id)
+    return if img_token.blank?
+    videos = Video.where(token: img_token)
+    videos.update_all(attachable_id: post_id, attachable_type: 'Post') if videos.any?
   end
 
   def prepare_images

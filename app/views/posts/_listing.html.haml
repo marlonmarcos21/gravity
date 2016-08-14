@@ -26,6 +26,12 @@
         .post-images
           = render 'posts/image_swiper', images: post.images
 
+    - if post.videos.any?
+      .row
+        .post-videos
+          - post.videos.each do |video|
+            = video_tag video.source.url, controls: true, size: video.aspect_ratio_display
+
     - if can?(:publish, post)
       .row
         %p.delete-post

@@ -313,6 +313,44 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: videos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE videos (
+    id integer NOT NULL,
+    source_file_name character varying,
+    source_content_type character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone,
+    source_meta json,
+    attachable_id integer,
+    attachable_type character varying,
+    token character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: videos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE videos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE videos_id_seq OWNED BY videos.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -352,6 +390,13 @@ ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profile
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY videos ALTER COLUMN id SET DEFAULT nextval('videos_id_seq'::regclass);
 
 
 --
@@ -400,6 +445,14 @@ ALTER TABLE ONLY user_profiles
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: videos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY videos
+    ADD CONSTRAINT videos_pkey PRIMARY KEY (id);
 
 
 --
@@ -487,6 +540,13 @@ CREATE INDEX index_users_on_tsv_name ON users USING gin (tsv_name);
 
 
 --
+-- Name: index_videos_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_videos_on_attachable_type_and_attachable_id ON videos USING btree (attachable_type, attachable_id);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -567,4 +627,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160813063008');
 INSERT INTO schema_migrations (version) VALUES ('20160813063449');
 
 INSERT INTO schema_migrations (version) VALUES ('20160813064505');
+
+INSERT INTO schema_migrations (version) VALUES ('20160814131210');
 
