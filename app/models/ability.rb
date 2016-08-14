@@ -20,6 +20,7 @@ class Ability
   private
 
   def post_permissions
+    can :more_published_posts, Post
     can :read, Post do |post|
       post.published? || post.user == current_user
     end
@@ -44,7 +45,8 @@ class Ability
   end
 
   def user_permissions
-    can :read, User do |user|
+
+    can [:read, :more_published_posts, :more_drafted_posts, :more_published_blogs, :more_drafted_blogs], User do |user|
       current_user.persisted?
     end
     can :update, User do |user|

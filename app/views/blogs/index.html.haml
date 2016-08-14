@@ -1,7 +1,7 @@
 #blogs
   .row
-    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
-      - if current_user
+    - if current_user
+      .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
         = link_to 'New Blog', new_blog_path, class: 'btn btn-default pull-right'
 
     .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.blogs-container
