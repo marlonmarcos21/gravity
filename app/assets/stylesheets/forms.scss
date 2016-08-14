@@ -203,3 +203,13 @@ form {
     display: none;
   }
 }
+
+.editable-input {
+  iframe {
+    height: 75px !important;
+  }
+}
+
+.edit-xeditable {
+  cursor: pointer;
+}

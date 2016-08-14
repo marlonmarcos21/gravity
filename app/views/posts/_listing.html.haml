@@ -14,7 +14,8 @@
 
     .row
       - if can?(:update, post)
-        %p.post-body.editable-post-body{ 'data-type' => 'wysihtml5', 'data-pk' => post.id, 'data-url' => editable_post_path(post), name: 'body', value: post.body, 'data-name' => 'body', 'data-escape' => true, 'data-rows' => 5, class: "post-body-#{post.id}" }
+        %p.post-body.editable-post-body{ 'data-type' => 'wysihtml5', 'data-pk' => post.id, 'data-url' => editable_post_path(post), 'data-name' => 'body', name: 'body', 'data-value' => post.body, value: post.body, 'data-escape' => 'true', 'data-rows' => 5, class: "post-body-#{post.id}" }
+          = fa_icon 'edit'
           = post.embed_youtube.html_safe
       - else
         %p.post-body

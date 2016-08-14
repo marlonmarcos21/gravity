@@ -7,10 +7,23 @@ class PostsController < ApplicationController
   before_action :image_token,    only: [:new, :index]
 
   def index
+    pp_scope = Post.includes(:user).published.descending
     @post  = Post.new
-    page   = params[:page] || 1
-    @posts = Post.includes(user: :user_profile)
-               .published.descending.page(page)
+    @posts = pp_scope.page(1)
+    @has_more_results = !pp_scope.page(2).empty?
+  end
+
+  def more_published_posts
+    pp_scope = Post.includes(:user).published.descending
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
+    @posts = pp_scope.page(page)
+    @has_more_results = !pp_scope.page(@next_page).empty?
+
+    respond_to do |format|
+      format.html { render :index }
+      format.js
+    end
   end
 
   def show

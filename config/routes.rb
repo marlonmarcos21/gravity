@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     collection do
       post 'upload_image'
       delete 'remove_image'
+      get 'more_published_posts'
     end
 
     member do

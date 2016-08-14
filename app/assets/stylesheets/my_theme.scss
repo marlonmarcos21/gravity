@@ -81,12 +81,6 @@ p {
 .post-body, .blog-body {
   font-size: 15px;
   color: #000;
-  cursor: pointer;
-  &:hover,
-  &:focus {
-    color: $tertiary;
-    cursor: pointer;
-  }
 }
 .delete-post, .delete-blog {
   text-align: right;
