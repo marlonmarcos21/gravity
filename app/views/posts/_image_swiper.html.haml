@@ -1,8 +1,8 @@
 .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
   - images.each do |img|
     %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject' }
-      %a{ href: img.source.url, itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
-        = image_tag img.source.url(:thumb), itemprop: 'thumbnail'
+      %a{ href: img.source.expiring_url(5.minutes.to_i), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
+        = image_tag img.source.expiring_url(5.minutes.to_i, :thumb), itemprop: 'thumbnail'
 
 .pswp{ tabindex: '-1', role: 'dialog', 'aria-hidden' => 'true' }
   .pswp__bg

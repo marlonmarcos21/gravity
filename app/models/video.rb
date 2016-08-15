@@ -10,7 +10,8 @@ class Video < ActiveRecord::Base
                              storage: :s3,
                              s3_credentials: "#{Rails.root}/config/s3.yml",
                              s3_region: ENV['AWS_S3_REGION'],
-                             s3_protocol: :https
+                             s3_protocol: :https,
+                             s3_permissions: :private
 
   validates_attachment_presence :source
   validates_attachment_content_type :source, content_type: /\Avideo\/mp4\Z/
