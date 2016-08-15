@@ -62,6 +62,45 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: blog_media; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE blog_media (
+    id integer NOT NULL,
+    source_file_name character varying,
+    source_content_type character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone,
+    attachable_id integer,
+    attachable_type character varying,
+    token character varying,
+    width integer,
+    height integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: blog_media_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE blog_media_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: blog_media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE blog_media_id_seq OWNED BY blog_media.id;
+
+
+--
 -- Name: blogs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -354,6 +393,13 @@ ALTER SEQUENCE videos_id_seq OWNED BY videos.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY blog_media ALTER COLUMN id SET DEFAULT nextval('blog_media_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY blogs ALTER COLUMN id SET DEFAULT nextval('blogs_id_seq'::regclass);
 
 
@@ -397,6 +443,14 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 --
 
 ALTER TABLE ONLY videos ALTER COLUMN id SET DEFAULT nextval('videos_id_seq'::regclass);
+
+
+--
+-- Name: blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY blog_media
+    ADD CONSTRAINT blog_media_pkey PRIMARY KEY (id);
 
 
 --
@@ -453,6 +507,13 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY videos
     ADD CONSTRAINT videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_blog_media_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_blog_media_on_attachable_type_and_attachable_id ON blog_media USING btree (attachable_type, attachable_id);
 
 
 --
@@ -629,4 +690,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160813063449');
 INSERT INTO schema_migrations (version) VALUES ('20160813064505');
 
 INSERT INTO schema_migrations (version) VALUES ('20160814131210');
+
+INSERT INTO schema_migrations (version) VALUES ('20160815123614');
 

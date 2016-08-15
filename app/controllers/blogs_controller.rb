@@ -16,11 +16,11 @@ def index
 
   def new
     @blog = Blog.new
-    @blog.images.build
+    @blog.blog_media.build
   end
 
   def edit
-    @image_token = @blog.images.first.try(:token) || image_token
+    @image_token = @blog.blog_media.first.try(:token) || image_token
   end
 
   def create
@@ -70,7 +70,7 @@ def index
   end
 
   def tinymce_assets
-    img = Image.create(
+    img = BlogMedium.create(
       source: params[:file],
       token: params[:hint]
     )
@@ -92,7 +92,7 @@ def index
   private
 
   def blog
-    @blog = Blog.includes(:images).find(params[:id])
+    @blog = Blog.includes(:blog_media).find(params[:id])
   end
 
   def blog_params
@@ -106,7 +106,7 @@ def index
 
   def attach_images(img_token)
     return if img_token.blank?
-    images = Image.where(token: img_token)
+    images = BlogMedium.where(token: img_token)
     images.update_all(attachable_id: @blog.id, attachable_type: 'Blog') if images.any?
   end
 end

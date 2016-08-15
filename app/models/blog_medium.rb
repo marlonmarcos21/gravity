@@ -1,19 +1,17 @@
 # t.attachment :source
 # t.references :attachable, polymorphic: true
-# t.boolean    :main_image, default: false
 # t.string     :token
 # t.integer    :width
 # t.integer    :height
 
-class Image < ActiveRecord::Base
+class BlogMedium < ActiveRecord::Base
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] } },
                              storage: :s3,
                              s3_credentials: "#{Rails.root}/config/s3.yml",
                              s3_region: ENV['AWS_S3_REGION'],
-                             s3_protocol: :https,
-                             s3_permissions: :private
+                             s3_protocol: :https
 
   validates_attachment_presence :source
   validates_attachment_content_type :source, content_type: /\Aimage\/(\w?jpeg|jpg|png|gif)\Z/

@@ -8,7 +8,7 @@
 class Blog < ActiveRecord::Base
   belongs_to :user
 
-  has_many :images, as: :attachable, dependent: :destroy
+  has_many :blog_media, as: :attachable, dependent: :destroy
 
   validates :user, presence: true
 
