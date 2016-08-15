@@ -20,15 +20,12 @@
         %li
           %a.page-scroll{ href: '#about' }
             About
-        %li
-          %a.page-scroll{ href: '#contact' }
-            Contact
         - if current_user
           %li
-            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form' } do |f|
+            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form search-form' } do |f|
               %p= f.input :search, wrapper: :horizontal_form, label: false, placeholder: 'Search', input_html: { class: 'form-control input-sm' }
               .input-group-btn
-                %button.btn.btn-default{ type: 'submit' }
+                %button.btn.btn-default.search-submit{ type: 'submit' }
                   = fa_icon 'search'
       .collapse.navbar-collapse.navbar-right.navbar-main-collapse
         - if current_user
@@ -86,4 +83,13 @@
           }
         });
       }
+
+      $('.search-form').submit(function(e) {
+        if ($('#search_search').val().trim() === '' || !$('#search_search').val()) {
+          e.preventDefault();
+          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>';
+          $(html).modal();
+          return false;
+        }
+      });
     });
