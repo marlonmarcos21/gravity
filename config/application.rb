@@ -30,6 +30,7 @@ module TheMarcoses
       #{config.root}/app/concerns/
       #{config.root}/app/controllers/concerns/
       #{config.root}/app/inputs/
+      #{config.root}/app/jobs/
       #{config.root}/app/mailers/concerns/
       #{config.root}/app/models/concerns/
       #{config.root}/app/lib/listeners/
@@ -58,5 +59,7 @@ module TheMarcoses
     config.generators do |g|
       g.template_engine :haml
     end
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end
