@@ -1,35 +1,39 @@
-#blog
+.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2#blog
   .row
-    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+    - if can? :publish, @blog
       .blog-header
-        - if can? :publish, @blog
-          - if @blog.published?
-            = link_to 'Unpublish', unpublish_blog_path(@blog), method: :patch, class: 'btn btn-default'
-          - else
-            = link_to 'Publish', publish_blog_path(@blog), method: :patch, class: 'btn btn-default'
-          %hr
+        - if @blog.published?
+          = link_to 'Unpublish', unpublish_blog_path(@blog), method: :patch, class: 'btn btn-default'
+        - else
+          = link_to 'Publish', publish_blog_path(@blog), method: :patch, class: 'btn btn-default'
+    %hr
 
-        %p.blog-author
-          %a{ href: user_path(@blog.user) }
-            %h4.user-name
-              = image_tag @blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
-              = @blog.user.name
+  .row
+    %p.blog-author
+      %a{ href: user_path(@blog.user) }
+        %h4.user-name
+          = image_tag @blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
+          = @blog.user.name
 
-        %p.blog-meta= @blog.date_meta
-        %h1= @blog.title
+  .row
+    %p.blog-meta= @blog.date_meta
+    %h1= @blog.title
 
-      #blog-body
-        = @blog.body.html_safe
+  .row
+    #blog-body
+      = @blog.body.html_safe
 
-      - if current_user
-        = render 'comments/template', commentable: @blog, new_comment: @comment
-      - else
-        .comments-header
-          %h5 Sign in to view or read comments
+  .row
+    - if current_user
+      = render 'comments/template', commentable: @blog, new_comment: @comment
+    - else
+      .comments-header
+        %h5 Sign in to view or read comments
 
-      .blog-actions
-        = link_to 'Back', blogs_path, class: 'btn btn-default'
-        
-        - if can? :publish, @blog
-          = link_to 'Edit', edit_blog_path(@blog), class: 'btn btn-default'
-          = link_to 'Delete', blog_path(@blog), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
+  .row
+    .blog-actions
+      = link_to 'Back', blogs_path, class: 'btn btn-default'
+      
+      - if can? :publish, @blog
+        = link_to 'Edit', edit_blog_path(@blog), class: 'btn btn-default'
+        = link_to 'Delete', blog_path(@blog), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

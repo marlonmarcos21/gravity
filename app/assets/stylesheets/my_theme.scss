@@ -87,14 +87,24 @@ p {
 }
 
 #blog {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 3px;
+  .row {
+    margin-left: 0px;
+    margin-right: 0px;
+    p {
+      line-height: 1.4;
+    }
+  }
   #blog-body {
-    margin-top: 40px;
+    font-size: 15px;
     h1, h2, h3, h4, h5, h6 {
-      color: white !important;
+      color: black !important;
     }
   }
   .blog-actions {
-    margin-top: 30px;
+    margin-top: 20px;
   }
 }
 
@@ -353,7 +363,7 @@ a {
 
 @media(min-width:767px) {
   .content-section {
-    padding-top: 150px !important;
+    padding-top: 75px !important;
     &.home {
       padding-top: 80px !important;
       margin-bottom: 80px;

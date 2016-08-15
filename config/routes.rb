@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :blogs do
     collection do
       post 'tinymce_assets'
+      get 'more_published_blogs'
     end
 
     member do

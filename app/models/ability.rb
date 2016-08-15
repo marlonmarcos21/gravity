@@ -33,6 +33,7 @@ class Ability
   end
 
   def blog_permissions
+    can :more_published_blogs, Blog
     can :read, Blog do |blog|
       blog.published? || blog.user == current_user
     end

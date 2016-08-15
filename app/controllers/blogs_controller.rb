@@ -4,10 +4,23 @@ class BlogsController < ApplicationController
   before_action :blog, only:  [:show, :edit, :update, :destroy, :publish, :unpublish]
   before_action :image_token, only: :new
 
-def index
-    page   = params[:page] || 1
-    @blogs = Blog.includes(user: :user_profile)
-               .published.descending.page(page)
+  def index
+    pb_scope = Blog.includes(:user).published.descending
+    @blogs   = pb_scope.page(1)
+    @has_more_results = !pb_scope.page(2).empty?
+  end
+
+  def more_published_blogs
+    pb_scope = Blog.includes(:user).published.descending
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
+    @blogs = pb_scope.page(page)
+    @has_more_results = !pb_scope.page(@next_page).empty?
+
+    respond_to do |format|
+      format.html { render :index }
+      format.js
+    end
   end
 
   def show
@@ -52,7 +65,7 @@ def index
     respond_to do |format|
       flash[:notice] = 'Blog successfully deleted!'
       format.html { redirect_to blogs_url }
-      format.json { render json: { message: 'Post deleted!' } }
+      format.json { render json: { message: 'Blog deleted!' } }
     end
   end
 
