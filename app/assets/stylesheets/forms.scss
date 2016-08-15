@@ -118,7 +118,7 @@ form {
   margin-bottom: 20px;
   .submit-new-comment[disabled] {
     background-color: gray !important;
-    border-color: $primary !important;
+    border-color: gray !important;
     color: white !important;
   }
 }
@@ -164,7 +164,7 @@ form {
   margin-bottom: 25px;
   .submit-reply-comment[disabled] {
     background-color: gray !important;
-    border-color: $primary !important;
+    border-color: gray !important;
     color: white !important;
   }
 }
@@ -212,4 +212,10 @@ form {
 
 .edit-xeditable {
   cursor: pointer;
+}
+
+.btn-primary[disabled] {
+  background-color: gray !important;
+  border-color: gray !important;
+  color: white !important;
 }

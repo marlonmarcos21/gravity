@@ -60,11 +60,28 @@
         dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
       });
 
+      dz.on('addedfile', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
+      dz.on('processing', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
+      dz.on('uploadprogress', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
       var auth_token = $('meta[name=csrf-token]').attr('content');
       var image_token = '#{raw(@image_token)}';
       dz.on('sending', function(file, xhr, formData) {
+        $('input[name=commit]').attr('disabled', true);
         formData.append('authenticity_token', auth_token);
         formData.append('image_token', image_token);
+      });
+
+      dz.on('complete', function(file) {
+        $('input[name=commit]').removeAttr('disabled');
       });
 
       document.querySelector('.start-upload').onclick = function() {
@@ -77,6 +94,7 @@
             dz.removeFile(v);
           }
         });
+        $('input[name=commit]').removeAttr('disabled');
       };
 
       dz.on('removedfile', function(file) {
@@ -106,9 +124,12 @@
         e.preventDefault();
         editor.clear();
         editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
-
         $.each(dz.files, function(k, v) {
           dz.removeFile(v);
         });
+        $('html, body').animate({
+          scrollTop: 0
+        }, 0);
+        $('input[name=commit]').removeAttr('disabled');
       });
     });

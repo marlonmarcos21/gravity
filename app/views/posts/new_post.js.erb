@@ -1,7 +1,6 @@
 $('#posts-container').prepend("<%= escape_javascript(render('listing', posts: [@new_post])) %>");
 var new_img_token = "<%= @image_token %>";
 $('input[name=image_token]').val(new_img_token);
-var postElement = $("#post-<%= @new_post.id %>");
 $('html, body').animate({
   scrollTop: 510
 }, 500);
@@ -206,10 +205,27 @@ var dz = new Dropzone('.dropzone', {
   dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
 });
 
+dz.on('addedfile', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
+dz.on('processing', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
+dz.on('uploadprogress', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
 var auth_token = $('meta[name=csrf-token]').attr('content');
 dz.on('sending', function(file, xhr, formData) {
+  $('input[name=commit]').attr('disabled', true);
   formData.append('authenticity_token', auth_token);
   formData.append('image_token', new_img_token);
+});
+
+dz.on('complete', function(file) {
+  $('input[name=commit]').removeAttr('disabled');
 });
 
 document.querySelector('.start-upload').onclick = function() {
@@ -222,6 +238,7 @@ document.querySelector('.cancel-upload').onclick = function() {
       dz.removeFile(v);
     }
   });
+  $('input[name=commit]').removeAttr('disabled');
 };
 
 dz.on('removedfile', function(file) {
@@ -239,8 +256,11 @@ $('a.cancel-post').click(function(e) {
   e.preventDefault();
   editor.clear();
   editor.setValue("<%= current_user.first_name %>What's happening?", true);
-
   $.each(dz.files, function(k, v) {
     dz.removeFile(v);
   });
+  $('html, body').animate({
+    scrollTop: 0
+  }, 0);
+  $('input[name=commit]').removeAttr('disabled');
 });
