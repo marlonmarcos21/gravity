@@ -37,12 +37,6 @@
       var wysi = $('textarea#post_body').wysihtml5();
       var editor = $('#post_body').data('wysihtml5').editor;
 
-      $('a.cancel-post').click(function(e) {
-        e.preventDefault();
-        editor.clear();
-        editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
-      });
-
       $('#new_post').submit(function(e) {
         e.preventDefault();
         if (!editor.getValue()) {
@@ -107,4 +101,14 @@
           dz.files.push(mockFile);
         }
       }
+
+      $('a.cancel-post').click(function(e) {
+        e.preventDefault();
+        editor.clear();
+        editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
+
+        $.each(dz.files, function(k, v) {
+          dz.removeFile(v);
+        });
+      });
     });
