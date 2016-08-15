@@ -109,6 +109,7 @@ class BlogsController < ApplicationController
   end
 
   def blog_params
+    params[:blog][:body] = params['tinymce-container']
     permitted_params = %i(title body published)
     params.require(:blog).permit(*permitted_params)
   end

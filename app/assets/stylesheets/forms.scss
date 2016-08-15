@@ -169,16 +169,36 @@ form {
   }
 }
 
-#mceu_18 {
+#tinymce-toolbar {
   position: fixed;
   bottom: 0;
-  margin-left: 60px;
-  background-color: black;
-  border: 3px solid $primary;
-  @media(max-width: 767px) {
-    width: 79%;
-    margin-left: 38px;
+  z-index: 9999;
+  margin-left: 55px;
+}
+.mce-tooltip-inner {
+  position:relative !important;
+  top:-65px !important;
+}
+.mce-tooltip-n {
+  .mce-tooltip-arrow {
+    top: -40px !important;
   }
+}
+#tinymce-container {
+  background-color: #fff;
+  min-height: 700px;
+  height: auto;
+  padding: 10px;
+  border-radius: 3px;
+  h1, h2, h3, h4, h5, h6 {
+    color: black;
+  }
+  img {
+    max-width: 750px;
+  }
+}
+#mceu_18 {
+  border: 3px solid $primary;
 }
 
 .wysihtml5-toolbar {

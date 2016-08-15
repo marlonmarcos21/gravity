@@ -7,19 +7,24 @@
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
   = f.input :title
   = error_span(@blog[:title])
-  = f.input :body, input_html: { class: 'tinymce', rows: 30, cols: 120 }
-  = error_span(@blog[:body])
+
+  .form-group.blog_body
+    = f.label :body
+    #tinymce-toolbar
+    #tinymce-container{ value: @blog.body || '' }
 
   .form-actions
-    = f.button :submit, class: 'btn-primary'
     - if @blog.persisted?
+      - button_label = @blog.published? ? 'Update Blog' : 'Update Draft'
+      = f.button :submit, button_label, class: 'btn btn-default'
       = link_to 'Cancel', blog_path(@blog), class: 'btn btn-default'
     - else
+      = f.button :submit, 'Save Draft', class: 'btn btn-default'
       = link_to 'Cancel', blogs_path, class: 'btn btn-default'
 
 - content_for :footer_scripts do
   :javascript
-    $(document).ready(function() {
+    (function() {
       var image_token = '#{raw(@image_token)}';
       function setupEditor(ed) {
         ed.on('init', function() {
@@ -27,15 +32,25 @@
           this.getDoc().body.style.fontFamily = '"Lora"';
         });
       }
-      tinymce.init({
-        selector: 'textarea',
-        toolbar: ['bold italic underline | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link | media | indent outdent'],
-        plugins: 'uploadimage,link,media',
-        uploadimage_form_url: '/blogs/tinymce_assets',
-        uploadimage_hint: image_token,
-        menubar: '',
-        statusbar: false,
-        media_live_embeds: true,
-        setup: setupEditor
-      });
-    });
+      function insert_contents(inst){
+        inst.setContent($('#tinymce-container').attr('value'));
+      }
+      if (typeof tinyMCE != 'undefined') {
+        tinyMCE.init({
+          selector: '#tinymce-container',
+          toolbar: ['bold italic underline | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link | media | indent outdent'],
+          plugins: 'uploadimage,link,media',
+          uploadimage_form_url: '/blogs/tinymce_assets',
+          uploadimage_hint: image_token,
+          menubar: '',
+          statusbar: false,
+          inline: true,
+          fixed_toolbar_container: '#tinymce-toolbar',
+          media_live_embeds: true,
+          setup: setupEditor,
+          init_instance_callback: insert_contents
+        });
+      } else {
+        setTimeout(arguments.callee, 50);
+      }
+    })();
