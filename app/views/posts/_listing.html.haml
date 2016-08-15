@@ -30,7 +30,7 @@
       .row
         .post-videos
           - post.videos.each do |video|
-            = video_tag video.source.url, controls: true, size: video.aspect_ratio_display
+            = video_tag video.source.expiring_url(1.hour.to_i), controls: true, size: video.aspect_ratio_display
 
     - if can?(:publish, post)
       .row
