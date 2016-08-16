@@ -1,5 +1,5 @@
 .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#blog
-  .row-fluid
+  .row
     - if can? :publish, @blog
       .blog-header
         - if @blog.published?
@@ -19,16 +19,17 @@
     %p.blog-meta= @blog.date_meta
     %h1= @blog.title
 
-  .row-fluid
+  .row
     #blog-body
       = @blog.body.html_safe
 
-  .row
-    - if current_user
-      = render 'comments/template', commentable: @blog, new_comment: @comment
-    - else
-      .comments-header
-        %h5 Sign in to view or read comments
+  - if @blog.published?
+    .row
+      - if current_user
+        = render 'comments/template', commentable: @blog, new_comment: @comment
+      - else
+        .comments-header
+          %h5 Sign in to read or post comments
 
   .row
     .blog-actions

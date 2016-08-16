@@ -1,40 +1,35 @@
-#post
+.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#post
   .row
-    .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
-      .post-header
-        - if can? :publish, @post
-          - if @post.published?
-            = link_to 'Unpublish', unpublish_post_path(@post), method: :patch, class: 'btn btn-default'
-          - else
-            = link_to 'Publish', publish_post_path(@post), method: :patch, class: 'btn btn-default'
-          %hr
+    %p.poster
+      %a{ href: user_path(@post.user) }
+        %h4.user-name
+          = image_tag @post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
+          = @post.user.name
 
-        %p.poster
-          %a{ href: user_path(@post.user) }
-            %h4.user-name
-              = image_tag @post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
-              = @post.user.name
+  .row
+    %p.post-meta
+      = fa_icon 'clock-o'
+      = @post.date_meta
 
-        %p.post-meta
-          = fa_icon 'clock-o'
-          = @post.date_meta
+  .row
+    #post-body
+      %p= @post.embed_youtube.html_safe
 
-      #post-body
-        %p= embed_youtube(@post.body).gsub(/\n/, '<br />').html_safe
+  - if @post.images.any?
+    .row
+      .post-images
+        = render 'image_swiper', images: @post.images
 
-      - if @post.images.any?
-        .post-images
-          = render 'image_swiper', images: @post.images
+  .row
+    - if current_user
+      = render 'comments/template', commentable: @post, new_comment: @comment
+    - else
+      .comments-header
+        %h5 Sign in to read or post comments
 
-      - if current_user
-        = render 'comments/template', commentable: @post, new_comment: @comment
-      - else
-        .comments-header
-          %h5 Sign in to view or read comments
-
-      .post-actions
-        = link_to 'Back', posts_path, class: 'btn btn-default'
-        
-        - if can? :publish, @post
-          = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'
-          = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'
+  .row
+    .post-actions
+      = link_to 'Back', posts_path, class: 'btn btn-default'
+      - if can? :publish, @post
+        = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'
+        = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

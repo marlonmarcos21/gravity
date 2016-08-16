@@ -86,7 +86,7 @@ p {
   text-align: right;
 }
 
-#blog {
+#blog, #post {
   background-color: #fff;
   padding: 15px;
   border-radius: 3px;
@@ -115,8 +115,14 @@ p {
       }
     }
   }
-  .blog-actions {
+  .blog-actions, .post-actions {
     margin-top: 20px;
+  }
+}
+
+.comment {
+  .user-name {
+    margin-bottom: 0px;
   }
 }
 
