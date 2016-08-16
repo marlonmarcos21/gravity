@@ -1,5 +1,5 @@
-.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2#blog
-  .row
+.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#blog
+  .row-fluid
     - if can? :publish, @blog
       .blog-header
         - if @blog.published?
@@ -19,7 +19,7 @@
     %p.blog-meta= @blog.date_meta
     %h1= @blog.title
 
-  .row
+  .row-fluid
     #blog-body
       = @blog.body.html_safe
 

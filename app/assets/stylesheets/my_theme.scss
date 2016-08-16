@@ -102,6 +102,18 @@ p {
     h1, h2, h3, h4, h5, h6 {
       color: black !important;
     }
+    img, iframe {
+      max-width: 720px;
+      @media(max-width: 543px){
+        max-width: 320px;
+      }
+      @media(min-width: 544px) and (max-width: 767px) {
+        max-width: 420px;
+      }
+      @media(min-width: 768px) and (max-width: 992px) {
+        max-width: 520px !important;
+      }
+    }
   }
   .blog-actions {
     margin-top: 20px;
