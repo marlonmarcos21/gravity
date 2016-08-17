@@ -62,6 +62,44 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: activities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE activities (
+    id integer NOT NULL,
+    trackable_id integer,
+    trackable_type character varying,
+    owner_id integer,
+    owner_type character varying,
+    key character varying,
+    parameters text,
+    recipient_id integer,
+    recipient_type character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE activities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+
+
+--
 -- Name: blog_media; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -174,6 +212,72 @@ CREATE SEQUENCE comments_id_seq
 --
 
 ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
+
+
+--
+-- Name: friend_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE friend_requests (
+    id integer NOT NULL,
+    user_id integer,
+    requester_id integer,
+    status character varying DEFAULT 'pending'::character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: friend_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friend_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friend_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friend_requests_id_seq OWNED BY friend_requests.id;
+
+
+--
+-- Name: friends; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE friends (
+    id integer NOT NULL,
+    user_id integer,
+    friend_id integer,
+    friend_request_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: friends_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friends_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friends_id_seq OWNED BY friends.id;
 
 
 --
@@ -393,6 +497,13 @@ ALTER SEQUENCE videos_id_seq OWNED BY videos.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY blog_media ALTER COLUMN id SET DEFAULT nextval('blog_media_id_seq'::regclass);
 
 
@@ -408,6 +519,20 @@ ALTER TABLE ONLY blogs ALTER COLUMN id SET DEFAULT nextval('blogs_id_seq'::regcl
 --
 
 ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_requests ALTER COLUMN id SET DEFAULT nextval('friend_requests_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friends ALTER COLUMN id SET DEFAULT nextval('friends_id_seq'::regclass);
 
 
 --
@@ -446,6 +571,14 @@ ALTER TABLE ONLY videos ALTER COLUMN id SET DEFAULT nextval('videos_id_seq'::reg
 
 
 --
+-- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY activities
+    ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -467,6 +600,22 @@ ALTER TABLE ONLY blogs
 
 ALTER TABLE ONLY comments
     ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friend_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_requests
+    ADD CONSTRAINT friend_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friends_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friends
+    ADD CONSTRAINT friends_pkey PRIMARY KEY (id);
 
 
 --
@@ -510,6 +659,27 @@ ALTER TABLE ONLY videos
 
 
 --
+-- Name: index_activities_on_owner_id_and_owner_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_owner_id_and_owner_type ON activities USING btree (owner_id, owner_type);
+
+
+--
+-- Name: index_activities_on_recipient_id_and_recipient_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_recipient_id_and_recipient_type ON activities USING btree (recipient_id, recipient_type);
+
+
+--
+-- Name: index_activities_on_trackable_id_and_trackable_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_trackable_id_and_trackable_type ON activities USING btree (trackable_id, trackable_type);
+
+
+--
 -- Name: index_blog_media_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -549,6 +719,41 @@ CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON comments U
 --
 
 CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
+
+
+--
+-- Name: index_friend_requests_on_requester_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friend_requests_on_requester_id ON friend_requests USING btree (requester_id);
+
+
+--
+-- Name: index_friend_requests_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friend_requests_on_user_id ON friend_requests USING btree (user_id);
+
+
+--
+-- Name: index_friends_on_friend_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friends_on_friend_id ON friends USING btree (friend_id);
+
+
+--
+-- Name: index_friends_on_friend_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friends_on_friend_request_id ON friends USING btree (friend_request_id);
+
+
+--
+-- Name: index_friends_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friends_on_user_id ON friends USING btree (user_id);
 
 
 --
@@ -692,4 +897,10 @@ INSERT INTO schema_migrations (version) VALUES ('20160813064505');
 INSERT INTO schema_migrations (version) VALUES ('20160814131210');
 
 INSERT INTO schema_migrations (version) VALUES ('20160815123614');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817004636');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817115752');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817120411');
 

@@ -46,12 +46,14 @@ class Ability
   end
 
   def user_permissions
-
     can [:read, :more_published_posts, :more_drafted_posts, :more_published_blogs, :more_drafted_blogs], User do |user|
       current_user.persisted?
     end
     can :update, User do |user|
       user == current_user
+    end
+    can :send_friend_request, User do |user|
+      !current_user.has_friend_request_with?(user) && !current_user.is_friends_with?(user)
     end
   end
 

@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
-  before_action :user, only: [:show, :edit, :update, :destroy]
+  before_action :user, only: [:show, :edit, :update, :destroy, :friend_request]
 
   def show
     pp_scope = @user.posts.published.descending
@@ -105,6 +105,21 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     redirect_to users_url, notice: 'User was successfully deleted.'
+  end
+
+  def send_friend_request
+    respond_to do |format|
+      if !current_user.is_friends_with?(@user) && current_user.send_friend_request_to(@user)
+        @user.create_activity :send_friend_request
+        @post = @user.posts.published.first
+        flash[:notice] = 'Request sent!'
+        format.html { redirect_to :back }
+        format.js
+      else
+        flash[:alert] = 'Request failed, please try again.'
+        render nothing: true
+      end
+    end
   end
 
   private

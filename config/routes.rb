@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get 'more_drafted_posts'
       get 'more_published_blogs'
       get 'more_drafted_blogs'
+      get 'send_friend_request'
     end
   end
 

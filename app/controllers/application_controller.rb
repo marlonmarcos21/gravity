@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  include PublicActivity::StoreController
+
   after_action :flash_to_headers
 
   helper_method :in_homepage?

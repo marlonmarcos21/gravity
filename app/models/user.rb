@@ -14,12 +14,21 @@
 # t.string     :last_name
 
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :recoverable,
+         :rememberable, :trackable, :validatable
+
   DEFAULT_AVATAR = 'https://themarcoses-dev.s3-ap-southeast-1.amazonaws.com/dev_files/default-avatar.png'
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
   has_many :posts
   has_many :blogs
+
+  has_many :friends
+  has_many :friend_requests
+  has_many :requested_friends, class_name: 'FriendRequest', foreign_key: :requester_id
 
   has_attached_file :profile_photo, styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
                                     storage: :s3,
@@ -43,10 +52,10 @@ class User < ActiveRecord::Base
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
                              trigram: { threshold: 0.6 } }
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :recoverable,
-         :rememberable, :trackable, :validatable
+  include PublicActivity::Model
+  tracked skip_defaults: true,
+          owner: Proc.new { |controller, _model| controller.current_user },
+          recipient: Proc.new { |_controller, model| model }
 
   delegate :date_of_birth,   to: :user_profile, allow_nil: true
   delegate :street_address1, to: :user_profile, allow_nil: true
@@ -93,6 +102,25 @@ class User < ActiveRecord::Base
       postal_code
     ].compact.join(' ').gsub(' ,', ',').gsub(/,,|, ,/, ',').gsub(/^ , |^,$/, '')
   end
+
+  def is_friends_with?(other_user)
+    return true if self == other_user
+    friends.where(friend: other_user).exists?
+  end
+
+  def send_friend_request_to(other_user)
+    requested_friends.create(user: other_user)
+  end
+
+  def requested_to_be_friends_with?(other_user)
+    requested_friends.where(user: other_user, status: 'pending').exists?
+  end
+
+  def has_friend_request_with?(other_user)
+    friend_requests.where(requester: other_user, status: 'pending').exists?
+  end
+
+  private
 
   def slug_candidates
     "#{first_name}-#{last_name}"
