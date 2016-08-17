@@ -32,8 +32,8 @@ class Video < ActiveRecord::Base
       end
     else
       if orig_width > 258
-        width = 258
-        height = (258/aspect).round
+        width = 270
+        height = (270/aspect).round
       end
     end
 
