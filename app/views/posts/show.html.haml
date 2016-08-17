@@ -1,24 +1,5 @@
 .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#post
-  .row
-    %p.poster
-      %a{ href: user_path(@post.user) }
-        %h4.user-name
-          = image_tag @post.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
-          = @post.user.name
-
-  .row
-    %p.post-meta
-      = fa_icon 'clock-o'
-      = @post.date_meta
-
-  .row
-    #post-body
-      %p= @post.embed_youtube.html_safe
-
-  - if @post.images.any?
-    .row
-      .post-images
-        = render 'image_swiper', images: @post.images
+  = render 'posts/post_preview', post: @post, ajax: 'false'
 
   .row
     - if current_user
@@ -32,4 +13,3 @@
       = link_to 'Back', posts_path, class: 'btn btn-default'
       - if can? :publish, @post
         = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'
-        = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

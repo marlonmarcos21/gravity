@@ -5,9 +5,8 @@
   - if has_more_results
     %nav.published-posts-pagination
       %span.published-posts-pagination-page
-        %a.published-posts-pagination-link{ data: { remote: 'true' }, href: more_published_posts_posts_path(page: next_page) }
-          %em Loading more
-          = image_tag 'loading.gif'
+        %em Loading more
+        = image_tag 'loading.gif'
   - else
     %span#end-of-internet
       %em Congratulations, you have reached the end of internet!
@@ -22,9 +21,8 @@
       var nextPage = 2;
       $(window).scroll(function() {
         var scrolled = parseInt($(window).scrollTop());
-        var height = parseInt($(document).height() - $(window).height()) - 100;
+        var height = parseInt($(document).height() - $(window).height()) - 120;
         if (scrolled >= height && nextPage === 2) {
-          $('.published-posts-pagination').hide();
           $.ajax({
             method: 'GET',
             url: '#{more_published_posts_posts_path}',
@@ -33,5 +31,9 @@
           });
           nextPage = 3;
         }
+        $(document).ajaxStop(function () {
+          console.log('ajax stop');
+          $('.published-posts-pagination').hide();
+        });
       });
     });

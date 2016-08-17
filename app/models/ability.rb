@@ -53,7 +53,10 @@ class Ability
       user == current_user
     end
     can :send_friend_request, User do |user|
-      !current_user.has_friend_request_with?(user) && !current_user.is_friends_with?(user)
+      !current_user.is_friends_with?(user) && !current_user.has_friend_request_from?(user)
+    end
+    can :accept_friend_request, User do |user|
+      !current_user.is_friends_with?(user) && user.has_friend_request_from?(current_user)
     end
   end
 

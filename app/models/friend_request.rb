@@ -12,6 +12,6 @@ class FriendRequest < ActiveRecord::Base
 
   validates :user,      presence: true
   validates :requester, presence: true
-
-  validates :status, presence: true, inclusion: { in: AVAILABLE_STATUSES }
+  validates :status,    presence: true, inclusion: { in: AVAILABLE_STATUSES }
+  validates :user_id,   uniqueness: { scope: :requester_id }
 end

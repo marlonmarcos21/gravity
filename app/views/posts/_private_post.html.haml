@@ -1,14 +1,19 @@
 .row{ class: "private-post-#{post.user_id}" }
   = fa_icon 'lock'
-  = "This post is private,".html_safe
+  This post is private,
   - if current_user.nil?
     sign in to view!
   - elsif current_user.requested_to_be_friends_with?(post.user)
     waiting for
     = link_to post.user.first_name, user_path(post.user)
     to accept your request.
+  - elsif current_user.has_friend_request_from?(post.user)
+    you have a pending friend request with
+    = link_to "#{post.user.first_name},", user_path(post.user)
+    click
+    = link_to 'here to accept', accept_friend_request_user_path(post.user, post_id: post.id), method: :patch, remote: true
   - else
-    = link_to 'send a friend request', send_friend_request_user_path(post.user), remote: true
+    = link_to 'send a friend request', send_friend_request_user_path(post.user), method: :patch, remote: true
     to
     = link_to post.user.first_name, user_path(post.user)
     to view this.

@@ -109,7 +109,13 @@ class UsersController < ApplicationController
 
   def send_friend_request
     respond_to do |format|
-      if !current_user.is_friends_with?(@user) && current_user.send_friend_request_to(@user)
+      if current_user.has_friend_request_from?(@user)
+        flash[:notice] = "#{user.first_name} already sent you a friend request, refresh to accept!"
+        format.html { redirect_to :back }
+        format.js   { render nothing: true, content_type: 'text/html' }
+      elsif !current_user.is_friends_with?(@user) &&
+           !current_user.requested_to_be_friends_with?(@user) &&
+           current_user.send_friend_request_to(@user)
         @user.create_activity :send_friend_request
         @post = @user.posts.published.first
         flash[:notice] = 'Request sent!'
@@ -117,7 +123,26 @@ class UsersController < ApplicationController
         format.js
       else
         flash[:alert] = 'Request failed, please try again.'
-        render nothing: true
+        format.html { redirect_to :back }
+        format.js   { render nothing: true, content_type: 'text/html' }
+      end
+    end
+  end
+
+  def accept_friend_request
+    respond_to do |format|
+      if !@user.is_friends_with?(current_user) &&
+           current_user.has_friend_request_from?(@user) &&
+           current_user.accept_friend_request!(@user)
+        @user.create_activity :accept_friend_request, recipient: @user
+        @post = Post.find_by_id params[:post_id]
+        flash[:notice] = 'Request accepted!'
+        format.html { redirect_to :back }
+        format.js
+      else
+        flash[:alert] = 'Accept failed, please try again.'
+        format.html { redirect_to :back }
+        format.js   { render nothing: true, content_type: 'text/html' }
       end
     end
   end

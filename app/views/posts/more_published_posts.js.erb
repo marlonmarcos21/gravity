@@ -5,9 +5,9 @@ var nextPage = "<%= @next_page %>"
 var checker = true
 $(window).scroll(function() {
   var scrolled = parseInt($(window).scrollTop());
-  var height = parseInt($(document).height() - $(window).height()) - 100;
+  var height = parseInt($(document).height() - $(window).height()) - 120;
   if (scrolled >= height  && checker === true && moreResults === 'true') {
-    $('.published-posts-pagination').hide();
+    $('.published-posts-pagination').show();
     $.ajax({
       method: 'GET',
       url: "<%= more_published_posts_posts_path %>",

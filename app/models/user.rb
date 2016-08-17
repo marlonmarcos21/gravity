@@ -116,8 +116,26 @@ class User < ActiveRecord::Base
     requested_friends.where(user: other_user, status: 'pending').exists?
   end
 
-  def has_friend_request_with?(other_user)
-    friend_requests.where(requester: other_user, status: 'pending').exists?
+  def friend_request_from(other_user)
+    friend_requests.where(requester: other_user, status: 'pending').first
+  end
+
+  def has_friend_request_from?(other_user)
+    !friend_request_from(other_user).nil?
+  end
+
+  def accept_friend_request!(other_user)
+    friend_request = friend_request_from(other_user)
+    return false unless friend_request
+    friends.create(
+      friend: other_user,
+      friend_request: friend_request
+    )
+    other_user.friends.create(
+      friend: self,
+      friend_request: friend_request
+    )
+    friend_request.update(status: 'accepted')
   end
 
   private
