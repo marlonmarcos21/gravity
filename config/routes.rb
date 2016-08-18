@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   resources :users, except: [:index] do
     member do
       get 'more_published_posts'
-      get 'more_drafted_posts'
       get 'more_published_blogs'
       get 'more_drafted_blogs'
       patch 'send_friend_request'
       patch 'accept_friend_request'
+      patch 'reject_friend_request'
+      patch 'cancel_friend_request'
     end
   end
 

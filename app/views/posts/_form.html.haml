@@ -6,7 +6,6 @@
 
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
   = f.input :body, label: false, placeholder: "#{current_user.first_name}, What's happening?", input_html: { rows: 3, cols: 120 }
-  = error_span(@post[:body])
 
   .dropzone
     .dropzone-previews

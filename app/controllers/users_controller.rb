@@ -33,19 +33,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def more_drafted_posts
-    dp_scope = @user.posts.unpublished.order(updated_at: :desc)
-    @dppage  = (params[:dppage] || 2).to_i + 1
-
-    @drafted_posts = dp_scope.page(params[:dppage] || 2)
-    @more_results  = !dp_scope.page(@dppage).empty?
-
-    respond_to do |format|
-      format.html { render :show }
-      format.js
-    end
-  end
-
   def more_published_blogs
     pb_scope = @user.blogs.published.descending
     @pbpage  = (params[:pbpage] || 2).to_i + 1
@@ -110,12 +97,12 @@ class UsersController < ApplicationController
   def send_friend_request
     respond_to do |format|
       if current_user.has_friend_request_from?(@user)
-        flash[:notice] = "#{user.first_name} already sent you a friend request, refresh to accept!"
+        flash[:notice] = "#{@user.first_name} already sent you a friend request, accept now!"
         format.html { redirect_to :back }
         format.js   { render nothing: true, content_type: 'text/html' }
       elsif !current_user.is_friends_with?(@user) &&
-           !current_user.requested_to_be_friends_with?(@user) &&
-           current_user.send_friend_request_to(@user)
+              !current_user.requested_to_be_friends_with?(@user) &&
+              current_user.send_friend_request_to(@user)
         @user.create_activity :send_friend_request
         @post = @user.posts.published.first
         flash[:notice] = 'Request sent!'
@@ -135,12 +122,46 @@ class UsersController < ApplicationController
            current_user.has_friend_request_from?(@user) &&
            current_user.accept_friend_request!(@user)
         @user.create_activity :accept_friend_request, recipient: @user
-        @post = Post.find_by_id params[:post_id]
+        @post = Post.find_by_id params[:post_id] if params[:post_id]
         flash[:notice] = 'Request accepted!'
         format.html { redirect_to :back }
         format.js
       else
         flash[:alert] = 'Accept failed, please try again.'
+        format.html { redirect_to :back }
+        format.js   { render nothing: true, content_type: 'text/html' }
+      end
+    end
+  end
+
+  def cancel_friend_request
+    respond_to do |format|
+      if !@user.is_friends_with?(current_user) &&
+           @user.has_friend_request_from?(current_user) &&
+           current_user.cancel_friend_request!(@user)
+        @user.create_activity :cancel_friend_request, recipient: @user
+        flash[:notice] = 'Request canceled!'
+        format.html { redirect_to :back }
+        format.js
+      else
+        flash[:alert] = 'Cancel failed, please try again.'
+        format.html { redirect_to :back }
+        format.js   { render nothing: true, content_type: 'text/html' }
+      end
+    end
+  end
+
+  def reject_friend_request
+    respond_to do |format|
+      if !@user.is_friends_with?(current_user) &&
+           current_user.has_friend_request_from?(@user) &&
+           current_user.reject_friend_request!(@user)
+        @user.create_activity :reject_friend_request, recipient: @user
+        flash[:notice] = 'Request rejected!'
+        format.html { redirect_to :back }
+        format.js
+      else
+        flash[:alert] = 'Reject failed, please try again.'
         format.html { redirect_to :back }
         format.js   { render nothing: true, content_type: 'text/html' }
       end

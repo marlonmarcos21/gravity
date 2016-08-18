@@ -109,15 +109,20 @@ class User < ActiveRecord::Base
   end
 
   def send_friend_request_to(other_user)
-    requested_friends.create(user: other_user)
+    friend_request = other_user.friend_request_from(self, ['canceled', 'rejected'])
+    if friend_request
+      friend_request.update(status: 'pending')
+    else
+      requested_friends.create(user: other_user)
+    end
   end
 
   def requested_to_be_friends_with?(other_user)
     requested_friends.where(user: other_user, status: 'pending').exists?
   end
 
-  def friend_request_from(other_user)
-    friend_requests.where(requester: other_user, status: 'pending').first
+  def friend_request_from(other_user, status = 'pending')
+    friend_requests.where(requester: other_user, status: status).first
   end
 
   def has_friend_request_from?(other_user)
@@ -136,6 +141,18 @@ class User < ActiveRecord::Base
       friend_request: friend_request
     )
     friend_request.update(status: 'accepted')
+  end
+
+  def cancel_friend_request!(other_user)
+    friend_request = other_user.friend_request_from(self)
+    return false unless friend_request
+    friend_request.update(status: 'canceled')
+  end
+
+  def reject_friend_request!(other_user)
+    friend_request = friend_request_from(other_user)
+    return false unless friend_request
+    friend_request.update(status: 'rejected')
   end
 
   private
