@@ -22,10 +22,11 @@ class UsersController < ApplicationController
 
   def more_published_posts
     pp_scope = @user.posts.published.descending
-    @pppage  = (params[:pppage] || 2).to_i + 1
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
 
-    @published_posts = pp_scope.page(params[:pppage] || 2)
-    @more_results    = !pp_scope.page(@pppage).empty?
+    @published_posts  = pp_scope.page(page)
+    @has_more_results = !pp_scope.page(@next_page).empty?
 
     respond_to do |format|
       format.html { render :show }
@@ -35,10 +36,11 @@ class UsersController < ApplicationController
 
   def more_published_blogs
     pb_scope = @user.blogs.published.descending
-    @pbpage  = (params[:pbpage] || 2).to_i + 1
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
 
-    @published_blogs = pb_scope.page(params[:pbpage] || 2)
-    @more_results    = !pb_scope.page(@pbpage).empty?
+    @published_blogs  = pb_scope.page(page)
+    @has_more_results = !pb_scope.page(@next_page).empty?
 
     respond_to do |format|
       format.html { render :show }

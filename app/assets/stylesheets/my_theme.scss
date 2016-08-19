@@ -609,3 +609,14 @@ hr {
     }
   }
 }
+
+#published-posts-tab, #published-blogs-tab {
+  display: none;
+}
+
+.published-posts-pagination-page,
+.published-blogs-pagination-page, {
+  em {
+    color: $primary;
+  }
+}

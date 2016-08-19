@@ -54,6 +54,8 @@ $ ->
       dataType: 'json'
   )
 
+  $('.end-of-internet').delay(3000).fadeOut('slow')
+
   initPhotoSwipeFromDOM = (gallerySelector) ->
     parseThumbnailElements = (el) ->
       thumbElements = el.childNodes
@@ -254,11 +256,11 @@ $(document).ajaxComplete((event, request) ->
   if (msg != null)
     showAjaxMessage(msg, type)
 
-  $('#end-of-internet').delay(3000).fadeOut('slow')
-
   $('#comment-reply-form .reply-form').each(->
     $(this).css('display', 'none');
   )
+
+  $('.end-of-internet').delay(3000).fadeOut('slow')
 
   $('textarea').each(->
     $(this).val('')

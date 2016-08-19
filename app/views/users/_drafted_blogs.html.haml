@@ -8,7 +8,8 @@
             %a.drafted-blogs-pagination-link{ data: { remote: 'true' }, href: more_drafted_blogs_user_path(@user, dbpage: @dbpage) }
               %em Load More
       - else
-        %em Congratulations, you have reached the end of internet!
+        %span.end-of-internet
+          %em Congratulations, you have reached the end of internet!
 
 - content_for :footer_scripts do
   :javascript

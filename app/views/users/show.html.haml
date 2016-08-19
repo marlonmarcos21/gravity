@@ -3,7 +3,10 @@
     .row
       .col-lg-10.col-md-10.col-s-10
         %h2{ style: 'margin-left: -15px; display: inline;' }
-          = "Welcome, #{@user.name}!"
+          - if current_user == @user
+            = "Welcome, #{@user.name}!"
+          - else
+            = @user.name
         %p.pull-right
           = image_tag @user.profile_photo.url(:thumb), id: 'user-profile-photo'
     .row
@@ -51,9 +54,9 @@
           #profile-tab.tab-pane.fade.in.active
             = render 'profile'
           #published-posts-tab.tab-pane.fade
-            = render 'published_posts', posts: @published_posts, more_results: @more_published_posts_results
+            = render 'published_posts', posts: @published_posts, has_more_results: @more_published_posts_results
           #published-blogs-tab.tab-pane.fade
-            = render 'published_blogs', blogs: @published_blogs, more_results: @more_published_blogs_results
+            = render 'published_blogs', blogs: @published_blogs, has_more_results: @more_published_blogs_results
           - if can?(:manage, :all) || current_user == @user
             #drafted-blogs-tab.tab-pane.fade
               = render 'drafted_blogs', blogs: @drafted_blogs, more_results: @more_drafted_blogs_results

@@ -1,19 +1,50 @@
+- next_page = 2 if local_assigns[:next_page].blank?
+
 .row
-  .col-lg-10.col-lg-offset-1.col-md-10.col-md-offset-1
+  .col-lg-12.col-md-12
     = render 'posts/listing', posts: posts
     .text-center
-      - if more_results
+      - if has_more_results
         %nav.published-posts-pagination
           %span.published-posts-pagination-page
-            %a.published-posts-pagination-link{ data: { remote: 'true' }, href: more_published_posts_user_path(@user, pppage: @pppage) }
+            %a.published-posts-pagination-link{ data: { remote: 'true' }, href: more_published_posts_user_path(@user, page: next_page) }
               %em Load More
+              = image_tag 'loading.gif'
       - else
-        %em Congratulations, you have reached the end of internet!
+        %span.end-of-internet
+          %em Congratulations, you have reached the end of internet!
 
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      $('#published-posts-link').click(function() {
+        $('#published-blogs-tab').hide();
+        $('#published-posts-tab').show();
+      });
+
       $('#published-posts-tab').on('click', '.published-posts-pagination-link', function() {
         $(this).hide();
+      });
+
+      var nextPage = 2;
+      $('.nav-tabs').on('click', '#published-posts-link', function() {
+        $(window).scroll(function() {
+          if ($('#published-posts-tab').is(':visible')) {
+            var scrolled = parseInt($(window).scrollTop());
+            var height = parseInt($(document).height() - $(window).height()) - 120;
+            if (scrolled >= height && nextPage === 2) {
+              $.ajax({
+                method: 'GET',
+                url: '#{more_published_posts_user_path}',
+                dataType: 'script',
+                data: { page: nextPage }
+              });
+              nextPage = 3;
+            }
+            $(document).ajaxStop(function () {
+              $('.published-posts-pagination').hide();
+            });
+          }
+        });
       });
     });
