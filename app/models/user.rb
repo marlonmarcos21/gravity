@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
                                     s3_protocol: :https,
                                     default_url: DEFAULT_AVATAR
 
-  validates_attachment_presence :profile_photo
   validates_attachment_content_type :profile_photo, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
