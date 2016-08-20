@@ -8,7 +8,7 @@
           - else
             = @user.name
         %p.pull-right
-          = image_tag @user.profile_photo.url(:thumb), id: 'user-profile-photo'
+          = image_tag @user.profile_photo_url(:thumb), id: 'user-profile-photo'
     .row
       .col-lg-10.col-md-10.col-s-10
         - if can?(:edit, @user)

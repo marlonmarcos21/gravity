@@ -4,7 +4,7 @@
 
   .row
     .col-lg-6.col-md-6
-      = f.input :profile_photo, hint: image_tag(@user.profile_photo.url(:thumb), size: '150x150')
+      = f.input :profile_photo, hint: image_tag(@user.profile_photo_url(:thumb), size: '150x150')
       = image_tag '', id: 'preview-container', size: '150x150'
 
   .row-fluid

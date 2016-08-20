@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  DEFAULT_AVATAR = 'https://themarcoses-dev.s3-ap-southeast-1.amazonaws.com/dev_files/default-avatar.png'
+  DEFAULT_AVATAR = 'https://static-prod.gravity.ph/dev_files/default-avatar.png'
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
@@ -152,6 +152,10 @@ class User < ActiveRecord::Base
     friend_request = friend_request_from(other_user)
     return false unless friend_request
     friend_request.update(status: 'rejected')
+  end
+
+  def profile_photo_url(style = :original)
+    profile_photo.url(style).sub("#{ENV['AWS_S3_HOST_NAME']}/", '')
   end
 
   private

@@ -2,7 +2,7 @@
   %p.commenter
     %a{ href: user_path(comment.user) }
       %h5.user-name
-        = image_tag comment.user.profile_photo.url(:thumb), id: 'nav-profile-photo'
+        = image_tag comment.user.profile_photo_url(:thumb), id: 'nav-profile-photo'
         = comment.user.name
   %p= comment.body
   %p.comment-meta= "on #{comment.created_at.strftime '%a, %b %e, %Y %R'}"

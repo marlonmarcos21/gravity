@@ -4,7 +4,7 @@
       %p.blog-author
         %a{ href: user_path(blog.user) }
           %h4.user-name
-            = image_tag blog.user.profile_photo.url(:thumb), id: 'user-listing-profile-photo'
+            = image_tag blog.user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
             = blog.user.name
 
     .row
