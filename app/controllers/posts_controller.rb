@@ -171,8 +171,8 @@ class PostsController < ApplicationController
     return unless @post.try(:images).try(:any?)
     hash = {}
     @post.images.each do |img|
-      hash[img.id.to_s] = { img_url: img.source.url,
-                            img_url_thumb: img.source.url(:thumb),
+      hash[img.id.to_s] = { img_url: img.source_url,
+                            img_url_thumb: img.source_url(:thumb),
                             size: img.source_file_size,
                             file_name: img.source_file_name,
                             width: img.width,

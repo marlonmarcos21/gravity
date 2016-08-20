@@ -19,6 +19,10 @@ class BlogMedium < ActiveRecord::Base
 
   after_post_process :save_image_dimensions
 
+  def source_url(style = :original)
+    source.url(style).sub("#{ENV['AWS_S3_HOST_NAME']}/", '')
+  end
+
   private
 
   def save_image_dimensions

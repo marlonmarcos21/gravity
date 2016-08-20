@@ -90,7 +90,7 @@ class BlogsController < ApplicationController
     if img.persisted?
       render json: {
         image: {
-          url: img.source.url
+          url: img.source_url
         }
       }, content_type: 'text/html'
     else
