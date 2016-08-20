@@ -120,6 +120,22 @@ p {
   }
 }
 
+.post-body {
+  img, iframe {
+    max-width: 720px;
+    @media(max-width: 543px){
+      max-width: 320px;
+    }
+    @media(min-width: 544px) and (max-width: 767px) {
+      max-width: 420px;
+    }
+    @media(min-width: 768px) and (max-width: 992px) {
+      max-width: 520px !important;
+    }
+  }
+}
+
+
 .comment {
   .user-name {
     margin-bottom: 0px;
