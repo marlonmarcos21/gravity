@@ -6,7 +6,6 @@
 
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
   = f.input :title
-  = error_span(@blog[:title])
 
   .form-group.blog_body
     = f.label :body
