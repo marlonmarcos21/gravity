@@ -1,2 +1,3 @@
-$('.comments-container').append("<%= escape_javascript(render('comments/show', comments: [@comment])) %>");
-$('.comments-header h4').html("<%= @total_comments %> Comments");
+var commentable = "#<%= @comment.commentable_type.underscore %>-<%= @comment.commentable_id %>";
+$(commentable + ' .comments-container').append("<%= escape_javascript(render('comments/show', comments: [@comment], new_comment: @new_comment)) %>");
+$(commentable + ' .comments-header h6').html("<%= @total_comments %> Comments");

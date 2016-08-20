@@ -2,13 +2,13 @@ class CommentsController < ApplicationController
   load_and_authorize_resource
 
   def create
-    commentable = commentable_type.constantize.find(commentable_id)
-    @comment = Comment.build_from(commentable, current_user.id, body)
+    @commentable = commentable_type.constantize.find(commentable_id)
+    @comment = Comment.build_from(@commentable, current_user.id, body)
 
     respond_to do |format|
       if @comment.save
-        @total_comments = commentable.comment_threads.count
-        @new_comment = Comment.build_from(commentable, current_user.try(:id), nil)
+        @total_comments = @commentable.comment_threads.count
+        @new_comment = Comment.build_from(@commentable, current_user.try(:id), nil)
         flash[:notice] = 'Comment posted!'
 
         template = if make_child_comment
@@ -30,10 +30,11 @@ class CommentsController < ApplicationController
     commentable = comment.commentable
     comment.destroy
     @total_comments = commentable.comment_threads.count
+    element_id = "#{comment.commentable_type.underscore}-#{comment.commentable_id}"
     respond_to do |format|
       flash[:alert] = 'Comment deleted!'
       format.html { redirect_to :back }
-      format.json { render json: { message: 'Comment deleted!', total_comments: @total_comments } }
+      format.json { render json: { message: 'Comment deleted!', element_id: element_id, total_comments: @total_comments } }
     end
   end
 

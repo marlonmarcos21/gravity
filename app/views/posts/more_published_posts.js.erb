@@ -17,3 +17,52 @@ $(window).scroll(function() {
     checker = false;
   }
 });
+
+$('.comment-reply').each(function() {
+  $(this).click(function() {
+    $('.reply-form').each(function() {
+      $(this).hide();
+    });
+    $(this).parent().next('.reply-form').show();
+
+    $(this).parent().parent().parent().siblings('.new-comment-toggle').show();
+    $(this).parent().parent().parent().siblings('.new-comment-form').hide();
+    return;
+  });
+});
+
+$('.new-comment-toggle a').each(function() {
+  $(this).click(function() {
+    $(this).parent().siblings('.comments-container').find('.reply-form').each(function() {
+      $(this).hide();
+    });
+    $(this).parent().hide();
+    $(this).parent().siblings('.new-comment-form').show();
+    return;
+  });
+});
+
+$('.new_comment').each(function() {
+  $(this).submit(function(e) {
+    e.preventDefault();
+    if ($(this).find('.new-comment-body').val() == '') {
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>';
+      if (!$('.modal').hasClass('in')) {
+        $(html).modal();
+      }
+      return false;
+    }
+  });
+});
+
+$('.reply-form .new_comment').each(function() {
+  $(this).submit(function(e) {
+    e.preventDefault();
+    if ($(this).find('.reply-comment-body').val() == '');
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>';
+      if (!$('.modal').hasClass('in')) {
+        $(html).modal();
+      }
+      return false;
+  });
+});

@@ -3,7 +3,7 @@
 
   .row
     - if current_user
-      = render 'comments/template', commentable: @post, new_comment: @comment
+      = render 'comments/template', commentable: @post, new_comment: @new_comment
     - else
       .comments-header
         %h5 Sign in to read or post comments

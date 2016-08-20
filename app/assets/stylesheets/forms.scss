@@ -108,14 +108,7 @@ form {
   }
 }
 
-.comments-header {
-  border-bottom: 1px dotted $primary;
-  margin-top: 40px;
-  margin-bottom: 10px;
-}
-
 .new-comment-form {
-  margin-bottom: 20px;
   .submit-new-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;
@@ -123,9 +116,17 @@ form {
   }
 }
 
+#blog {
+  .comments-header {
+    border-top: 1px solid $primary;
+    margin-top: 30px;
+    padding-top: 15px;
+  }
+}
+
 .comments-container {
   p {
-    margin-bottom: 0px;
+    margin-bottom: 5px !important;
     font-size: 13px;
     margin-left: 30px;
   }
@@ -145,7 +146,7 @@ form {
   display: none;
 }
 
-#new-comment-toggle {
+.new-comment-toggle {
   margin-bottom: 30px;
   display: none;
   a {
@@ -162,6 +163,7 @@ form {
 #comment-reply-form {
   margin-left: 50px;
   margin-bottom: 25px;
+  margin-top: -15px;
   .submit-reply-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;

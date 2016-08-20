@@ -26,7 +26,7 @@
   - if @blog.published?
     .row
       - if current_user
-        = render 'comments/template', commentable: @blog, new_comment: @comment
+        = render 'comments/template', commentable: @blog, new_comment: @new_comment
       - else
         .comments-header
           %h5 Sign in to read or post comments

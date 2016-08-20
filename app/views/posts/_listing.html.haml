@@ -1,3 +1,11 @@
 - posts.each do |post|
   .post-preview{ id: "post-#{post.id}" }
     = render 'posts/post_preview', post: post
+
+    - unless in_homepage?
+      .row
+        - if current_user
+          = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
+        - else
+          .comments-header
+            %h5 Sign in to read or post comments

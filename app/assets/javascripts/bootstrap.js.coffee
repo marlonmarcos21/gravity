@@ -2,45 +2,27 @@ $ ->
   $("a[rel~=popover], .has-popover").popover()
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
-  $('.comment-reply').click(->
-    $('.reply-form').each(->
-      $(this).hide()
+  $('.comment-reply').each(->
+    $(this).click(->
+      $('.reply-form').each(->
+        $(this).hide()
+      )
+      $(this).parent().next('.reply-form').show()
+
+      $(this).parent().parent().parent().siblings('.new-comment-toggle').show()
+      $(this).parent().parent().parent().siblings('.new-comment-form').hide()
+      return
     )
-    $(this).parent().next('.reply-form').show()
-
-    $('#new-comment-toggle').show()
-    $('.new-comment-form').hide()
-    return
   )
 
-  $('#new-comment-toggle').click(->
-    $('.reply-form').each(->
-      $(this).hide()
-    )
-    $(this).hide()
-    $('.new-comment-form').show()
-    return
-  )
-
-  if ($('.new-comment-body').val() == '')
-    $('.submit-new-comment').attr('disabled', true)
-
-  $('.new-comment-body').keyup(->
-    if ($('.new-comment-body').val() != '')
-      $('.submit-new-comment').attr('disabled', false)
-    else
-      $('.submit-new-comment').attr('disabled', true)
-  )
-
-  $('.reply-comment-body').each(->
-    if ($(this).val() == '')
-      $(this).parent().next('.submit-reply-comment').attr('disabled', true)
-
-    $(this).keyup(->
-      if ($(this).val() != '')
-        $(this).parent().next('.submit-reply-comment').attr('disabled', false)
-      else
-        $(this).parent().next('.submit-reply-comment').attr('disabled', true)
+  $('.new-comment-toggle a').each(->
+    $(this).click(->
+      $(this).parent().siblings('.comments-container').find('.reply-form').each(->
+        $(this).hide()
+      )
+      $(this).parent().hide()
+      $(this).parent().siblings('.new-comment-form').show()
+      return
     )
   )
 
@@ -202,6 +184,26 @@ $ ->
   if ($('.my-gallery').length)
     initPhotoSwipeFromDOM('.my-gallery')
 
+  $('.new_comment').each(->
+    $(this).submit((e) ->
+      e.preventDefault()
+      if ($(this).find('.new-comment-body').val() == '')
+        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
+        $(html).modal()
+        return false
+    )
+  )
+
+  $('.reply-form .new_comment').each(->
+    $(this).submit((e) ->
+      e.preventDefault()
+      if ($(this).find('.reply-comment-body').val() == '')
+        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
+        $(html).modal()
+        return false
+    )
+  )
+
 $.rails.allowAction = (link) ->
   return true unless link.attr('data-confirm')
   $.rails.showConfirmDialog(link)
@@ -269,7 +271,8 @@ $(document).ajaxComplete((event, request) ->
   if (request.responseJSON)
     if (request.responseJSON.message == 'Comment deleted!')
       totalComments = request.responseJSON.total_comments
-      $('.comments-header h4').html(totalComments + ' Comments')
+      elementId = '#' + request.responseJSON.element_id
+      $(elementId + ' .comments-header h6').html(totalComments + ' Comments')
 
     if (request.responseJSON.content && request.responseJSON.post_id)
       $('.post-body-' + request.responseJSON.post_id).html(request.responseJSON.content)
