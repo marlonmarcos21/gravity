@@ -17,7 +17,7 @@ GC::Profiler.enable
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module TheMarcoses
+module Gravity
   class Application < Rails::Application
     config.i18n.enforce_available_locales = true
 
