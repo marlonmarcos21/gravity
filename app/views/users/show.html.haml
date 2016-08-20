@@ -16,9 +16,10 @@
             = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
         %p.pull-right{ style: 'margin-right:5px;'}
           - if current_user.is_friends_with?(@user)
-            %span.btn.btn-default
-              = fa_icon 'hand-peace-o'
-              Friends
+            - if current_user != @user
+              %span.btn.btn-default
+                = fa_icon 'hand-peace-o'
+                Friends
           - else
             - if current_user.has_friend_request_from?(@user)
               Friend Request: 
