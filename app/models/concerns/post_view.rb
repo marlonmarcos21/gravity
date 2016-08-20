@@ -11,7 +11,7 @@ module PostView
     a_tags.map do |node|
       youtube_id = get_youtube_id(node.attributes['href'].value)
       next if youtube_id.blank?
-      replace_with = "#{node.to_s}<br /><br />" + %Q{<iframe width="560" height="315" src="http://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>} + "<br /><br />"
+      replace_with = "#{node.to_s}<br /><br />" + %Q{<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>} + "<br /><br />"
       content.sub!(node.to_s, replace_with)
     end
 
