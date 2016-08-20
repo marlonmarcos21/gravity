@@ -34,6 +34,11 @@ class Blog < ActiveRecord::Base
 
   acts_as_commentable
 
+  include PublicActivity::Model
+  tracked skip_defaults: true,
+          owner: Proc.new { |controller, _model| controller.current_user },
+          recipient: Proc.new { |_controller, model| model.user }
+
   def publish!
     return update_attribute :published, true if publishable?
     errors.add(:title, %(can't be blank when publising)) if title.blank?

@@ -7,6 +7,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        @commentable.create_activity :comment
         @total_comments = @commentable.comment_threads.count
         @new_comment = Comment.build_from(@commentable, current_user.try(:id), nil)
         flash[:notice] = 'Comment posted!'
