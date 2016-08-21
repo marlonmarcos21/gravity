@@ -372,7 +372,10 @@ a {
 }
 
 .content-section {
-  padding-top: 132px;
+  padding-top: 75px;
+  &.home {
+    padding-top: 190px;
+  }
 }
 
 .download-section {
