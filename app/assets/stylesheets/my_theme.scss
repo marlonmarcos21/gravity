@@ -105,7 +105,7 @@ p {
     img, iframe {
       max-width: 720px;
       @media(max-width: 543px){
-        max-width: 320px !important;
+        max-width: 300px !important;
       }
       @media(min-width: 544px) and (max-width: 767px) {
         max-width: 420px !important;
@@ -124,7 +124,7 @@ p {
   img, iframe {
     max-width: 720px;
     @media(max-width: 543px){
-      max-width: 320px !important;
+      max-width: 300px !important;
     }
     @media(min-width: 544px) and (max-width: 767px) {
       max-width: 420px !important;
