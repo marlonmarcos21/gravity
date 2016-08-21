@@ -2,62 +2,79 @@
   .col-lg-10.col-lg-offset-2.col-md-10.col-md-offset-2.col-s-10.col-s-offset-2
     .row
       .col-lg-10.col-md-10.col-s-10
-        %h2{ style: 'margin-left: -15px; display: inline;' }
+        %h2{ style: 'display: inline;' }
           - if current_user == @user
             = "Welcome, #{@user.name}!"
           - else
             = @user.name
         %p.pull-right
           = image_tag @user.profile_photo_url(:thumb), id: 'user-profile-photo'
-    .row
-      .col-lg-10.col-md-10.col-s-10
-        - if can?(:edit, @user)
-          %p.pull-right
-            = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
-        %p.pull-right{ style: 'margin-right:5px;'}
-          - if current_user.is_friends_with?(@user)
-            - if current_user != @user
+
+    - if current_user
+      .row
+        .col-lg-10.col-md-10.col-s-10
+          - if can?(:edit, @user)
+            %p.pull-right
+              = link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-default'
+          %p.pull-right{ style: 'margin-right:5px;'}
+            - if current_user.is_friends_with?(@user)
               %span.btn.btn-default
                 = fa_icon 'hand-peace-o'
                 Friends
-          - else
-            - if current_user.has_friend_request_from?(@user)
-              Friend Request: 
-              = link_to accept_friend_request_user_path(@user), method: :patch, class: 'btn btn-default btn-xs' do
-                = fa_icon 'user-plus'
-                Accept
-              = link_to reject_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger btn-xs' do
-                = fa_icon 'ban'
-                Reject
-            - elsif current_user.requested_to_be_friends_with?(@user)
-              = link_to cancel_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger' do
-                = fa_icon 'user-times'
-                Cancel Friend Request
-            - else
-              = link_to send_friend_request_user_path(@user), method: :patch, class: 'btn btn-default' do
-                = fa_icon 'user-plus'
-                Add Friend
+            - elsif current_user != @user
+              - if current_user.has_friend_request_from?(@user)
+                Friend Request: 
+                = link_to accept_friend_request_user_path(@user), method: :patch, class: 'btn btn-default btn-xs' do
+                  = fa_icon 'user-plus'
+                  Accept
+                = link_to reject_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger btn-xs' do
+                  = fa_icon 'ban'
+                  Reject
+              - elsif current_user.requested_to_be_friends_with?(@user)
+                = link_to cancel_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger' do
+                  = fa_icon 'user-times'
+                  Cancel Friend Request
+              - else
+                = link_to send_friend_request_user_path(@user), method: :patch, class: 'btn btn-default' do
+                  = fa_icon 'user-plus'
+                  Add Friend
 
     .row
       .col-lg-10.col-md-10
         %ul.nav.nav-tabs
-          %li.active
-            %a#profile-tab-link{ href: '#profile-tab', 'data-toggle' => 'tab' } Profile
-          %li
-            %a#published-posts-link{ href: '#published-posts-tab', 'data-toggle' => 'tab' } Published Posts
+          - if current_user
+            %li.active
+              %a#profile-tab-link{ href: '#profile-tab', 'data-toggle' => 'tab' } Profile
+
+          - if current_user
+            %li
+              %a#published-posts-link{ href: '#published-posts-tab', 'data-toggle' => 'tab' } Published Posts
+          - else
+            %li.active
+              %a#published-posts-link{ href: '#published-posts-tab', 'data-toggle' => 'tab' } Published Posts
+
           %li
             %a#published-blogs-link{ href: '#published-blogs-tab', 'data-toggle' => 'tab' } Published Blogs
+
           - if current_user == @user || can?(:manage, :all)
             %li
               %a#drafted-blogs-link{ href: '#drafted-blogs-tab', 'data-toggle' => 'tab' } Drafted Blogs
 
         .tab-content
-          #profile-tab.tab-pane.fade.in.active
-            = render 'profile'
-          #published-posts-tab.tab-pane.fade
-            = render 'published_posts', posts: @published_posts, has_more_results: @more_published_posts_results
+          - if current_user
+            #profile-tab.tab-pane.fade.in.active
+              = render 'profile'
+
+          - if current_user
+            #published-posts-tab.tab-pane.fade
+              = render 'published_posts', posts: @published_posts, has_more_results: @more_published_posts_results
+          - else
+            #published-posts-tab.tab-pane.fade.in.active
+              = render 'published_posts', posts: @published_posts, has_more_results: @more_published_posts_results
+
           #published-blogs-tab.tab-pane.fade
             = render 'published_blogs', blogs: @published_blogs, has_more_results: @more_published_blogs_results
+
           - if can?(:manage, :all) || current_user == @user
             #drafted-blogs-tab.tab-pane.fade
               = render 'drafted_blogs', blogs: @drafted_blogs, more_results: @more_drafted_blogs_results

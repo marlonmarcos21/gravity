@@ -5,7 +5,7 @@
       %td= @user.email
     %tr
       %td Birthday:
-      %td= @user.date_of_birth.try(:strftime, '%b %e, %Y')
+      %td= @user.date_of_birth.try(:strftime, '%B %e, %Y')
     %tr
       %td Address:
       %td= @user.full_address

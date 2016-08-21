@@ -103,7 +103,6 @@ class User < ActiveRecord::Base
   end
 
   def is_friends_with?(other_user)
-    return true if self == other_user
     friends.where(friend: other_user).exists?
   end
 

@@ -46,8 +46,9 @@ class Ability
   end
 
   def user_permissions
-    can [:read, :more_published_posts, :more_published_blogs, :more_drafted_blogs], User do |user|
-      current_user.persisted?
+    can [:read, :more_published_posts, :more_published_blogs], User
+    can :more_drafted_blogs, User do |user|
+      current_user == user
     end
     can :update, User do |user|
       user == current_user
