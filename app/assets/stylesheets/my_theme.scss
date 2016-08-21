@@ -279,35 +279,33 @@ a {
   .intro-body {
     display: table-cell;
     vertical-align: middle;
-    .brand-heading {
-      font-size: 40px;
+    .header-text {
+      font-size: 50px;
     }
     .intro-text {
-      font-size: 18px;
+      color: #fff;
+      font-size: 24px;
     }
   }
   @media(min-width:768px) {
     height: 100%;
     padding: 0;
     .intro-body {
-      .brand-heading {
-        font-size: 100px;
-      }
       .intro-text {
-        font-size: 26px;
+        font-size: 30px;
       }
     }
   }
 }
 
 .btn-circle {
-  width: 70px;
-  height: 70px;
+  width: 49px;
+  height: 49px;
   margin-top: 15px;
   padding: 7px 16px;
   border: 2px solid white;
   border-radius: 100% !important;
-  font-size: 40px;
+  font-size: 22px;
   color: white;
   background: transparent;
   -webkit-transition: background .3s ease-in-out;
@@ -374,7 +372,7 @@ a {
 }
 
 .content-section {
-  padding-top: 100px;
+  padding-top: 132px;
 }
 
 .download-section {

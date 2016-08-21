@@ -27,15 +27,14 @@
         .intro-body
           .container
             - if bootstrap_flash
-              .col-md-8.col-md-offset-2
+              .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
                 = bootstrap_flash
             .row
-              .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
-                %h1.brand-heading Gravity
-                %p.intro-text
-                  A free, responsive, one page Bootstrap theme.
-                  %br
-                  Created by Start Bootstrap.
+              .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+                %h2.header-text
+                  Gravity
+                %h4.intro-text
+                  Share. Express. Connect.
                 %a.btn.btn-circle.page-scroll{ href: '#posts' }
                   = fa_icon 'angle-double-down'
 
