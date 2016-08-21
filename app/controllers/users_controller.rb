@@ -122,7 +122,7 @@ class UsersController < ApplicationController
       if !@user.is_friends_with?(current_user) &&
            current_user.has_friend_request_from?(@user) &&
            current_user.accept_friend_request!(@user)
-        @user.create_activity :accept_friend_request, recipient: @user
+        @user.create_activity :accept_friend_request
         @post = Post.find_by_id params[:post_id] if params[:post_id]
         flash[:notice] = 'Request accepted!'
         format.html { redirect_to :back }
@@ -140,7 +140,7 @@ class UsersController < ApplicationController
       if !@user.is_friends_with?(current_user) &&
            @user.has_friend_request_from?(current_user) &&
            current_user.cancel_friend_request!(@user)
-        @user.create_activity :cancel_friend_request, recipient: @user
+        @user.create_activity :cancel_friend_request
         flash[:notice] = 'Request canceled!'
         format.html { redirect_to :back }
         format.js
@@ -157,7 +157,7 @@ class UsersController < ApplicationController
       if !@user.is_friends_with?(current_user) &&
            current_user.has_friend_request_from?(@user) &&
            current_user.reject_friend_request!(@user)
-        @user.create_activity :reject_friend_request, recipient: @user
+        @user.create_activity :reject_friend_request
         flash[:notice] = 'Request rejected!'
         format.html { redirect_to :back }
         format.js

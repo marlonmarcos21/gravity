@@ -187,7 +187,7 @@ $ ->
   $('.new_comment').each(->
     $(this).submit((e) ->
       e.preventDefault()
-      if ($(this).find('.new-comment-body').val() == '')
+      if ($(this).find('.new-comment-body').val().trim() == '')
         html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
         $(html).modal()
         return false
@@ -197,11 +197,30 @@ $ ->
   $('.reply-form .new_comment').each(->
     $(this).submit((e) ->
       e.preventDefault()
-      if ($(this).find('.reply-comment-body').val() == '')
+      if ($(this).find('.reply-comment-body').val().trim() == '')
         html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
         $(html).modal()
         return false
     )
+  )
+
+  $('.log-me-in').click(->
+    $(this).hide()
+    $('.sign-in-form').removeClass('hidden')
+    $('#user_email').focus()
+  )
+
+  $('.cancel-log-in').click(->
+    $('.sign-in-form').addClass('hidden')
+    $('.log-me-in').show()
+  )
+
+  $('.search-form').submit((e) ->
+    if ($('#search_search').val().trim() == '' || !$('#search_search').val())
+      e.preventDefault();
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
+      $(html).modal()
+      return false
   )
 
 $.rails.allowAction = (link) ->

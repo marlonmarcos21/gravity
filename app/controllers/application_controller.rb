@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   after_action :flash_to_headers
 
   helper_method :in_homepage?
+  helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to :back, alert: exception.message
@@ -13,6 +14,15 @@ class ApplicationController < ActionController::Base
 
   def in_homepage?
     request.original_fullpath == '/'
+  end
+
+  def activities
+    return [] unless current_user
+    @activities = current_user
+                    .activities_as_recipient
+                    .for_notification
+                    .descending
+                    .limit(10)
   end
 
   protected

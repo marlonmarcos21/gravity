@@ -157,6 +157,10 @@ class User < ActiveRecord::Base
     profile_photo.url(style).sub("#{ENV['AWS_S3_HOST_NAME']}/", '')
   end
 
+  def activities_as_recipient
+    Activity.where(recipient: self)
+  end
+
   private
 
   def slug_candidates

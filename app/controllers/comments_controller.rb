@@ -13,6 +13,7 @@ class CommentsController < ApplicationController
         flash[:notice] = 'Comment posted!'
 
         template = if make_child_comment
+                     @commentable.create_activity :reply_comment, recipient: @parent_comment.user
                      :new_reply
                    else
                      :new_comment
@@ -67,7 +68,7 @@ class CommentsController < ApplicationController
   def make_child_comment
     return if comment_id.blank?
 
-    parent_comment = Comment.find comment_id
-    @comment.move_to_child_of(parent_comment)
+    @parent_comment = Comment.find comment_id
+    @comment.move_to_child_of(@parent_comment)
   end
 end

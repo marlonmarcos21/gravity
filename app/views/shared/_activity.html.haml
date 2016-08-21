@@ -1,0 +1,10 @@
+#activities-container
+  %ul
+    - activities.each do |activity|
+      %li
+        = link_to user_path(activity.owner) do
+          = image_tag activity.owner.profile_photo_url(:thumb), id: 'nav-profile-photo'
+          = activity.owner.first_name
+        = activity.human_readable_key
+    %li.text-center
+      = link_to 'Show more notifications...', user_path(current_user)

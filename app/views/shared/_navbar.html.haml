@@ -8,7 +8,7 @@
         %span.light Home
 
     .collapse.navbar-collapse.navbar-main-collapse
-      %ul.nav.navbar-nav
+      %ul.nav.navbar-nav.left-menus
         %li.hidden
           %a{ href: '#page-top' }
         %li
@@ -29,65 +29,36 @@
                   = fa_icon 'search'
       .collapse.navbar-collapse.navbar-right.navbar-main-collapse
         - if current_user
-          %li.dropdown.nav-user-dropdown{ role: 'presentation' }
-            %a.dropdown-toggle.nav-user-dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
-              = image_tag current_user.profile_photo_url(:thumb), id: 'nav-profile-photo'
-              = current_user.name
-              %span.caret
-            %ul.dropdown-menu
-              %li
-                %a{ href: user_path(current_user) }
-                  = fa_icon('user-secret') + ' Profile'
-              %li
-                %a{ href: new_blog_path }
-                  = fa_icon('newspaper-o') + ' New Blog'
-              %li
-                = link_to(destroy_user_session_path, method: :delete) do
-                  = fa_icon 'power-off'
-                  Sign Out
+          %ul.nav.navbar-nav
+            %li.dropdown.inline
+              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', title: 'Notifications', 'data-toggle' => 'dropdown' }
+                = fa_icon 'fa'
+                Notifications
+              .dropdown-menu.notifications
+                = render 'shared/activity', activities: activities
+            %li.dropdown.nav-user-dropdown{ role: 'presentation' }
+              %a.dropdown-toggle.nav-user-dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
+                = image_tag current_user.profile_photo_url(:thumb), id: 'nav-profile-photo'
+                = current_user.name
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{ href: user_path(current_user) }
+                    = fa_icon('user-secret') + ' Profile'
+                %li
+                  %a{ href: new_blog_path }
+                    = fa_icon('newspaper-o') + ' New Blog'
+                %li
+                  = link_to(destroy_user_session_path, method: :delete) do
+                    = fa_icon 'power-off'
+                    Sign Out
         - else
-          %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
-          .sign-in-form.hidden
-            = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
-              %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', input_html: { class: 'input-sm' }
-              %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
-              %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
-              %p.nav-form-cancel
-                %span.btn-xs.btn.cancel-log-in Cancel
-
-- content_for :footer_scripts do
-  :javascript
-    $(document).ready(function() {
-      $('.log-me-in').click(function() {
-        $(this).hide();
-        $('.sign-in-form').removeClass('hidden');
-        $('#user_email').focus();
-      });
-      $('.cancel-log-in').click(function() {
-        $('.sign-in-form').addClass('hidden');
-        $('.log-me-in').show();
-      });
-
-      var clicks = 0;
-      var width = $(window).width();
-      if (width < 786) {
-        $('.nav-user-dropdown-toggle').click(function() {
-          if (clicks === 0) {
-            $('.nav-user-dropdown').css('margin-bottom', '100px');
-            clicks++;
-          } else {
-            $('.nav-user-dropdown').css('margin-bottom', '10px');
-            clicks--
-          }
-        });
-      }
-
-      $('.search-form').submit(function(e) {
-        if ($('#search_search').val().trim() === '' || !$('#search_search').val()) {
-          e.preventDefault();
-          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>';
-          $(html).modal();
-          return false;
-        }
-      });
-    });
+          %ul.nav.navbar-nav.sign-in
+            %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
+            .sign-in-form.hidden
+              = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', input_html: { class: 'input-sm' }
+                %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
+                %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
+                %p.nav-form-cancel
+                  %span.btn-xs.btn.cancel-log-in Cancel

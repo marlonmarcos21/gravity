@@ -158,9 +158,9 @@ a {
   font-weight: 400;
 }
 
-.top-nav-collapse {
-  .navbar-right {
-    margin-top: 17px !important;
+.navbar-fixed-top {
+  .navbar-collapse {
+    max-height: 370px !important;
   }
 }
 
@@ -170,6 +170,11 @@ a {
   font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
   background-color: black;
   color: $primary;
+  .navbar-header {
+    button {
+      color: $primary;
+    }
+  }
   .navbar-toggle {
     padding: 4px 6px;
     font-size: 16px;
@@ -217,7 +222,7 @@ a {
     }
   }
   .navbar-right {
-    margin-top: 10px;
+    margin-bottom: -5px;
     li {
       list-style: none;
     }
@@ -238,6 +243,14 @@ a {
       outline: none;
       background-color: transparent;
     }
+    .navbar-nav {
+      &.sign-in {
+        margin-top: 15px;
+      }
+    }
+    .dropdown-menu {
+      margin-top: -5px;
+    }
   }
   @media(min-width:768px) {
     padding: 20px 0;
@@ -251,14 +264,6 @@ a {
       padding: 0;
       background: black;
       border-bottom: 1px solid rgba(white, 0.3);
-    }
-  }
-  @media(max-width:768px) {
-    .navbar-right {
-      .nav-user-dropdown {
-        margin-top: 15px;
-        margin-bottom: 10px;
-      }
     }
   }
 }
@@ -636,5 +641,24 @@ hr {
 .published-blogs-pagination-page, {
   em {
     color: $primary;
+  }
+}
+
+.dropdown-menu {
+  &.notifications {
+    width: 300px;
+    left: 0;
+    margin-top: 0px;
+  }
+  #activities-container {
+    font-family: "Lora","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    color: #fff;
+    margin-left: -30px;
+    a {
+      &:hover {
+        color: $tertiary;
+      }
+    }
   }
 }
