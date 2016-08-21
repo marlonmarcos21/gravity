@@ -246,3 +246,25 @@ form {
   margin: 0px;
   font-size: 12px;
 }
+
+.editable-container.editable-inline {
+  .control-group.form-group {
+    .editable-buttons {
+      @media(max-width: 543px){
+        display: block;
+      }
+    }
+    iframe {
+      max-width: 720px;
+      @media(max-width: 543px){
+        max-width: 320px !important;
+      }
+      @media(min-width: 544px) and (max-width: 767px) {
+        max-width: 420px !important;
+      }
+      @media(min-width: 768px) and (max-width: 992px) {
+        max-width: 520px !important;
+      }
+    }
+  }
+}
