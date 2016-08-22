@@ -14,9 +14,7 @@ class CommentsController < ApplicationController
         flash[:notice] = 'Comment posted!'
 
         template = if make_child_comment
-                     if current_user != @parent_comment.user && current_user != @commentable.user
-                       CommentMailer.delay.reply_comment(@comment) 
-                     end
+                     CommentMailer.delay.reply_comment(@comment) unless current_user == @parent_comment.user
                      @commentable.create_activity :reply_comment, recipient: @parent_comment.user
                      :new_reply
                    else
