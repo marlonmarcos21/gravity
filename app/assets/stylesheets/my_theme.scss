@@ -120,8 +120,8 @@ p {
   }
 }
 
-.post-body {
-  img, iframe {
+.post-body, .post-preview {
+  .single-image, iframe {
     max-width: 720px;
     @media(max-width: 543px){
       max-width: 300px !important;

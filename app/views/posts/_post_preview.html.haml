@@ -30,7 +30,7 @@
         - if post.images.length > 1
           = render 'posts/image_swiper', images: post.images
         - else
-          = image_tag post.images.first.source_url
+          = image_tag post.images.first.source_url, class: 'single-image'
 
   - if post.videos.any?
     .row
