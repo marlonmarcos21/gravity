@@ -27,7 +27,10 @@
   - if post.images.any?
     .row
       .post-images
-        = render 'posts/image_swiper', images: post.images
+        - if post.images.length > 1
+          = render 'posts/image_swiper', images: post.images
+        - else
+          = image_tag post.images.first.source_url
 
   - if post.videos.any?
     .row
