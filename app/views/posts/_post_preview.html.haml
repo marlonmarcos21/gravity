@@ -1,11 +1,27 @@
 - ajax = true if local_assigns[:ajax].blank?
 
-.row
-  %p.poster
+.row.inline
+  %h4.user-name.pull-left
     %a{ href: user_path(post.user) }
-      %h4.user-name
-        = image_tag post.user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
-        = post.user.name
+      = image_tag post.user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
+      = post.user.name
+
+  - if can?(:update, post)
+    .dropdown.post-menu-dropdown.pull-right
+      %a.dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
+        %span.caret
+      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'dLabel' }
+        %li
+          %a{ href: edit_post_path(post) }
+            = fa_icon('pencil') + ' Edit'
+        - unless post.private?
+          %li
+            %a.fb-xfbml-parse-ignore{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{post_url(post)}', 'mywindowtitle', 'width=400,height=300')" }
+              = fa_icon('facebook') + ' Share'
+        %li.danger
+          = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax } do
+            = fa_icon 'trash'
+            Delete
 
 .row
   %p.post-meta
@@ -37,10 +53,4 @@
       .post-videos
         - post.videos.each do |video|
           = video_tag video.source_url, controls: true, size: video.aspect_ratio_display
-
-  - if can?(:publish, post)
-    .row
-      %p.delete-post
-        = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax }, class: 'btn btn-trash btn-xs btn-danger' do
-          = fa_icon 'trash'
   %hr

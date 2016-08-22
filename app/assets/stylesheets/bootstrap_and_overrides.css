@@ -13,10 +13,8 @@
 .dropdown-menu li a:hover {
   color: #fff;
   background: transparent;
-  background-color: none;
 }
 
 .dropdown-menu {
-  background-color: none;
   background: #000;
 }

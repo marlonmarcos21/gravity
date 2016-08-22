@@ -40,6 +40,20 @@
 }
 
 .dropzone-previews {
+  .dz-preview {
+    .dz-image {
+      border-radius: 10px !important;
+      width: 80px !important;
+      height: auto !important;
+      img {
+        width: 80px !important;
+        height: auto !important;
+      }
+    }
+    .dz-details {
+      display: none;
+    }
+  }
   .dz-remove:hover {
     background: none;
   }

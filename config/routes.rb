@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  default_url_options host: Rails.application.config.action_mailer.default_url_options[:host].freeze
-
   devise_for :users, controllers: { sessions: 'sessions' }
 
   resources :users, except: [:index] do
