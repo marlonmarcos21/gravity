@@ -1,0 +1,13 @@
+%div
+  = "Hi #{@user.first_name.titleize},"
+%br
+%div
+  You received a friend request from
+  = "#{@requester.first_name.titleize}."
+  Click
+  = link_to 'here', user_url(@requester)
+  to accept!
+%br
+%br
+%div
+  Gravity Team

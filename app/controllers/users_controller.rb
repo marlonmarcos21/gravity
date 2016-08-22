@@ -104,6 +104,7 @@ class UsersController < ApplicationController
       elsif !current_user.is_friends_with?(@user) &&
               !current_user.requested_to_be_friends_with?(@user) &&
               current_user.send_friend_request_to(@user)
+        UserMailer.delay.send_friend_request(@user, current_user)
         @user.create_activity :send_friend_request
         @post = @user.posts.published.first
         flash[:notice] = 'Request sent!'
@@ -122,6 +123,7 @@ class UsersController < ApplicationController
       if !@user.is_friends_with?(current_user) &&
            current_user.has_friend_request_from?(@user) &&
            current_user.accept_friend_request!(@user)
+        UserMailer.delay.accept_friend_request(current_user, @user)
         @user.create_activity :accept_friend_request
         @post = Post.find_by_id params[:post_id] if params[:post_id]
         flash[:notice] = 'Request accepted!'

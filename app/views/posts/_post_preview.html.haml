@@ -12,7 +12,7 @@
     = fa_icon 'clock-o'
     = post.date_meta
 
-- if post.private? && !current_user.try(:is_friends_with?, post.user)
+- if post.private? && !current_user.try(:is_friends_with?, post.user) && current_user != post.user
   = render 'posts/private_post', post: post
 - else
   .row
