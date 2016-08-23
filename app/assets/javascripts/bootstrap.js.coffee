@@ -215,6 +215,18 @@ $ ->
     $('.log-me-in').show()
   )
 
+  $('.forgot-password').click(->
+    $(this).hide()
+    $('.sign-in-form').addClass('hidden')
+    $('.forgot-password-form').removeClass('hidden')
+  )
+
+  $('.cancel-forgot-password').click(->
+    $('.forgot-password-form').addClass('hidden')
+    $('.sign-in-form').removeClass('hidden')
+    $('.forgot-password').show()
+  )
+
   $('.search-form').submit((e) ->
     if ($('#search_search').val().trim() == '' || !$('#search_search').val())
       e.preventDefault();

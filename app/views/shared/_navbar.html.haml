@@ -56,9 +56,16 @@
           %ul.nav.navbar-nav.sign-in
             %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
             .sign-in-form.hidden
+              %span.btn-xs.btn.forgot-password Forgot Password?
               = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
-                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', input_html: { class: 'input-sm' }
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
                 %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
                 %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-log-in Cancel
+            .forgot-password-form.hidden
+              = simple_form_for User.new, as: :user, url: user_password_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+                %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
+                %p.nav-form-cancel
+                  %span.btn-xs.btn.cancel-forgot-password Cancel
