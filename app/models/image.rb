@@ -9,7 +9,7 @@ class Image < ActiveRecord::Base
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '100x', processors: [:thumbnail] },
-                                       main: { geometry: '720x', processors: [:thumbnail] } },
+                                       main: { geometry: '800x', processors: [:thumbnail] } },
                              storage: :s3,
                              s3_credentials: "#{Rails.root}/config/s3.yml",
                              s3_region: ENV['AWS_S3_REGION'],
@@ -34,7 +34,7 @@ class Image < ActiveRecord::Base
   private
 
   def save_image_dimensions
-    geometry    = Paperclip::Geometry.from_file(source.queued_for_write[:original])
+    geometry    = Paperclip::Geometry.from_file(source.queued_for_write[:main])
     self.width  = geometry.width
     self.height = geometry.height
   end
