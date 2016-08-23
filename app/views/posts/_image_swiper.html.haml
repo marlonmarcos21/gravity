@@ -1,7 +1,7 @@
 .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
   - images.each do |img|
     %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject' }
-      %a{ href: img.source_url, itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
+      %a{ href: img.source_url(:main), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
         = image_tag img.source_url(:thumb), itemprop: 'thumbnail'
 
 .pswp{ tabindex: '-1', role: 'dialog', 'aria-hidden' => 'true' }
@@ -18,7 +18,6 @@
         .pswp__counter
 
         %button.pswp__button.pswp__button--close{ title: 'Close (Esc)' }
-        %button.pswp__button.pswp__button--share{ title: 'Share' }
         %button.pswp__button.pswp__button--fs{ title: 'Toggle fullscreen' }
         %button.pswp__button.pswp__button--zoom{ title: 'Zoom in/out' }
 

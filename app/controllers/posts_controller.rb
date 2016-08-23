@@ -65,7 +65,7 @@ class PostsController < ApplicationController
 
     if @post.update(post_params)
       attach_images img_token, @post.id
-      attach_videos img_token, @new_post.id
+      attach_videos img_token, @post.id
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
@@ -171,7 +171,7 @@ class PostsController < ApplicationController
     return unless @post.try(:images).try(:any?)
     hash = {}
     @post.images.each do |img|
-      hash[img.id.to_s] = { img_url: img.source_url,
+      hash[img.id.to_s] = { img_url: img.source_url(:main),
                             img_url_thumb: img.source_url(:thumb),
                             size: img.source_file_size,
                             file_name: img.source_file_name,
