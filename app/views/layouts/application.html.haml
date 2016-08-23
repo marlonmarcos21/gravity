@@ -11,7 +11,7 @@
       = javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js'
 
     - if Rails.env == 'production'
-      = stylesheet_link_tag('application', media: 'all').sub('/assets', 'https://static-prod.gravity.ph/assets')
+      = stylesheet_link_tag('application', media: 'all').sub('/assets', 'https://static-prod.gravity.ph/assets').html_safe
     - else
       = stylesheet_link_tag 'application', media: 'all'
 
@@ -61,7 +61,7 @@
           = Time.zone.now.strftime '%Y'
 
     - if Rails.env == 'production'
-      = javascript_include_tag('application').sub('/assets', 'https://static-prod.gravity.ph/assets')
+      = javascript_include_tag('application').sub('/assets', 'https://static-prod.gravity.ph/assets').html_safe
     - else
       = javascript_include_tag 'application'
     = yield(:footer_scripts) if content_for?(:footer_scripts)
