@@ -85,6 +85,11 @@ class User < ActiveRecord::Base
     super && active?
   end
 
+  def send_devise_notification(notification, *args)
+    devise_mailer.delay.send(notification, self, *args)
+  end
+  # End override devise methods
+
   def name
     "#{first_name} #{last_name}"
   end
