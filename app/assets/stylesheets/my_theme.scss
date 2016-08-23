@@ -273,9 +273,8 @@ a {
   width: 100%;
   height: auto;
   padding: 100px 0;
-  text-align: center;
   color: white;
-  background: image-url('intro-bg.jpg') no-repeat bottom center scroll;
+  background: url('https://static-prod.gravity.ph/assets/home.jpg') no-repeat bottom center scroll;
   background-color: black;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -285,10 +284,12 @@ a {
     display: table-cell;
     vertical-align: middle;
     .header-text {
-      font-size: 50px;
+      font-size: 48px;
+    }
+    .subheader-text {
+      font-size: 36px;
     }
     .intro-text {
-      color: #fff;
       font-size: 24px;
     }
   }
