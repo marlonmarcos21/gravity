@@ -301,9 +301,15 @@ $(document).ajaxComplete((event, request) ->
 
   if (request.responseJSON)
     if (request.responseJSON.message == 'Comment deleted!')
-      totalComments = request.responseJSON.total_comments
+      totalComments = parseInt(request.responseJSON.total_comments)
+      if totalComments == 0
+        word = 'Be the first to comment!'
+      else if totalComments == 1
+        word = '1 Comment'
+      else
+        word = totalComments + ' Comments'
       elementId = '#' + request.responseJSON.element_id
-      $(elementId + ' .comments-header h6').html(totalComments + ' Comments')
+      $(elementId + ' .comments-header h6').html(word)
 
     if (request.responseJSON.content && request.responseJSON.post_id)
       $('.post-body-' + request.responseJSON.post_id).html(request.responseJSON.content)

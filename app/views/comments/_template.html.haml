@@ -1,6 +1,8 @@
 .comments-header
   %h6
-    = commentable.comment_threads.count == 0 ? 'Be the first to comment!' : "#{commentable.comment_threads.count} Comments"
+    - comment_count = commentable.comment_threads.count
+    - word = comment_count > 1 ? 'Comments' : 'Comment'
+    = commentable.comment_threads.count == 0 ? 'Be the first to comment!' : "#{comment_count} #{word}"
 
 .comments-container
   = render 'comments/show', comments: commentable.root_comments.order(:created_at), new_comment: new_comment

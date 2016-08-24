@@ -120,7 +120,7 @@ p {
   }
 }
 
-.post-body, .post-preview {
+#post, .post-body, .post-preview {
   .single-image, iframe {
     max-width: 720px;
     @media(max-width: 543px){
@@ -684,3 +684,6 @@ hr {
   }
 }
 
+.spacer {
+  margin-top: 30px;
+}
