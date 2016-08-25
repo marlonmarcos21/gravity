@@ -253,7 +253,7 @@ $.rails.confirmed = (link) ->
         link.parent().parent().siblings().remove()
         link.parent().parent().parent().next('#comment-reply-form').remove()
 
-      link.parent().parent().parent().remove()
+      link.closest('.post-preview').remove()
     )
   else
     link.trigger('click.rails')

@@ -39,27 +39,11 @@ class Post < ActiveRecord::Base
           owner: Proc.new { |controller, _model| controller.current_user },
           recipient: Proc.new { |_controller, model| model.user }
 
-  def publish!
-    return update_attribute :published, true if publishable?
-    errors.add(:title, %(can't be blank when publising)) if title.blank?
-    errors.add(:body, %(can't be blank when publising)) if body.blank?
-    false
-  end
-
-  def unpublish!
-    update_attribute :published, false
-  end
-
   def date_meta
-    datetime = published_at || updated_at
-    datetime.strftime '%a, %b %e, %Y %R'
+    published_at.strftime '%a, %b %e, %Y %R'
   end
 
   private
-
-  def publishable?
-    !body.blank?
-  end
 
   def strip_body
     body.strip!

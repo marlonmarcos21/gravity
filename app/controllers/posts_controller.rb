@@ -1,10 +1,10 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: [:show, :edit, :update, :destroy, :publish, :unpublish, :editable]
+  before_action :post, only: %i(show edit update destroy publish unpublish editable)
 
-  before_action :prepare_images, only: [:new, :edit]
-  before_action :image_token,    only: [:new, :index]
+  before_action :prepare_images, only: [:edit]
+  before_action :image_token,    only: %i(new index)
 
   def index
     pp_scope = Post.includes(:user).published.descending
@@ -32,7 +32,6 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
-    @post.images.build
   end
 
   def edit
@@ -40,22 +39,22 @@ class PostsController < ApplicationController
   end
 
   def create
-    @new_post = Post.new(post_params)
-    @new_post.user = current_user
-    img_token  = params.delete :image_token
+    @post.user = current_user
+    img_token = params.delete :image_token
     respond_to do |format|
-      if @new_post.save
+      if @post.save
         flash[:notice] = 'Post created!'
-        attach_images img_token, @new_post.id
-        attach_videos img_token, @new_post.id
+        attach_images img_token, @post.id
+        attach_videos img_token, @post.id
         image_token
+        @new_post = @post
         @post = Post.new
-        @post.images.build
 
         format.html { redirect_to @new_post }
-        format.js { render :new_post }
+        format.js   { render :new_post }
       else
-        render :new
+        format.html { render :new }
+        format.js   { render nothing: true, content_type: 'text/html' }
       end
     end
   end
@@ -80,7 +79,8 @@ class PostsController < ApplicationController
       if @post.update_attributes(attrs)
         flash[:notice] = 'Post updated!'
         format.html { redirect_to @post }
-        format.json { render json: { message: 'success', post_id: post.id, content: @post.embed_youtube }, status: 200 }
+        format.json { render json: { message: 'success', post_id: post.id, content: @post.embed_youtube },
+                             status: 200 }
       else
         flash[:alert] = 'Post update failed!'
         format.html { redirect_to @post }
