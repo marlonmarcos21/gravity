@@ -1,6 +1,6 @@
 $('#posts-container').prepend("<%= escape_javascript(render('listing', posts: [@new_post])) %>");
-var new_img_token = "<%= @image_token %>";
-$('input[name=image_token]').val(new_img_token);
+var new_media_token = "<%= @media_token %>";
+$('input[name=media_token]').val(new_media_token);
 $('html, body').animate({
   scrollTop: 510
 }, 500);
@@ -193,11 +193,11 @@ $('#new_post').submit(function(e) {
 
 Dropzone.autoDiscover = false;
 var dz = new Dropzone('.dropzone', {
-  url: '/posts/upload_image',
+  url: '/posts/upload_media',
   previewsContainer: '.dropzone-previews',
   addRemoveLinks: true,
   uploadMultiple: true,
-  paramName1: 'post[images_attributes]',
+  paramName1: 'post[media_attributes]',
   paramName2: '[source]',
   autoQueue: false,
   acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
@@ -221,7 +221,7 @@ var auth_token = $('meta[name=csrf-token]').attr('content');
 dz.on('sending', function(file, xhr, formData) {
   $('input[name=commit]').attr('disabled', true);
   formData.append('authenticity_token', auth_token);
-  formData.append('image_token', new_img_token);
+  formData.append('media_token', new_media_token);
 });
 
 dz.on('complete', function(file) {
@@ -243,10 +243,10 @@ document.querySelector('.cancel-upload').onclick = function() {
 
 dz.on('removedfile', function(file) {
   $.ajax({
-    url: '/posts/remove_image',
+    url: '/posts/remove_media',
     type: 'DELETE',
     data: {
-      image_token: new_img_token,
+      media_token: media_token,
       source_file_name: file.name
     }
   });

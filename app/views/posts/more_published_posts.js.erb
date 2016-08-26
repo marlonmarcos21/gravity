@@ -42,10 +42,10 @@ $('.new-comment-toggle a').each(function() {
   });
 });
 
-$('.new_comment').each(function() {
+$('.new-comment-form .new_comment').each(function() {
   $(this).submit(function(e) {
     e.preventDefault();
-    if ($(this).find('.new-comment-body').val() == '') {
+    if ($(this).find('.new-comment-body').val().trim() == '') {
       html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>';
       if (!$('.modal').hasClass('in')) {
         $(html).modal();
@@ -58,11 +58,12 @@ $('.new_comment').each(function() {
 $('.reply-form .new_comment').each(function() {
   $(this).submit(function(e) {
     e.preventDefault();
-    if ($(this).find('.reply-comment-body').val() == '');
+    if ($(this).find('.reply-comment-body').val().trim() == '') {
       html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>';
       if (!$('.modal').hasClass('in')) {
         $(html).modal();
       }
       return false;
+    }
   });
 });

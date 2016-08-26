@@ -10,6 +10,14 @@ require 'paperclip/matchers'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |file| require file }
 
+VCR.configure do |c|
+  # the directory where your cassettes will be saved
+  c.cassette_library_dir = 'spec/factories/vcr'
+  # your HTTP request service. You can also use fakeweb, webmock, and more
+  c.hook_into :webmock
+  c.ignore_localhost = true
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end

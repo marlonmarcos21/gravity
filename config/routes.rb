@@ -15,14 +15,12 @@ Rails.application.routes.draw do
 
   resources :posts do
     collection do
-      post 'upload_image'
-      delete 'remove_image'
+      post 'upload_media'
+      delete 'remove_media'
       get 'more_published_posts'
     end
 
     member do
-      patch 'publish'
-      patch 'unpublish'
       patch 'editable'
     end
   end

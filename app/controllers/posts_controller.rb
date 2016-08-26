@@ -1,10 +1,10 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: %i(show edit update destroy publish unpublish editable)
+  before_action :post, only: %i(show edit update destroy editable)
 
-  before_action :prepare_images, only: [:edit]
-  before_action :image_token,    only: %i(new index)
+  before_action :prepare_images, only: :edit
+  before_action :media_token,    only: %i(new index)
 
   def index
     pp_scope = Post.includes(:user).published.descending
@@ -19,11 +19,7 @@ class PostsController < ApplicationController
     @next_page = page + 1
     @posts = pp_scope.page(page)
     @has_more_results = !pp_scope.page(@next_page).empty?
-
-    respond_to do |format|
-      format.html { render :index }
-      format.js
-    end
+    respond_to :js
   end
 
   def show
@@ -35,24 +31,25 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @image_token = @post.images.first.try(:token) || image_token
+    @media_token = @post.images.first.try(:token) || media_token
   end
 
   def create
     @post.user = current_user
-    img_token = params.delete :image_token
+    medium_token = params.delete :media_token
     respond_to do |format|
       if @post.save
-        flash[:notice] = 'Post created!'
-        attach_images img_token, @post.id
-        attach_videos img_token, @post.id
-        image_token
+        flash[:notice] = 'Post created'
+        attach_images medium_token, @post.id
+        attach_videos medium_token, @post.id
+        media_token
         @new_post = @post
         @post = Post.new
 
         format.html { redirect_to @new_post }
         format.js   { render :new_post }
       else
+        flash[:alert] = 'Error creating post'
         format.html { render :new }
         format.js   { render nothing: true, content_type: 'text/html' }
       end
@@ -60,12 +57,12 @@ class PostsController < ApplicationController
   end
 
   def update
-    img_token = params.delete :image_token
+    medium_token = params.delete :media_token
 
     if @post.update(post_params)
-      attach_images img_token, @post.id
-      attach_videos img_token, @post.id
-      redirect_to @post, notice: 'Post was successfully updated.'
+      attach_images medium_token, @post.id
+      attach_videos medium_token, @post.id
+      redirect_to @post, notice: 'Post updated'
     else
       render :edit
     end
@@ -78,48 +75,29 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.update_attributes(attrs)
         flash[:notice] = 'Post updated!'
-        format.html { redirect_to @post }
         format.json { render json: { message: 'success', post_id: post.id, content: @post.embed_youtube },
                              status: 200 }
       else
         flash[:alert] = 'Post update failed!'
-        format.html { redirect_to @post }
         format.json { render json: { message: 'failed' }, status: 422 }
       end
     end
   end
 
-  def upload_image
-    image_token = params[:image_token]
-    return if image_token.blank?
-    image_params = params[:post][:images_attributes]
-    return unless image_params
-    image_params.each_value do |img|
-      if img['source'].content_type == 'video/mp4'
-        Video.create(
-          token: image_token,
-          source: img['source']
-        )
-      else
-        Image.create(
-          token: image_token,
-          source: img['source']
-        )
-      end
+  def upload_media
+    if create_media
+      render json: { message: 'success' }, status: 200
+    else
+      render json: { message: 'failed' }, status: 422
     end
-    render json: {}, status: 200
   end
 
-  def remove_image
-    attrs = {
-      source_file_name: params[:source_file_name],
-      token: params[:image_token]
-    }
-    img = Image.where(attrs).first
-    video = Video.where(attrs).first
-    img.try(:destroy)
-    video.try(:destroy)
-    render json: {}, status: 200
+  def remove_media
+    if destroy_media == false
+      render json: { message: 'failed' }, status: 422
+    else
+      render json: { message: 'success' }, status: 200
+    end
   end
 
   def destroy
@@ -129,19 +107,6 @@ class PostsController < ApplicationController
       format.html { redirect_to posts_url }
       format.json { render json: { message: 'Post deleted!' } }
     end
-  end
-
-  def publish
-    if @post.publish!
-      redirect_to @post, notice: 'Post published!'
-    else
-      render :edit, alert: 'Error publishing post!'
-    end
-  end
-
-  def unpublish
-    @post.unpublish!
-    redirect_to @post, alert: 'Post unpublished!'
   end
 
   private
@@ -155,15 +120,47 @@ class PostsController < ApplicationController
     params.require(:post).permit(*permitted_params)
   end
 
-  def attach_images(img_token, post_id)
-    return if img_token.blank?
-    images = Image.where(token: img_token)
+  def create_media
+    media_token = params[:media_token]
+    return if media_token.blank?
+    media_params = params[:post][:media_attributes]
+    return if media_params.blank?
+    media_params.each_value do |medium|
+      if medium['source'].content_type == 'video/mp4'
+        Video.create(
+          token: media_token,
+          source: medium['source']
+        )
+      else
+        Image.create(
+          token: media_token,
+          source: medium['source']
+        )
+      end
+    end
+  end
+
+  def destroy_media
+    attrs = {
+      source_file_name: params[:source_file_name],
+      token: params[:media_token]
+    }
+    img = Image.where(attrs).first
+    video = Video.where(attrs).first
+    return false unless img || video
+    img.try(:destroy)
+    video.try(:destroy)
+  end
+
+  def attach_images(token, post_id)
+    return if token.blank?
+    images = Image.where(token: token)
     images.update_all(attachable_id: post_id, attachable_type: 'Post') if images.any?
   end
 
-  def attach_videos(img_token, post_id)
-    return if img_token.blank?
-    videos = Video.where(token: img_token)
+  def attach_videos(token, post_id)
+    return if token.blank?
+    videos = Video.where(token: token)
     videos.update_all(attachable_id: post_id, attachable_type: 'Post') if videos.any?
   end
 
@@ -181,7 +178,7 @@ class PostsController < ApplicationController
     @images = hash.to_json
   end
 
-  def image_token
-    @image_token = SecureRandom.urlsafe_base64(30)
+  def media_token
+    @media_token = SecureRandom.urlsafe_base64(30)
   end
 end

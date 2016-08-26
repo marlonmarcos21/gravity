@@ -184,7 +184,7 @@ $ ->
   if ($('.my-gallery').length)
     initPhotoSwipeFromDOM('.my-gallery')
 
-  $('.new_comment').each(->
+  $('.new-comment-form .new_comment').each(->
     $(this).submit((e) ->
       e.preventDefault()
       if ($(this).find('.new-comment-body').val().trim() == '')

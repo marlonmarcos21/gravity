@@ -4,7 +4,7 @@
   = f.error_notification
   = @post.errors.full_messages.inspect unless @post.errors.empty?
 
-  = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
+  = f.input :media_token, as: :fake, label: false, input_html: { class: 'hidden', value: @media_token }
   = f.input :body, label: false, placeholder: "#{current_user.first_name}, What's happening?", input_html: { rows: 3, cols: 120 }
 
   .dropzone
@@ -47,11 +47,11 @@
 
       Dropzone.autoDiscover = false;
       var dz = new Dropzone('.dropzone', {
-        url: '/posts/upload_image',
+        url: '/posts/upload_media',
         previewsContainer: '.dropzone-previews',
         addRemoveLinks: true,
         uploadMultiple: true,
-        paramName1: 'post[images_attributes]',
+        paramName1: 'post[media_attributes]',
         paramName2: '[source]',
         autoQueue: false,
         acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
@@ -72,11 +72,11 @@
       });
 
       var auth_token = $('meta[name=csrf-token]').attr('content');
-      var image_token = '#{raw(@image_token)}';
+      var media_token = '#{raw(@media_token)}';
       dz.on('sending', function(file, xhr, formData) {
         $('input[name=commit]').attr('disabled', true);
         formData.append('authenticity_token', auth_token);
-        formData.append('image_token', image_token);
+        formData.append('media_token', media_token);
       });
 
       dz.on('complete', function(file) {
@@ -98,10 +98,10 @@
 
       dz.on('removedfile', function(file) {
         $.ajax({
-          url: '/posts/remove_image',
+          url: '/posts/remove_media',
           type: 'DELETE',
           data: {
-            image_token: image_token,
+            media_token: media_token,
             source_file_name: file.name
           }
         });

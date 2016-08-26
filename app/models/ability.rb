@@ -24,10 +24,10 @@ class Ability
     can :read, Post do |post|
       post.published? || post.user == current_user
     end
-    can [:update, :destroy, :publish, :unpublish, :editable], Post do |post|
+    can [:update, :destroy, :editable], Post do |post|
       post.user == current_user
     end
-    can [:create, :upload_image, :remove_image], Post do
+    can [:create, :upload_media, :remove_media], Post do
       current_user.persisted?
     end
   end
