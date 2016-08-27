@@ -86,7 +86,7 @@ p {
   text-align: right;
 }
 
-#blog, #post {
+.blog-container {
   background-color: #fff;
   padding: 15px;
   border-radius: 3px;
@@ -114,9 +114,6 @@ p {
         max-width: 520px !important;
       }
     }
-  }
-  .blog-actions, .post-actions {
-    margin-top: 20px;
   }
 }
 

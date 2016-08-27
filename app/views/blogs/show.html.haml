@@ -1,4 +1,4 @@
-.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#blog
+.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.blog-container{ id: "blog-#{@blog.id}" }
   .row
     - if can? :publish, @blog
       .blog-header
@@ -32,7 +32,7 @@
           %h5 Sign in to read or post comments
 
   .row
-    .blog-actions
+    .blog-actions.spacer
       = link_to 'Back', blogs_path, class: 'btn btn-default'
       
       - if can? :publish, @blog
