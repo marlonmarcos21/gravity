@@ -22,7 +22,10 @@ class Ability
   def post_permissions
     can :more_published_posts, Post
     can :read, Post do |post|
-      post.published? || post.user == current_user
+      !post.private? || 
+        (post.private? && (post.user == current_user ||
+                            current_user.is_friends_with?(post.user)))
+
     end
     can [:update, :destroy, :editable], Post do |post|
       post.user == current_user
@@ -47,35 +50,41 @@ class Ability
 
   def user_permissions
     can [:read, :more_published_posts, :more_published_blogs], User
-    can :more_drafted_blogs, User do |user|
+    can [:update, :more_drafted_blogs], User do |user|
       current_user == user
     end
-    can :update, User do |user|
-      user == current_user
-    end
     can :send_friend_request, User do |user|
-      !current_user.is_friends_with?(user) && !current_user.has_friend_request_from?(user)
+      current_user.persisted? &&
+        current_user != user &&
+        !current_user.is_friends_with?(user) &&
+        !current_user.requested_to_be_friends_with?(user)
     end
     can :accept_friend_request, User do |user|
-      !current_user.is_friends_with?(user) && current_user.has_friend_request_from?(user)
+      current_user.persisted? &&
+        current_user != user &&
+        !current_user.is_friends_with?(user) &&
+        current_user.has_friend_request_from?(user)
     end
     can :cancel_friend_request, User do |user|
-      !current_user.is_friends_with?(user) && user.has_friend_request_from?(current_user)
+      current_user.persisted? &&
+        current_user != user &&
+        !current_user.is_friends_with?(user) &&
+        user.has_friend_request_from?(current_user)
     end
     can :reject_friend_request, User do |user|
-      !current_user.is_friends_with?(user) && current_user.has_friend_request_from?(user)
+      current_user.persisted? &&
+        current_user != user &&
+        !current_user.is_friends_with?(user) &&
+        current_user.has_friend_request_from?(user)
     end
   end
 
   def comment_permissions
-    can :read, Blog do |blog|
-      blog.published? || blog.user == current_user
+    can :create, Comment do
+      current_user.persisted?
     end
     can :destroy, Comment do |comment|
       comment.user == current_user || comment.commentable.user == current_user
-    end
-    can :create, Comment do
-      current_user.persisted?
     end
   end
 end

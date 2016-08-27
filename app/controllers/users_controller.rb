@@ -101,9 +101,7 @@ class UsersController < ApplicationController
         flash[:notice] = "#{@user.first_name} already sent you a friend request, accept now!"
         format.html { redirect_to :back }
         format.js   { render nothing: true, content_type: 'text/html' }
-      elsif !current_user.is_friends_with?(@user) &&
-              !current_user.requested_to_be_friends_with?(@user) &&
-              current_user.send_friend_request_to(@user)
+      elsif current_user.send_friend_request_to(@user)
         UserMailer.delay.send_friend_request(@user, current_user)
         @user.create_activity :send_friend_request
         @post = @user.posts.published.first
@@ -120,9 +118,7 @@ class UsersController < ApplicationController
 
   def accept_friend_request
     respond_to do |format|
-      if !@user.is_friends_with?(current_user) &&
-           current_user.has_friend_request_from?(@user) &&
-           current_user.accept_friend_request!(@user)
+      if current_user.accept_friend_request!(@user)
         UserMailer.delay.accept_friend_request(current_user, @user)
         @user.create_activity :accept_friend_request
         @post = Post.find_by_id params[:post_id] if params[:post_id]
@@ -139,9 +135,7 @@ class UsersController < ApplicationController
 
   def cancel_friend_request
     respond_to do |format|
-      if !@user.is_friends_with?(current_user) &&
-           @user.has_friend_request_from?(current_user) &&
-           current_user.cancel_friend_request!(@user)
+      if current_user.cancel_friend_request!(@user)
         @user.create_activity :cancel_friend_request
         flash[:notice] = 'Request canceled!'
         format.html { redirect_to :back }
@@ -156,9 +150,7 @@ class UsersController < ApplicationController
 
   def reject_friend_request
     respond_to do |format|
-      if !@user.is_friends_with?(current_user) &&
-           current_user.has_friend_request_from?(@user) &&
-           current_user.reject_friend_request!(@user)
+      if current_user.reject_friend_request!(@user)
         @user.create_activity :reject_friend_request
         flash[:notice] = 'Request rejected!'
         format.html { redirect_to :back }
