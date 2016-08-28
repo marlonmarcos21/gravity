@@ -32,10 +32,14 @@
   .row
     - if can?(:update, post)
       %p.post-body.editable-post-body{ 'data-type' => 'wysihtml5', 'data-pk' => post.id, 'data-url' => editable_post_path(post), 'data-name' => 'body', name: 'body', 'data-value' => post.body, value: post.body, 'data-escape' => 'true', 'data-rows' => 5, class: "post-body-#{post.id}" }
+        - if post.private?
+          = fa_icon 'lock'
         = fa_icon 'edit'
         = post.embed_youtube.html_safe
     - else
       %p.post-body
+        - if post.private?
+          = fa_icon 'lock'
         = post.embed_youtube.html_safe
 
   - if post.images.any?

@@ -313,7 +313,10 @@ $(document).ajaxComplete((event, request) ->
       $(elementId + ' .comments-header h6').html(word)
 
     if (request.responseJSON.content && request.responseJSON.post_id)
-      $('.post-body-' + request.responseJSON.post_id).html(request.responseJSON.content)
+      html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content
+      if request.responseJSON.private == true
+        html = '<i class="fa fa-lock"></i> ' + html
+      $('.post-body-' + request.responseJSON.post_id).html(html)
 
   $.fn.editable.defaults.mode = 'inline'
   $('.editable-post-body').editable(
