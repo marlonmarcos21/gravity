@@ -16,13 +16,14 @@ class Post < ActiveRecord::Base
   validates :body, presence: true
   validates :user, presence: true
 
-  scope :published,   ->{ where(published: true) }
-  scope :unpublished, ->{ where(published: false) }
-  scope :recent,      ->(limit) { published.order(published_at: :desc).limit(limit) }
-  scope :descending,  ->{ order(published_at: :desc) }
-   
-  before_save   :strip_body,      if: :body_changed?
+  scope :published,   -> { where(published: true) }
+  scope :unpublished, -> { where(published: false) }
+  scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
+  scope :descending,  -> { order(published_at: :desc) }
+
   before_create :set_published_at
+
+  before_save :strip_body, if: :body_changed?
 
   include PostView
   include PgSearch
@@ -36,8 +37,8 @@ class Post < ActiveRecord::Base
 
   include PublicActivity::Model
   tracked skip_defaults: true,
-          owner: Proc.new { |controller, _model| controller.current_user },
-          recipient: Proc.new { |_controller, model| model.user }
+          owner: proc { |controller, _model| controller.current_user },
+          recipient: proc { |_controller, model| model.user }
 
   def date_meta
     published_at.strftime '%a, %b %e, %Y %R'

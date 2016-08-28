@@ -19,11 +19,13 @@ class SearchController < ApplicationController
 
   def post_search(search_term)
     @posts = Post.includes(user: :user_profile)
-               .published.search search_term
+                 .published
+                 .search search_term
   end
 
   def blog_search(search_term)
     @blogs = Blog.includes(user: :user_profile)
-               .published.search search_term
+                 .published
+                 .search search_term
   end
 end

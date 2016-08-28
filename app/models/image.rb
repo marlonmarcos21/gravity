@@ -18,7 +18,7 @@ class Image < ActiveRecord::Base
                              s3_url_options: { virtual_host: true }
 
   validates_attachment_presence :source
-  validates_attachment_content_type :source, content_type: /\Aimage\/(\w?jpeg|jpg|png|gif)\Z/
+  validates_attachment_content_type :source, content_type: %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}
   validates :token, presence: true
 
   after_post_process :save_image_dimensions

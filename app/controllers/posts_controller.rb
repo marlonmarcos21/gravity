@@ -75,15 +75,14 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.update_attributes(attrs)
         flash[:notice] = 'Post updated!'
-        format.json {
+        format.json do
           render json: {
             message: 'success',
             post_id: @post.id,
             content: @post.embed_youtube,
             private: @post.private?
-          },
-          status: 200
-        }
+          }, status: 200
+        end
       else
         flash[:alert] = 'Post update failed!'
         format.json { render json: { message: 'failed' }, status: 422 }

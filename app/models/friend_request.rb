@@ -3,7 +3,7 @@
 # t.string     :status
 
 class FriendRequest < ActiveRecord::Base
-  AVAILABLE_STATUSES = %w(pending canceled accepted rejected)
+  AVAILABLE_STATUSES = %w(pending canceled accepted rejected).freeze
 
   belongs_to :user
   belongs_to :requester, class_name: 'User', foreign_key: :requester_id

@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
 
   # NOTE: install the acts_as_votable plugin if you
   # want user to vote on the quality of comments.
-  #acts_as_votable
+  # acts_as_votable
 
   belongs_to :commentable, polymorphic: true
   belongs_to :user
@@ -29,9 +29,9 @@ class Comment < ActiveRecord::Base
     # example in readme
     def build_from(obj, user_id, comment)
       new \
-        :commentable => obj,
-        :body        => comment,
-        :user_id     => user_id
+        commentable: obj,
+        body: comment,
+        user_id: user_id
     end
 
     # Helper class method to look up a commentable object
@@ -41,7 +41,7 @@ class Comment < ActiveRecord::Base
     end
   end
 
-  #helper method to check if a comment has children
+  # helper method to check if a comment has children
   def has_children?
     children.any?
   end

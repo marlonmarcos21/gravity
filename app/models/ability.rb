@@ -22,10 +22,9 @@ class Ability
   def post_permissions
     can :more_published_posts, Post
     can :read, Post do |post|
-      !post.private? || 
+      !post.private? ||
         (post.private? && (post.user == current_user ||
                             current_user.is_friends_with?(post.user)))
-
     end
     can [:update, :destroy, :editable], Post do |post|
       post.user == current_user

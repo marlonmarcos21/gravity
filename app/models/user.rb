@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  DEFAULT_AVATAR = 'https://static-prod.gravity.ph/dev_files/default-avatar.png'
+  DEFAULT_AVATAR = 'https://static-prod.gravity.ph/dev_files/default-avatar.png'.freeze
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
                                     s3_protocol: :https,
                                     default_url: DEFAULT_AVATAR
 
-  validates_attachment_content_type :profile_photo, content_type: /\Aimage\/.*\Z/
+  validates_attachment_content_type :profile_photo, content_type: %r{\Aimage/.*\Z}
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -53,8 +53,8 @@ class User < ActiveRecord::Base
 
   include PublicActivity::Model
   tracked skip_defaults: true,
-          owner: Proc.new { |controller, _model| controller.current_user },
-          recipient: Proc.new { |_controller, model| model }
+          owner: proc { |controller, _model| controller.current_user },
+          recipient: proc { |_controller, model| model }
 
   delegate :date_of_birth,   to: :user_profile, allow_nil: true
   delegate :street_address1, to: :user_profile, allow_nil: true
@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
   end
 
   def send_friend_request_to(other_user)
-    friend_request = other_user.friend_request_from(self, ['canceled', 'rejected'])
+    friend_request = other_user.friend_request_from(self, %w(canceled rejected))
     if friend_request
       friend_request.update(status: 'pending')
     else
@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
   end
 
   def friend_request_from(other_user, status = 'pending')
-    friend_requests.where(requester: other_user, status: status).first
+    friend_requests.find_by(requester: other_user, status: status)
   end
 
   def has_friend_request_from?(other_user)

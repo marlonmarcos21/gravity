@@ -2,20 +2,17 @@ module PostView
   extend ActiveSupport::Concern
 
   def embed_youtube
-    content = body
-    html = Nokogiri::HTML.fragment(content)
+    html = Nokogiri::HTML.fragment(body)
     a_tags = html.search('a')
 
-    return content if a_tags.empty?
+    return body if a_tags.empty?
 
     a_tags.map do |node|
       youtube_id = get_youtube_id(node.attributes['href'].value)
       next if youtube_id.blank?
-      replace_with = "#{node.to_s}<br /><br />" + %Q{<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>} + "<br /><br />"
-      content.sub!(node.to_s, replace_with)
-    end
-
-    content
+      replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>) + '<br /><br />'
+      body.sub!(node.to_s, replace_with)
+    end.last
   end
 
   private
@@ -27,7 +24,7 @@ module PostView
       query['v'].first if query.key?('v')
     elsif youtube_url =~ /youtu\.be/
       uri = URI youtube_url
-      uri.path.sub(/^\//, '')
+      uri.path.sub(%r{^/}, '')
     end
   end
 end
