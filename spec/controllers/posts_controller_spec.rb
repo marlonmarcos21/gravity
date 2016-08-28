@@ -237,7 +237,7 @@ RSpec.describe PostsController, type: :controller do
 
           it 'json response should include message, id and content' do
             subject
-            expect(JSON.parse(response.body)).to eq({"message"=>"success", "post_id"=>@post.id, "content"=>"new body"})
+            expect(JSON.parse(response.body)).to eq({"message"=>"success", "post_id"=>@post.id, "content"=>"new body", "private"=>false})
           end
         end
 
