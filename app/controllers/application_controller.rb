@@ -9,7 +9,8 @@ class ApplicationController < ActionController::Base
   helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to :back, alert: exception.message
+    redirect_page = request.env['HTTP_REFERER'].nil? ? root_url : :back
+    redirect_to redirect_page, alert: exception.message
   end
 
   def in_homepage?
