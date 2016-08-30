@@ -35,6 +35,11 @@ $ ->
       type: 'patch'
       dataType: 'json'
   )
+  $('.editable-comment-body').editable(
+    ajaxOptions:
+      type: 'patch'
+      dataType: 'json'
+  )
 
   $('.end-of-internet').delay(3000).fadeOut('slow')
 
@@ -318,8 +323,17 @@ $(document).ajaxComplete((event, request) ->
         html = '<i class="fa fa-lock"></i> ' + html
       $('.post-body-' + request.responseJSON.post_id).html(html)
 
+    if (request.responseJSON.content && request.responseJSON.comment_id)
+      html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content
+      $('.comment-body-' + request.responseJSON.comment_id).html(html)
+
   $.fn.editable.defaults.mode = 'inline'
   $('.editable-post-body').editable(
+    ajaxOptions:
+      type: 'patch'
+      dataType: 'json'
+  )
+  $('.editable-comment-body').editable(
     ajaxOptions:
       type: 'patch'
       dataType: 'json'

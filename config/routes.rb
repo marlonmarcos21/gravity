@@ -39,7 +39,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :comments, only: [:create, :destroy]
+  resources :comments, only: [:create, :destroy] do
+    member do
+      patch 'editable'
+    end
+  end
 
   get 'search', to: 'search#search'
 

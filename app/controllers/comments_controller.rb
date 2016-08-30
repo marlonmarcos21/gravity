@@ -29,12 +29,32 @@ class CommentsController < ApplicationController
     end
   end
 
+  def editable
+    attrs = {}
+    attrs[params[:name]] = params[:value]
+
+    respond_to do |format|
+      if @comment.update_attributes(attrs)
+        flash[:notice] = 'Comment updated!'
+        format.json do
+          render json: {
+            message: 'success',
+            comment_id: @comment.id,
+            content: @comment.body,
+          }, status: 200
+        end
+      else
+        flash[:alert] = 'Comment update failed!'
+        format.json { render json: { message: 'failed' }, status: 422 }
+      end
+    end
+  end
+
   def destroy
-    comment = Comment.find(params[:id])
-    commentable = comment.commentable
-    comment.destroy
+    commentable = @comment.commentable
+    @comment.destroy
     @total_comments = commentable.comment_threads.count
-    element_id = "#{comment.commentable_type.underscore}-#{comment.commentable_id}"
+    element_id = "#{@comment.commentable_type.underscore}-#{@comment.commentable_id}"
     respond_to do |format|
       flash[:alert] = 'Comment deleted!'
       format.html { redirect_to :back }

@@ -416,6 +416,8 @@ RSpec.describe Ability do
   end
 
   describe 'Comment' do
+    let(:comment) { FactoryGirl.create(:comment, user: user) }
+
     describe 'create' do
       let(:new_comment) { FactoryGirl.build(:comment) }
 
@@ -433,8 +435,6 @@ RSpec.describe Ability do
     end
 
     describe 'destroy' do
-      let(:comment) { FactoryGirl.create(:comment, user: user) }
-
       context 'when anonymous' do
         it { should_not be_able_to(:destroy, comment) }
       end
@@ -460,6 +460,36 @@ RSpec.describe Ability do
           end
 
           it { should be_able_to(:destroy, comment) }
+        end
+      end
+    end
+
+    describe 'editable' do
+      context 'when anonymous' do
+        it { should_not be_able_to(:editable, comment) }
+      end
+
+      context 'when commenter' do
+        before do
+          @user = user
+        end
+
+        it { should be_able_to(:editable, comment) }
+      end
+
+      context 'when other user' do
+        before do
+          @user = other_user
+        end
+
+        it { should_not be_able_to(:editable, comment) }
+
+        context 'when the other user is the owner of the commentable' do
+          before do
+            comment.commentable.update(user: other_user)
+          end
+
+          it { should_not be_able_to(:editable, comment) }
         end
       end
     end

@@ -85,5 +85,8 @@ class Ability
     can :destroy, Comment do |comment|
       comment.user == current_user || comment.commentable.user == current_user
     end
+    can :editable, Comment do |comment|
+      comment.user == current_user
+    end
   end
 end
