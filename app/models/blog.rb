@@ -12,6 +12,8 @@ class Blog < ActiveRecord::Base
 
   validates :user, presence: true
 
+  has_paper_trail on: :update, only: %i(title body)
+
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
   scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }

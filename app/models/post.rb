@@ -16,6 +16,8 @@ class Post < ActiveRecord::Base
   validates :body, presence: true
   validates :user, presence: true
 
+  has_paper_trail on: :update, only: :body
+
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
   scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }

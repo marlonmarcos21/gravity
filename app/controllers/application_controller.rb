@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   include PublicActivity::StoreController
 
+  before_action :set_paper_trail_whodunnit
+
   after_action :flash_to_headers
 
   helper_method :in_homepage?
