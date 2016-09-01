@@ -33,6 +33,10 @@ class Image < ActiveRecord::Base
     uri.to_s
   end
 
+  def gif?
+    source_content_type == 'image/gif'
+  end
+
   private
 
   def save_image_dimensions
@@ -44,9 +48,5 @@ class Image < ActiveRecord::Base
 
   def skip_gif
     !gif?
-  end
-
-  def gif?
-    source_content_type == 'image/gif'
   end
 end
