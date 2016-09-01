@@ -21,6 +21,8 @@ class Image < ActiveRecord::Base
   validates_attachment_content_type :source, content_type: %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}
   validates :token, presence: true
 
+  before_post_process :skip_gif
+
   after_post_process :save_image_dimensions
 
   def source_url(style = :original, expires_in = 3600)
@@ -34,8 +36,17 @@ class Image < ActiveRecord::Base
   private
 
   def save_image_dimensions
+    return if gif?
     geometry    = Paperclip::Geometry.from_file(source.queued_for_write[:main])
     self.width  = geometry.width
     self.height = geometry.height
+  end
+
+  def skip_gif
+    !gif?
+  end
+
+  def gif?
+    source_content_type == 'image/gif'
   end
 end
