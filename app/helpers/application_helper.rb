@@ -19,6 +19,8 @@ module ApplicationHelper
       meta.title = 'Gravity'
       meta.image = model.images.first.try(:source_url, :main, 1.day.to_i)
     end
+    meta.image = 'http://static-prod.gravity.ph/assets/home.jpg' unless meta.image
+    meta.image = meta.image.sub('https', 'http')
     content_for :meta_tags, meta.render
   end
 
@@ -42,7 +44,7 @@ module ApplicationHelper
   end
 
   def strip_content!(text)
-    text = strip_tags(text).split('. ')[0..1].join('. ').squish
+    text = strip_tags(text).split('. ').join('. ').squish
     text = text.truncate(150, omission: '...', separator: ' ')
     Nokogiri::HTML.parse(text).text
   end
