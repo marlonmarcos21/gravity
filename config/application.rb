@@ -33,8 +33,7 @@ module Gravity
       #{config.root}/app/jobs/
       #{config.root}/app/mailers/concerns/
       #{config.root}/app/models/concerns/
-      #{config.root}/app/lib/listeners/
-      #{config.root}/app/lib/publishers/
+      #{config.root}/app/lib/
       #{config.root}/app/workers/concerns/
     )
 
