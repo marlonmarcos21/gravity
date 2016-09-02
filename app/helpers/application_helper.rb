@@ -44,8 +44,7 @@ module ApplicationHelper
   end
 
   def strip_content!(text)
-    text = strip_tags(text).split('. ').join('. ').squish
-    text = text.truncate(150, omission: '...', separator: ' ')
+    text = strip_tags(text).squish.truncate(150, omission: '...', separator: ' ')
     Nokogiri::HTML.parse(text).text
   end
 end
