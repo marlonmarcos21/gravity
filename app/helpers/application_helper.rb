@@ -17,7 +17,12 @@ module ApplicationHelper
       meta.author = model.user.name
     else
       meta.title = 'Gravity'
-      meta.image = model.images.first.try(:source_url, :main, 1.week.to_i)
+      image = model.images.first
+      if image
+        style = image.gif? ? :original : :main
+        meta.image = image.source_url(style, 1.week.to_i)
+        meta.url = meta.image if image.gif?
+      end
     end
     meta.image = 'http://static-prod.gravity.ph/assets/home.jpg' unless meta.image
     meta.image = meta.image.sub('https', 'http')
