@@ -42,7 +42,7 @@ class Ability
     can [:update, :destroy, :publish, :unpublish], Blog do |blog|
       blog.user == current_user
     end
-    can :create, Blog do
+    can [:create, :tinymce_assets], Blog do
       current_user.persisted?
     end
   end

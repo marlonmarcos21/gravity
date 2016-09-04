@@ -196,11 +196,13 @@ RSpec.describe Ability do
       end
     end
 
-    describe 'create' do
+    describe 'create & tinymce_assets' do
       let(:new_blog) { FactoryGirl.build(:blog) }
 
       context 'when anonymous' do
-        it { should_not be_able_to(:create, new_blog) }
+        %i(create tinymce_assets).each do |action|
+          it { should_not be_able_to(action, new_blog) }
+        end
       end
 
       context 'when logged in' do
@@ -208,7 +210,9 @@ RSpec.describe Ability do
           @user = user
         end
 
-        it { should be_able_to(:create, new_blog) }
+        %i(create tinymce_assets).each do |action|
+          it { should be_able_to(action, new_blog) }
+        end
       end
     end
   end
