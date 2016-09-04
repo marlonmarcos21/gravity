@@ -7,9 +7,9 @@
   - if can?(:editable, comment)
     %p.comment-body.editable-comment-body{ 'data-type' => 'wysihtml5', 'data-pk' => comment.id, 'data-url' => editable_comment_path(comment), 'data-name' => 'body', name: 'body', 'data-value' => comment.body, value: comment.body, 'data-escape' => 'true', 'data-rows' => 2, class: "comment-body-#{comment.id}" }
       = fa_icon 'edit'
-      = comment.body
+      = comment.body.html_safe
   - else
-    %p= comment.body
+    %p= comment.body.html_safe
   %p.comment-meta= "on #{comment.created_at.strftime '%a, %b %e, %Y %R'}"
   %p.delete-comment
     - if current_user && can?(:destroy, comment)
