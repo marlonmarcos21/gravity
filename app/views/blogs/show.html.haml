@@ -29,6 +29,8 @@
       #blog-body
         = @blog.body.html_safe
 
+  %hr
+
     - if @blog.published?
       .row
         - if current_user
