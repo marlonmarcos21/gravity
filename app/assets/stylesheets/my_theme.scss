@@ -102,7 +102,19 @@ p {
     h1, h2, h3, h4, h5, h6 {
       color: black !important;
     }
-    img, iframe {
+    iframe {
+      max-width: 720px;
+      @media(max-width: 543px) {
+        max-width: 300px !important;
+      }
+      @media(min-width: 544px) and (max-width: 767px) {
+        max-width: 420px !important;
+      }
+      @media(min-width: 768px) and (max-width: 992px) {
+        max-width: 520px !important;
+      }
+    }
+    img {
       max-width: 720px;
       height: auto !important;
       @media(max-width: 543px) {
@@ -119,7 +131,19 @@ p {
 }
 
 #post, .post-body, .post-preview {
-  .single-image, iframe {
+  iframe {
+    max-width: 720px;
+    @media(max-width: 543px){
+      max-width: 300px !important;
+    }
+    @media(min-width: 544px) and (max-width: 767px) {
+      max-width: 420px !important;
+    }
+    @media(min-width: 768px) and (max-width: 992px) {
+      max-width: 520px !important;
+    }
+  }
+  .single-image {
     max-width: 720px;
     height: auto !important;
     @media(max-width: 543px){
