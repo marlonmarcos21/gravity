@@ -54,6 +54,7 @@ class BlogsController < ApplicationController
 
     if @blog.update(blog_params)
       attach_images img_token
+      CleanUpBlogImagesJob.perform_later @blog.id
       redirect_to @blog, notice: 'Blog was successfully updated.'
     else
       render :edit
