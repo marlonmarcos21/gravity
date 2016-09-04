@@ -5,7 +5,7 @@ class Meta
 
   def render
     tags = inject_meta_tags
-    tags * "\n"
+    (tags * "\n").html_safe
   end
 
   private
