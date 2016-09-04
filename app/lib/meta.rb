@@ -1,15 +1,20 @@
 class Meta
+  include ActionView::Helpers::TagHelper
+
   attr_accessor :title, :type, :description, :url, :image, :author
 
   def render
     tags = inject_meta_tags
-    (tags * "\n").html_safe
+    tags * "\n"
   end
 
   private
 
   def meta(property, content, property_type = 'og')
-    content.present? ? %(<meta property="#{property_type}:#{property}" content="#{content}"/>) : ''
+    content_tag :meta,
+                nil,
+                property: "#{property_type}:#{property}",
+                content: content
   end
 
   def inject_meta_tags(property_type = 'og')

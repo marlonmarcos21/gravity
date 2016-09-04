@@ -40,7 +40,7 @@ class CommentsController < ApplicationController
           render json: {
             message: 'success',
             comment_id: @comment.id,
-            content: @comment.body,
+            content: @comment.body
           }, status: 200
         end
       else

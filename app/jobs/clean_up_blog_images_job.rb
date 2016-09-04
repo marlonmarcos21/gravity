@@ -14,7 +14,7 @@ class CleanUpBlogImagesJob < ActiveJob::Base
 
   def get_blog_images(blog)
     html    = Nokogiri::HTML(blog.body)
-    sources = html.xpath "//img/@src"
+    sources = html.xpath '//img/@src'
     sources.map do |attr|
       src = attr.value
       uri = URI src

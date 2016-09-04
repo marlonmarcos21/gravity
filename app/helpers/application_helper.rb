@@ -17,7 +17,7 @@ module ApplicationHelper
       meta.author = model.user.name
     else
       meta.title = 'Gravity'
-      meta.image = model.images.first.try(:source_url, :main, 1.day.to_i)
+      meta.image = model.images.first.try(:source_url, :main, 1.week.to_i)
     end
     meta.image = 'http://static-prod.gravity.ph/assets/home.jpg' unless meta.image
     meta.image = meta.image.sub('https', 'http')
@@ -40,7 +40,7 @@ module ApplicationHelper
   end
 
   def custom_name_and_caret(name)
-    "#{name} #{content_tag(:b, class: 'caret') {}}".html_safe
+    "#{name} #{content_tag(:b, nil, class: 'caret')}"
   end
 
   def strip_content!(text)
