@@ -2,12 +2,14 @@
   = render_meta_tags @blog
 
 .row
-  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.blog-container{ id: "blog-#{@blog.id}" }
+  .col-lg-8.col-lg-offset-2.blog-container{ id: "blog-#{@blog.id}" }
     .row
       - if can? :publish, @blog
         .blog-header
           - if @blog.published?
             = link_to 'Unpublish', unpublish_blog_path(@blog), method: :patch, class: 'btn btn-default'
+            %a.fb-xfbml-parse-ignore.btn.btn-default{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{blog_url(@blog)}', 'Gravity', 'width=400,height=300')" }
+              = fa_icon('facebook') + ' Share'
           - else
             = link_to 'Publish', publish_blog_path(@blog), method: :patch, class: 'btn btn-default'
       %hr

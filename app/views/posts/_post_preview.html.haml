@@ -16,7 +16,7 @@
             = fa_icon('pencil') + ' Edit'
         - unless post.private?
           %li
-            %a.fb-xfbml-parse-ignore{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{post_url(post)}', 'mywindowtitle', 'width=400,height=300')" }
+            %a.fb-xfbml-parse-ignore{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{post_url(post)}', 'Gravity', 'width=400,height=300')" }
               = fa_icon('facebook') + ' Share'
         %li.danger
           = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax } do

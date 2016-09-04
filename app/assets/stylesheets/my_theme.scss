@@ -104,7 +104,8 @@ p {
     }
     img, iframe {
       max-width: 720px;
-      @media(max-width: 543px){
+      height: auto !important;
+      @media(max-width: 543px) {
         max-width: 300px !important;
       }
       @media(min-width: 544px) and (max-width: 767px) {
@@ -120,6 +121,7 @@ p {
 #post, .post-body, .post-preview {
   .single-image, iframe {
     max-width: 720px;
+    height: auto !important;
     @media(max-width: 543px){
       max-width: 300px !important;
     }
