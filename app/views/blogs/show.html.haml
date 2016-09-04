@@ -1,5 +1,5 @@
 - content_for(:meta_tags) do
-  = render_meta_tags @blog
+  = render_meta_tags(@blog).html_safe
 
 .row
   .col-lg-8.col-lg-offset-2.blog-container{ id: "blog-#{@blog.id}" }
