@@ -56,6 +56,7 @@ gem 'acts_as_commentable_with_threading'
 gem 'sidekiq'
 gem 'public_activity'
 gem 'paper_trail'
+gem 'sitemap_generator'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

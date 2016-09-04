@@ -22,6 +22,8 @@ class Post < ActiveRecord::Base
   scope :unpublished, -> { where(published: false) }
   scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
+  scope :non_public,  -> { where(private: true) }
+  scope :non_private, -> { where.not(private: true) }
 
   before_create :set_published_at
 
