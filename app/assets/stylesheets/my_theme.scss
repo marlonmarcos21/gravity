@@ -553,26 +553,21 @@ body {
   margin: 0 auto;
   border: 1px solid $primary;
   background: #fff;
-  position: absolute;
+  position: fixed;
   top: 200px;
   border-radius: 3px;
+  overflow-y: hidden !important;
   .blank-post {
     margin-left: 230px;
   }
-}
-
-#confirmationDialog {
-  position: fixed;
-}
-
-.modal-body {
-  font-size: 15px;
-  text-align: center;
-  padding-top: 25px;
-}
-
-.modal-footer {
-  border-top: none !important;
+  .modal-body {
+    font-size: 15px;
+    text-align: center;
+    padding-top: 25px;
+  }
+  .modal-footer {
+    border-top: none !important;
+  }
 }
 
 #nav-profile-photo {
