@@ -49,7 +49,7 @@
           = render 'posts/image_swiper', images: post.images
         - else
           - image = post.images.first
-          - style = image.gif? ? :original : :main
+          - style = image.gif? ? :original : image.width > image.height ? :main : :portrait
           = image_tag post.images.first.source_url(style), class: 'single-image'
 
   - if post.videos.any?
