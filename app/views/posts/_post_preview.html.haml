@@ -19,7 +19,7 @@
             %a.fb-xfbml-parse-ignore{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{post_url(post)}', 'Gravity', 'width=400,height=300')" }
               = fa_icon('facebook') + ' Share'
         %li.danger
-          = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax } do
+          = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax, id: post.id } do
             = fa_icon 'trash'
             Delete
 
