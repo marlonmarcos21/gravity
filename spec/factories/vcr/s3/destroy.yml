@@ -144,4 +144,628 @@ http_interactions:
       string: ''
     http_version: 
   recorded_at: Fri, 26 Aug 2016 15:55:38 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/078/portrait/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160826T155538Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160826/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=fad08eb6f2aef3c0f9be50050fd3a25a627c0e1183cf56a98f8af8422aef2c53
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - D87136ED8083F074
+      X-Amz-Id-2:
+      - mt7wLw4bAoBeQ4ZzUWrTWhh63uEUrdYuIipNpeTr7kjLQ+R0Eas/kn5Wx3jTR3/TwSXl/DlPnuo=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 26 Aug 2016 15:55:37 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Fri, 26 Aug 2016 15:55:38 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/045/original/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T111927Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=c3098a871b833cb98dba34f8fe4f7795b83a6bd6ad7100b66fe8e5eef5a0c816
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - EDA0FDB3509EC378
+      X-Amz-Id-2:
+      - 3IzW4yVtj7eF7ItFnkzWSk5pRZfFxqSa0HQ7nRgrVVE4I3mx+aqDGQIEW8D4SG5C2M0tlFpXY8A=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:19:27 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:19:27 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/045/thumb/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T111927Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=27ed3572ac38237f12228e203ec2aadac5fb8eca8795e3e09d49ba571a7c190c
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 490C41F70DFBBAD3
+      X-Amz-Id-2:
+      - aKUfQvlHgdo1spFWgDjBAP7DmL5F2/pKb6t5ki8i8yY/CHj724ooxsIQ9o9NwteOnF0drJUnM10=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:19:27 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:19:28 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/045/main/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T111928Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=596e83d31abfa8a5fccc1feacda9de67b002e2093a847d9fefbb540ffa63c259
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 61AB4F2AC292E386
+      X-Amz-Id-2:
+      - OHptQFjY85+YA27KBYl47JwxcAoZWo0xiZhwsU0NTNz1FtgSrds2SW7f0LA35vRfTcUl81kwqdo=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:19:27 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:19:28 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/045/portrait/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T111928Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=56c19d04d9a6b6d717450a36b609fb4ce2107189bae1e129ddb3a3043a24538c
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 1A5D16BD95BAD94E
+      X-Amz-Id-2:
+      - Q7VyTuvPoY9KKtfUTc2dxwp0SZWUVs7DyHLt2AtOvYOm8m05xcg7cY05BdgStO5EteLpokDo7aw=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:19:27 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:19:28 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/058/original/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160824T153912Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160824/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=f7b24f8c9338af408eec24e92bc94b77ce98ec46f96a4cc4f1c1ac2c4e1bef40
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      X-Amz-Request-Id:
+      - A7311042F32F2AF2
+      X-Amz-Id-2:
+      - A/f53CJ3wHJKtIYLQFCipKpxWKEdEUy/m7nowzjn1vH4eC+xhiLK5ili1LfZUo6HqJijjFVL0qY=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:20:49 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Aug 2016 15:39:12 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/058/thumb/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160824T153912Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160824/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=78b2d782e825cfd993db76d90b058dba2f5bbde4174982606d7ef96b94214c43
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      X-Amz-Request-Id:
+      - 5AA27602C4F21703
+      X-Amz-Id-2:
+      - GMVMz9Lk3Kr4ADvUBZu5LUzFoBdLwiVKAl07Lo92WbgacJ0MQfmLTPTMbQgJ+4qJplFSWs8CLZw=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:20:48 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Aug 2016 15:39:12 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/058/main/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160824T153912Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160824/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=f410e0c62058955faa496f241b299874e4209565e9c81a31386574643f624904
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      X-Amz-Request-Id:
+      - 123F674F6AE7A860
+      X-Amz-Id-2:
+      - hK52Hrtbes7AYJ3EH9h0z8KS0ZetMyFCnjKLWIyKJLs9QXpZOiwmz4jpJMTXHAZcpKrSVittzbg=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:20:49 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Aug 2016 15:39:12 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/058/portrait/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160824T153912Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160824/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=9c170417b6e2224ae901e249e323a5f7d270cb1d9ea53dd8b31cf74004b510fe
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      X-Amz-Request-Id:
+      - A6C2DEBB98CE2AC6
+      X-Amz-Id-2:
+      - 8HVo+kShxvw81+Qf3mdAk3+Zqc7btKCHfBmhGHc9FJYyyRTWjcra4wgZmxF7ualXMm0j2KJZQ+U=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:20:48 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Aug 2016 15:39:12 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/064/original/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T112231Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=c89ddf35bd99935463eddc295184ef88f0bfd3b6c66f562f96017d88a3455a16
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - C5575B18ED649F0A
+      X-Amz-Id-2:
+      - 99RDWM/wgzP9IhtkGBLhSdmrDhx9CitAuMgqi+xM/sy3H5/sDfLzc97QFL1d9rA3VRKxDcDjF3c=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:22:31 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:22:31 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/064/thumb/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T112231Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=b3c566a4d0a3356b074a779e622d3b133a51325a9eb6b18ee28dfa0a6d422d96
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - B05A9678AAD481BD
+      X-Amz-Id-2:
+      - qIpc45OSTfxtb5ZP3dY2DbfX9uMmic6h1OHVYZ2KaMf6ZYEosDMLngjY2laEhvJg21u06B5bWAk=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:22:31 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:22:31 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/064/main/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T112231Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=dabd8fc988afcd9b814065251094b52d5fcfd5821ce64d2b76b238606c77f21b
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 2FB83E335106785C
+      X-Amz-Id-2:
+      - e4bttC1itFhAS/lnRXxLuTtCkvhKg5NulFym4/QxkPB50XBT7Xurllo0dKN+Tp/m+6sc9O91FQo=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:22:31 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:22:32 GMT
+- request:
+    method: head
+    uri: https://s3-ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/064/portrait/test.jpg
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.5.5 ruby/2.3.1 x86_64-darwin15 resources
+      X-Amz-Date:
+      - 20160917T112232Z
+      Host:
+      - s3-ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20160917/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=cbb943b8447efc14670a8c64df0702fb19c14f467bea8d7d8107070a8c198925
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 08E96B8787481FC8
+      X-Amz-Id-2:
+      - TfsQ1ay1NB2kcTGRtbexKo6+PKRfmF4AGETMFniBH5BG0OUltLGfLDiv53F+ANrTWsznsttUFRs=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sat, 17 Sep 2016 11:22:31 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Sep 2016 11:22:32 GMT
 recorded_with: VCR 3.0.3

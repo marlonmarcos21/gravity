@@ -287,7 +287,7 @@ RSpec.describe PostsController, type: :controller do
 
       describe '#upload_media' do
         subject do
-          VCR.use_cassette 's3/upload', match_requests_on: [:host, :method] do
+          VCR.use_cassette 's3/upload', match_requests_on: [:host, :method], record: :new_episodes do
             xhr :post,
                 :upload_media,
                 media_token: @token,
@@ -323,7 +323,7 @@ RSpec.describe PostsController, type: :controller do
         let(:image) { FactoryGirl.create(:image, token: token) }
 
         subject do
-          VCR.use_cassette 's3/destroy', match_requests_on: [:host, :method] do
+          VCR.use_cassette 's3/destroy', match_requests_on: [:host, :method], record: :new_episodes do
             xhr :post,
                 :remove_media,
                 media_token: @token,

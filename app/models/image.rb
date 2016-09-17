@@ -9,7 +9,8 @@ class Image < ActiveRecord::Base
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] },
-                                       main: { geometry: '800x', processors: [:thumbnail] } },
+                                       main: { geometry: '800x', processors: [:thumbnail] },
+                                       portrait: { geometry: 'x500', processors: [:thumbnail] } },
                              storage: :s3,
                              s3_credentials: "#{Rails.root}/config/s3.yml",
                              s3_region: ENV['AWS_S3_REGION'],
