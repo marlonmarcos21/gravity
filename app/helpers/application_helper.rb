@@ -13,7 +13,7 @@ module ApplicationHelper
     if model.is_a?(Blog)
       meta.title = strip_content!(model.title)
       meta.type = 'article'
-      meta.image = model.blog_media.first.try(:source_url)
+      meta.image = model.blog_media.order(:id).first.try(:source_url)
       meta.author = model.user.name
     else
       meta.title = 'Gravity'
