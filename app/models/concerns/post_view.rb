@@ -18,13 +18,9 @@ module PostView
   private
 
   def get_youtube_id(youtube_url)
-    if youtube_url =~ /youtube/
-      uri = URI youtube_url
-      query = CGI::parse uri.query
-      query['v'].first if query.key?('v')
-    elsif youtube_url =~ /youtu\.be/
-      uri = URI youtube_url
-      uri.path.sub(%r{^/}, '')
-    end
+    uri = URI youtube_url
+    return uri.path.sub(%r{^/}, '') if youtube_url =~ /youtu\.be/
+    query = CGI::parse uri.query
+    query['v'].try(:first)
   end
 end
