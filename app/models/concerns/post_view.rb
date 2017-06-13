@@ -23,6 +23,7 @@ module PostView
   def get_youtube_id(youtube_url)
     uri = URI youtube_url
     return uri.path.sub(%r{^/}, '') if youtube_url =~ /youtu\.be/
+    return unless uri.query
     query = CGI::parse uri.query
     query['v'].try(:first)
   end
