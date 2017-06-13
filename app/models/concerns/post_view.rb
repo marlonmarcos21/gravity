@@ -9,9 +9,12 @@ module PostView
 
     a_tags.map do |node|
       youtube_id = get_youtube_id(node.attributes['href'].value)
-      next if youtube_id.blank?
-      replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>) + '<br /><br />'
-      body.sub!(node.to_s, replace_with)
+      if youtube_id.blank?
+        body
+      else
+        replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>) + '<br /><br />'
+        body.sub!(node.to_s, replace_with)
+      end
     end.last
   end
 
