@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '4.2.8'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 gem 'pg_search'
@@ -30,7 +30,7 @@ gem 'jquery-ui-rails'
 gem 'turbolinks'
 
 gem 'rack-timeout'
-gem 'puma', '~> 3.6.0'
+gem 'puma', '~> 3.9.1'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
@@ -53,7 +53,7 @@ gem 'html_truncator'
 gem 'rails_autolink'
 gem 'photoswipe-rails'
 gem 'acts_as_commentable_with_threading'
-gem 'sidekiq'
+gem 'sidekiq', '~> 4.2.10'
 gem 'public_activity'
 gem 'paper_trail'
 gem 'sitemap_generator'
