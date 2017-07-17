@@ -1,0 +1,38 @@
+- next_page = 2 if local_assigns[:next_page].blank?
+
+= render 'listing', posts: @posts
+.text-center
+  - if has_more_results
+    %nav.published-posts-pagination
+      %span.published-posts-pagination-page
+        %em Loading more
+        = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
+  - else
+    %span.end-of-internet
+      %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#posts-container').on('click', '.published-posts-pagination-link', function() {
+        $(this).hide();
+      });
+
+      var nextPage = 2;
+      $(window).scroll(function() {
+        var scrolled = parseInt($(window).scrollTop());
+        var height = parseInt($(document).height() - $(window).height()) - 120;
+        if (scrolled >= height && nextPage === 2) {
+          $.ajax({
+            method: 'GET',
+            url: '#{more_published_posts_posts_path}',
+            dataType: 'script',
+            data: { page: nextPage }
+          });
+          nextPage = 3;
+        }
+        $(document).ajaxStop(function () {
+          $('.published-posts-pagination').hide();
+        });
+      });
+    });

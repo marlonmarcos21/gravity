@@ -1,0 +1,266 @@
+$('#posts-container').prepend("<%= escape_javascript(render('listing', posts: [@new_post])) %>");
+var new_media_token = "<%= @media_token %>";
+$('input[name=media_token]').val(new_media_token);
+$('html, body').animate({
+  scrollTop: 510
+}, 500);
+
+$('#post-index-form form').remove();
+$('#post-index-form').prepend("<%= escape_javascript(render('form', is_remote: true)) %>");
+
+var initPhotoSwipeFromDOM = function(gallerySelector) {
+  var parseThumbnailElements = function(el) {
+    var thumbElements = el.childNodes,
+        numNodes = thumbElements.length,
+        items = [],
+        figureEl,
+        linkEl,
+        size,
+        item;
+
+    for(var i = 0; i < numNodes; i++) {
+      figureEl = thumbElements[i];
+
+      if(figureEl.nodeType !== 1) {
+        continue;
+      }
+
+      linkEl = figureEl.children[0];
+      size = linkEl.getAttribute('data-size').split('x');
+
+      item = {
+        src: linkEl.getAttribute('href'),
+        w: parseInt(size[0], 10),
+        h: parseInt(size[1], 10)
+      };
+
+      if (figureEl.children.length > 1) {
+        item.title = figureEl.children[1].innerHTML; 
+      }
+
+      if (linkEl.children.length > 0) {
+        item.msrc = linkEl.children[0].getAttribute('src');
+      } 
+
+      item.el = figureEl;
+      items.push(item);
+    }
+    return items;
+  };
+
+  var closest = function closest(el, fn) {
+    return el && (fn(el) ? el : closest(el.parentNode, fn));
+  };
+
+  var onThumbnailsClick = function(e) {
+    e = e || window.event;
+    e.preventDefault ? e.preventDefault() : e.returnValue = false;
+    var eTarget = e.target || e.srcElement;
+    var clickedListItem = closest(eTarget, function(el) {
+      return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+    });
+
+    if (!clickedListItem) {
+      return;
+    }
+
+    var clickedGallery = clickedListItem.parentNode,
+        childNodes = clickedListItem.parentNode.childNodes,
+        numChildNodes = childNodes.length,
+        nodeIndex = 0,
+        index;
+
+    for (var i = 0; i < numChildNodes; i++) {
+      if (childNodes[i].nodeType !== 1) { 
+        continue; 
+      }
+
+      if (childNodes[i] === clickedListItem) {
+        index = nodeIndex;
+        break;
+      }
+      nodeIndex++;
+    }
+
+    if (index >= 0) {
+      openPhotoSwipe(index, clickedGallery);
+    }
+    return false;
+  };
+
+  var photoswipeParseHash = function() {
+    var hash = window.location.hash.substring(1),
+    params = {};
+
+    if(hash.length < 5) {
+      return params;
+    }
+
+    var vars = hash.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      if(!vars[i]) {
+        continue;
+      }
+      var pair = vars[i].split('=');  
+      if(pair.length < 2) {
+        continue;
+      }           
+      params[pair[0]] = pair[1];
+    }
+
+    if(params.gid) {
+      params.gid = parseInt(params.gid, 10);
+    }
+
+    return params;
+  };
+
+  var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
+    var pswpElement = document.querySelectorAll('.pswp')[0],
+        gallery,
+        options,
+        items;
+
+    items = parseThumbnailElements(galleryElement);
+
+    options = {
+      galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+
+      getThumbBoundsFn: function(index) {
+        var thumbnail = items[index].el.getElementsByTagName('img')[0],
+            pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+            rect = thumbnail.getBoundingClientRect();
+
+        return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+      }
+    };
+
+    if (fromURL) {
+      if (options.galleryPIDs) {
+        for(var j = 0; j < items.length; j++) {
+          if(items[j].pid == index) {
+            options.index = j;
+            break;
+          }
+        }
+      } else {
+        options.index = parseInt(index, 10) - 1;
+      }
+    } else {
+      options.index = parseInt(index, 10);
+    }
+
+    if (isNaN(options.index)) {
+      return;
+    }
+
+    if (disableAnimation) {
+      options.showAnimationDuration = 0;
+    }
+
+    gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery.init();
+  };
+
+  var galleryElements = document.querySelectorAll( gallerySelector );
+
+  for (var i = 0, l = galleryElements.length; i < l; i++) {
+    galleryElements[i].setAttribute('data-pswp-uid', i+1);
+    galleryElements[i].onclick = onThumbnailsClick;
+  }
+
+  var hashData = photoswipeParseHash();
+  if(hashData.pid && hashData.gid) {
+    openPhotoSwipe( hashData.pid, galleryElements[hashData.gid - 1], true, true);
+  }
+};
+
+if ($('.my-gallery').length) {
+  initPhotoSwipeFromDOM('.my-gallery');
+}
+
+var wysi = $('textarea#post_body').wysihtml5();
+var editor = $('#post_body').data('wysihtml5').editor;
+
+$('#new_post').submit(function(e) {
+  if (!editor.getValue()) {
+    e.preventDefault();
+    html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    $(html).modal();
+    return false;
+  }
+});
+
+Dropzone.autoDiscover = false;
+var dz = new Dropzone('.dropzone', {
+  url: '/posts/upload_media',
+  previewsContainer: '.dropzone-previews',
+  addRemoveLinks: true,
+  uploadMultiple: true,
+  paramName1: 'post[media_attributes]',
+  paramName2: '[source]',
+  autoQueue: false,
+  acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
+  dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
+  dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
+});
+
+dz.on('addedfile', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
+dz.on('processing', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
+dz.on('uploadprogress', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+});
+
+var auth_token = $('meta[name=csrf-token]').attr('content');
+dz.on('sending', function(file, xhr, formData) {
+  $('input[name=commit]').attr('disabled', true);
+  formData.append('authenticity_token', auth_token);
+  formData.append('media_token', new_media_token);
+});
+
+dz.on('complete', function(file) {
+  $('input[name=commit]').removeAttr('disabled');
+});
+
+document.querySelector('.start-upload').onclick = function() {
+  dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
+};
+
+document.querySelector('.cancel-upload').onclick = function() {
+  $.each(dz.files, function(k, v) {
+    if (v.hasOwnProperty('status') && v.status !== 'success') {
+      dz.removeFile(v);
+    }
+  });
+  $('input[name=commit]').removeAttr('disabled');
+};
+
+dz.on('removedfile', function(file) {
+  $.ajax({
+    url: '/posts/remove_media',
+    type: 'DELETE',
+    data: {
+      media_token: media_token,
+      source_file_name: file.name
+    }
+  });
+});
+
+$('a.cancel-post').click(function(e) {
+  e.preventDefault();
+  editor.clear();
+  editor.setValue("<%= current_user.first_name %>What's happening?", true);
+  $.each(dz.files, function(k, v) {
+    dz.removeFile(v);
+  });
+  $('html, body').animate({
+    scrollTop: 0
+  }, 0);
+  $('input[name=commit]').removeAttr('disabled');
+});

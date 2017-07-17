@@ -1,0 +1,288 @@
+@import 'myvariables';
+@import 'mymixins';
+
+.navbar-form {
+  display: inline-flex;
+  height: 17px;
+  padding-top: 0px;
+  margin-top: 0px;
+  .form-group {
+    margin-right: -10px;
+    .input-sm {
+      height: 22px !important;
+      padding: 5px 5px !important;
+    }
+  }
+  .nav-form-submit, .nav-form-cancel {
+    margin-top: -3px;
+  }
+  .input-group-btn > button {
+    margin-left: -7px !important;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    height: 22px;
+    background-color: $primary;
+    color: #fff;
+    border: 1px #ccc solid;
+    .fa.fa-search {
+      position: absolute;
+      font-size: 12px;
+      top: 4px;
+      right: 6px;
+    }
+  }
+}
+
+.form-group {
+  label {
+    color: $primary;
+  }
+}
+
+.dropzone-previews {
+  .dz-preview {
+    .dz-image {
+      border-radius: 10px !important;
+      width: 80px !important;
+      height: auto !important;
+      img {
+        width: 80px !important;
+        height: auto !important;
+      }
+    }
+    .dz-details {
+      display: none;
+    }
+  }
+  .dz-remove:hover {
+    background: none;
+  }
+  .dz-remove {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    color: red;
+    i {
+      cursor: pointer;
+    }
+  }
+}
+
+form {
+  &.posts {
+    padding: 10px;
+    .post_private {
+      margin-top: 50px;
+      margin-bottom: -40px;
+      margin-left: 2px;
+    }
+    .dropzone-action-buttons {
+      display: inline-flex;
+      margin-top: 5px;
+      .start-upload:hover {
+        background: none;
+      }
+      .start-upload {
+        margin-right: 5px;
+        display: inline-block;
+        text-decoration: none;
+        cursor: pointer;
+        span {
+          cursor: pointer;
+          display: block;
+        }
+      }
+    }
+    .form-actions {
+      margin-top: 60px;
+    }
+  }
+}
+
+.select2-container {
+  .select2-dropdown {
+    background: #000 !important;
+    color: $primary !important;
+  }
+}
+
+.select2-container--default {
+  .select2-results__option--highlighted[aria-selected] {
+    background-color: $primary;
+    color: #fff; 
+  }
+}
+
+.datepicker {
+  color: #555;
+ &.datepicker-dropdown {
+    background: #000;
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+.new-comment-form {
+  .submit-new-comment[disabled] {
+    background-color: gray !important;
+    border-color: gray !important;
+    color: white !important;
+  }
+}
+
+#blog {
+  .comments-header {
+    border-top: 1px solid $primary;
+    margin-top: 30px;
+    padding-top: 15px;
+  }
+}
+
+.comments-container {
+  p {
+    margin-bottom: 5px !important;
+    font-size: 13px;
+    margin-left: 30px;
+  }
+  .comment-nav {
+    margin-left: 5px;
+    margin-bottom: 10px;
+
+    a {
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}
+
+.reply-form {
+  display: none;
+}
+
+.new-comment-toggle {
+  margin-bottom: 30px;
+  display: none;
+  a {
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+}
+
+.comments-show {
+  margin-left: 25px;
+}
+
+#comment-reply-form {
+  margin-left: 50px;
+  margin-bottom: 25px;
+  margin-top: -15px;
+  .submit-reply-comment[disabled] {
+    background-color: gray !important;
+    border-color: gray !important;
+    color: white !important;
+  }
+}
+
+#tinymce-toolbar {
+  position: fixed;
+  bottom: 0;
+  z-index: 9999;
+  margin-left: 90px;
+}
+.mce-tooltip-inner {
+  position:relative !important;
+  top:-65px !important;
+}
+.mce-tooltip-n {
+  .mce-tooltip-arrow {
+    top: -40px !important;
+  }
+}
+#tinymce-container {
+  background-color: #fff;
+  min-height: 700px;
+  height: auto;
+  padding: 10px;
+  border-radius: 3px;
+  h1, h2, h3, h4, h5, h6 {
+    color: black;
+  }
+  img {
+    max-width: 750px;
+  }
+}
+#mceu_18 {
+  border: 3px solid $primary;
+}
+
+.wysihtml5-toolbar {
+  display: none !important;
+}
+
+.dropzone {
+  background: none;
+  min-height: 0px;
+  border: none;
+  .dz-preview.dz-image-preview {
+    background: none;
+  }
+}
+
+#post-index-form {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  .post_media_token {
+    display: none;
+  }
+}
+
+.editable-input {
+  iframe {
+    height: 75px !important;
+  }
+}
+
+.edit-xeditable {
+  cursor: pointer;
+}
+
+.btn-primary[disabled] {
+  background-color: gray !important;
+  border-color: gray !important;
+  color: white !important;
+}
+
+.help-block {
+  margin: 0px;
+  font-size: 12px;
+}
+
+.editable-container.editable-inline {
+  .control-group.form-group {
+    .editable-buttons {
+      @media(max-width: 543px){
+        display: block;
+      }
+    }
+    iframe {
+      max-width: 720px;
+      @media(max-width: 543px){
+        max-width: 320px !important;
+      }
+      @media(min-width: 544px) and (max-width: 767px) {
+        max-width: 420px !important;
+      }
+      @media(min-width: 768px) and (max-width: 992px) {
+        max-width: 520px !important;
+      }
+    }
+  }
+}
+
+.inline {
+  display: inline;
+}

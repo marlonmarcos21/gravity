@@ -1,0 +1,8 @@
+- @users.each do |user|
+  .user-preview
+    %p.user-meta= "Joined #{user.created_at.strftime '%a, %b %e, %Y %R'}"
+    %a{ href: user_path(user) }
+      %h4.user-name
+        = image_tag user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
+        = user.name
+  %hr

@@ -1,0 +1,134 @@
+- is_remote = false if local_assigns[:is_remote].blank?
+
+= simple_form_for @post, remote: is_remote, html: { class: 'form-horizontal posts' }, multipart: true do |f|
+  = f.error_notification
+  = @post.errors.full_messages.inspect unless @post.errors.empty?
+
+  = f.input :media_token, as: :fake, label: false, input_html: { class: 'hidden', value: @media_token }
+  = f.input :body, label: false, placeholder: "#{current_user.first_name}, What's happening?", input_html: { rows: 3, cols: 120 }
+
+  .dropzone
+    .dropzone-previews
+  .pull-right.dropzone-action-buttons
+    %a.start-upload
+      %span.btn.btn-default.btn-xs
+        = fa_icon 'cloud-upload'
+        Start Upload
+    %a.cancel-upload
+      %span.btn.btn-danger.btn-xs
+        = fa_icon 'ban'
+        Cancel Upload
+
+  = f.input :private, hint: 'Private posts can be viewed by your friends only'
+
+  .form-actions
+    = f.button :submit, class: 'btn-primary'
+    - if @post.persisted?
+      = link_to 'Cancel', post_path(@post), class: 'btn btn-default'
+    - elsif current_page?(posts_path)
+      = link_to 'Cancel', '', class: 'btn btn-default cancel-post'
+    - else
+      = link_to 'Cancel', posts_path, class: 'btn btn-default'
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      var wysi = $('textarea#post_body').wysihtml5();
+      var editor = $('#post_body').data('wysihtml5').editor;
+
+      $('#new_post').submit(function(e) {
+        if (!editor.getValue()) {
+          e.preventDefault();
+          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+          $(html).modal();
+          return false;
+        }
+      });
+
+      Dropzone.autoDiscover = false;
+      var dz = new Dropzone('.dropzone', {
+        url: '/posts/upload_media',
+        previewsContainer: '.dropzone-previews',
+        addRemoveLinks: true,
+        uploadMultiple: true,
+        paramName1: 'post[media_attributes]',
+        paramName2: '[source]',
+        autoQueue: false,
+        acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
+        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
+        dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
+      });
+
+      dz.on('addedfile', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
+      dz.on('processing', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
+      dz.on('uploadprogress', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+      });
+
+      var auth_token = $('meta[name=csrf-token]').attr('content');
+      var media_token = '#{raw(@media_token)}';
+      dz.on('sending', function(file, xhr, formData) {
+        $('input[name=commit]').attr('disabled', true);
+        formData.append('authenticity_token', auth_token);
+        formData.append('media_token', media_token);
+      });
+
+      dz.on('complete', function(file) {
+        $('input[name=commit]').removeAttr('disabled');
+      });
+
+      document.querySelector('.start-upload').onclick = function() {
+        dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
+      };
+
+      document.querySelector('.cancel-upload').onclick = function() {
+        $.each(dz.files, function(k, v) {
+          if (v.hasOwnProperty('status') && v.status !== 'success') {
+            dz.removeFile(v);
+          }
+        });
+        $('input[name=commit]').removeAttr('disabled');
+      };
+
+      dz.on('removedfile', function(file) {
+        $.ajax({
+          url: '/posts/remove_media',
+          type: 'DELETE',
+          data: {
+            media_token: media_token,
+            source_file_name: file.name
+          }
+        });
+      });
+
+      var images = '#{raw(@images)}';
+      if (images !== '') {
+        images = JSON.parse('#{raw(@images)}');
+        for (var img in images) {
+          var mockFile = { name: images[img].file_name, size: images[img].size };
+          dz.emit('addedfile', mockFile);
+          dz.emit('thumbnail', mockFile, images[img].img_url_thumb);
+          dz.emit('complete', mockFile);
+          dz.files.push(mockFile);
+        }
+      }
+
+      $('a.cancel-post').click(function(e) {
+        e.preventDefault();
+        editor.clear();
+        editor.setValue("#{raw(current_user.first_name)}, What's happening?", true);
+        $.each(dz.files, function(k, v) {
+          dz.removeFile(v);
+        });
+        $('html, body').animate({
+          scrollTop: 0
+        }, 0);
+        $('input[name=commit]').removeAttr('disabled');
+      });
+    });

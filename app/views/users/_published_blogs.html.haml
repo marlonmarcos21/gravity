@@ -1,0 +1,51 @@
+- next_page = 2 if local_assigns[:next_page].blank?
+
+.row
+  .col-lg-12.col-md-12
+    = render 'blogs/listing', blogs: blogs
+    .text-center
+      - if has_more_results
+        %nav.published-blogs-pagination
+          %span.published-blogs-pagination-page
+            %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_user_path(@user, page: next_page) }
+              %em Load More
+              = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
+      - else
+        %span.end-of-internet
+          %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#published-blogs-link').click(function() {
+        $('#published-posts-tab').hide();
+        $('#drafted-blogs-tab').hide();
+        $('#published-blogs-tab').show();
+      });
+
+      $('#published-blogs-tab').on('click', '.published-blogs-pagination-link', function() {
+        $(this).hide();
+      });
+
+      var nextPage = 2;
+      $('.nav-tabs').on('click', '#published-blogs-link', function() {
+        $(window).scroll(function() {
+          if ($('#published-blogs-tab').is(':visible')) {
+            var scrolled = parseInt($(window).scrollTop());
+            var height = parseInt($(document).height() - $(window).height()) - 120;
+            if (scrolled >= height && nextPage === 2) {
+              $.ajax({
+                method: 'GET',
+                url: '#{more_published_blogs_user_path}',
+                dataType: 'script',
+                data: { page: nextPage }
+              });
+              nextPage = 3;
+            }
+            $(document).ajaxStop(function () {
+              $('.published-blogs-pagination').hide();
+            });
+          }
+        });
+      });
+    });

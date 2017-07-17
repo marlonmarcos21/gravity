@@ -1,0 +1,4 @@
+var postElement = ".private-post-<%= @user.id %>";
+$(postElement).each(function() {
+  $(this).replaceWith("<%= escape_javascript(render('posts/private_post', post: @post)) %>");
+});

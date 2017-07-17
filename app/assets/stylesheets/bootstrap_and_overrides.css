@@ -1,0 +1,20 @@
+/*
+  =require twitter-bootstrap-static/bootstrap
+
+  Use Font Awesome icons (default)
+  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
+  */
+
+.dropdown-menu li a {
+  text-align: left;
+  color: #00868B;
+}
+
+.dropdown-menu li a:hover {
+  color: #fff;
+  background: transparent;
+}
+
+.dropdown-menu {
+  background: #000;
+}

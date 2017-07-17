@@ -1,0 +1,2 @@
+var postElement = "#post-<%= @post.id %>";
+$(postElement).replaceWith("<div class='post-preview'><%= escape_javascript(render('posts/post_preview', post: @post)) %></div>");

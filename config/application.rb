@@ -17,7 +17,7 @@ GC::Profiler.enable
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module TheMarcoses
+module Gravity
   class Application < Rails::Application
     config.i18n.enforce_available_locales = true
 
@@ -30,10 +30,10 @@ module TheMarcoses
       #{config.root}/app/concerns/
       #{config.root}/app/controllers/concerns/
       #{config.root}/app/inputs/
+      #{config.root}/app/jobs/
       #{config.root}/app/mailers/concerns/
       #{config.root}/app/models/concerns/
-      #{config.root}/app/lib/listeners/
-      #{config.root}/app/lib/publishers/
+      #{config.root}/app/lib/
       #{config.root}/app/workers/concerns/
     )
 
@@ -54,5 +54,11 @@ module TheMarcoses
 
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    config.generators do |g|
+      g.template_engine :haml
+    end
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end

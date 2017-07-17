@@ -1,0 +1,26 @@
+.row
+  .col-lg-12.col-md-12
+    = render 'blogs/listing', blogs: blogs
+    .text-center
+      - if more_results
+        %nav.drafted-blogs-pagination
+          %span.drafted-blogs-pagination-page
+            %a.drafted-blogs-pagination-link{ data: { remote: 'true' }, href: more_drafted_blogs_user_path(@user, dbpage: @dbpage) }
+              %em Load More
+      - else
+        %span.end-of-internet
+          %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#drafted-blogs-link').click(function() {
+        $('#published-posts-tab').hide();
+        $('#published-blogs-tab').hide();
+        $('#drafted-blogs-tab').show();
+      });
+
+      $('#drafted-blogs-tab').on('click', '.drafted-blogs-pagination-link', function() {
+        $(this).hide();
+      });
+    });

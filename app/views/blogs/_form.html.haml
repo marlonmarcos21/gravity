@@ -1,0 +1,55 @@
+- content_for :header_scripts, tinymce_assets
+
+= simple_form_for @blog, html: { class: 'form-horizontal blogs' }, multipart: true do |f|
+  = f.error_notification
+  = @blog.errors.full_messages.inspect unless @blog.errors.empty?
+
+  = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
+  = f.input :title
+
+  .form-group.blog_body
+    = f.label :body
+    #tinymce-toolbar
+    #tinymce-container{ value: @blog.body || '' }
+
+  .form-actions
+    - if @blog.persisted?
+      - button_label = @blog.published? ? 'Update Blog' : 'Update Draft'
+      = f.button :submit, button_label, class: 'btn btn-default'
+      = link_to 'Cancel', blog_path(@blog), class: 'btn btn-default'
+    - else
+      = f.button :submit, 'Save Draft', class: 'btn btn-default'
+      = link_to 'Cancel', blogs_path, class: 'btn btn-default'
+
+- content_for :footer_scripts do
+  :javascript
+    (function() {
+      var image_token = '#{raw(@image_token)}';
+      function setupEditor(ed) {
+        ed.on('init', function() {
+          this.getDoc().body.style.fontSize = '16px';
+          this.getDoc().body.style.fontFamily = '"Lora"';
+        });
+      }
+      function insert_contents(inst){
+        inst.setContent($('#tinymce-container').attr('value'));
+      }
+      if (typeof tinyMCE != 'undefined') {
+        tinyMCE.init({
+          selector: '#tinymce-container',
+          toolbar: ['bold italic underline | alignleft aligncenter alignright alignjustify | formatselect bullist numlist | uploadimage | link | media | indent outdent'],
+          plugins: 'uploadimage,link,media',
+          uploadimage_form_url: '/blogs/tinymce_assets',
+          uploadimage_hint: image_token,
+          menubar: '',
+          statusbar: false,
+          inline: true,
+          fixed_toolbar_container: '#tinymce-toolbar',
+          media_live_embeds: true,
+          setup: setupEditor,
+          init_instance_callback: insert_contents
+        });
+      } else {
+        setTimeout(arguments.callee, 50);
+      }
+    })();

@@ -17,3 +17,6 @@
 *.swo
 *.swp
 /.env
+public/assets
+public/assets/*
+public/sitemap.xml.gz

@@ -1,0 +1,11 @@
+- posts.each do |post|
+  .post-preview{ id: "post-#{post.id}" }
+    = render 'posts/post_preview', post: post
+
+    .row
+      - if current_user
+        - if (post.private? && current_user.try(:is_friends_with?, post.user)) || !post.private? || current_user == post.user
+          = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
+      - else
+        .comments-header
+          %h5 Sign in to read or post comments

@@ -1,0 +1,63 @@
+- ajax = true if local_assigns[:ajax].blank?
+
+.row.inline
+  %h4.user-name.pull-left
+    %a{ href: user_path(post.user) }
+      = image_tag post.user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
+      = post.user.name
+
+  - if can?(:update, post)
+    .dropdown.post-menu-dropdown.pull-right
+      %a.dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
+        %span.caret
+      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'dLabel' }
+        %li
+          %a{ href: edit_post_path(post) }
+            = fa_icon('pencil') + ' Edit'
+        - unless post.private?
+          %li
+            %a.fb-xfbml-parse-ignore{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{post_url(post)}', 'Gravity', 'width=400,height=300')" }
+              = fa_icon('facebook') + ' Share'
+        %li.danger
+          = link_to post_path(post), method: :delete, data: { confirm: 'Pag Sure!', ajax: ajax, id: post.id } do
+            = fa_icon 'trash'
+            Delete
+
+.row
+  %p.post-meta
+    = fa_icon 'clock-o'
+    = post.date_meta
+
+- if can?(:read, post)
+  .row
+    - if can?(:update, post)
+      %p.post-body.editable-post-body{ 'data-type' => 'wysihtml5', 'data-pk' => post.id, 'data-url' => editable_post_path(post), 'data-name' => 'body', name: 'body', 'data-value' => post.body, value: post.body, 'data-escape' => 'true', 'data-rows' => 5, class: "post-body-#{post.id}" }
+        - if post.private?
+          = fa_icon 'lock'
+        = fa_icon 'edit'
+        = post.embed_youtube.html_safe
+    - else
+      %p.post-body
+        - if post.private?
+          = fa_icon 'lock'
+        = post.embed_youtube.html_safe
+
+  - if post.images.any?
+    .row
+      .post-images
+        - if post.images.length > 1
+          = render 'posts/image_swiper', images: post.images
+        - else
+          - image = post.images.first
+          - style = image.gif? ? :original : image.width > image.height ? :main : :portrait
+          = image_tag post.images.first.source_url(style), class: 'single-image'
+
+  - if post.videos.any?
+    .row
+      .post-videos
+        - post.videos.each do |video|
+          = video_tag video.source_url, controls: true, size: video.aspect_ratio_display
+- else
+  = render 'posts/private_post', post: post
+
+%hr

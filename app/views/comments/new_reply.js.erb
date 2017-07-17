@@ -1,0 +1,6 @@
+var commentable = "#<%= @comment.commentable_type.underscore %>-<%= @comment.commentable_id %>";
+var total_comments = "<%= @total_comments %>";
+var word = total_comments > 1 ? 'Comments' : 'Comment';
+var parentId = ".comment-<%= @comment.parent_id %>";
+$(parentId).append("<%= escape_javascript(render('comments/show', comments: [@comment])) %>");
+$(commentable + ' .comments-header h6').html(total_comments + ' ' + word);

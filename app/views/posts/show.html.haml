@@ -1,0 +1,20 @@
+- content_for(:meta_tags) do
+  = render_meta_tags @post
+
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#posts-container
+    .post-preview{ id: "post-#{@post.id}" }
+      = render 'posts/post_preview', post: @post, ajax: 'false'
+
+      .row
+        - if current_user
+          = render 'comments/template', commentable: @post, new_comment: @new_comment
+        - else
+          .comments-header
+            %h5 Sign in to read or post comments
+
+      .row.spacer
+        .post-actions
+          = link_to 'Back', posts_path, class: 'btn btn-default'
+          - if can? :publish, @post
+            = link_to 'Edit', edit_post_path(@post), class: 'btn btn-default'

@@ -1,0 +1,6 @@
+toolbar:
+  - styleselect | bold italic underline | blockquote | undo redo | alignleft aligncenter alignright alignjustify
+  - uploadimage | link
+plugins:
+  - uploadimage
+  - link

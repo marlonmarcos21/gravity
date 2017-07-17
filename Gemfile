@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
+ruby '2.4.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7'
+gem 'rails', '4.2.9'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 gem 'pg_search'
@@ -14,6 +15,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'bootstrap-sass'
 gem 'twitter-bootstrap-rails'
+# gem 'less-rails'
 gem 'font-awesome-rails'
 gem 'select2-rails'
 gem 'bootstrap-datepicker-rails'
@@ -22,12 +24,13 @@ gem 'therubyracer'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-easing-rails'
 gem 'jquery-ui-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 
 gem 'rack-timeout'
-gem 'puma'
+gem 'puma', '~> 3.9.1'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
@@ -36,9 +39,24 @@ gem 'devise', '~> 3.5'
 gem 'haml'
 gem 'friendly_id', '~> 5.1.0'
 gem 'paperclip', '~> 5.0.0'
+gem 'paperclip-av-transcoder'
+gem 'aws-sdk', '~> 2'
 gem 'dalli'
 gem 'tinymce-rails'
+gem 'tinymce-rails-imageupload', '~> 4.0.0.beta'
 gem 'simple_form'
+gem 'country_select'
+gem 'kaminari'
+gem 'cancancan'
+gem 'htmlentities'
+gem 'html_truncator'
+gem 'rails_autolink'
+gem 'photoswipe-rails'
+gem 'acts_as_commentable_with_threading'
+gem 'sidekiq', '~> 4.2.10'
+gem 'public_activity'
+gem 'paper_trail'
+gem 'sitemap_generator'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

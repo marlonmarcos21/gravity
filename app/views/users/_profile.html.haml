@@ -1,0 +1,17 @@
+#profile-tab
+  %table.table-condensed
+    %tr
+      %td Email:
+      %td= @user.email
+    %tr
+      %td Birthday:
+      %td= @user.date_of_birth.try(:strftime, '%B %e, %Y')
+    %tr
+      %td Address:
+      %td= @user.full_address
+    %tr
+      %td Mobile:
+      %td= @user.mobile_number
+    %tr
+      %td Landline:
+      %td= @user.phone_number

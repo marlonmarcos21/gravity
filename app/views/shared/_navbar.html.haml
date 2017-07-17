@@ -1,0 +1,70 @@
+%nav.navbar.navbar-custom.navbar-fixed-top.top-nav-collapse{ role: 'navigation' }
+  .container
+    .navbar-header
+      %button.navbar-toggle{ type: 'button', 'data-toggle' => 'collapse', 'data-target' => '.navbar-main-collapse' }
+        = fa_icon 'bars'
+      %a.navbar-brand{ 'page-scroll' => true, href: in_homepage? ? '#page-top' : root_path }
+        %span G
+
+    .collapse.navbar-collapse.navbar-main-collapse
+      %ul.nav.navbar-nav.left-menus
+        %li.hidden
+          %a{ href: '#page-top' }
+        %li
+          %a.page-scroll{ href: in_homepage? ? '#posts' : posts_path }
+            Posts
+        %li
+          %a.page-scroll{ href: in_homepage? ? '#blogs' : blogs_path }
+            Blogs
+        %li
+          %a.page-scroll{ href: '#about' }
+            About
+        - if current_user
+          %li
+            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form search-form' } do |f|
+              %p= f.input :search, wrapper: :horizontal_form, label: false, placeholder: 'Search', input_html: { class: 'form-control input-sm' }
+              .input-group-btn
+                %button.btn.btn-default.search-submit{ type: 'submit' }
+                  = fa_icon 'search'
+      .collapse.navbar-collapse.navbar-right.navbar-main-collapse
+        - if current_user
+          %ul.nav.navbar-nav
+            %li.dropdown.inline
+              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', title: 'Notifications', 'data-toggle' => 'dropdown' }
+                = fa_icon 'fa'
+                Notifications
+              .dropdown-menu.notifications
+                = render 'shared/activity', activities: activities
+            %li.dropdown.nav-user-dropdown{ role: 'presentation' }
+              %a.dropdown-toggle.nav-user-dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
+                = image_tag current_user.profile_photo_url(:thumb), id: 'nav-profile-photo'
+                = current_user.name
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{ href: user_path(current_user) }
+                    = fa_icon('user-secret') + ' Profile'
+                %li
+                  %a{ href: new_blog_path }
+                    = fa_icon('newspaper-o') + ' New Blog'
+                %li
+                  = link_to(destroy_user_session_path, method: :delete) do
+                    = fa_icon 'power-off'
+                    Sign Out
+        - else
+          %ul.nav.navbar-nav.sign-in
+            %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
+            .sign-in-form.hidden
+              %span.btn-xs.btn.forgot-password Forgot Password?
+              = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+                %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
+                %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
+                %p.nav-form-cancel
+                  %span.btn-xs.btn.cancel-log-in Cancel
+            .forgot-password-form.hidden
+              = simple_form_for User.new, as: :user, url: user_password_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+                %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
+                %p.nav-form-cancel
+                  %span.btn-xs.btn.cancel-forgot-password Cancel

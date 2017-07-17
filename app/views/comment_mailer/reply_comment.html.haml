@@ -1,0 +1,14 @@
+%div
+  = "Hi #{@parent_comment.user.first_name.titleize},"
+%br
+%div
+  = @commenter.first_name.titleize
+  replied to your comment on this
+  - if @comment.commentable_type == 'Post'
+    = link_to 'Post.', post_url(@commentable)
+  - else
+    = link_to 'Blog.', blog_url(@commentable)
+%br
+%br
+%div
+  Gravity Team
