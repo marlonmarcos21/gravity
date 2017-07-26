@@ -172,16 +172,17 @@ class PostsController < ApplicationController
 
   def prepare_images
     return unless @post.try(:images).try(:any?)
-    hash = {}
-    @post.images.each do |img|
-      hash[img.id.to_s] = { img_url: img.source_url(:main),
-                            img_url_thumb: img.source_url(:thumb),
-                            size: img.source_file_size,
-                            file_name: img.source_file_name,
-                            width: img.width,
-                            height: img.height }
+    img_hash = @post.images.each_with_object({}) do |img, hash|
+      hash[img.id.to_s] = {
+        img_url: img.source_url(:main),
+        img_url_thumb: img.source_url(:thumb),
+        size: img.source_file_size,
+        file_name: img.source_file_name,
+        width: img.width,
+        height: img.height
+      }
     end
-    @images = hash.to_json
+    @images = img_hash.to_json
   end
 
   def media_token
