@@ -63,7 +63,7 @@ group :development, :test do
   gem 'byebug'
   gem 'awesome_print', '~> 1.6.1'
   gem 'dotenv-rails'
-  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'factory_bot_rails', '~> 4.8'
   gem 'faker'
   gem 'hirb', '~> 0.7.2'
   gem 'phantomjs', '>= 1.8.1.1'

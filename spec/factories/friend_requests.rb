@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :friend_request do
-    user      { FactoryGirl.create(:user) }
-    requester { FactoryGirl.create(:user) }
+    user      { FactoryBot.create(:user) }
+    requester { FactoryBot.create(:user) }
   end
 end

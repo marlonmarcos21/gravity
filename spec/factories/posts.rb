@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :post do
     body { Faker::Lorem.paragraph }
-    user { FactoryGirl.create(:user) }
+    user { FactoryBot.create(:user) }
   end
 end

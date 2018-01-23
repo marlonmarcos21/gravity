@@ -6,7 +6,7 @@ RSpec.describe PostsController, type: :controller do
   let(:unpermitted_attributes) { { tae: 'ka'  } }
 
   before do
-    @post = FactoryGirl.create(:post)
+    @post = FactoryBot.create(:post)
   end
 
   describe 'GET #index' do
@@ -70,8 +70,8 @@ RSpec.describe PostsController, type: :controller do
 
           before do
             @post_params = valid_attributes
-            @image = FactoryGirl.create(:image, token: token)
-            @video = FactoryGirl.create(:video, token: token)
+            @image = FactoryBot.create(:image, token: token)
+            @video = FactoryBot.create(:video, token: token)
           end
 
           it 'created post should have image and video' do
@@ -320,7 +320,7 @@ RSpec.describe PostsController, type: :controller do
       end
 
       describe '#remove_modia' do
-        let(:image) { FactoryGirl.create(:image, token: token) }
+        let(:image) { FactoryBot.create(:image, token: token) }
 
         subject do
           VCR.use_cassette 's3/destroy', match_requests_on: [:host, :method], record: :new_episodes do

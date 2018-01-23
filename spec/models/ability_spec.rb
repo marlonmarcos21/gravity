@@ -2,14 +2,14 @@ require 'rails_helper'
 require 'cancan/matchers'
 
 RSpec.describe Ability do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:other_user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
 
   subject { Ability.new(@user) }
 
   describe 'Post' do
-    let(:post) { FactoryGirl.create(:post, user: user) }
-    let(:private_post) { FactoryGirl.create(:post, private: true, user: user) }
+    let(:post) { FactoryBot.create(:post, user: user) }
+    let(:private_post) { FactoryBot.create(:post, private: true, user: user) }
 
     describe 'more_published_posts' do
       context 'when anonymous' do
@@ -50,14 +50,14 @@ RSpec.describe Ability do
 
         describe 'when poster is friends with other user' do
           let(:friend_request) do
-            FactoryGirl.create(:friend_request,
+            FactoryBot.create(:friend_request,
                                user: user,
                                requester: other_user)
           end
 
           before do
-            FactoryGirl.create(:friend, friend_request: friend_request)
-            friend2 = FactoryGirl.create(:friend)
+            FactoryBot.create(:friend, friend_request: friend_request)
+            friend2 = FactoryBot.create(:friend)
             friend2.update(friend_request: friend_request, user: other_user, friend: user)
           end
 
@@ -95,7 +95,7 @@ RSpec.describe Ability do
     end
 
     describe 'create, upload_media & remove_media' do
-      let(:new_post) { FactoryGirl.build(:post) }
+      let(:new_post) { FactoryBot.build(:post) }
 
       context 'when anonymous' do
         %i(create upload_media remove_media).each do |action|
@@ -126,8 +126,8 @@ RSpec.describe Ability do
   end
 
   describe 'Blog' do
-    let(:blog) { FactoryGirl.create(:blog, user: user) }
-    let(:published_blog) { FactoryGirl.create(:blog, user: user, published: true) }
+    let(:blog) { FactoryBot.create(:blog, user: user) }
+    let(:published_blog) { FactoryBot.create(:blog, user: user, published: true) }
 
     describe 'more_published_blogs' do
       context 'when anonymous' do
@@ -197,7 +197,7 @@ RSpec.describe Ability do
     end
 
     describe 'create & tinymce_assets' do
-      let(:new_blog) { FactoryGirl.build(:blog) }
+      let(:new_blog) { FactoryBot.build(:blog) }
 
       context 'when anonymous' do
         %i(create tinymce_assets).each do |action|
@@ -286,8 +286,8 @@ RSpec.describe Ability do
 
         context 'when already friends' do
           before do
-            friend_request = FactoryGirl.create(:friend_request, user: other_user, requester: user)
-            FactoryGirl.create(:friend, friend_request: friend_request)
+            friend_request = FactoryBot.create(:friend_request, user: other_user, requester: user)
+            FactoryBot.create(:friend, friend_request: friend_request)
           end
 
           it { should_not be_able_to(:send_friend_request, user) }
@@ -295,7 +295,7 @@ RSpec.describe Ability do
 
         context 'when already have existing request' do
           before do
-            FactoryGirl.create(:friend_request, user: user, requester: other_user)
+            FactoryBot.create(:friend_request, user: user, requester: other_user)
           end
 
           it { should_not be_able_to(:send_friend_request, user) }
@@ -325,14 +325,14 @@ RSpec.describe Ability do
 
         context 'when have existing request' do
           before do
-            @friend_request = FactoryGirl.create(:friend_request, user: other_user, requester: user)
+            @friend_request = FactoryBot.create(:friend_request, user: other_user, requester: user)
           end
 
           it { should be_able_to(:accept_friend_request, user) }
 
           context 'when already friends' do
             before do
-              FactoryGirl.create(:friend, friend_request: @friend_request)
+              FactoryBot.create(:friend, friend_request: @friend_request)
             end
 
             it { should_not be_able_to(:accept_friend_request, user) }
@@ -363,15 +363,15 @@ RSpec.describe Ability do
 
         context 'when have existing request' do
           before do
-            @friend_request = FactoryGirl.create(:friend_request, user: user, requester: other_user)
+            @friend_request = FactoryBot.create(:friend_request, user: user, requester: other_user)
           end
 
           it { should be_able_to(:cancel_friend_request, user) }
 
           context 'when already friends' do
             before do
-              friend_request = FactoryGirl.create(:friend_request, user: other_user, requester: user)
-              FactoryGirl.create(:friend, friend_request: friend_request)
+              friend_request = FactoryBot.create(:friend_request, user: other_user, requester: user)
+              FactoryBot.create(:friend, friend_request: friend_request)
             end
 
             it { should_not be_able_to(:cancel_friend_request, user) }
@@ -402,14 +402,14 @@ RSpec.describe Ability do
 
         context 'when have existing request' do
           before do
-            @friend_request = FactoryGirl.create(:friend_request, user: other_user, requester: user)
+            @friend_request = FactoryBot.create(:friend_request, user: other_user, requester: user)
           end
 
           it { should be_able_to(:reject_friend_request, user) }
 
           context 'when already friends' do
             before do
-              FactoryGirl.create(:friend, friend_request: @friend_request)
+              FactoryBot.create(:friend, friend_request: @friend_request)
             end
 
             it { should_not be_able_to(:reject_friend_request, user) }
@@ -420,10 +420,10 @@ RSpec.describe Ability do
   end
 
   describe 'Comment' do
-    let(:comment) { FactoryGirl.create(:comment, user: user) }
+    let(:comment) { FactoryBot.create(:comment, user: user) }
 
     describe 'create' do
-      let(:new_comment) { FactoryGirl.build(:comment) }
+      let(:new_comment) { FactoryBot.build(:comment) }
 
       context 'when anonymous' do
         it { should_not be_able_to(:create, new_comment) }
