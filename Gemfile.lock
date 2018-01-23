@@ -95,12 +95,11 @@ GEM
     dalli (2.7.6)
     database_cleaner (1.5.3)
     debug_inspector (0.0.3)
-    devise (3.5.10)
+    devise (4.4.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
+      railties (>= 4.1.0, < 5.2)
       responders
-      thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.1.5)
@@ -125,7 +124,7 @@ GEM
     get_process_mem (0.2.1)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    haml (5.0.1)
+    haml (5.0.4)
       temple (>= 0.8.0)
       tilt
     hashdiff (0.3.4)
@@ -402,14 +401,14 @@ DEPENDENCIES
   country_select
   dalli
   database_cleaner (~> 1.5.0)
-  devise (~> 3.5)
+  devise (~> 4.4)
   dotenv-rails
   factory_girl_rails (~> 4.5.0)
   faker
   fakeweb
   font-awesome-rails
   friendly_id (~> 5.1.0)
-  haml
+  haml (~> 5.0.4)
   hirb (~> 0.7.2)
   html_truncator
   htmlentities
@@ -460,7 +459,7 @@ DEPENDENCIES
   wisper-rspec
 
 RUBY VERSION
-   ruby 2.4.1p111
+   ruby 2.5.0p0
 
 BUNDLED WITH
-   1.15.1
+   1.16.1

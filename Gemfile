@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.1'
+ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.9'
@@ -34,9 +34,9 @@ gem 'puma', '~> 3.9.1'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
-gem 'devise', '~> 3.5'
+gem 'devise', '~> 4.4'
 
-gem 'haml'
+gem 'haml', '~> 5.0.4'
 gem 'friendly_id', '~> 5.1.0'
 gem 'paperclip', '~> 5.0.0'
 gem 'paperclip-av-transcoder'
