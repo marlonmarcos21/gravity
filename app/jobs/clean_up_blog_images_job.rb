@@ -1,4 +1,4 @@
-class CleanUpBlogImagesJob < ActiveJob::Base
+class CleanUpBlogImagesJob < ApplicationJob
   queue_as :default
 
   def perform(blog_id)

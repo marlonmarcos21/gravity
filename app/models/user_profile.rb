@@ -9,7 +9,7 @@
 # t.string     :mobile_number
 # t.references :user
 
-class UserProfile < ActiveRecord::Base
+class UserProfile < ApplicationRecord
   belongs_to :user
   validates :user, presence: true
 end

@@ -18,7 +18,7 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'GET #more_published_posts' do
     it 'assigns all posts as @posts' do
-      xhr :get, :more_published_posts, format: :js
+      get :more_published_posts, xhr: true
       expect(response.code).to eq('200')
       expect(response).to render_template(:more_published_posts)
     end
@@ -26,7 +26,7 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'GET #show' do
     it 'assigns the requested post as @post' do
-      get :show, id: @post.id
+      get :show, params: { id: @post.id }
       expect(assigns(:post)).to eq(@post)
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe PostsController, type: :controller do
 
     describe 'POST #create' do
       describe 'normal http request' do
-        subject { post :create, post: @post_params }
+        subject { post :create, params: { post: @post_params } }
 
         context 'with valid params' do
           before do
@@ -66,7 +66,7 @@ RSpec.describe PostsController, type: :controller do
         end
 
         context 'with attached media' do
-          subject { post :create, post: @post_params, media_token: token }
+          subject { post :create, params: { post: @post_params, media_token: token } }
 
           before do
             @post_params = valid_attributes
@@ -114,7 +114,7 @@ RSpec.describe PostsController, type: :controller do
       end
 
       describe 'xhr request' do
-        subject { xhr :post, :create, post: @post_params, format: :js }
+        subject { post :create, params: { post: @post_params }, xhr: true, format: :js }
 
         context 'with valid params' do
           before do
@@ -175,13 +175,13 @@ RSpec.describe PostsController, type: :controller do
 
       describe 'GET #edit' do
         it 'assigns the requested post as @post' do
-          get :edit, id: @post.id
+          get :edit, params: { id: @post.id }
           expect(assigns(:post)).to eq(@post)
         end
       end
 
       describe 'PATCH #update' do
-        subject { patch :update, id: @post.id, post: @new_attributes }
+        subject { patch :update, params: { id: @post.id, post: @new_attributes } }
 
         context 'with valid params' do
           before do
@@ -224,7 +224,7 @@ RSpec.describe PostsController, type: :controller do
       end
 
       describe 'PATCH #editable' do
-        subject { xhr :patch, :editable, @editable_params }
+        subject { patch :editable, params: @editable_params, xhr: true }
 
         context 'with valid params' do
           before do
@@ -273,7 +273,7 @@ RSpec.describe PostsController, type: :controller do
       end
 
       describe 'DELETE #destroy' do
-        subject { delete :destroy, id: @post.id }
+        subject { delete :destroy, params: { id: @post.id } }
 
         it 'destroys the requested post' do
           expect { subject }.to change(Post, :count).by(-1)
@@ -288,11 +288,13 @@ RSpec.describe PostsController, type: :controller do
       describe '#upload_media' do
         subject do
           VCR.use_cassette 's3/upload', match_requests_on: [:host, :method], record: :new_episodes do
-            xhr :post,
-                :upload_media,
-                media_token: @token,
-                post: { media_attributes: { '0' => { source: fixture_file_upload('files/test.jpg', 'image/jpg') } } },
-                format: :json
+            post :upload_media,
+                 params: {
+                   media_token: @token,
+                   post: { media_attributes: { '0' => { source: fixture_file_upload('files/test.jpg', 'image/jpg') } } }
+                 },
+                 format: :json,
+                 xhr: true
           end
         end
 
@@ -324,11 +326,13 @@ RSpec.describe PostsController, type: :controller do
 
         subject do
           VCR.use_cassette 's3/destroy', match_requests_on: [:host, :method], record: :new_episodes do
-            xhr :post,
-                :remove_media,
-                media_token: @token,
-                source_file_name: image.source_file_name,
-                format: :json
+            post :remove_media,
+                 params: {
+                   media_token: @token,
+                   source_file_name: image.source_file_name
+                 },
+                format: :json,
+                xhr: true
           end
         end
 

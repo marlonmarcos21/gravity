@@ -752,7 +752,7 @@ http_interactions:
       message: Not Found
     headers:
       X-Amz-Request-Id:
-      - 08E96B8787481FC8
+      - '08E96B8787481FC8'
       X-Amz-Id-2:
       - TfsQ1ay1NB2kcTGRtbexKo6+PKRfmF4AGETMFniBH5BG0OUltLGfLDiv53F+ANrTWsznsttUFRs=
       Content-Type:
@@ -768,4 +768,196 @@ http_interactions:
       string: ''
     http_version: 
   recorded_at: Sat, 17 Sep 2016 11:22:32 GMT
-recorded_with: VCR 3.0.3
+- request:
+    method: head
+    uri: https://s3.ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/094/original/test.jpg
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.10.123 ruby/2.5.0 x86_64-darwin17 resources
+      X-Amz-Date:
+      - 20180124T034229Z
+      Host:
+      - s3.ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20180124/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=1c09df874bb13cad4bcadf21c6383f4d944a5ef2d6795b05d3455ed447f841ef
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - E913F67096C67353
+      X-Amz-Id-2:
+      - v68EgS7FBHNWPNOwQo+lIeE5uBjSDoufioxgHOBwkuc70WRnkCpBXGAbfH6R5UssIOSwCb+njZ0=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 24 Jan 2018 03:42:29 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Jan 2018 03:42:29 GMT
+- request:
+    method: head
+    uri: https://s3.ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/094/thumb/test.jpg
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.10.123 ruby/2.5.0 x86_64-darwin17 resources
+      X-Amz-Date:
+      - 20180124T034229Z
+      Host:
+      - s3.ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20180124/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=11bb9c9b130c65e7acea35907d904034e7905bda3459c9f8793b8617b54975b3
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 4AB78B109897A265
+      X-Amz-Id-2:
+      - 61gAoCqpNrTMYNBMwC9kOmTRaYrpgv9Cyeg5hkL02/i2887pr8+VIH9Dkec8OqnpBELh1nM5A70=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 24 Jan 2018 03:42:29 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Jan 2018 03:42:29 GMT
+- request:
+    method: head
+    uri: https://s3.ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/094/main/test.jpg
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.10.123 ruby/2.5.0 x86_64-darwin17 resources
+      X-Amz-Date:
+      - 20180124T034229Z
+      Host:
+      - s3.ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20180124/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=4feed0d94a024225fef40eae83369c53258c21f61edf5f742e06d58e9849dc59
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - FD8EF54E3744C3DE
+      X-Amz-Id-2:
+      - y8HJ1UA3UV5Y/RRnmPf7znEIBT/wf6vCpxOTQVPNchHAHF0LOUNNBfEoHUnGGbdkGBbqXpqWSKk=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 24 Jan 2018 03:42:29 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Jan 2018 03:42:29 GMT
+- request:
+    method: head
+    uri: https://s3.ap-southeast-1.amazonaws.com/static-dev.gravity.ph/images/sources/000/000/094/portrait/test.jpg
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.10.123 ruby/2.5.0 x86_64-darwin17 resources
+      X-Amz-Date:
+      - 20180124T034229Z
+      Host:
+      - s3.ap-southeast-1.amazonaws.com
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJH2643PGQ5J2CKAQ/20180124/ap-southeast-1/s3/aws4_request,
+        SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=c6f4923b99fafd13657a80b47549ad67ff18a22b27eee01d0873411320af7c70
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - 2D0AF5AF05BCE482
+      X-Amz-Id-2:
+      - w8fgVafFC071qvrwrqigflPQDbo0+HKUEXr6DFJhpiBnXk5vZiCjgYe17SgdXrW7TV9HBvXrMGU=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 24 Jan 2018 03:42:29 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 24 Jan 2018 03:42:29 GMT
+recorded_with: VCR 4.0.0

@@ -4,7 +4,7 @@
 # t.integer    :width
 # t.integer    :height
 
-class BlogMedium < ActiveRecord::Base
+class BlogMedium < ApplicationRecord
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] } },

@@ -2,7 +2,7 @@
 # t.references :requester
 # t.string     :status
 
-class FriendRequest < ActiveRecord::Base
+class FriendRequest < ApplicationRecord
   AVAILABLE_STATUSES = %w(pending canceled accepted rejected).freeze
 
   belongs_to :user

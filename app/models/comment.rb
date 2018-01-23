@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   acts_as_nested_set scope: [:commentable_id, :commentable_type]
 
   validates :body, presence: true

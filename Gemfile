@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.9'
+gem 'rails', '5.1.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 gem 'pg_search'
@@ -72,6 +72,7 @@ group :development, :test do
   gem 'rb-readline'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
+  gem 'listen'
 end
 
 group :development do
@@ -84,15 +85,15 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner', '~> 1.5.0'
+  gem 'database_cleaner', '~> 1.6.0'
   gem 'resque_spec'
   gem 'rspec-activejob'
   gem 'shoulda-matchers', require: false
   gem 'simplecov', require: false
-  gem 'test_after_commit'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
   gem 'wisper-rspec', require: false
   gem 'fakeweb'
+  gem 'rails-controller-testing'
 end

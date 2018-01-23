@@ -5,7 +5,7 @@
 # t.references :user,        index: true
 # t.string     :slug
 
-class Blog < ActiveRecord::Base
+class Blog < ApplicationRecord
   belongs_to :user
 
   has_many :blog_media, as: :attachable, dependent: :destroy

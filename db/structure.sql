@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -97,6 +90,18 @@ CREATE SEQUENCE activities_id_seq
 --
 
 ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -620,6 +625,14 @@ ALTER TABLE ONLY activities
 
 
 --
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
 -- Name: blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -902,63 +915,36 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXEC
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20160731044836');
+INSERT INTO "schema_migrations" (version) VALUES
+('20160731044836'),
+('20160731045808'),
+('20160731050120'),
+('20160731104259'),
+('20160801094451'),
+('20160806023746'),
+('20160806141904'),
+('20160807032520'),
+('20160807032607'),
+('20160807033320'),
+('20160807051628'),
+('20160807164700'),
+('20160807180624'),
+('20160808073114'),
+('20160809074722'),
+('20160811163956'),
+('20160811164714'),
+('20160811165102'),
+('20160811165306'),
+('20160811170021'),
+('20160813062412'),
+('20160813063008'),
+('20160813063449'),
+('20160813064505'),
+('20160814131210'),
+('20160815123614'),
+('20160817004636'),
+('20160817115752'),
+('20160817120411'),
+('20160830152057');
 
-INSERT INTO schema_migrations (version) VALUES ('20160731045808');
-
-INSERT INTO schema_migrations (version) VALUES ('20160731050120');
-
-INSERT INTO schema_migrations (version) VALUES ('20160731104259');
-
-INSERT INTO schema_migrations (version) VALUES ('20160801094451');
-
-INSERT INTO schema_migrations (version) VALUES ('20160806023746');
-
-INSERT INTO schema_migrations (version) VALUES ('20160806141904');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807032520');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807032607');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807033320');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807051628');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807164700');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807180624');
-
-INSERT INTO schema_migrations (version) VALUES ('20160808073114');
-
-INSERT INTO schema_migrations (version) VALUES ('20160809074722');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811163956');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811164714');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811165102');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811165306');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811170021');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813062412');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813063008');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813063449');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813064505');
-
-INSERT INTO schema_migrations (version) VALUES ('20160814131210');
-
-INSERT INTO schema_migrations (version) VALUES ('20160815123614');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817004636');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817115752');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817120411');
-
-INSERT INTO schema_migrations (version) VALUES ('20160830152057');
 

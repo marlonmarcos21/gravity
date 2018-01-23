@@ -51,7 +51,7 @@ class PostsController < ApplicationController
       else
         flash[:alert] = 'Error creating post'
         format.html { render :new }
-        format.js   { render nothing: true, content_type: 'text/html' }
+        format.js   { render body: nil, content_type: 'text/html' }
       end
     end
   end
@@ -131,7 +131,7 @@ class PostsController < ApplicationController
     return if media_token.blank?
     media_params = params[:post][:media_attributes]
     return if media_params.blank?
-    media_params.each_value do |medium|
+    media_params.each_pair do |_i, medium|
       if medium['source'].content_type == 'video/mp4'
         Video.create(
           token: media_token,

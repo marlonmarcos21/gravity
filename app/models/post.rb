@@ -4,7 +4,7 @@
 # t.datetime   :published_at
 # t.boolean    :private
 
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
   belongs_to :user
 
   has_one  :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable

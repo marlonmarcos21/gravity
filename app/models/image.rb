@@ -5,7 +5,7 @@
 # t.integer    :width
 # t.integer    :height
 
-class Image < ActiveRecord::Base
+class Image < ApplicationRecord
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] },
