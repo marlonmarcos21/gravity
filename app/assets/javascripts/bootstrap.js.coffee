@@ -280,7 +280,6 @@ $.rails.showConfirmDialog = (link) ->
   $(html).modal()
   $('#confirmationDialog .confirm').on 'click', -> $.rails.confirmed(link)
 
-
 fadeFlash = ->
   $('#flash-notice').delay(3000).fadeOut('slow')
   $('#flash-alert').delay(3000).fadeOut('slow')
