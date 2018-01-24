@@ -124,7 +124,7 @@ GEM
     ffi (1.9.18)
     font-awesome-rails (4.7.0.3)
       railties (>= 3.2, < 5.2)
-    friendly_id (5.1.0)
+    friendly_id (5.2.3)
       activerecord (>= 4.0.0)
     get_process_mem (0.2.1)
     globalid (0.4.1)
@@ -433,7 +433,7 @@ DEPENDENCIES
   faker
   fakeweb
   font-awesome-rails
-  friendly_id (~> 5.1.0)
+  friendly_id (~> 5.2)
   haml (~> 5.0.4)
   hirb (~> 0.7.2)
   html_truncator

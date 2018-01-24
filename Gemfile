@@ -37,7 +37,7 @@ gem 'puma_worker_killer'
 gem 'devise', '~> 4.4'
 
 gem 'haml', '~> 5.0.4'
-gem 'friendly_id', '~> 5.1.0'
+gem 'friendly_id', '~> 5.2'
 gem 'paperclip', '~> 5.0.0'
 gem 'paperclip-av-transcoder'
 gem 'aws-sdk', '~> 2'

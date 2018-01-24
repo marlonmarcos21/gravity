@@ -25,7 +25,7 @@ class Blog < ApplicationRecord
   include BlogView
 
   extend FriendlyId
-  friendly_id :title
+  friendly_id :title, use: [:slugged, :finders]
 
   include PgSearch
   pg_search_scope :search,
