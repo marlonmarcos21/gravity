@@ -7,19 +7,25 @@ class PostsController < ApplicationController
   before_action :media_token,    only: %i(new index)
 
   def index
-    pp_scope = Post.includes(:user).published.descending
-    @post  = Post.new
-    @posts = pp_scope.page(1)
-    @has_more_results = !pp_scope.page(2).empty?
+    if latest_post &&
+         stale?(etag: latest_post.cache_key, last_modified: latest_post.updated_at.utc)
+      pp_scope = Post.includes(:user).published.descending
+      @has_more_results = !pp_scope.page(2).empty?
+      @post  = Post.new
+      @posts = pp_scope.page(1)
+    end
   end
 
   def more_published_posts
-    pp_scope = Post.includes(:user).published.descending
-    page = params[:page].blank? ? 2 : params[:page].to_i
-    @next_page = page + 1
-    @posts = pp_scope.page(page)
-    @has_more_results = !pp_scope.page(@next_page).empty?
-    respond_to :js
+    if latest_post &&
+        stale?(etag: latest_post.cache_key, last_modified: latest_post.updated_at.utc)
+      pp_scope = Post.includes(:user).published.descending
+      page = params[:page].blank? ? 2 : params[:page].to_i
+      @next_page = page + 1
+      @posts = pp_scope.page(page)
+      @has_more_results = !pp_scope.page(@next_page).empty?
+      respond_to :js
+    end
   end
 
   def show
@@ -116,6 +122,10 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def latest_post
+    @latest_post ||= Post.published.order(updated_at: :desc).first
+  end
 
   def post
     @post = Post.includes(:images).find(params[:id])

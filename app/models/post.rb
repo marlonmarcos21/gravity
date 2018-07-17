@@ -20,10 +20,10 @@ class Post < ApplicationRecord
 
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
-  scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
+  scope :recent,      -> (limit) { published.descending.limit(limit) }
   scope :non_public,  -> { where(private: true) }
-  scope :non_private, -> { where.not(private: true) }
+  scope :non_private, -> { where(private: false) }
 
   before_create :set_published_at
 

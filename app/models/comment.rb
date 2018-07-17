@@ -8,7 +8,7 @@ class Comment < ApplicationRecord
   # want user to vote on the quality of comments.
   # acts_as_votable
 
-  belongs_to :commentable, polymorphic: true
+  belongs_to :commentable, polymorphic: true, touch: true
   belongs_to :user
 
   has_paper_trail on: :update, only: :body

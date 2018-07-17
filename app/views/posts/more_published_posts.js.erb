@@ -12,6 +12,8 @@ $(window).scroll(function() {
       method: 'GET',
       url: "<%= more_published_posts_posts_path %>",
       dataType: 'script',
+      cache: true,
+      ifModified: true,
       data: { page: nextPage }
     });
     checker = false;
