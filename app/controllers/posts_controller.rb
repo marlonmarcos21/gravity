@@ -17,15 +17,12 @@ class PostsController < ApplicationController
   end
 
   def more_published_posts
-    if latest_post &&
-        stale?(etag: latest_post.cache_key, last_modified: latest_post.updated_at.utc)
-      pp_scope = Post.includes(:user).published.descending
-      page = params[:page].blank? ? 2 : params[:page].to_i
-      @next_page = page + 1
-      @posts = pp_scope.page(page)
-      @has_more_results = !pp_scope.page(@next_page).empty?
-      respond_to :js
-    end
+    pp_scope = Post.includes(:user).published.descending
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
+    @posts = pp_scope.page(page)
+    @has_more_results = !pp_scope.page(@next_page).empty?
+    respond_to :js
   end
 
   def show
