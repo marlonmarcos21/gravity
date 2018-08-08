@@ -4,16 +4,13 @@ class PostsController < ApplicationController
   before_action :post, only: %i(show edit update destroy editable)
 
   before_action :prepare_images, only: :edit
-  before_action :media_token,    only: %i(new index)
+  before_action :media_token,    only: %i(new index create)
 
   def index
-    if latest_post &&
-         stale?(etag: latest_post.cache_key, last_modified: latest_post.updated_at.utc)
-      pp_scope = Post.includes(:user).published.descending
-      @has_more_results = !pp_scope.page(2).empty?
-      @post  = Post.new
-      @posts = pp_scope.page(1)
-    end
+    pp_scope = Post.includes(:user).published.descending
+    @has_more_results = !pp_scope.page(2).empty?
+    @post  = Post.new
+    @posts = pp_scope.page(1)
   end
 
   def more_published_posts
@@ -45,10 +42,8 @@ class PostsController < ApplicationController
         flash[:notice] = 'Post created'
         attach_images medium_token, @post.id
         attach_videos medium_token, @post.id
-        media_token
         @new_post = @post
         @post = Post.new
-
         format.html { redirect_to @new_post }
         format.js   { render :new_post }
       else
@@ -119,10 +114,6 @@ class PostsController < ApplicationController
   end
 
   private
-
-  def latest_post
-    @latest_post ||= Post.published.order(updated_at: :desc).first
-  end
 
   def post
     @post = Post.includes(:images).find(params[:id])
