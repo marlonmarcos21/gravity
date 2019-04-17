@@ -435,6 +435,10 @@ a {
       padding-top: 0 !important;
       margin-bottom: 80px;
     }
+    &.about {
+      padding-top: 0 !important;
+      margin-bottom: 80px;
+    }
   }
 
   .download-section {
@@ -707,4 +711,30 @@ hr {
 
 .spacer {
   margin-top: 30px;
+}
+
+.spacer-sm {
+  margin-top: 15px;
+}
+
+.fa-heart {
+  color: red;
+}
+
+#about-img {
+  max-width: 500px;
+  height: auto !important;
+  @media(max-width: 543px) {
+    max-width: 300px !important;
+  }
+  @media(min-width: 544px) and (max-width: 767px) {
+    max-width: 400px !important;
+  }
+  @media(min-width: 768px) and (max-width: 992px) {
+    max-width: 500px !important;
+  }
+}
+
+.white-bg {
+  background: #fff;
 }

@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   end
 
   get 'search', to: 'search#search'
+  get 'about',  to: 'about#index'
 
   root to: 'home#index'
 end

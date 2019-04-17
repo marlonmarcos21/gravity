@@ -15,7 +15,7 @@
           %a.page-scroll{ href: blogs_path }
             Blogs
         %li{ class: current_page?('about') ? 'active' : 'inactive' }
-          %a.page-scroll{ href: '#about' }
+          %a.page-scroll{ href: about_path }
             About
         - if current_user
           %li
