@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   after_action :flash_to_headers
 
   helper_method :in_homepage?
+  helper_method :current_page?
   helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -17,6 +18,10 @@ class ApplicationController < ActionController::Base
 
   def in_homepage?
     request.original_fullpath == '/'
+  end
+
+  def current_page?(page)
+    request.original_fullpath == "/#{page}"
   end
 
   def activities
