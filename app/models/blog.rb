@@ -9,6 +9,7 @@ class Blog < ApplicationRecord
   belongs_to :user
 
   has_many :blog_media, as: :attachable, dependent: :destroy
+  has_many :likes, as: :trackable, dependent: :destroy
 
   validates :user, presence: true
 
@@ -19,7 +20,8 @@ class Blog < ApplicationRecord
   scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
 
-  before_save :strip_title,        if: :title_changed?
+  before_save :strip_title, if: :title_changed?
+
   before_update :set_published_at, if: :published_changed?
 
   include BlogView

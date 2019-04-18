@@ -6,6 +6,7 @@ RSpec.describe Post, type: :model do
     it { is_expected.to have_one :main_image }
     it { is_expected.to have_many :images }
     it { is_expected.to have_many :videos }
+    it { is_expected.to have_many :likes }
     it { is_expected.to validate_presence_of :body }
     it { is_expected.to validate_presence_of :user }
   end

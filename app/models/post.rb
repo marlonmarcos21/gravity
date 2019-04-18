@@ -7,9 +7,11 @@
 class Post < ApplicationRecord
   belongs_to :user
 
-  has_one  :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable
+  has_one :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable
+
   has_many :images, as: :attachable, dependent: :destroy
   has_many :videos, as: :attachable, dependent: :destroy
+  has_many :likes,  as: :trackable,  dependent: :destroy
 
   accepts_nested_attributes_for :images, allow_destroy: true
 

@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   has_many :posts
   has_many :blogs
+  has_many :likes
 
   has_many :friends
   has_many :friend_requests
@@ -40,7 +41,7 @@ class User < ApplicationRecord
   validates_attachment_content_type :profile_photo, content_type: %r{\Aimage/.*\Z}
 
   validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates :last_name,  presence: true
 
   extend FriendlyId
   friendly_id :slug_candidates
