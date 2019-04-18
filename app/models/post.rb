@@ -11,7 +11,6 @@ class Post < ApplicationRecord
 
   has_many :images, as: :attachable, dependent: :destroy
   has_many :videos, as: :attachable, dependent: :destroy
-  has_many :likes,  as: :trackable,  dependent: :destroy
 
   accepts_nested_attributes_for :images, allow_destroy: true
 
@@ -31,7 +30,7 @@ class Post < ApplicationRecord
 
   before_save :strip_body, if: :body_changed?
 
-  include Likeable
+  include AsLikeable
   include PostView
   include PgSearch
   pg_search_scope :search,

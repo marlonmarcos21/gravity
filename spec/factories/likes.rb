@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :like do
     user
-    post
+    trackable { FactoryBot.create(:post) }
   end
 end

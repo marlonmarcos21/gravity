@@ -1,4 +1,6 @@
 class Comment < ApplicationRecord
+  include AsLikeable
+
   acts_as_nested_set scope: [:commentable_id, :commentable_type]
 
   validates :body, presence: true

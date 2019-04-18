@@ -9,7 +9,6 @@ class Blog < ApplicationRecord
   belongs_to :user
 
   has_many :blog_media, as: :attachable, dependent: :destroy
-  has_many :likes, as: :trackable, dependent: :destroy
 
   validates :user, presence: true
 
@@ -24,6 +23,7 @@ class Blog < ApplicationRecord
 
   before_update :set_published_at, if: :published_changed?
 
+  include AsLikeable
   include BlogView
 
   extend FriendlyId
