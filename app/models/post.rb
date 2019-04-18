@@ -31,6 +31,7 @@ class Post < ApplicationRecord
 
   before_save :strip_body, if: :body_changed?
 
+  include Likeable
   include PostView
   include PgSearch
   pg_search_scope :search,

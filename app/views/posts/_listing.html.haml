@@ -5,6 +5,21 @@
     .row
       - if current_user
         - if (post.private? && current_user.try(:is_friends_with?, post.user)) || !post.private? || current_user == post.user
+          %ul.post-likes-comment-section
+            %li
+              - if post.liked_by?(current_user)
+                = link_to unlike_post_path(post), method: :patch, data: { remote: true, id: post.id } do
+                  = fa_icon 'thumbs-up', id: "thumbs-up-#{post.id}"
+              - else
+                = link_to like_post_path(post), method: :patch, data: { remote: true, id: post.id } do
+                  = fa_icon 'thumbs-o-up', id: "thumbs-up-#{post.id}"
+              - likes_count = post.likes.count
+            %li
+              %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{post.likes.count} ka Ayus! |"
+            %li
+              - comment_count = post.comment_threads.count
+              %h6= comment_count.zero? ? 'May comment ka?' : "#{comment_count} #{'Comment'.pluralize(comment_count)}"
+
           = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
       - else
         .comments-header

@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: %i(show edit update destroy editable)
+  before_action :post, only: %i(show edit update destroy editable like unlike)
 
   before_action :prepare_images, only: :edit
   before_action :media_token,    only: %i(new index create)
@@ -110,6 +110,31 @@ class PostsController < ApplicationController
       flash[:alert] = 'Post deleted!'
       format.html { redirect_to posts_url }
       format.json { render json: { message: 'Post deleted!' } }
+    end
+  end
+
+  def like
+    @like = @post.likes.create(user: current_user)
+    @total_likes = @post.likes.count
+    @post.create_activity :like, recipient: @post.user
+    respond_to do |format|
+      flash[:notice] = 'Post liked!'
+      format.html { redirect_to posts_url }
+      format.json { render json: { message: 'Post liked!' } }
+      format.js
+    end
+  end
+
+  def unlike
+    @like = @post.likes.where(user: current_user).first
+    @like.destroy
+    @post.create_activity :unlike, recipient: @post.user
+    @total_likes = @post.likes.count
+    respond_to do |format|
+      flash[:alert] = 'Post unliked!'
+      format.html { redirect_to posts_url }
+      format.json { render json: { message: 'Post unliked!' } }
+      format.js
     end
   end
 

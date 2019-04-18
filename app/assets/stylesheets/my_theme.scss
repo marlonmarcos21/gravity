@@ -721,6 +721,11 @@ hr {
   color: red;
 }
 
+.fa-thumbs-up, .fa-thumbs-o-up {
+  color: $primary;
+  font-size: 18px;
+}
+
 #about-img {
   max-width: 500px;
   height: auto !important;
@@ -737,4 +742,12 @@ hr {
 
 .white-bg {
   background: #fff;
+}
+
+.post-likes-comment-section {
+  list-style: none;
+  margin-left: -39px;
+  li {
+    display: inline-block;
+  }
 }
