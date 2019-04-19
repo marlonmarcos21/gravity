@@ -61,8 +61,8 @@
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-log-in Cancel
             .forgot-password-form.hidden
-              = simple_form_for User.new, as: :user, url: user_password_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
-                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+              = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { id: 'user_email_forgot_pw', class: 'input-sm' }
                 %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-forgot-password Cancel

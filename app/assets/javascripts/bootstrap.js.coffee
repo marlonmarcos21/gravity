@@ -242,6 +242,25 @@ $ ->
     $('.forgot-password').show()
   )
 
+  $('form#new_user').submit((e) ->
+    email = $('input#user_email').val().trim()
+    pass = $('input#user_password').val().trim()
+    if (email == '' || pass == '')
+      e.preventDefault()
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
+  $('form#new_user_forgot_pw').submit((e) ->
+    email = $('input#user_email_forgot_pw').val().trim()
+    if (email == '')
+      e.preventDefault()
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Email required!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
   $('.search-form').submit((e) ->
     if ($('#search_search').val().trim() == '' || !$('#search_search').val())
       e.preventDefault();
