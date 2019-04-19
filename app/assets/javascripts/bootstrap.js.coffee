@@ -19,6 +19,23 @@ $ ->
     return
   )
 
+  $('.blog-container').on('click', '.li-comment-section', ->
+    $(this).parent().siblings('.new-comment-form').toggle()
+    return
+  )
+
+  $('.blog-container').on('click', '.comment-new', ->
+    $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
+    $(this).parent().siblings('.reply-form').hide()
+    return
+  )
+
+  $('.blog-container').on('click', '.comment-reply', ->
+    $(this).parent().next('.reply-form').toggle()
+    $(this).parent().parent().parent().siblings('.new-comment-form').hide()
+    return
+  )
+
   $('.alert .close').remove();
   $('.alert').delay(3000).fadeOut('slow')
 
