@@ -1,9 +1,5 @@
 .comments-container
   = render 'comments/show', comments: commentable.root_comments.order(:created_at), new_comment: new_comment
 
-.new-comment-toggle
-  %a.new-comment
-    New Comment
-
 .new-comment-form
   = render 'comments/form', new_comment: new_comment

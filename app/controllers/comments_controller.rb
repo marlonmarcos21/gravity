@@ -58,7 +58,13 @@ class CommentsController < ApplicationController
     respond_to do |format|
       flash[:alert] = 'Comment deleted!'
       format.html { redirect_to :back }
-      format.json { render json: { message: 'Comment deleted!', element_id: element_id, total_comments: @total_comments } }
+      format.json do
+        render json: {
+          message: 'Comment deleted!',
+          element_id: element_id,
+          total_comments: @total_comments
+        }
+      end
     end
   end
 

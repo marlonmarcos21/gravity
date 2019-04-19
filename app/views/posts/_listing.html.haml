@@ -16,9 +16,12 @@
               - likes_count = post.likes.count
             %li
               %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{post.likes.count} ka Ayus! |"
-            %li
+            %li.li-comment-section
               - comment_count = post.comment_threads.count
-              %h6= comment_count.zero? ? 'May comment ka?' : "#{comment_count} #{'Comment'.pluralize(comment_count)}"
+              - if comment_count.zero?
+                %h6.new-post-comment= 'May comment ka?'
+              - else
+                %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
 
           = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
       - else

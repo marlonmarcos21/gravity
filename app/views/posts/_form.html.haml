@@ -130,5 +130,15 @@
           scrollTop: 0
         }, 0);
         $('input[name=commit]').removeAttr('disabled');
+        $(this).css('background-color', 'transparent');
+        $(this).css('color', '#00868B');
+        $(this).on('mouseenter', function() {
+          $(this).css('background-color', '#00868B');
+          $(this).css('color', '#fff');
+        });
+        $(this).on('mouseleave', function() {
+          $(this).css('background-color', 'transparent');
+          $(this).css('color', '#00868B');
+        });
       });
     });

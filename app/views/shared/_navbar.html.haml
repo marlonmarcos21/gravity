@@ -8,13 +8,13 @@
 
     .collapse.navbar-collapse.navbar-main-collapse
       %ul.nav.navbar-nav.left-menus
-        %li{ class: current_page?('posts') ? 'active' : 'inactive' }
+        %li{ class: current_page?(posts_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: posts_path }
             Posts
-        %li{ class: current_page?('blogs') ? 'active' : 'inactive' }
+        %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: blogs_path }
             Blogs
-        %li{ class: current_page?('about') ? 'active' : 'inactive' }
+        %li{ class: current_page?(about_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: about_path }
             About
         - if current_user

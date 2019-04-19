@@ -123,6 +123,8 @@ form {
 }
 
 .new-comment-form {
+  display: none;
+  margin-top: 10px;
   .submit-new-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;
@@ -172,12 +174,13 @@ form {
 
 .comments-show {
   margin-left: 25px;
+  padding: 10px 0;
 }
 
 #comment-reply-form {
   margin-left: 50px;
-  margin-bottom: 25px;
-  margin-top: -15px;
+  margin-bottom: 10px;
+  margin-top: -33px;
   .submit-reply-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;
@@ -285,4 +288,8 @@ form {
 
 .inline {
   display: inline;
+}
+
+.new-post-comment {
+  cursor: pointer;
 }

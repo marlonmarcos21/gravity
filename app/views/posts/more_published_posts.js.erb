@@ -1,11 +1,11 @@
 $('#posts-container').append("<%= escape_javascript(render('published_posts', posts: @posts, has_more_results: @has_more_results, next_page: @next_page)) %>");
 
-var moreResults = "<%= @has_more_results %>";
-var nextPage = "<%= @next_page %>";
-var checker = true;
+const moreResults = "<%= @has_more_results %>";
+const nextPage = "<%= @next_page %>";
+let checker = true;
 $(window).scroll(function() {
-  var scrolled = parseInt($(window).scrollTop());
-  var height = parseInt($(document).height() - $(window).height()) - 120;
+  const scrolled = parseInt($(window).scrollTop());
+  const height = parseInt($(document).height() - $(window).height()) - 120;
   if (scrolled >= height  && checker === true && moreResults === 'true') {
     $('.published-posts-pagination').show();
     $.ajax({
@@ -21,26 +21,22 @@ $(window).scroll(function() {
 });
 
 $('.comment-reply').each(function() {
-  $(this).click(function() {
-    $('.reply-form').each(function() {
-      $(this).hide();
-    });
-    $(this).parent().next('.reply-form').show();
-
-    $(this).parent().parent().parent().siblings('.new-comment-toggle').show();
+  return $(this).click(function() {
+    $(this).parent().next('.reply-form').toggle();
     $(this).parent().parent().parent().siblings('.new-comment-form').hide();
-    return;
   });
 });
 
-$('.new-comment-toggle a').each(function() {
-  $(this).click(function() {
-    $(this).parent().siblings('.comments-container').find('.reply-form').each(function() {
-      $(this).hide();
-    });
-    $(this).parent().hide();
-    $(this).parent().siblings('.new-comment-form').show();
-    return;
+$('.comment-new').each(function() {
+  return $(this).click(function() {
+    $(this).parent().parent().parent().siblings('.new-comment-form').toggle();
+    $(this).parent().siblings('.reply-form').hide();
+  });
+});
+
+$('.new-post-comment').each(function() {
+  return $(this).click(function() {
+    $(this).parent().parent().siblings('.new-comment-form').toggle();
   });
 });
 

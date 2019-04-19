@@ -46,7 +46,7 @@ p {
 .post-preview, .blog-preview {
   background-color: #fff;
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border-radius: 3px;
   .poster, .blog-author {
     margin: 0px !important;
@@ -747,6 +747,7 @@ hr {
 .post-likes-comment-section {
   list-style: none;
   margin-left: -39px;
+  margin-bottom: -10px;
   li {
     display: inline-block;
   }

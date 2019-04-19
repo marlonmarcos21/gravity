@@ -4,24 +4,23 @@ $ ->
 
   $('.comment-reply').each(->
     $(this).click(->
-      $('.reply-form').each(->
-        $(this).hide()
-      )
-      $(this).parent().next('.reply-form').show()
-
-      $(this).parent().parent().parent().siblings('.new-comment-toggle').show()
+      $(this).parent().next('.reply-form').toggle()
       $(this).parent().parent().parent().siblings('.new-comment-form').hide()
       return
     )
   )
 
-  $('.new-comment-toggle a').each(->
+  $('.comment-new').each(->
     $(this).click(->
-      $(this).parent().siblings('.comments-container').find('.reply-form').each(->
-        $(this).hide()
-      )
-      $(this).parent().hide()
-      $(this).parent().siblings('.new-comment-form').show()
+      $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
+      $(this).parent().siblings('.reply-form').hide()
+      return
+    )
+  )
+
+  $('.new-post-comment').each(->
+    $(this).click(->
+      $(this).parent().parent().siblings('.new-comment-form').toggle()
       return
     )
   )
@@ -308,13 +307,24 @@ $(document).ajaxComplete((event, request) ->
     if (request.responseJSON.message == 'Comment deleted!')
       totalComments = parseInt(request.responseJSON.total_comments)
       if totalComments == 0
-        word = 'Be the first to comment!'
+        text = 'May comment ka?'
       else if totalComments == 1
-        word = '1 Comment'
+        text = '1 Comment'
       else
-        word = totalComments + ' Comments'
-      elementId = '#' + request.responseJSON.element_id
-      $(elementId + ' .comments-header h6').html(word)
+        text = totalComments + ' Comments'
+
+      elementId = request.responseJSON.element_id
+      elTarget = $('#' + elementId + ' .li-comment-section h6')
+      elTarget.html(text)
+      if totalComments == 0
+        elTarget.addClass('new-post-comment')
+        $('.new-post-comment').each(->
+          $(this).click(->
+            $(this).parent().parent().siblings('.new-comment-form').toggle()
+            return
+          )
+        )
+        elTarget.parent().parent().next('.comments-container').children().remove()
 
     if (request.responseJSON.content && request.responseJSON.post_id)
       html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content

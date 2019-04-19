@@ -4,9 +4,12 @@
 
   - unless comment.parent_id
     #comment-reply-form
-      .comment-nav
+      .comment-nav.inline
         %a.comment-reply
           Reply
+        %a= '|'
+        %a.comment-new
+          New Comment
 
       .reply-form
         = simple_form_for new_comment, remote: true do |f|
