@@ -39,6 +39,11 @@ class Activity < PublicActivity::Activity
         'post.'
       end
       "liked your #{post_url}"
+    when 'blog.like'
+      blog_url = content_tag(:a, href: trackable_url) do
+        'blog.'
+      end
+      "liked your #{blog_url}"
     end
   end
 end
