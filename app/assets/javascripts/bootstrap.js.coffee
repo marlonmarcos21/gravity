@@ -2,34 +2,21 @@ $ ->
   $("a[rel~=popover], .has-popover").popover()
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
-  $('.comment-reply').each(->
-    $(this).click(->
-      $(this).parent().next('.reply-form').toggle()
-      $(this).parent().parent().parent().siblings('.new-comment-form').hide()
-      return
-    )
+  $('#posts-container').on('click', '.li-comment-section', ->
+    $(this).parent().siblings('.new-comment-form').toggle()
+    return
   )
 
-  $('.comment-new').each(->
-    $(this).click(->
-      $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
-      $(this).parent().siblings('.reply-form').hide()
-      return
-    )
+  $('#posts-container').on('click', '.comment-new', ->
+    $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
+    $(this).parent().siblings('.reply-form').hide()
+    return
   )
 
-  $('.new-post-comment').each(->
-    $(this).click(->
-      $(this).parent().parent().siblings('.new-comment-form').toggle()
-      return
-    )
-  )
-
-  $('.new-blog-comment').each(->
-    $(this).click(->
-      $(this).parent().parent().siblings('.new-comment-form').toggle()
-      return
-    )
+  $('#posts-container').on('click', '.comment-reply', ->
+    $(this).parent().next('.reply-form').toggle()
+    $(this).parent().parent().parent().siblings('.new-comment-form').hide()
+    return
   )
 
   $('.alert .close').remove();
@@ -324,18 +311,6 @@ $(document).ajaxComplete((event, request) ->
       elTarget = $('#' + elementId + ' .li-comment-section h6')
       elTarget.html(text)
       if totalComments == 0
-        if elementId.indexOf('post') > -1
-          elClass = 'new-post-comment'
-        else
-          elClass = 'new-blog-comment'
-
-        elTarget.addClass(elClass)
-        $('.' + elClass).each(->
-          $(this).click(->
-            $(this).parent().parent().siblings('.new-comment-form').toggle()
-            return
-          )
-        )
         elTarget.parent().parent().next('.comments-container').children().remove()
 
     if (request.responseJSON.content && request.responseJSON.post_id)

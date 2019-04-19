@@ -20,26 +20,6 @@ $(window).scroll(function() {
   }
 });
 
-$('.comment-reply').each(function() {
-  return $(this).click(function() {
-    $(this).parent().next('.reply-form').toggle();
-    $(this).parent().parent().parent().siblings('.new-comment-form').hide();
-  });
-});
-
-$('.comment-new').each(function() {
-  return $(this).click(function() {
-    $(this).parent().parent().parent().siblings('.new-comment-form').toggle();
-    $(this).parent().siblings('.reply-form').hide();
-  });
-});
-
-$('.new-post-comment').each(function() {
-  return $(this).click(function() {
-    $(this).parent().parent().siblings('.new-comment-form').toggle();
-  });
-});
-
 $('.new-comment-form .new_comment').each(function() {
   $(this).submit(function(e) {
     e.preventDefault();

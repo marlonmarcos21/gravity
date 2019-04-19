@@ -13,13 +13,13 @@
               - else
                 = link_to like_post_path(post), method: :patch, data: { remote: true, id: post.id } do
                   = fa_icon 'thumbs-o-up', id: "thumbs-up-#{post.id}"
-              - likes_count = post.likes.count
+            - likes_count = post.likes.count
             %li
-              %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{post.likes.count} ka Ayus! |"
+              %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
             %li.li-comment-section
               - comment_count = post.comment_threads.count
               - if comment_count.zero?
-                %h6.new-post-comment= 'May comment ka?'
+                %h6= 'May comment ka?'
               - else
                 %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
 

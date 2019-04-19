@@ -3,23 +3,3 @@ const total_comments = "<%= @total_comments %>";
 const word = total_comments > 1 ? 'Comments' : 'Comment';
 $(`${commentable} .comments-container`).append("<%= escape_javascript(render('comments/show', comments: [@comment], new_comment: @new_comment)) %>");
 $(`${commentable} .li-comment-section h6`).html(`${total_comments} ${word}`);
-
-$(`${commentable} .comment-reply`).each(function() {
-  return $(this).click(function() {
-    $(this).parent().next('.reply-form').toggle();
-    $(this).parent().parent().parent().siblings('.new-comment-form').hide();
-  });
-});
-
-$(`${commentable} .comment-new`).each(function() {
-  return $(this).click(function() {
-    $(this).parent().parent().parent().siblings('.new-comment-form').toggle();
-    $(this).parent().siblings('.reply-form').hide();
-  });
-});
-
-$(`${commentable} .new-post-comment`).each(function() {
-  return $(this).click(function() {
-    $(this).parent().parent().siblings('.new-comment-form').toggle();
-  });
-});

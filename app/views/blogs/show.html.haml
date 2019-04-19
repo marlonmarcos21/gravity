@@ -47,7 +47,7 @@
             %li.li-comment-section
               - comment_count = @blog.comment_threads.count
               - if comment_count.zero?
-                %h6.new-blog-comment= 'May comment ka?'
+                %h6= 'May comment ka?'
               - else
                 %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
 
