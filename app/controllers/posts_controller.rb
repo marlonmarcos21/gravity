@@ -134,7 +134,7 @@ class PostsController < ApplicationController
       flash[:alert] = 'Post unliked!'
       format.html { redirect_to posts_url }
       format.json { render json: { message: 'Post unliked!' } }
-      format.js
+      format.js   { render :like }
     end
   end
 
