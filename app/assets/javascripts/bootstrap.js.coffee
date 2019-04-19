@@ -25,6 +25,13 @@ $ ->
     )
   )
 
+  $('.new-blog-comment').each(->
+    $(this).click(->
+      $(this).parent().parent().siblings('.new-comment-form').toggle()
+      return
+    )
+  )
+
   $('.alert .close').remove();
   $('.alert').delay(3000).fadeOut('slow')
 
@@ -317,8 +324,13 @@ $(document).ajaxComplete((event, request) ->
       elTarget = $('#' + elementId + ' .li-comment-section h6')
       elTarget.html(text)
       if totalComments == 0
-        elTarget.addClass('new-post-comment')
-        $('.new-post-comment').each(->
+        if elementId.indexOf('post') > -1
+          elClass = 'new-post-comment'
+        else
+          elClass = 'new-blog-comment'
+
+        elTarget.addClass(elClass)
+        $('.' + elClass).each(->
           $(this).click(->
             $(this).parent().parent().siblings('.new-comment-form').toggle()
             return

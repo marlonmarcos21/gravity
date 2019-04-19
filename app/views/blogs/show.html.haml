@@ -26,14 +26,31 @@
       %h1= @blog.title
 
     .row
-      #blog-body
-        = @blog.body.html_safe
+      #blog-body= @blog.body.html_safe
 
       %hr.spacer
 
     - if @blog.published?
       .row
         - if current_user
+          %ul.blog-likes-comment-section
+            %li
+              - if @blog.liked_by?(current_user)
+                = link_to unlike_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                  = fa_icon 'thumbs-up', id: "thumbs-up-#{@blog.id}"
+              - else
+                = link_to like_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                  = fa_icon 'thumbs-o-up', id: "thumbs-up-#{@blog.id}"
+            - likes_count = @blog.likes.count
+            %li
+              %h6{ id: "thumbs-up-text-#{@blog.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
+            %li.li-comment-section
+              - comment_count = @blog.comment_threads.count
+              - if comment_count.zero?
+                %h6.new-blog-comment= 'May comment ka?'
+              - else
+                %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
+
           = render 'comments/template', commentable: @blog, new_comment: @new_comment
         - else
           .comments-header
