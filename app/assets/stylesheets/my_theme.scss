@@ -473,14 +473,31 @@ a {
   }
 }
 
+.btn-modal-close {
+  border: none;
+  color: #fff;
+  background-color: transparent;
+  border-radius: 100%;
+  line-height: 0.5;
+  padding: 6px;
+  font-size: 15px;
+  background-color: $danger;
+  &:hover,
+  &:focus {
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+
 .btn-danger {
   background-color: transparent;
-  color: #d43f3a;
+  color: $danger;
   &:hover,
   &:focus {
     color: #fff;
-    background-color: #d43f3a;
-    border: 1px solid #d43f3a;
+    background-color: $danger;
+    border: 1px solid $danger;
   }
 }
 
@@ -550,8 +567,8 @@ body {
 }
 
 .alert-danger {
-  background-color: #d43f3a;
-  border-color: #d43f3a;
+  background-color: $danger;
+  border-color: $danger;
 }
 
 #confirmationDialog {
@@ -564,8 +581,9 @@ body {
   top: 200px;
   border-radius: 3px;
   overflow-y: hidden !important;
+  color: $primary;
   .blank-post {
-    margin-left: 230px;
+    margin-left: 227px;
   }
   .modal-body {
     font-size: 15px;
@@ -615,8 +633,8 @@ body {
     border-radius: 3px;
   }
   #flash-alert {
-    background-color: #d43f3a;
-    border: 1px solid #d43f3a;
+    background-color: $danger;
+    border: 1px solid $danger;
     margin: 50px auto;
     width: 200px;
     height: auto;
@@ -703,7 +721,7 @@ hr {
     }
     .danger {
       a, a:hover {
-        color: #d43f3a;
+        color: $danger;
       }
     }
   }

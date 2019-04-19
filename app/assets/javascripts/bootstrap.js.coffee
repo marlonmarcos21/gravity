@@ -203,7 +203,7 @@ $ ->
     $(this).submit((e) ->
       e.preventDefault()
       if ($(this).find('.new-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
+        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
         $(html).modal()
         return false
     )
@@ -213,7 +213,7 @@ $ ->
     $(this).submit((e) ->
       e.preventDefault()
       if ($(this).find('.reply-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
+        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
         $(html).modal()
         return false
     )
@@ -247,7 +247,7 @@ $ ->
     pass = $('input#user_password').val().trim()
     if (email == '' || pass == '')
       e.preventDefault()
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
       $(html).modal()
       return false
   )
@@ -256,7 +256,7 @@ $ ->
     email = $('input#user_email_forgot_pw').val().trim()
     if (email == '')
       e.preventDefault()
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Email required!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email required!</p></div></div>'
       $(html).modal()
       return false
   )
@@ -264,7 +264,7 @@ $ ->
   $('.search-form').submit((e) ->
     if ($('#search_search').val().trim() == '' || !$('#search_search').val())
       e.preventDefault();
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
       $(html).modal()
       return false
   )
