@@ -3,7 +3,7 @@
     .navbar-header
       %button.navbar-toggle{ type: 'button', 'data-toggle' => 'collapse', 'data-target' => '.navbar-main-collapse' }
         = fa_icon 'bars'
-      %a.navbar-brand{ 'page-scroll' => true, href: in_homepage? ? '#page-top' : root_path }
+      %a.navbar-brand{ 'page-scroll' => true, href: current_page?(root_path) ? '#page-top' : root_path }
         %span G
 
     .collapse.navbar-collapse.navbar-main-collapse
