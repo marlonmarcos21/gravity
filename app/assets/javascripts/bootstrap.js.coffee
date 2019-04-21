@@ -2,35 +2,18 @@ $ ->
   $("a[rel~=popover], .has-popover").popover()
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
-  $('#posts-container').on('click', '.li-comment-section', ->
+  $('.container').on('click', '.li-comment-section', ->
     $(this).parent().siblings('.new-comment-form').toggle()
     return
   )
 
-  $('#posts-container').on('click', '.comment-new', ->
+  $('.container').on('click', '.comment-new', ->
     $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
     $(this).parent().siblings('.reply-form').hide()
     return
   )
 
-  $('#posts-container').on('click', '.comment-reply', ->
-    $(this).parent().next('.reply-form').toggle()
-    $(this).parent().parent().parent().siblings('.new-comment-form').hide()
-    return
-  )
-
-  $('.blog-container').on('click', '.li-comment-section', ->
-    $(this).parent().siblings('.new-comment-form').toggle()
-    return
-  )
-
-  $('.blog-container').on('click', '.comment-new', ->
-    $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
-    $(this).parent().siblings('.reply-form').hide()
-    return
-  )
-
-  $('.blog-container').on('click', '.comment-reply', ->
+  $('.container').on('click', '.comment-reply', ->
     $(this).parent().next('.reply-form').toggle()
     $(this).parent().parent().parent().siblings('.new-comment-form').hide()
     return
@@ -199,24 +182,12 @@ $ ->
   if ($('.my-gallery').length)
     initPhotoSwipeFromDOM('.my-gallery')
 
-  $('.new-comment-form .new_comment').each(->
-    $(this).submit((e) ->
-      e.preventDefault()
-      if ($(this).find('.new-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
-        $(html).modal()
-        return false
-    )
-  )
-
-  $('.reply-form .new_comment').each(->
-    $(this).submit((e) ->
-      e.preventDefault()
-      if ($(this).find('.reply-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
-        $(html).modal()
-        return false
-    )
+  $('.container').on('submit', '.new_comment', (e) ->
+    e.preventDefault()
+    if ($(this).find('.new-comment-body').val().trim() == '')
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
+      $(html).modal()
+      return false
   )
 
   $('.log-me-in').click(->
