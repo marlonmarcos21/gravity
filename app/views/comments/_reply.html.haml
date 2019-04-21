@@ -13,10 +13,10 @@
     %p= comment.body.html_safe
 
   %p.comment-meta= "on #{comment.created_at.strftime '%a, %b %e, %Y %R'}"
-  %p.delete-comment
-    - if current_user && can?(:destroy, comment)
+
+  - if current_user && can?(:destroy, comment)
+    %p.delete-comment
       = link_to comment_path(comment), method: :delete, data: { confirm: 'Pag Sure!', ajax: true, parent: comment.parent_id.nil? }, class: 'btn btn-trash btn-xs btn-danger' do
         = fa_icon 'trash'
-  %br
 
-= render 'comments/show', comments: comment.children
+= render 'comments/show', comments: comment.children, is_reply: true

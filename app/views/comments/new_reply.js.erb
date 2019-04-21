@@ -2,5 +2,5 @@ const commentable = "#<%= @comment.commentable_type.underscore %>-<%= @comment.c
 const total_comments = "<%= @total_comments %>";
 const word = total_comments > 1 ? 'Comments' : 'Comment';
 const parentId = ".comment-<%= @comment.parent_id %>";
-$(parentId).append("<%= escape_javascript(render('comments/show', comments: [@comment])) %>");
+$(parentId).append("<%= escape_javascript(render('comments/show', comments: [@comment], is_reply: true)) %>");
 $(`${commentable} .li-comment-section h6`).html(`${total_comments} ${word}`);

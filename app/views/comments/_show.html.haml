@@ -1,5 +1,9 @@
+- is_reply = false if local_assigns[:is_reply].blank?
+
 - comments.each do |comment|
-  .comments-show{ class: "comment-#{comment.id} "}
+  - el_klass = "comment-#{comment.id}"
+  - el_klass += ' reply-comment' if is_reply
+  .comments-show{ class: el_klass }
     = render 'comments/reply', comment: comment
 
   - unless comment.parent_id
@@ -16,7 +20,5 @@
           = f.input :commentable_id, as: :hidden, value: new_comment.commentable_id
           = f.input :commentable_type, as: :hidden, value: new_comment.commentable_type
           = f.input :comment_id, as: :fake, label: false, input_html: { class: 'hidden', value: comment.id }
-
           = f.input :body, label: false, input_html: { class: 'new-comment-body', rows: 2, cols: 120 }
-
           = f.button :submit, 'Post Reply', class: 'submit-reply-comment btn-primary btn-xs'
