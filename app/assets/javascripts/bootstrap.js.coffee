@@ -3,18 +3,24 @@ $ ->
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
   $('.container').on('click', '.li-comment-section', ->
-    $(this).parent().siblings('.new-comment-form').toggle()
+    newCommentForm = $(this).parent().siblings('.new-comment-form')
+    newCommentForm.toggle()
+    newCommentForm.find('textarea').focus()
     return
   )
 
   $('.container').on('click', '.comment-new', ->
-    $(this).parent().parent().parent().siblings('.new-comment-form').toggle()
+    newCommentForm = $(this).parent().parent().parent().siblings('.new-comment-form')
+    newCommentForm.toggle()
+    newCommentForm.find('textarea').focus()
     $(this).parent().siblings('.reply-form').hide()
     return
   )
 
   $('.container').on('click', '.comment-reply', ->
-    $(this).parent().next('.reply-form').toggle()
+    replyForm = $(this).parent().next('.reply-form')
+    replyForm.toggle()
+    replyForm.find('textarea').focus()
     $(this).parent().parent().parent().siblings('.new-comment-form').hide()
     return
   )
