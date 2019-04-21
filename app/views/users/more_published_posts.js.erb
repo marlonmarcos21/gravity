@@ -1,12 +1,12 @@
-$('#published-posts-tab').append("<%= escape_javascript(render('published_posts', posts: @published_posts, has_more_results: @has_more_results, next_page: @next_page)) %>");
+$('#published-posts-tab').append("<%= escape_javascript(render('published_posts', posts: @published_posts, has_more_results: @has_more_results)) %>");
 
-var moreResults = "<%= @has_more_results %>" 
-var nextPage = "<%= @next_page %>"
-var checker = true
+const moreResults = "<%= @has_more_results %>";
+const nextPage = "<%= @next_page %>";
+let checker = true;
 $(window).scroll(function() {
   if ($('#published-posts-tab').is(':visible')) {
-    var scrolled = parseInt($(window).scrollTop());
-    var height = parseInt($(document).height() - $(window).height()) - 120;
+    const scrolled = parseInt($(window).scrollTop());
+    const height = parseInt($(document).height() - $(window).height()) - 120;
     if (scrolled >= height  && checker === true && moreResults === 'true') {
       $('.published-posts-pagination').show();
       $.ajax({

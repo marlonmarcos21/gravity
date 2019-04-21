@@ -1,6 +1,5 @@
-- next_page = 2 if local_assigns[:next_page].blank?
-
 = render 'listing', posts: @posts
+
 .text-center
   - if has_more_results
     %nav.published-posts-pagination

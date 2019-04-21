@@ -407,7 +407,7 @@ a {
 }
 
 .content-section {
-  padding-top: 40px;
+  padding-top: 65px;
 }
 
 .download-section {
@@ -428,17 +428,34 @@ a {
   margin-top: 100px;
 }
 
-@media(min-width:767px) {
+@media(max-width: 543px) {
+  .navbar-toggle {
+    margin-right: 20px;
+  }
+
   .content-section {
-    padding-top: 75px !important;
-    &.home {
-      padding-top: 0 !important;
-      margin-bottom: 80px;
+    padding-top: 45px;
+    &.container {
+      padding-left: 0px;
+      padding-right: 0px;
     }
-    &.about {
-      padding-top: 0 !important;
-      margin-bottom: 80px;
-    }
+  }
+
+  #post-index-form, .post-preview, .blog-preview {
+    border-radius: 0;
+  }
+
+  #blogs-container {
+    padding-top: 20px;
+  }
+
+  .blog-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .new-blog-btn {
+    display: none;
   }
 
   .download-section {

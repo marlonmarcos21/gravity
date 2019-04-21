@@ -54,5 +54,5 @@ Rails.application.routes.draw do
   get 'search', to: 'search#search'
   get 'about',  to: 'about#index'
 
-  root to: 'home#index'
+  root to: 'posts#index'
 end
