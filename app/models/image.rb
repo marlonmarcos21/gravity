@@ -26,6 +26,9 @@ class Image < ApplicationRecord
 
   after_post_process :save_image_dimensions
 
+  scope :gif, -> { where(source_content_type: 'image/gif') }
+  scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
+
   def source_url(style = :original, expires_in = 3600)
     presigned_url = source.expiring_url(expires_in.to_i, style)
     uri = URI presigned_url

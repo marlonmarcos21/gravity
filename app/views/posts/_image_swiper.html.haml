@@ -1,36 +1,48 @@
-.my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
-  - images.each do |img|
-    %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject' }
-      %a{ href: img.source_url(:main), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
-        = image_tag img.source_url(:thumb), itemprop: 'thumbnail'
+- if images.gif.any?
+  - gif_count = images.gif.length
+  - images.gif.each.with_index do |img, i|
+    = image_tag img.source_url, class: 'gif-image'
+    - unless i == gif_count - 1
+      %br
+      %br
 
-.pswp{ tabindex: '-1', role: 'dialog', 'aria-hidden' => 'true' }
-  .pswp__bg
+- if images.non_gif.any?
+  .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
+    - img_count = images.non_gif.length
+    - images.non_gif.each do |img|
+      - style = img_count > 1 ? :thumb : (img.width > img.height ? :main : :portrait)
+      - fig_class = img_count > 1 ? '' : 'single-image'
+      %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject', class: fig_class }
+        %a{ href: img.source_url(:main), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
+          = image_tag img.source_url(style), itemprop: 'thumbnail'
 
-  .pswp__scroll-wrap
-    .pswp__container
-      .pswp__item
-      .pswp__item
-      .pswp__item
+  .pswp{ tabindex: '-1', role: 'dialog', 'aria-hidden' => 'true' }
+    .pswp__bg
 
-    .pswp__ui.pswp__ui--hidden
-      .pswp__top-bar
-        .pswp__counter
+    .pswp__scroll-wrap
+      .pswp__container
+        .pswp__item
+        .pswp__item
+        .pswp__item
 
-        %button.pswp__button.pswp__button--close{ title: 'Close (Esc)' }
-        %button.pswp__button.pswp__button--fs{ title: 'Toggle fullscreen' }
-        %button.pswp__button.pswp__button--zoom{ title: 'Zoom in/out' }
+      .pswp__ui.pswp__ui--hidden
+        .pswp__top-bar
+          .pswp__counter
 
-        .pswp__preloader
-          .pswp__preloader__icn
-            .pswp__preloader__cut
-              .pswp__preloader__donut
+          %button.pswp__button.pswp__button--close{ title: 'Close (Esc)' }
+          %button.pswp__button.pswp__button--fs{ title: 'Toggle fullscreen' }
+          %button.pswp__button.pswp__button--zoom{ title: 'Zoom in/out' }
 
-      .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
-        .pswp__share-tooltip
+          .pswp__preloader
+            .pswp__preloader__icn
+              .pswp__preloader__cut
+                .pswp__preloader__donut
 
-      %button.pswp__button.pswp__button--arrow--left{ title: 'Previous (arrow left)' }
-      %button.pswp__button.pswp__button--arrow--right{ title: 'Next (arrow right)' }
+        .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
+          .pswp__share-tooltip
 
-      .pswp__caption
-        .pswp__caption__center
+        %button.pswp__button.pswp__button--arrow--left{ title: 'Previous (arrow left)' }
+        %button.pswp__button.pswp__button--arrow--right{ title: 'Next (arrow right)' }
+
+        .pswp__caption
+          .pswp__caption__center
