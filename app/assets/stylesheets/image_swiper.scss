@@ -1,7 +1,6 @@
 .post-images {
   height: auto;
   .my-gallery {
-    margin-bottom: 30px;
     width: 100%;
     float: left;
     img {
@@ -13,7 +12,9 @@
       display: block;
       float: left;
       margin: 0 5px 5px 0;
-      width: 130px;
+      &.single-image {
+        width: 100%;
+      }
     }
   }
 }

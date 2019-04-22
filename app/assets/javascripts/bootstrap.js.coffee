@@ -2,28 +2,27 @@ $ ->
   $("a[rel~=popover], .has-popover").popover()
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
-  $('.comment-reply').each(->
-    $(this).click(->
-      $('.reply-form').each(->
-        $(this).hide()
-      )
-      $(this).parent().next('.reply-form').show()
-
-      $(this).parent().parent().parent().siblings('.new-comment-toggle').show()
-      $(this).parent().parent().parent().siblings('.new-comment-form').hide()
-      return
-    )
+  $('.container').on('click', '.li-comment-section', ->
+    newCommentForm = $(this).parent().siblings('.new-comment-form')
+    newCommentForm.toggle()
+    newCommentForm.find('textarea').focus()
+    return
   )
 
-  $('.new-comment-toggle a').each(->
-    $(this).click(->
-      $(this).parent().siblings('.comments-container').find('.reply-form').each(->
-        $(this).hide()
-      )
-      $(this).parent().hide()
-      $(this).parent().siblings('.new-comment-form').show()
-      return
-    )
+  $('.container').on('click', '.comment-new', ->
+    newCommentForm = $(this).parent().parent().parent().siblings('.new-comment-form')
+    newCommentForm.toggle()
+    newCommentForm.find('textarea').focus()
+    $(this).parent().siblings('.reply-form').hide()
+    return
+  )
+
+  $('.container').on('click', '.comment-reply', ->
+    replyForm = $(this).parent().next('.reply-form')
+    replyForm.toggle()
+    replyForm.find('textarea').focus()
+    $(this).parent().parent().parent().siblings('.new-comment-form').hide()
+    return
   )
 
   $('.alert .close').remove();
@@ -189,24 +188,12 @@ $ ->
   if ($('.my-gallery').length)
     initPhotoSwipeFromDOM('.my-gallery')
 
-  $('.new-comment-form .new_comment').each(->
-    $(this).submit((e) ->
-      e.preventDefault()
-      if ($(this).find('.new-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
-        $(html).modal()
-        return false
-    )
-  )
-
-  $('.reply-form .new_comment').each(->
-    $(this).submit((e) ->
-      e.preventDefault()
-      if ($(this).find('.reply-comment-body').val().trim() == '')
-        html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>'
-        $(html).modal()
-        return false
-    )
+  $('.container').on('submit', '.new_comment', (e) ->
+    e.preventDefault()
+    if ($(this).find('.new-comment-body').val().trim() == '')
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>'
+      $(html).modal()
+      return false
   )
 
   $('.log-me-in').click(->
@@ -232,10 +219,29 @@ $ ->
     $('.forgot-password').show()
   )
 
+  $('form#new_user').submit((e) ->
+    email = $('input#user_email').val().trim()
+    pass = $('input#user_password').val().trim()
+    if (email == '' || pass == '')
+      e.preventDefault()
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
+  $('form#new_user_forgot_pw').submit((e) ->
+    email = $('input#user_email_forgot_pw').val().trim()
+    if (email == '')
+      e.preventDefault()
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email required!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
   $('.search-form').submit((e) ->
     if ($('#search_search').val().trim() == '' || !$('#search_search').val())
       e.preventDefault();
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
       $(html).modal()
       return false
   )
@@ -280,7 +286,6 @@ $.rails.showConfirmDialog = (link) ->
   $(html).modal()
   $('#confirmationDialog .confirm').on 'click', -> $.rails.confirmed(link)
 
-
 fadeFlash = ->
   $('#flash-notice').delay(3000).fadeOut('slow')
   $('#flash-alert').delay(3000).fadeOut('slow')
@@ -309,13 +314,17 @@ $(document).ajaxComplete((event, request) ->
     if (request.responseJSON.message == 'Comment deleted!')
       totalComments = parseInt(request.responseJSON.total_comments)
       if totalComments == 0
-        word = 'Be the first to comment!'
+        text = 'May comment ka?'
       else if totalComments == 1
-        word = '1 Comment'
+        text = '1 Comment'
       else
-        word = totalComments + ' Comments'
-      elementId = '#' + request.responseJSON.element_id
-      $(elementId + ' .comments-header h6').html(word)
+        text = totalComments + ' Comments'
+
+      elementId = request.responseJSON.element_id
+      elTarget = $('#' + elementId + ' .li-comment-section h6')
+      elTarget.html(text)
+      if totalComments == 0
+        elTarget.parent().parent().next('.comments-container').children().remove()
 
     if (request.responseJSON.content && request.responseJSON.post_id)
       html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content

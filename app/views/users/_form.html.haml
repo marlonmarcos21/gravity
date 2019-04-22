@@ -2,8 +2,8 @@
   = f.error_notification
   = @user.errors.full_messages.inspect unless @user.errors.empty?
 
-  .row
-    .col-lg-6.col-md-6
+  .row.user-edit-page
+    .col-lg-6.col-md-8
       = f.input :profile_photo, hint: image_tag(@user.profile_photo_url(:thumb), size: '150x150')
       = image_tag '', id: 'preview-container', size: '150x150'
 

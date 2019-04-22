@@ -1,16 +1,16 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :post, only: %i(show edit update destroy editable)
+  before_action :post, only: %i(show edit update destroy editable like unlike)
 
   before_action :prepare_images, only: :edit
-  before_action :media_token,    only: %i(new index)
+  before_action :media_token,    only: %i(new index create)
 
   def index
     pp_scope = Post.includes(:user).published.descending
+    @has_more_results = !pp_scope.page(2).empty?
     @post  = Post.new
     @posts = pp_scope.page(1)
-    @has_more_results = !pp_scope.page(2).empty?
   end
 
   def more_published_posts
@@ -42,16 +42,14 @@ class PostsController < ApplicationController
         flash[:notice] = 'Post created'
         attach_images medium_token, @post.id
         attach_videos medium_token, @post.id
-        media_token
         @new_post = @post
         @post = Post.new
-
         format.html { redirect_to @new_post }
         format.js   { render :new_post }
       else
         flash[:alert] = 'Error creating post'
         format.html { render :new }
-        format.js   { render nothing: true, content_type: 'text/html' }
+        format.js   { render body: nil, content_type: 'text/html' }
       end
     end
   end
@@ -115,6 +113,31 @@ class PostsController < ApplicationController
     end
   end
 
+  def like
+    @like = @post.likes.create(user: current_user)
+    @total_likes = @post.likes.count
+    @post.create_activity :like, recipient: @post.user
+    respond_to do |format|
+      flash[:notice] = 'Post liked!'
+      format.html { redirect_to posts_url }
+      format.json { render json: { message: 'Post liked!' } }
+      format.js
+    end
+  end
+
+  def unlike
+    @like = @post.likes.where(user: current_user).first
+    @like.destroy
+    @post.create_activity :unlike, recipient: @post.user
+    @total_likes = @post.likes.count
+    respond_to do |format|
+      flash[:alert] = 'Post unliked!'
+      format.html { redirect_to posts_url }
+      format.json { render json: { message: 'Post unliked!' } }
+      format.js   { render :like }
+    end
+  end
+
   private
 
   def post
@@ -131,7 +154,7 @@ class PostsController < ApplicationController
     return if media_token.blank?
     media_params = params[:post][:media_attributes]
     return if media_params.blank?
-    media_params.each_value do |medium|
+    media_params.each_pair do |_i, medium|
       if medium['source'].content_type == 'video/mp4'
         Video.create(
           token: media_token,
@@ -172,16 +195,17 @@ class PostsController < ApplicationController
 
   def prepare_images
     return unless @post.try(:images).try(:any?)
-    hash = {}
-    @post.images.each do |img|
-      hash[img.id.to_s] = { img_url: img.source_url(:main),
-                            img_url_thumb: img.source_url(:thumb),
-                            size: img.source_file_size,
-                            file_name: img.source_file_name,
-                            width: img.width,
-                            height: img.height }
+    img_hash = @post.images.each_with_object({}) do |img, hash|
+      hash[img.id.to_s] = {
+        img_url: img.source_url(:main),
+        img_url_thumb: img.source_url(:thumb),
+        size: img.source_file_size,
+        file_name: img.source_file_name,
+        width: img.width,
+        height: img.height
+      }
     end
-    @images = hash.to_json
+    @images = img_hash.to_json
   end
 
   def media_token

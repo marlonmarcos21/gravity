@@ -3,21 +3,19 @@
     .navbar-header
       %button.navbar-toggle{ type: 'button', 'data-toggle' => 'collapse', 'data-target' => '.navbar-main-collapse' }
         = fa_icon 'bars'
-      %a.navbar-brand{ 'page-scroll' => true, href: in_homepage? ? '#page-top' : root_path }
+      %a.navbar-brand{ 'page-scroll' => true, href: current_page?(root_path) ? '#page-top' : root_path }
         %span G
 
     .collapse.navbar-collapse.navbar-main-collapse
       %ul.nav.navbar-nav.left-menus
-        %li.hidden
-          %a{ href: '#page-top' }
-        %li
-          %a.page-scroll{ href: in_homepage? ? '#posts' : posts_path }
+        %li{ class: current_page?(posts_path) ? 'active' : 'inactive' }
+          %a.page-scroll{ href: posts_path }
             Posts
-        %li
-          %a.page-scroll{ href: in_homepage? ? '#blogs' : blogs_path }
+        %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
+          %a.page-scroll{ href: blogs_path }
             Blogs
-        %li
-          %a.page-scroll{ href: '#about' }
+        %li{ class: current_page?(about_path) ? 'active' : 'inactive' }
+          %a.page-scroll{ href: about_path }
             About
         - if current_user
           %li
@@ -63,8 +61,8 @@
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-log-in Cancel
             .forgot-password-form.hidden
-              = simple_form_for User.new, as: :user, url: user_password_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
-                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+              = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { id: 'user_email_forgot_pw', class: 'input-sm' }
                 %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-forgot-password Cancel

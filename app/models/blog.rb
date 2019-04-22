@@ -5,7 +5,7 @@
 # t.references :user,        index: true
 # t.string     :slug
 
-class Blog < ActiveRecord::Base
+class Blog < ApplicationRecord
   belongs_to :user
 
   has_many :blog_media, as: :attachable, dependent: :destroy
@@ -19,13 +19,15 @@ class Blog < ActiveRecord::Base
   scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
 
-  before_save :strip_title,        if: :title_changed?
+  before_save :strip_title, if: :title_changed?
+
   before_update :set_published_at, if: :published_changed?
 
+  include AsLikeable
   include BlogView
 
   extend FriendlyId
-  friendly_id :title
+  friendly_id :title, use: [:slugged, :finders]
 
   include PgSearch
   pg_search_scope :search,

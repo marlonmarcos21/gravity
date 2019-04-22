@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -97,6 +90,18 @@ CREATE SEQUENCE activities_id_seq
 --
 
 ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -321,6 +326,39 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 
 
 --
+-- Name: likes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE likes (
+    id bigint NOT NULL,
+    user_id bigint,
+    trackable_type character varying,
+    trackable_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: likes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE likes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: likes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE likes_id_seq OWNED BY likes.id;
+
+
+--
 -- Name: posts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -528,91 +566,98 @@ ALTER SEQUENCE videos_id_seq OWNED BY videos.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: activities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: blog_media id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_media ALTER COLUMN id SET DEFAULT nextval('blog_media_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: blogs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blogs ALTER COLUMN id SET DEFAULT nextval('blogs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: friend_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friend_requests ALTER COLUMN id SET DEFAULT nextval('friend_requests_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: friends id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friends ALTER COLUMN id SET DEFAULT nextval('friends_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: likes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY likes ALTER COLUMN id SET DEFAULT nextval('likes_id_seq'::regclass);
+
+
+--
+-- Name: posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: user_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profiles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: videos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY videos ALTER COLUMN id SET DEFAULT nextval('videos_id_seq'::regclass);
 
 
 --
--- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activities
@@ -620,7 +665,15 @@ ALTER TABLE ONLY activities
 
 
 --
--- Name: blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: blog_media blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_media
@@ -628,7 +681,7 @@ ALTER TABLE ONLY blog_media
 
 
 --
--- Name: blogs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: blogs blogs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blogs
@@ -636,7 +689,7 @@ ALTER TABLE ONLY blogs
 
 
 --
--- Name: comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY comments
@@ -644,7 +697,7 @@ ALTER TABLE ONLY comments
 
 
 --
--- Name: friend_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: friend_requests friend_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friend_requests
@@ -652,7 +705,7 @@ ALTER TABLE ONLY friend_requests
 
 
 --
--- Name: friends_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: friends friends_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friends
@@ -660,7 +713,7 @@ ALTER TABLE ONLY friends
 
 
 --
--- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY images
@@ -668,7 +721,15 @@ ALTER TABLE ONLY images
 
 
 --
--- Name: posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: likes likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY likes
+    ADD CONSTRAINT likes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY posts
@@ -676,7 +737,7 @@ ALTER TABLE ONLY posts
 
 
 --
--- Name: user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_profiles user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_profiles
@@ -684,7 +745,7 @@ ALTER TABLE ONLY user_profiles
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -692,7 +753,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions
@@ -700,7 +761,7 @@ ALTER TABLE ONLY versions
 
 
 --
--- Name: videos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: videos videos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY videos
@@ -813,6 +874,20 @@ CREATE INDEX index_images_on_attachable_type_and_attachable_id ON images USING b
 
 
 --
+-- Name: index_likes_on_trackable_type_and_trackable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_likes_on_trackable_type_and_trackable_id ON likes USING btree (trackable_type, trackable_id);
+
+
+--
+-- Name: index_likes_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_likes_on_user_id ON likes USING btree (user_id);
+
+
+--
 -- Name: index_posts_on_tsv_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -876,21 +951,21 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: blogs tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
 
 
 --
--- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: users tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
 
 
 --
--- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: posts tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'body');
@@ -902,63 +977,37 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXEC
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20160731044836');
+INSERT INTO "schema_migrations" (version) VALUES
+('20160731044836'),
+('20160731045808'),
+('20160731050120'),
+('20160731104259'),
+('20160801094451'),
+('20160806023746'),
+('20160806141904'),
+('20160807032520'),
+('20160807032607'),
+('20160807033320'),
+('20160807051628'),
+('20160807164700'),
+('20160807180624'),
+('20160808073114'),
+('20160809074722'),
+('20160811163956'),
+('20160811164714'),
+('20160811165102'),
+('20160811165306'),
+('20160811170021'),
+('20160813062412'),
+('20160813063008'),
+('20160813063449'),
+('20160813064505'),
+('20160814131210'),
+('20160815123614'),
+('20160817004636'),
+('20160817115752'),
+('20160817120411'),
+('20160830152057'),
+('20190418065909');
 
-INSERT INTO schema_migrations (version) VALUES ('20160731045808');
-
-INSERT INTO schema_migrations (version) VALUES ('20160731050120');
-
-INSERT INTO schema_migrations (version) VALUES ('20160731104259');
-
-INSERT INTO schema_migrations (version) VALUES ('20160801094451');
-
-INSERT INTO schema_migrations (version) VALUES ('20160806023746');
-
-INSERT INTO schema_migrations (version) VALUES ('20160806141904');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807032520');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807032607');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807033320');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807051628');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807164700');
-
-INSERT INTO schema_migrations (version) VALUES ('20160807180624');
-
-INSERT INTO schema_migrations (version) VALUES ('20160808073114');
-
-INSERT INTO schema_migrations (version) VALUES ('20160809074722');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811163956');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811164714');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811165102');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811165306');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811170021');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813062412');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813063008');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813063449');
-
-INSERT INTO schema_migrations (version) VALUES ('20160813064505');
-
-INSERT INTO schema_migrations (version) VALUES ('20160814131210');
-
-INSERT INTO schema_migrations (version) VALUES ('20160815123614');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817004636');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817115752');
-
-INSERT INTO schema_migrations (version) VALUES ('20160817120411');
-
-INSERT INTO schema_migrations (version) VALUES ('20160830152057');
 

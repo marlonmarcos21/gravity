@@ -4,10 +4,11 @@
 # t.datetime   :published_at
 # t.boolean    :private
 
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
   belongs_to :user
 
-  has_one  :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable
+  has_one :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable
+
   has_many :images, as: :attachable, dependent: :destroy
   has_many :videos, as: :attachable, dependent: :destroy
 
@@ -20,15 +21,16 @@ class Post < ActiveRecord::Base
 
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
-  scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
+  scope :recent,      -> (limit) { published.descending.limit(limit) }
   scope :non_public,  -> { where(private: true) }
-  scope :non_private, -> { where.not(private: true) }
+  scope :non_private, -> { where(private: false) }
 
   before_create :set_published_at
 
   before_save :strip_body, if: :body_changed?
 
+  include AsLikeable
   include PostView
   include PgSearch
   pg_search_scope :search,

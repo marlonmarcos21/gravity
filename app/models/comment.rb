@@ -1,4 +1,6 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
+  include AsLikeable
+
   acts_as_nested_set scope: [:commentable_id, :commentable_type]
 
   validates :body, presence: true
@@ -8,7 +10,7 @@ class Comment < ActiveRecord::Base
   # want user to vote on the quality of comments.
   # acts_as_votable
 
-  belongs_to :commentable, polymorphic: true
+  belongs_to :commentable, polymorphic: true, touch: true
   belongs_to :user
 
   has_paper_trail on: :update, only: :body

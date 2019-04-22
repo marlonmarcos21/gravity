@@ -1,4 +1,11 @@
 class Activity < PublicActivity::Activity
+  EXCLUDED_NOTIFICATION_KEYS = %w(
+    user.cancel_friend_request
+    user.reject_friend_request
+    post.unlike
+    blog.unlike
+  )
+
   include ActionView::Helpers::TagHelper
   include ActionView::Context
   include Rails.application.routes.url_helpers
@@ -7,8 +14,7 @@ class Activity < PublicActivity::Activity
 
   class << self
     def for_notification
-      where
-        .not(key: ['user.cancel_friend_request', 'user.reject_friend_request'])
+      where.not(key: EXCLUDED_NOTIFICATION_KEYS)
         .where(arel_table[:owner_id].not_eq(arel_table[:recipient_id]))
     end
   end
@@ -35,6 +41,16 @@ class Activity < PublicActivity::Activity
         'blog.'
       end
       "commented on your #{blog_url}."
+    when 'post.like'
+      post_url = content_tag(:a, href: trackable_url) do
+        'post.'
+      end
+      "liked your #{post_url}"
+    when 'blog.like'
+      blog_url = content_tag(:a, href: trackable_url) do
+        'blog.'
+      end
+      "liked your #{blog_url}"
     end
   end
 end

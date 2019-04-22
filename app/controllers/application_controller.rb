@@ -7,16 +7,11 @@ class ApplicationController < ActionController::Base
 
   after_action :flash_to_headers
 
-  helper_method :in_homepage?
   helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_page = request.env['HTTP_REFERER'].nil? ? root_url : :back
+    redirect_page = request.env['HTTP_REFERER'] || root_url
     redirect_to redirect_page, alert: exception.message
-  end
-
-  def in_homepage?
-    request.original_fullpath == '/'
   end
 
   def activities

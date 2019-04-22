@@ -46,7 +46,7 @@ p {
 .post-preview, .blog-preview {
   background-color: #fff;
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border-radius: 3px;
   .poster, .blog-author {
     margin: 0px !important;
@@ -131,33 +131,10 @@ p {
 }
 
 #post, .post-body, .post-preview {
-  iframe {
-    max-width: 720px;
-    @media(max-width: 543px){
-      max-width: 300px !important;
-    }
-    @media(min-width: 544px) and (max-width: 767px) {
-      max-width: 420px !important;
-    }
-    @media(min-width: 768px) and (max-width: 992px) {
-      max-width: 520px !important;
-    }
-  }
-  .single-image {
-    max-width: 720px;
-    height: auto !important;
-    @media(max-width: 543px){
-      max-width: 300px !important;
-    }
-    @media(min-width: 544px) and (max-width: 767px) {
-      max-width: 420px !important;
-    }
-    @media(min-width: 768px) and (max-width: 992px) {
-      max-width: 520px !important;
-    }
+  iframe, .gif-image {
+    width: 100%;
   }
 }
-
 
 .comment {
   .user-name {
@@ -210,8 +187,10 @@ a {
   }
   .navbar-brand {
     font-weight: 700;
-    &:focus {
+    &:focus,
+    &:hover {
       outline: none;
+      color: #fff;
     }
   }
   a {
@@ -239,7 +218,7 @@ a {
         a {
           background-color: rgba(white, 0.3);
           &:hover {
-            color: white;
+            color: #fff;
           }
         }
       }
@@ -257,11 +236,7 @@ a {
         background-color: transparent;
       }
     }
-    &:hover {
-      color: #fff;
-      outline: none;
-      background-color: transparent;
-    }
+    &:hover,
     &:focus,
     &:active {
       outline: none;
@@ -270,6 +245,13 @@ a {
     .navbar-nav {
       &.sign-in {
         margin-top: 15px;
+        .forgot-password,
+        .cancel-log-in,
+        .cancel-forgot-password {
+          &:hover {
+            color: #fff;
+          }
+        }
       }
     }
     .dropdown-menu {
@@ -402,10 +384,7 @@ a {
 }
 
 .content-section {
-  padding-top: 75px;
-  &.home {
-    padding-top: 190px;
-  }
+  padding-top: 65px;
 }
 
 .download-section {
@@ -426,13 +405,43 @@ a {
   margin-top: 100px;
 }
 
-@media(min-width:767px) {
+@media(max-width: 543px) {
+  .navbar-toggle {
+    margin-right: 5px;
+    margin-top: 10px;
+  }
+
   .content-section {
-    padding-top: 75px !important;
-    &.home {
-      padding-top: 80px !important;
-      margin-bottom: 80px;
+    padding-top: 45px;
+    &.container {
+      padding-left: unset;
+      padding-right: unset;
     }
+  }
+
+  #post-index-form, .post-preview, .blog-preview {
+    border-radius: 0;
+  }
+
+  #blogs-container {
+    padding-top: 20px;
+  }
+
+  .blog-container {
+    padding-left: 30px !important;
+    padding-right: 15px !important;
+  }
+
+  .new-blog-btn {
+    display: none;
+  }
+
+  .user-profile {
+    padding: 0 15px;
+  }
+
+  .user-edit-page {
+    padding: 0 25px;
   }
 
   .download-section {
@@ -442,6 +451,22 @@ a {
   #map {
     height: 400px;
     margin-top: 250px;
+  }
+
+  .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    padding-right: unset;
+  }
+
+  .row {
+    margin-right: unset;
+  }
+
+  .user-nav-tabs, .user-tab-content {
+    margin-right: -15px;
+  }
+
+  .user-greeting {
+    padding: 15px;
   }
 }
 
@@ -467,14 +492,31 @@ a {
   }
 }
 
+.btn-modal-close {
+  border: none;
+  color: #fff;
+  background-color: transparent;
+  border-radius: 100%;
+  line-height: 0.5;
+  padding: 6px;
+  font-size: 15px;
+  background-color: $danger;
+  &:hover,
+  &:focus {
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+
 .btn-danger {
   background-color: transparent;
-  color: #d43f3a;
+  color: $danger;
   &:hover,
   &:focus {
     color: #fff;
-    background-color: #d43f3a;
-    border: 1px solid #d43f3a;
+    background-color: $danger;
+    border: 1px solid $danger;
   }
 }
 
@@ -544,8 +586,8 @@ body {
 }
 
 .alert-danger {
-  background-color: #d43f3a;
-  border-color: #d43f3a;
+  background-color: $danger;
+  border-color: $danger;
 }
 
 #confirmationDialog {
@@ -558,8 +600,9 @@ body {
   top: 200px;
   border-radius: 3px;
   overflow-y: hidden !important;
+  color: $primary;
   .blank-post {
-    margin-left: 230px;
+    margin-left: 227px;
   }
   .modal-body {
     font-size: 15px;
@@ -609,8 +652,8 @@ body {
     border-radius: 3px;
   }
   #flash-alert {
-    background-color: #d43f3a;
-    border: 1px solid #d43f3a;
+    background-color: $danger;
+    border: 1px solid $danger;
     margin: 50px auto;
     width: 200px;
     height: auto;
@@ -697,7 +740,7 @@ hr {
     }
     .danger {
       a, a:hover {
-        color: #d43f3a;
+        color: $danger;
       }
     }
   }
@@ -705,4 +748,48 @@ hr {
 
 .spacer {
   margin-top: 30px;
+}
+
+.spacer-sm {
+  margin-top: 15px;
+}
+
+.fa-heart {
+  color: red;
+}
+
+.fa-thumbs-up, .fa-thumbs-o-up {
+  color: $primary;
+  font-size: 18px;
+}
+
+#about-img {
+  max-width: 500px;
+  height: auto !important;
+  @media(max-width: 543px) {
+    max-width: 300px !important;
+  }
+  @media(min-width: 544px) and (max-width: 767px) {
+    max-width: 400px !important;
+  }
+  @media(min-width: 768px) and (max-width: 992px) {
+    max-width: 500px !important;
+  }
+}
+
+.white-bg {
+  background: #fff;
+}
+
+.post-likes-comment-section, .blog-likes-comment-section {
+  list-style: none;
+  margin-left: -39px;
+  margin-bottom: -10px;
+  li {
+    display: inline-block;
+  }
+}
+
+.help-block img {
+  border-radius: 100%;
 }

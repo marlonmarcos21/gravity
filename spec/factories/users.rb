@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence :email do |n|
     n.to_s + Faker::Internet.email
   end
@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     factory :user_with_profile do
       after :create do |user|
-        FactoryGirl.create(:user_profile, user: user)
+        FactoryBot.create(:user_profile, user: user)
       end
     end
   end

@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
     member do
       patch 'editable'
+      patch 'like'
+      patch 'unlike'
     end
   end
 
@@ -36,16 +38,21 @@ Rails.application.routes.draw do
     member do
       patch 'publish'
       patch 'unpublish'
+      patch 'like'
+      patch 'unlike'
     end
   end
 
   resources :comments, only: [:create, :destroy] do
     member do
       patch 'editable'
+      patch 'like'
+      patch 'unlike'
     end
   end
 
   get 'search', to: 'search#search'
+  get 'about',  to: 'about#index'
 
-  root to: 'home#index'
+  root to: 'posts#index'
 end

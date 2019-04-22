@@ -1,7 +1,7 @@
 class BlogsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :blog, only:  [:show, :edit, :update, :destroy, :publish, :unpublish]
+  before_action :blog, only: %i(show edit update destroy publish unpublish like unlike)
   before_action :image_token, only: :new
 
   def index
@@ -100,6 +100,31 @@ class BlogsController < ApplicationController
           message: 'Error uploading image, please try again'
         }
       }
+    end
+  end
+
+  def like
+    @like = @blog.likes.create(user: current_user)
+    @total_likes = @blog.likes.count
+    @blog.create_activity :like, recipient: @blog.user
+    respond_to do |format|
+      flash[:notice] = 'Blog liked!'
+      format.html { redirect_to @blog }
+      format.json { render json: { message: 'Blog liked!' } }
+      format.js
+    end
+  end
+
+  def unlike
+    @like = @blog.likes.where(user: current_user).first
+    @like.destroy
+    @blog.create_activity :unlike, recipient: @blog.user
+    @total_likes = @blog.likes.count
+    respond_to do |format|
+      flash[:alert] = 'Blog unliked!'
+      format.html { redirect_to @blog }
+      format.json { render json: { message: 'Blog unliked!' } }
+      format.js   { render :like }
     end
   end
 

@@ -45,12 +45,7 @@
   - if post.images.any?
     .row
       .post-images
-        - if post.images.length > 1
-          = render 'posts/image_swiper', images: post.images
-        - else
-          - image = post.images.first
-          - style = image.gif? ? :original : image.width > image.height ? :main : :portrait
-          = image_tag post.images.first.source_url(style), class: 'single-image'
+        = render 'posts/image_swiper', images: post.images
 
   - if post.videos.any?
     .row

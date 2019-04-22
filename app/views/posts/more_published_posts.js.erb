@@ -1,69 +1,21 @@
-$('#posts-container').append("<%= escape_javascript(render('published_posts', posts: @posts, has_more_results: @has_more_results, next_page: @next_page)) %>");
+$('#posts-container').append("<%= escape_javascript(render('published_posts', posts: @posts, has_more_results: @has_more_results)) %>");
 
-var moreResults = "<%= @has_more_results %>" 
-var nextPage = "<%= @next_page %>"
-var checker = true
+const moreResults = "<%= @has_more_results %>";
+const nextPage = "<%= @next_page %>";
+let checker = true;
 $(window).scroll(function() {
-  var scrolled = parseInt($(window).scrollTop());
-  var height = parseInt($(document).height() - $(window).height()) - 120;
+  const scrolled = parseInt($(window).scrollTop());
+  const height = parseInt($(document).height() - $(window).height()) - 120;
   if (scrolled >= height  && checker === true && moreResults === 'true') {
     $('.published-posts-pagination').show();
     $.ajax({
       method: 'GET',
       url: "<%= more_published_posts_posts_path %>",
       dataType: 'script',
+      cache: true,
+      ifModified: true,
       data: { page: nextPage }
     });
     checker = false;
   }
-});
-
-$('.comment-reply').each(function() {
-  $(this).click(function() {
-    $('.reply-form').each(function() {
-      $(this).hide();
-    });
-    $(this).parent().next('.reply-form').show();
-
-    $(this).parent().parent().parent().siblings('.new-comment-toggle').show();
-    $(this).parent().parent().parent().siblings('.new-comment-form').hide();
-    return;
-  });
-});
-
-$('.new-comment-toggle a').each(function() {
-  $(this).click(function() {
-    $(this).parent().siblings('.comments-container').find('.reply-form').each(function() {
-      $(this).hide();
-    });
-    $(this).parent().hide();
-    $(this).parent().siblings('.new-comment-form').show();
-    return;
-  });
-});
-
-$('.new-comment-form .new_comment').each(function() {
-  $(this).submit(function(e) {
-    e.preventDefault();
-    if ($(this).find('.new-comment-body').val().trim() == '') {
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Comment is blank, it defeats its purpose in life!</p></div></div>';
-      if (!$('.modal').hasClass('in')) {
-        $(html).modal();
-      }
-      return false;
-    }
-  });
-});
-
-$('.reply-form .new_comment').each(function() {
-  $(this).submit(function(e) {
-    e.preventDefault();
-    if ($(this).find('.reply-comment-body').val().trim() == '') {
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Reply is blank, it defeats its purpose in life!</p></div></div>';
-      if (!$('.modal').hasClass('in')) {
-        $(html).modal();
-      }
-      return false;
-    }
-  });
 });

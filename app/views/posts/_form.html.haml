@@ -39,7 +39,7 @@
       $('#new_post').submit(function(e) {
         if (!editor.getValue()) {
           e.preventDefault();
-          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
           $(html).modal();
           return false;
         }
@@ -130,5 +130,15 @@
           scrollTop: 0
         }, 0);
         $('input[name=commit]').removeAttr('disabled');
+        $(this).css('background-color', 'transparent');
+        $(this).css('color', '#00868B');
+        $(this).on('mouseenter', function() {
+          $(this).css('background-color', '#00868B');
+          $(this).css('color', '#fff');
+        });
+        $(this).on('mouseleave', function() {
+          $(this).css('background-color', 'transparent');
+          $(this).css('color', '#00868B');
+        });
       });
     });

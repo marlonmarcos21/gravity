@@ -6,12 +6,13 @@ RSpec.describe Post, type: :model do
     it { is_expected.to have_one :main_image }
     it { is_expected.to have_many :images }
     it { is_expected.to have_many :videos }
+    it { is_expected.to have_many :likes }
     it { is_expected.to validate_presence_of :body }
     it { is_expected.to validate_presence_of :user }
   end
 
   describe 'Callbacks' do
-    let(:post) { FactoryGirl.build(:post) }
+    let(:post) { FactoryBot.build(:post) }
 
     subject { post.save }
 
@@ -42,7 +43,7 @@ RSpec.describe Post, type: :model do
   describe 'Instance methods' do
     before do
       Timecop.freeze '2016-08-24 23:39:12 +0800'
-      @post = FactoryGirl.create(:post)
+      @post = FactoryBot.create(:post)
     end
 
     describe '#date_meta' do

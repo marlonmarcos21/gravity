@@ -1,18 +1,15 @@
-- next_page = 2 if local_assigns[:next_page].blank?
+= render 'posts/listing', posts: posts
 
-.row
-  .col-lg-12.col-md-12
-    = render 'posts/listing', posts: posts
-    .text-center
-      - if has_more_results
-        %nav.published-posts-pagination
-          %span.published-posts-pagination-page
-            %a.published-posts-pagination-link{ data: { remote: 'true' }, href: more_published_posts_user_path(@user, page: next_page) }
-              %em Load More
-              = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
-      - else
-        %span.end-of-internet
-          %em Congratulations, you have reached the end of internet!
+.text-center
+  - if has_more_results
+    %nav.published-posts-pagination
+      %span.published-posts-pagination-page
+        %a.published-posts-pagination-link{ data: { remote: true }, href: more_published_posts_user_path(@user) }
+          %em Load More
+          = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
+  - else
+    %span.end-of-internet
+      %em Congratulations, you have reached the end of internet!
 
 - content_for :footer_scripts do
   :javascript

@@ -96,6 +96,9 @@ form {
     .form-actions {
       margin-top: 60px;
     }
+    iframe {
+      width: 100% !important;
+    }
   }
 }
 
@@ -123,6 +126,8 @@ form {
 }
 
 .new-comment-form {
+  display: none;
+  margin-top: 10px;
   .submit-new-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;
@@ -140,14 +145,13 @@ form {
 
 .comments-container {
   p {
-    margin-bottom: 5px !important;
+    margin-bottom: 3px !important;
     font-size: 13px;
     margin-left: 30px;
   }
   .comment-nav {
     margin-left: 5px;
     margin-bottom: 10px;
-
     a {
       font-size: 11px;
       font-weight: bold;
@@ -172,12 +176,17 @@ form {
 
 .comments-show {
   margin-left: 25px;
+  padding: 10px 0;
+}
+
+.reply-comment {
+  padding-bottom: 0 !important;
 }
 
 #comment-reply-form {
   margin-left: 50px;
-  margin-bottom: 25px;
-  margin-top: -15px;
+  margin-bottom: 10px;
+  margin-top: -12px;
   .submit-reply-comment[disabled] {
     background-color: gray !important;
     border-color: gray !important;
@@ -189,7 +198,7 @@ form {
   position: fixed;
   bottom: 0;
   z-index: 9999;
-  margin-left: 90px;
+  margin-left: 120px;
 }
 .mce-tooltip-inner {
   position:relative !important;
@@ -285,4 +294,8 @@ form {
 
 .inline {
   display: inline;
+}
+
+.li-comment-section {
+  cursor: pointer;
 }

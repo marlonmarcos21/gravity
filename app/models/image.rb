@@ -5,7 +5,7 @@
 # t.integer    :width
 # t.integer    :height
 
-class Image < ActiveRecord::Base
+class Image < ApplicationRecord
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] },
@@ -25,6 +25,9 @@ class Image < ActiveRecord::Base
   before_post_process :skip_gif
 
   after_post_process :save_image_dimensions
+
+  scope :gif, -> { where(source_content_type: 'image/gif') }
+  scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
 
   def source_url(style = :original, expires_in = 3600)
     presigned_url = source.expiring_url(expires_in.to_i, style)

@@ -20,3 +20,6 @@
 public/assets
 public/assets/*
 public/sitemap.xml.gz
+
+zeus.json
+custom_plan.rb

@@ -3,7 +3,7 @@
 # t.references :attachable, polymorphic: true
 # t.string     :token
 
-class Video < ActiveRecord::Base
+class Video < ApplicationRecord
   belongs_to :attachable, polymorphic: true
 
   has_attached_file :source, styles: { thumb: { geometry: '150x100!', format: 'jpg', time: 10 } }, processors: [:transcoder],

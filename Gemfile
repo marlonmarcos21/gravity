@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
 
-ruby '2.4.1'
+ruby '2.6.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.9'
+gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.15'
+gem 'pg'
 gem 'pg_search'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 4.2.2'
 gem 'bootstrap-sass'
 gem 'twitter-bootstrap-rails'
 # gem 'less-rails'
@@ -30,14 +30,14 @@ gem 'jquery-ui-rails'
 gem 'turbolinks'
 
 gem 'rack-timeout'
-gem 'puma', '~> 3.9.1'
+gem 'puma'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
-gem 'devise', '~> 3.5'
+gem 'devise', '~> 4.4'
 
-gem 'haml'
-gem 'friendly_id', '~> 5.1.0'
+gem 'haml', '~> 5.0.4'
+gem 'friendly_id', '~> 5.2'
 gem 'paperclip', '~> 5.0.0'
 gem 'paperclip-av-transcoder'
 gem 'aws-sdk', '~> 2'
@@ -63,7 +63,7 @@ group :development, :test do
   gem 'byebug'
   gem 'awesome_print', '~> 1.6.1'
   gem 'dotenv-rails'
-  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'factory_bot_rails', '~> 4.8'
   gem 'faker'
   gem 'hirb', '~> 0.7.2'
   gem 'phantomjs', '>= 1.8.1.1'
@@ -72,6 +72,7 @@ group :development, :test do
   gem 'rb-readline'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
+  gem 'listen'
 end
 
 group :development do
@@ -84,15 +85,15 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner', '~> 1.5.0'
+  gem 'database_cleaner', '~> 1.6.0'
   gem 'resque_spec'
   gem 'rspec-activejob'
   gem 'shoulda-matchers', require: false
   gem 'simplecov', require: false
-  gem 'test_after_commit'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
   gem 'wisper-rspec', require: false
   gem 'fakeweb'
+  gem 'rails-controller-testing'
 end
