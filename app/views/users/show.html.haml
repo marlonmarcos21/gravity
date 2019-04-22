@@ -1,7 +1,7 @@
 .row.user-profile
   .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2
-    .row
-      %h2{ style: 'display: inline;' }
+    .row.user-greeting
+      %h3
         - if current_user == @user
           = "Welcome, #{@user.name}!"
         - else
