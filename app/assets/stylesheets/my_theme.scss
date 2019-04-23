@@ -630,35 +630,35 @@ body {
 }
 
 #ajax-flash-msg {
-  width: 60%;
+  width: auto;
+  height: auto;
   text-align: center;
   position: fixed;
   z-index: 99999;
   font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #fff;
-  top: 153px;
-  @media(max-width:768px) {
-    width: 85%;
-  }
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   #flash-notice {
     background-color: $tertiary;
     border: 1px solid $tertiary;
     margin: 50px auto;
-    width: 200px;
+    width: inherit;
     height: auto;
-    padding-left: 5px;
-    padding-right: 5px;
     line-height: 25px;
     border-radius: 3px;
+    padding: 5px 10px;
   }
   #flash-alert {
     background-color: $danger;
     border: 1px solid $danger;
     margin: 50px auto;
-    width: 200px;
+    width: inherit;
     height: auto;
     line-height: 25px;
     border-radius: 3px;
+    padding: 5px 10px;
   }
 }
 
