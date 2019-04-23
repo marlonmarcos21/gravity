@@ -2,9 +2,8 @@ class PostsController < ApplicationController
   load_and_authorize_resource
 
   before_action :post, only: %i(show edit update destroy editable like unlike)
-
   before_action :prepare_images, only: :edit
-  before_action :media_token,    only: %i(new index create)
+  before_action :media_token, only: %i(new index create)
 
   def index
     pp_scope = Post.includes(:user).published.descending
@@ -171,14 +170,15 @@ class PostsController < ApplicationController
 
   def destroy_media
     attrs = {
-      source_file_name: params[:source_file_name],
+      source_file_name: params[:source_file_names],
       token: params[:media_token]
     }
-    img = Image.where(attrs).first
-    video = Video.where(attrs).first
-    return false unless img || video
-    img.try(:destroy)
-    video.try(:destroy)
+    imgs = Image.where(attrs)
+    videos = Video.where(attrs)
+    return false unless imgs.any? || videos.any?
+    imgs.destroy_all
+    videos.destroy_all
+    post.reload if params[:id]
   end
 
   def attach_images(token, post_id)
@@ -195,17 +195,17 @@ class PostsController < ApplicationController
 
   def prepare_images
     return unless @post.try(:images).try(:any?)
-    img_hash = @post.images.each_with_object({}) do |img, hash|
+    @images = @post.images.each_with_object({}) do |img, hash|
+      style = img.gif? ? :original : :thumb
       hash[img.id.to_s] = {
         img_url: img.source_url(:main),
-        img_url_thumb: img.source_url(:thumb),
+        img_url_thumb: img.source_url(style),
         size: img.source_file_size,
         file_name: img.source_file_name,
         width: img.width,
         height: img.height
       }
-    end
-    @images = img_hash.to_json
+    end.to_json
   end
 
   def media_token

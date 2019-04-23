@@ -1,6 +1,6 @@
 $('#posts-container').prepend("<%= escape_javascript(render('listing', posts: [@new_post])) %>");
-var new_media_token = "<%= @media_token %>";
-$('input[name=media_token]').val(new_media_token);
+const newMediaToken = "<%= @media_token %>";
+$('input[name=media_token]').val(newMediaToken);
 $('html, body').animate({
   scrollTop: 510
 }, 500);
@@ -8,7 +8,7 @@ $('html, body').animate({
 $('#post-index-form form').remove();
 $('#post-index-form').prepend("<%= escape_javascript(render('form', is_remote: true)) %>");
 
-var initPhotoSwipeFromDOM = function(gallerySelector) {
+const initPhotoSwipeFromDOM = function(gallerySelector) {
   var parseThumbnailElements = function(el) {
     var thumbElements = el.childNodes,
         numNodes = thumbElements.length,
@@ -179,8 +179,8 @@ if ($('.my-gallery').length) {
   initPhotoSwipeFromDOM('.my-gallery');
 }
 
-var wysi = $('textarea#post_body').wysihtml5();
-var editor = $('#post_body').data('wysihtml5').editor;
+const wysi = $('textarea#post_body').wysihtml5();
+const editor = $('#post_body').data('wysihtml5').editor;
 
 $('#new_post').submit(function(e) {
   if (!editor.getValue()) {
@@ -192,7 +192,7 @@ $('#new_post').submit(function(e) {
 });
 
 Dropzone.autoDiscover = false;
-var dz = new Dropzone('.dropzone', {
+const dz = new Dropzone('.dropzone', {
   url: '/posts/upload_media',
   previewsContainer: '.dropzone-previews',
   addRemoveLinks: true,
@@ -217,11 +217,11 @@ dz.on('uploadprogress', function(file) {
   $('input[name=commit]').attr('disabled', true);
 });
 
-var auth_token = $('meta[name=csrf-token]').attr('content');
+const authToken = $('meta[name=csrf-token]').attr('content');
 dz.on('sending', function(file, xhr, formData) {
   $('input[name=commit]').attr('disabled', true);
-  formData.append('authenticity_token', auth_token);
-  formData.append('media_token', new_media_token);
+  formData.append('authenticity_token', authToken);
+  formData.append('media_token', newMediaToken);
 });
 
 dz.on('complete', function(file) {
@@ -246,8 +246,8 @@ dz.on('removedfile', function(file) {
     url: '/posts/remove_media',
     type: 'DELETE',
     data: {
-      media_token: media_token,
-      source_file_name: file.name
+      media_token: newMediaToken,
+      source_file_names: file.name
     }
   });
 });
@@ -255,7 +255,7 @@ dz.on('removedfile', function(file) {
 $('a.cancel-post').click(function(e) {
   e.preventDefault();
   editor.clear();
-  editor.setValue("<%= current_user.first_name %>What's happening?", true);
+  editor.setValue("<%= current_user.first_name %>, What's happening?", true);
   $.each(dz.files, function(k, v) {
     dz.removeFile(v);
   });
@@ -263,4 +263,14 @@ $('a.cancel-post').click(function(e) {
     scrollTop: 0
   }, 0);
   $('input[name=commit]').removeAttr('disabled');
+  $(this).css('background-color', 'transparent');
+  $(this).css('color', '#00868B');
+  $(this).on('mouseenter', function() {
+    $(this).css('background-color', '#00868B');
+    $(this).css('color', '#fff');
+  });
+  $(this).on('mouseleave', function() {
+    $(this).css('background-color', 'transparent');
+    $(this).css('color', '#00868B');
+  });
 });

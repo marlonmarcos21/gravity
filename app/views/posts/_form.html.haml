@@ -25,16 +25,14 @@
     = f.button :submit, class: 'btn-primary'
     - if @post.persisted?
       = link_to 'Cancel', post_path(@post), class: 'btn btn-default'
-    - elsif current_page?(posts_path)
-      = link_to 'Cancel', '', class: 'btn btn-default cancel-post'
     - else
-      = link_to 'Cancel', posts_path, class: 'btn btn-default'
+      = link_to 'Cancel', '', class: 'btn btn-default cancel-post'
 
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
-      var wysi = $('textarea#post_body').wysihtml5();
-      var editor = $('#post_body').data('wysihtml5').editor;
+      const wysi = $('textarea#post_body').wysihtml5();
+      const editor = $('#post_body').data('wysihtml5').editor;
 
       $('#new_post').submit(function(e) {
         if (!editor.getValue()) {
@@ -46,7 +44,7 @@
       });
 
       Dropzone.autoDiscover = false;
-      var dz = new Dropzone('.dropzone', {
+      const dz = new Dropzone('.dropzone', {
         url: '/posts/upload_media',
         previewsContainer: '.dropzone-previews',
         addRemoveLinks: true,
@@ -71,12 +69,12 @@
         $('input[name=commit]').attr('disabled', true);
       });
 
-      var auth_token = $('meta[name=csrf-token]').attr('content');
-      var media_token = '#{raw(@media_token)}';
+      const authToken = $('meta[name=csrf-token]').attr('content');
+      const mediaToken = '#{raw(@media_token)}';
       dz.on('sending', function(file, xhr, formData) {
         $('input[name=commit]').attr('disabled', true);
-        formData.append('authenticity_token', auth_token);
-        formData.append('media_token', media_token);
+        formData.append('authenticity_token', authToken);
+        formData.append('media_token', mediaToken);
       });
 
       dz.on('complete', function(file) {
@@ -96,22 +94,30 @@
         $('input[name=commit]').removeAttr('disabled');
       };
 
+      let didRemoveFiles = false;
+      let filesRemoved = [];
+      const postId = '#{raw(@post.id)}';
       dz.on('removedfile', function(file) {
-        $.ajax({
-          url: '/posts/remove_media',
-          type: 'DELETE',
-          data: {
-            media_token: media_token,
-            source_file_name: file.name
-          }
-        });
+        if (postId === '') {
+          $.ajax({
+            url: '/posts/remove_media',
+            type: 'DELETE',
+            data: {
+              media_token: mediaToken,
+              source_file_names: file.name
+            }
+          });
+        } else {
+          didRemoveFiles = true;
+          filesRemoved.push(file.name);
+        }
       });
 
-      var images = '#{raw(@images)}';
+      let images = '#{raw(@images)}';
       if (images !== '') {
         images = JSON.parse('#{raw(@images)}');
-        for (var img in images) {
-          var mockFile = { name: images[img].file_name, size: images[img].size };
+        for (const img in images) {
+          const mockFile = {name: images[img].file_name, size: images[img].size};
           dz.emit('addedfile', mockFile);
           dz.emit('thumbnail', mockFile, images[img].img_url_thumb);
           dz.emit('complete', mockFile);
@@ -141,4 +147,21 @@
           $(this).css('color', '#00868B');
         });
       });
+
+      if (postId !== '') {
+        $('input[name=commit]').click(function(e) {
+          e.preventDefault();
+          if (didRemoveFiles) {
+            $.ajax({
+              url: '/posts/remove_media',
+              type: 'DELETE',
+              data: {
+                media_token: mediaToken,
+                source_file_names: filesRemoved
+              }
+            });
+          }
+          $(`#edit_post_${postId}`).submit();
+        });
+      }
     });
