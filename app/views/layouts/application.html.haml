@@ -24,9 +24,11 @@
         = bootstrap_flash
 
     .container.content-section
-      .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
-        #ajax-flash-msg
+      #ajax-flash-msg
       = yield
+      #scroll-up
+        %a.page-scroll{ 'page-scroll' => true, href: '#page-top' }
+          = fa_icon 'chevron-up 2x'
 
     %footer
       .container.text-center
