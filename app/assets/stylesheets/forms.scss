@@ -14,6 +14,14 @@
       height: 22px !important;
       padding: 5px 5px !important;
     }
+    .form-control {
+      @media(max-width: 767px) {
+        width: 85%;
+      }
+      &#search_search {
+        width: auto !important;
+      }
+    }
   }
   .nav-form-submit, .nav-form-cancel {
     margin-top: -3px;

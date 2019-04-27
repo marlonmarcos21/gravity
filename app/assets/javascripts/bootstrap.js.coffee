@@ -198,24 +198,37 @@ $ ->
 
   $('.log-me-in').click(->
     $(this).hide()
+    $('.forgot-password').hide()
     $('.sign-in-form').removeClass('hidden')
+    $('#user_email').focus()
+  )
+
+  $('.comments-header').click(->
+    $('.log-me-in').hide()
+    $('.forgot-password').hide()
+    $('.sign-in-form').removeClass('hidden')
+    if $('.navbar-toggle').is(':visible')
+      $('.navbar-toggle').click()
     $('#user_email').focus()
   )
 
   $('.cancel-log-in').click(->
     $('.sign-in-form').addClass('hidden')
     $('.log-me-in').show()
+    $('.forgot-password').show()
   )
 
   $('.forgot-password').click(->
     $(this).hide()
+    $('.log-me-in').hide()
     $('.sign-in-form').addClass('hidden')
     $('.forgot-password-form').removeClass('hidden')
+    $('#user_email_forgot_pw').focus()
   )
 
   $('.cancel-forgot-password').click(->
     $('.forgot-password-form').addClass('hidden')
-    $('.sign-in-form').removeClass('hidden')
+    $('.log-me-in').show()
     $('.forgot-password').show()
   )
 
@@ -224,7 +237,7 @@ $ ->
     pass = $('input#user_password').val().trim()
     if (email == '' || pass == '')
       e.preventDefault()
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and Password required!</p></div></div>'
       $(html).modal()
       return false
   )

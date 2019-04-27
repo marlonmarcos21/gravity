@@ -46,7 +46,7 @@ p {
 .post-preview, .blog-preview {
   background-color: #fff;
   padding: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 3px;
   .poster, .blog-author {
     margin: 0px !important;
@@ -162,6 +162,9 @@ a {
 .navbar-fixed-top {
   .navbar-collapse {
     max-height: 370px !important;
+    @media(max-width: 767px) {
+      padding-bottom: 5px;
+    }
   }
 }
 
@@ -245,6 +248,9 @@ a {
     .navbar-nav {
       &.sign-in {
         margin-top: 15px;
+        .forgot-password {
+          font-size: 11px;
+        }
         .forgot-password,
         .cancel-log-in,
         .cancel-forgot-password {
@@ -867,4 +873,9 @@ hr {
   @media(max-width: 767px) {
     display: none !important;
   }
+}
+
+.comments-header {
+  cursor: pointer;
+  margin-bottom: -18px;
 }
