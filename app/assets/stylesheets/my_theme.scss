@@ -500,17 +500,16 @@ a {
 
 .btn-modal-close {
   border: none;
-  color: #fff;
+  color: $danger;
   background-color: transparent;
   border-radius: 100%;
   line-height: 0.5;
   padding: 6px;
-  font-size: 15px;
-  background-color: $danger;
+  font-size: 20px;
   &:hover,
   &:focus {
+    color: $danger;
     font-weight: bold;
-    color: #fff;
   }
 }
 

@@ -25,6 +25,10 @@ $ ->
     return
   )
 
+  $('body').on('click', '.modal-backdrop', ->
+    $('.btn-modal-close').click()
+  )
+
   $('.alert .close').remove();
   $('.alert').delay(3000).fadeOut('slow')
 
