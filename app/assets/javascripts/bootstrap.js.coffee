@@ -255,8 +255,16 @@ $ ->
       return false
   )
 
-  $('.search-form').submit((e) ->
-    if ($('#search_search').val().trim() == '' || !$('#search_search').val())
+  $('.desktop-search-form').submit((e) ->
+    if ($(this).find('#search_search').val().trim() == '')
+      e.preventDefault();
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
+  $('.mobile-search-form').submit((e) ->
+    if ($(this).find('#search_search').val().trim() == '')
       e.preventDefault();
       html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
       $(html).modal()
