@@ -19,8 +19,7 @@ module ApplicationHelper
       meta.title = 'Gravity'
       image = model.images.first
       if image
-        style = image.gif? ? :original : :main
-        meta.image = image.source_url(style, 1.week.to_i)
+        meta.image = image.source_url(expires_in: 1.week.to_i)
         meta.url = meta.image if image.gif?
       end
     end

@@ -4,45 +4,34 @@
 # t.string     :token
 
 class Video < ApplicationRecord
-  belongs_to :attachable, polymorphic: true
+  ATTACHMENT_OPTIONS = {
+    styles: { geometry: '150x100!', format: 'jpg', time: 10 },
+    processors: [:transcoder],
+    storage: :s3,
+    s3_credentials: "#{Rails.root}/config/s3.yml",
+    s3_region: ENV['AWS_S3_REGION'],
+    s3_protocol: :https,
+    s3_permissions: :private,
+    s3_url_options: { virtual_host: true }
+  }
 
-  has_attached_file :source, styles: { thumb: { geometry: '150x100!', format: 'jpg', time: 10 } }, processors: [:transcoder],
-                             storage: :s3,
-                             s3_credentials: "#{Rails.root}/config/s3.yml",
-                             s3_region: ENV['AWS_S3_REGION'],
-                             s3_protocol: :https,
-                             s3_permissions: :private,
-                             s3_url_options: { virtual_host: true }
+  ALLOWED_CONTENT_TYPE = %r{\Avideo\/(mp4|quicktime|x-msvideo)\Z}
 
-  validates_attachment_presence :source
-  validates_attachment_content_type :source, content_type: %r{\Avideo\/mp4\Z}
-  validates :token, presence: true
-
-  # Instance methods
+  include WithAttachment
 
   def aspect_ratio_display
     orig_width = width = source_meta['width']
     orig_height = height = source_meta['height']
     aspect = source_meta['aspect']
 
-    if orig_width > orig_height
-      if orig_width > 516
-        width = 516
-        height = (516 / aspect).round
-      end
+    if orig_width > orig_height && orig_width > 516
+      width = 516
+      height = (516 / aspect).round
     elsif orig_height > orig_width && orig_width > 270
       width = 270
       height = (270 / aspect).round
     end
 
     "#{width}x#{height}"
-  end
-
-  def source_url(style = :original, expires_in = 3600)
-    presigned_url = source.expiring_url(expires_in.to_i, style)
-    uri = URI presigned_url
-    uri.port = nil
-    uri.scheme = 'https'
-    uri.to_s
   end
 end

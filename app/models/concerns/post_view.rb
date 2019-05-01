@@ -12,7 +12,7 @@ module PostView
       if youtube_id.blank?
         body
       else
-        replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>) + '<br /><br />'
+        replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>)
         body.sub!(node.to_s, replace_with)
       end
     end.last

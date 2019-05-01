@@ -198,8 +198,8 @@ class PostsController < ApplicationController
     @images = @post.images.each_with_object({}) do |img, hash|
       style = img.gif? ? :original : :thumb
       hash[img.id.to_s] = {
-        img_url: img.source_url(:main),
-        img_url_thumb: img.source_url(style),
+        img_url: img.source_url(style: :original),
+        img_url_thumb: img.source_url(style: style),
         size: img.source_file_size,
         file_name: img.source_file_name,
         width: img.width,
