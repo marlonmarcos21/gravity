@@ -9,8 +9,7 @@ class Image < ApplicationRecord
   ATTACHMENT_OPTIONS = {
     styles: {
       thumb: { geometry: '150x', processors: [:thumbnail] },
-      main: { geometry: '800x', processors: [:thumbnail] },
-      portrait: { geometry: 'x500', processors: [:thumbnail] }
+      main: { geometry: '1024x', processors: [:thumbnail] }
     },
     storage: :s3,
     s3_credentials: "#{Rails.root}/config/s3.yml",
@@ -33,13 +32,11 @@ class Image < ApplicationRecord
 
   def render_style
     return :original if small_image?
-    return :main if width > height
-    :portrait
+    :main
   end
 
   def small_image?
-    return true if width < 800 && width > height
-    return true if height < 500 && height > width
+    return true if width < 1024
     false
   end
 
@@ -51,9 +48,17 @@ class Image < ApplicationRecord
 
   def save_image_dimensions
     return if gif?
-    geometry    = Paperclip::Geometry.from_file(source.queued_for_write[render_style])
-    self.width  = geometry.width
-    self.height = geometry.height
+
+    main_geometry = Paperclip::Geometry.from_file(source.queued_for_write[:main])
+    orig_geometry = Paperclip::Geometry.from_file(source.queued_for_write[:original])
+
+    if main_geometry.width > orig_geometry.width
+      self.width  = orig_geometry.width
+      self.height = orig_geometry.height
+    else
+      self.width  = main_geometry.width
+      self.height = main_geometry.height
+    end
   end
 
   def skip_gif
