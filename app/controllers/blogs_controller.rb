@@ -7,7 +7,7 @@ class BlogsController < ApplicationController
   def index
     pb_scope = Blog.includes(:user).published.descending
     @blogs   = pb_scope.page(1)
-    @has_more_results = !pb_scope.page(2).empty?
+    @has_more_results = pb_scope.page(2).exists?
   end
 
   def more_published_blogs
@@ -15,7 +15,7 @@ class BlogsController < ApplicationController
     page = params[:page].blank? ? 2 : params[:page].to_i
     @next_page = page + 1
     @blogs = pb_scope.page(page)
-    @has_more_results = !pb_scope.page(@next_page).empty?
+    @has_more_results = pb_scope.page(@next_page).exists?
 
     respond_to do |format|
       format.html { render :index }

@@ -29,15 +29,14 @@ class Image < ApplicationRecord
 
   scope :gif, -> { where(source_content_type: 'image/gif') }
   scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
+  scope :by_height, -> { order(height: :desc) }
 
   def render_style
-    return :original if small_image?
-    :main
+    small_image? ? :original : :main
   end
 
   def small_image?
-    return true if width < 1024
-    false
+    width < 1024
   end
 
   def gif?

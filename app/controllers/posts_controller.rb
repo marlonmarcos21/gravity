@@ -7,7 +7,7 @@ class PostsController < ApplicationController
 
   def index
     pp_scope = Post.includes(:user).published.descending
-    @has_more_results = !pp_scope.page(2).empty?
+    @has_more_results = pp_scope.page(2).exists?
     @post  = Post.new
     @posts = pp_scope.page(1)
   end
@@ -17,7 +17,7 @@ class PostsController < ApplicationController
     page = params[:page].blank? ? 2 : params[:page].to_i
     @next_page = page + 1
     @posts = pp_scope.page(page)
-    @has_more_results = !pp_scope.page(@next_page).empty?
+    @has_more_results = pp_scope.page(@next_page).exists?
     respond_to :js
   end
 
