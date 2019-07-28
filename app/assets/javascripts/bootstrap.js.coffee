@@ -524,10 +524,4 @@ $(document).ajaxComplete((event, request) ->
 
   if ($('.my-gallery').length)
     initPhotoSwipeFromDOM('.my-gallery')
-
-  $('.my-gallery').masonry({
-    itemSelector: '.grid-item',
-    columnWidth: 150,
-    gutter: 5
-  })
 )
