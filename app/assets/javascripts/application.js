@@ -22,5 +22,4 @@
 //= require select2
 //= require dropzone.min
 //= require photoswipe
-//= require masonry
 //= require_tree .

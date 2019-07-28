@@ -271,12 +271,6 @@ $ ->
       return false
   )
 
-  $('.my-gallery').masonry({
-    itemSelector: '.grid-item',
-    columnWidth: 150,
-    gutter: 5
-  })
-
 $.rails.allowAction = (link) ->
   return true unless link.attr('data-confirm')
   $.rails.showConfirmDialog(link)
