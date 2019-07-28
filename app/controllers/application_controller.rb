@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def activities
-    return [] unless current_user
+    return Activity.none unless current_user
     @activities = current_user.activities_as_recipient
                               .for_notification
                               .descending
