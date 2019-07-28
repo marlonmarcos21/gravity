@@ -13,7 +13,7 @@
       - render_style = img.render_style
       - style = img_count > 1 ? :thumb : render_style
       - fig_class = img_count > 1 ? '' : 'single-image'
-      .grid-item
+      .grid-item{ class: img_count > 1 ? '' : 'grid-item--width2' }
         %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject', class: fig_class }
           %a{ href: img.source_url(style: render_style), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
             = image_tag img.source_url(style: style), itemprop: 'thumbnail'
