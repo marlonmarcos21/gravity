@@ -6,10 +6,10 @@
       %br
       %br
 
-- if images.non_gif.by_height.any?
+- if images.non_gif.any?
   .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
-    - img_count = images.non_gif.by_height.length
-    - images.non_gif.by_height.each do |img|
+    - img_count = images.non_gif.length
+    - images.non_gif.each do |img|
       - render_style = img.render_style
       - style = img_count > 1 ? :thumb : render_style
       - fig_class = img_count > 1 ? '' : 'single-image'
