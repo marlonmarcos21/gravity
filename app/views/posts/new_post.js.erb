@@ -57,7 +57,7 @@ const initPhotoSwipeFromDOM = function(gallerySelector) {
     e.preventDefault ? e.preventDefault() : e.returnValue = false;
     var eTarget = e.target || e.srcElement;
     var clickedListItem = closest(eTarget, function(el) {
-      return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+      return (el.tagName && el.tagName.toUpperCase() === 'DIV');
     });
 
     if (!clickedListItem) {
@@ -181,7 +181,8 @@ if ($('.my-gallery').length) {
 
 $('.my-gallery').masonry({
   itemSelector: '.grid-item',
-  columnWidth: 150
+  columnWidth: 150,
+  gutter: 5
 });
 
 const wysi = $('textarea#post_body').wysihtml5();

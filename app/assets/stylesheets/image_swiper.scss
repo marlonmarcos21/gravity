@@ -8,17 +8,11 @@
       height: auto;
     }
     .grid-item {
+      float: left;
       width: 150px;
+      margin-bottom: 5px;
       &.grid-item--width2 {
         width: 100%;
-      }
-    }
-    figure {
-      display: block;
-      float: left;
-      margin: 0 5px 5px 0;
-      &.single-image {
-        max-width: 100%;
       }
     }
   }

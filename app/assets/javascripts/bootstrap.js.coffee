@@ -95,7 +95,7 @@ $ ->
 
       eTarget = e.target || e.srcElement
       clickedListItem = closest(eTarget, (el) ->
-        return (el.tagName && el.tagName.toUpperCase() == 'FIGURE')
+        return (el.tagName && el.tagName.toUpperCase() == 'DIV')
       )
 
       if (!clickedListItem)
@@ -273,7 +273,8 @@ $ ->
 
   $('.my-gallery').masonry({
     itemSelector: '.grid-item',
-    columnWidth: 150
+    columnWidth: 150,
+    gutter: 5
   })
 
 $.rails.allowAction = (link) ->
@@ -427,7 +428,7 @@ $(document).ajaxComplete((event, request) ->
 
       eTarget = e.target || e.srcElement
       clickedListItem = closest(eTarget, (el) ->
-        return (el.tagName && el.tagName.toUpperCase() == 'FIGURE')
+        return (el.tagName && el.tagName.toUpperCase() == 'DIV')
       )
 
       if (!clickedListItem)
@@ -526,6 +527,7 @@ $(document).ajaxComplete((event, request) ->
 
   $('.my-gallery').masonry({
     itemSelector: '.grid-item',
-    columnWidth: 150
+    columnWidth: 150,
+    gutter: 5
   })
 )
