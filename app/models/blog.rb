@@ -26,6 +26,7 @@ class Blog < ApplicationRecord
   include AsLikeable
   include BlogView
 
+  extend FriendlyId::FinderMethods
   extend FriendlyId
   friendly_id :title, use: [:slugged, :finders]
 

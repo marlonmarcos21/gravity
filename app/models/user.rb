@@ -43,6 +43,7 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name,  presence: true
 
+  extend FriendlyId::FinderMethods
   extend FriendlyId
   friendly_id :slug_candidates
 

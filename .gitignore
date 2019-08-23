@@ -17,7 +17,10 @@
 *.swo
 *.swp
 /.env
+node_modules/*
 public/assets
+public/packs
+public/packs/*
 public/assets/*
 public/sitemap.xml.gz
 
