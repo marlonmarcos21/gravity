@@ -1,8 +1,11 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -48,8 +51,6 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
 
 
-SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -58,7 +59,7 @@ SET default_with_oids = false;
 -- Name: activities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE activities (
+CREATE TABLE public.activities (
     id integer NOT NULL,
     trackable_id integer,
     trackable_type character varying,
@@ -77,7 +78,7 @@ CREATE TABLE activities (
 -- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE activities_id_seq
+CREATE SEQUENCE public.activities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -89,14 +90,14 @@ CREATE SEQUENCE activities_id_seq
 -- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+ALTER SEQUENCE public.activities_id_seq OWNED BY public.activities.id;
 
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ar_internal_metadata (
+CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -108,7 +109,7 @@ CREATE TABLE ar_internal_metadata (
 -- Name: blog_media; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE blog_media (
+CREATE TABLE public.blog_media (
     id integer NOT NULL,
     source_file_name character varying,
     source_content_type character varying,
@@ -128,7 +129,7 @@ CREATE TABLE blog_media (
 -- Name: blog_media_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE blog_media_id_seq
+CREATE SEQUENCE public.blog_media_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -140,14 +141,14 @@ CREATE SEQUENCE blog_media_id_seq
 -- Name: blog_media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE blog_media_id_seq OWNED BY blog_media.id;
+ALTER SEQUENCE public.blog_media_id_seq OWNED BY public.blog_media.id;
 
 
 --
 -- Name: blogs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE blogs (
+CREATE TABLE public.blogs (
     id integer NOT NULL,
     title character varying,
     body text,
@@ -165,7 +166,7 @@ CREATE TABLE blogs (
 -- Name: blogs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE blogs_id_seq
+CREATE SEQUENCE public.blogs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -177,14 +178,14 @@ CREATE SEQUENCE blogs_id_seq
 -- Name: blogs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE blogs_id_seq OWNED BY blogs.id;
+ALTER SEQUENCE public.blogs_id_seq OWNED BY public.blogs.id;
 
 
 --
 -- Name: comments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE comments (
+CREATE TABLE public.comments (
     id integer NOT NULL,
     commentable_id integer,
     commentable_type character varying,
@@ -204,7 +205,7 @@ CREATE TABLE comments (
 -- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE comments_id_seq
+CREATE SEQUENCE public.comments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -216,14 +217,14 @@ CREATE SEQUENCE comments_id_seq
 -- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
+ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
 -- Name: friend_requests; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE friend_requests (
+CREATE TABLE public.friend_requests (
     id integer NOT NULL,
     user_id integer,
     requester_id integer,
@@ -237,7 +238,7 @@ CREATE TABLE friend_requests (
 -- Name: friend_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE friend_requests_id_seq
+CREATE SEQUENCE public.friend_requests_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -249,14 +250,14 @@ CREATE SEQUENCE friend_requests_id_seq
 -- Name: friend_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE friend_requests_id_seq OWNED BY friend_requests.id;
+ALTER SEQUENCE public.friend_requests_id_seq OWNED BY public.friend_requests.id;
 
 
 --
 -- Name: friends; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE friends (
+CREATE TABLE public.friends (
     id integer NOT NULL,
     user_id integer,
     friend_id integer,
@@ -270,7 +271,7 @@ CREATE TABLE friends (
 -- Name: friends_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE friends_id_seq
+CREATE SEQUENCE public.friends_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -282,14 +283,14 @@ CREATE SEQUENCE friends_id_seq
 -- Name: friends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE friends_id_seq OWNED BY friends.id;
+ALTER SEQUENCE public.friends_id_seq OWNED BY public.friends.id;
 
 
 --
 -- Name: images; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE images (
+CREATE TABLE public.images (
     id integer NOT NULL,
     source_file_name character varying,
     source_content_type character varying,
@@ -310,7 +311,7 @@ CREATE TABLE images (
 -- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE images_id_seq
+CREATE SEQUENCE public.images_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -322,14 +323,14 @@ CREATE SEQUENCE images_id_seq
 -- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE images_id_seq OWNED BY images.id;
+ALTER SEQUENCE public.images_id_seq OWNED BY public.images.id;
 
 
 --
 -- Name: likes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE likes (
+CREATE TABLE public.likes (
     id bigint NOT NULL,
     user_id bigint,
     trackable_type character varying,
@@ -343,7 +344,7 @@ CREATE TABLE likes (
 -- Name: likes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE likes_id_seq
+CREATE SEQUENCE public.likes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -355,14 +356,14 @@ CREATE SEQUENCE likes_id_seq
 -- Name: likes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE likes_id_seq OWNED BY likes.id;
+ALTER SEQUENCE public.likes_id_seq OWNED BY public.likes.id;
 
 
 --
 -- Name: posts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE posts (
+CREATE TABLE public.posts (
     id integer NOT NULL,
     body text,
     published boolean DEFAULT true,
@@ -380,7 +381,7 @@ CREATE TABLE posts (
 -- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE posts_id_seq
+CREATE SEQUENCE public.posts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -392,14 +393,14 @@ CREATE SEQUENCE posts_id_seq
 -- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE posts_id_seq OWNED BY posts.id;
+ALTER SEQUENCE public.posts_id_seq OWNED BY public.posts.id;
 
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
@@ -408,7 +409,7 @@ CREATE TABLE schema_migrations (
 -- Name: user_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE user_profiles (
+CREATE TABLE public.user_profiles (
     id integer NOT NULL,
     date_of_birth date,
     street_address1 character varying,
@@ -429,7 +430,7 @@ CREATE TABLE user_profiles (
 -- Name: user_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE user_profiles_id_seq
+CREATE SEQUENCE public.user_profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -441,14 +442,14 @@ CREATE SEQUENCE user_profiles_id_seq
 -- Name: user_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE user_profiles_id_seq OWNED BY user_profiles.id;
+ALTER SEQUENCE public.user_profiles_id_seq OWNED BY public.user_profiles.id;
 
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE public.users (
     id integer NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -478,7 +479,7 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -490,14 +491,14 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
 -- Name: versions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE versions (
+CREATE TABLE public.versions (
     id integer NOT NULL,
     item_type character varying NOT NULL,
     item_id integer NOT NULL,
@@ -512,7 +513,7 @@ CREATE TABLE versions (
 -- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE versions_id_seq
+CREATE SEQUENCE public.versions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -524,14 +525,14 @@ CREATE SEQUENCE versions_id_seq
 -- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
 
 
 --
 -- Name: videos; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE videos (
+CREATE TABLE public.videos (
     id integer NOT NULL,
     source_file_name character varying,
     source_content_type character varying,
@@ -550,7 +551,7 @@ CREATE TABLE videos (
 -- Name: videos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE videos_id_seq
+CREATE SEQUENCE public.videos_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -562,105 +563,105 @@ CREATE SEQUENCE videos_id_seq
 -- Name: videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE videos_id_seq OWNED BY videos.id;
+ALTER SEQUENCE public.videos_id_seq OWNED BY public.videos.id;
 
 
 --
 -- Name: activities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
+ALTER TABLE ONLY public.activities ALTER COLUMN id SET DEFAULT nextval('public.activities_id_seq'::regclass);
 
 
 --
 -- Name: blog_media id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY blog_media ALTER COLUMN id SET DEFAULT nextval('blog_media_id_seq'::regclass);
+ALTER TABLE ONLY public.blog_media ALTER COLUMN id SET DEFAULT nextval('public.blog_media_id_seq'::regclass);
 
 
 --
 -- Name: blogs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY blogs ALTER COLUMN id SET DEFAULT nextval('blogs_id_seq'::regclass);
+ALTER TABLE ONLY public.blogs ALTER COLUMN id SET DEFAULT nextval('public.blogs_id_seq'::regclass);
 
 
 --
 -- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
 
 
 --
 -- Name: friend_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friend_requests ALTER COLUMN id SET DEFAULT nextval('friend_requests_id_seq'::regclass);
+ALTER TABLE ONLY public.friend_requests ALTER COLUMN id SET DEFAULT nextval('public.friend_requests_id_seq'::regclass);
 
 
 --
 -- Name: friends id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friends ALTER COLUMN id SET DEFAULT nextval('friends_id_seq'::regclass);
+ALTER TABLE ONLY public.friends ALTER COLUMN id SET DEFAULT nextval('public.friends_id_seq'::regclass);
 
 
 --
 -- Name: images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
+ALTER TABLE ONLY public.images ALTER COLUMN id SET DEFAULT nextval('public.images_id_seq'::regclass);
 
 
 --
 -- Name: likes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY likes ALTER COLUMN id SET DEFAULT nextval('likes_id_seq'::regclass);
+ALTER TABLE ONLY public.likes ALTER COLUMN id SET DEFAULT nextval('public.likes_id_seq'::regclass);
 
 
 --
 -- Name: posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
+ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_id_seq'::regclass);
 
 
 --
 -- Name: user_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profiles_id_seq'::regclass);
+ALTER TABLE ONLY public.user_profiles ALTER COLUMN id SET DEFAULT nextval('public.user_profiles_id_seq'::regclass);
 
 
 --
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
 -- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+ALTER TABLE ONLY public.versions ALTER COLUMN id SET DEFAULT nextval('public.versions_id_seq'::regclass);
 
 
 --
 -- Name: videos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY videos ALTER COLUMN id SET DEFAULT nextval('videos_id_seq'::regclass);
+ALTER TABLE ONLY public.videos ALTER COLUMN id SET DEFAULT nextval('public.videos_id_seq'::regclass);
 
 
 --
 -- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY activities
+ALTER TABLE ONLY public.activities
     ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
 
 
@@ -668,7 +669,7 @@ ALTER TABLE ONLY activities
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ar_internal_metadata
+ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
@@ -676,7 +677,7 @@ ALTER TABLE ONLY ar_internal_metadata
 -- Name: blog_media blog_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY blog_media
+ALTER TABLE ONLY public.blog_media
     ADD CONSTRAINT blog_media_pkey PRIMARY KEY (id);
 
 
@@ -684,7 +685,7 @@ ALTER TABLE ONLY blog_media
 -- Name: blogs blogs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY blogs
+ALTER TABLE ONLY public.blogs
     ADD CONSTRAINT blogs_pkey PRIMARY KEY (id);
 
 
@@ -692,7 +693,7 @@ ALTER TABLE ONLY blogs
 -- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY comments
+ALTER TABLE ONLY public.comments
     ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
 
 
@@ -700,7 +701,7 @@ ALTER TABLE ONLY comments
 -- Name: friend_requests friend_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friend_requests
+ALTER TABLE ONLY public.friend_requests
     ADD CONSTRAINT friend_requests_pkey PRIMARY KEY (id);
 
 
@@ -708,7 +709,7 @@ ALTER TABLE ONLY friend_requests
 -- Name: friends friends_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friends
+ALTER TABLE ONLY public.friends
     ADD CONSTRAINT friends_pkey PRIMARY KEY (id);
 
 
@@ -716,7 +717,7 @@ ALTER TABLE ONLY friends
 -- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY images
+ALTER TABLE ONLY public.images
     ADD CONSTRAINT images_pkey PRIMARY KEY (id);
 
 
@@ -724,7 +725,7 @@ ALTER TABLE ONLY images
 -- Name: likes likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY likes
+ALTER TABLE ONLY public.likes
     ADD CONSTRAINT likes_pkey PRIMARY KEY (id);
 
 
@@ -732,7 +733,7 @@ ALTER TABLE ONLY likes
 -- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY posts
+ALTER TABLE ONLY public.posts
     ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
 
 
@@ -740,7 +741,7 @@ ALTER TABLE ONLY posts
 -- Name: user_profiles user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY user_profiles
+ALTER TABLE ONLY public.user_profiles
     ADD CONSTRAINT user_profiles_pkey PRIMARY KEY (id);
 
 
@@ -748,7 +749,7 @@ ALTER TABLE ONLY user_profiles
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
@@ -756,7 +757,7 @@ ALTER TABLE ONLY users
 -- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY versions
+ALTER TABLE ONLY public.versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
 
 
@@ -764,7 +765,7 @@ ALTER TABLE ONLY versions
 -- Name: videos videos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY videos
+ALTER TABLE ONLY public.videos
     ADD CONSTRAINT videos_pkey PRIMARY KEY (id);
 
 
@@ -772,203 +773,203 @@ ALTER TABLE ONLY videos
 -- Name: index_activities_on_owner_id_and_owner_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_activities_on_owner_id_and_owner_type ON activities USING btree (owner_id, owner_type);
+CREATE INDEX index_activities_on_owner_id_and_owner_type ON public.activities USING btree (owner_id, owner_type);
 
 
 --
 -- Name: index_activities_on_recipient_id_and_recipient_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_activities_on_recipient_id_and_recipient_type ON activities USING btree (recipient_id, recipient_type);
+CREATE INDEX index_activities_on_recipient_id_and_recipient_type ON public.activities USING btree (recipient_id, recipient_type);
 
 
 --
 -- Name: index_activities_on_trackable_id_and_trackable_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_activities_on_trackable_id_and_trackable_type ON activities USING btree (trackable_id, trackable_type);
+CREATE INDEX index_activities_on_trackable_id_and_trackable_type ON public.activities USING btree (trackable_id, trackable_type);
 
 
 --
 -- Name: index_blog_media_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_blog_media_on_attachable_type_and_attachable_id ON blog_media USING btree (attachable_type, attachable_id);
+CREATE INDEX index_blog_media_on_attachable_type_and_attachable_id ON public.blog_media USING btree (attachable_type, attachable_id);
 
 
 --
 -- Name: index_blogs_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_blogs_on_slug ON blogs USING btree (slug);
+CREATE INDEX index_blogs_on_slug ON public.blogs USING btree (slug);
 
 
 --
 -- Name: index_blogs_on_tsv_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_blogs_on_tsv_name ON blogs USING gin (tsv_name);
+CREATE INDEX index_blogs_on_tsv_name ON public.blogs USING gin (tsv_name);
 
 
 --
 -- Name: index_blogs_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_blogs_on_user_id ON blogs USING btree (user_id);
+CREATE INDEX index_blogs_on_user_id ON public.blogs USING btree (user_id);
 
 
 --
 -- Name: index_comments_on_commentable_id_and_commentable_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON comments USING btree (commentable_id, commentable_type);
+CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON public.comments USING btree (commentable_id, commentable_type);
 
 
 --
 -- Name: index_comments_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
+CREATE INDEX index_comments_on_user_id ON public.comments USING btree (user_id);
 
 
 --
 -- Name: index_friend_requests_on_requester_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friend_requests_on_requester_id ON friend_requests USING btree (requester_id);
+CREATE INDEX index_friend_requests_on_requester_id ON public.friend_requests USING btree (requester_id);
 
 
 --
 -- Name: index_friend_requests_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friend_requests_on_user_id ON friend_requests USING btree (user_id);
+CREATE INDEX index_friend_requests_on_user_id ON public.friend_requests USING btree (user_id);
 
 
 --
 -- Name: index_friends_on_friend_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friends_on_friend_id ON friends USING btree (friend_id);
+CREATE INDEX index_friends_on_friend_id ON public.friends USING btree (friend_id);
 
 
 --
 -- Name: index_friends_on_friend_request_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friends_on_friend_request_id ON friends USING btree (friend_request_id);
+CREATE INDEX index_friends_on_friend_request_id ON public.friends USING btree (friend_request_id);
 
 
 --
 -- Name: index_friends_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friends_on_user_id ON friends USING btree (user_id);
+CREATE INDEX index_friends_on_user_id ON public.friends USING btree (user_id);
 
 
 --
 -- Name: index_images_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_images_on_attachable_type_and_attachable_id ON images USING btree (attachable_type, attachable_id);
+CREATE INDEX index_images_on_attachable_type_and_attachable_id ON public.images USING btree (attachable_type, attachable_id);
 
 
 --
 -- Name: index_likes_on_trackable_type_and_trackable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_likes_on_trackable_type_and_trackable_id ON likes USING btree (trackable_type, trackable_id);
+CREATE INDEX index_likes_on_trackable_type_and_trackable_id ON public.likes USING btree (trackable_type, trackable_id);
 
 
 --
 -- Name: index_likes_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_likes_on_user_id ON likes USING btree (user_id);
+CREATE INDEX index_likes_on_user_id ON public.likes USING btree (user_id);
 
 
 --
 -- Name: index_posts_on_tsv_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_posts_on_tsv_name ON posts USING gin (tsv_name);
+CREATE INDEX index_posts_on_tsv_name ON public.posts USING gin (tsv_name);
 
 
 --
 -- Name: index_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_posts_on_user_id ON posts USING btree (user_id);
+CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
 -- Name: index_user_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_user_profiles_on_user_id ON user_profiles USING btree (user_id);
+CREATE INDEX index_user_profiles_on_user_id ON public.user_profiles USING btree (user_id);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
 
 
 --
 -- Name: index_users_on_tsv_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_tsv_name ON users USING gin (tsv_name);
+CREATE INDEX index_users_on_tsv_name ON public.users USING gin (tsv_name);
 
 
 --
 -- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
+CREATE INDEX index_versions_on_item_type_and_item_id ON public.versions USING btree (item_type, item_id);
 
 
 --
 -- Name: index_videos_on_attachable_type_and_attachable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_videos_on_attachable_type_and_attachable_id ON videos USING btree (attachable_type, attachable_id);
+CREATE INDEX index_videos_on_attachable_type_and_attachable_id ON public.videos USING btree (attachable_type, attachable_id);
 
 
 --
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+CREATE UNIQUE INDEX unique_schema_migrations ON public.schema_migrations USING btree (version);
 
 
 --
 -- Name: blogs tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.blogs FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'title');
 
 
 --
 -- Name: users tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
 
 
 --
 -- Name: posts tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'body');
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.posts FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'body');
 
 
 --
@@ -1008,6 +1009,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20160817115752'),
 ('20160817120411'),
 ('20160830152057'),
-('20190418065909');
+('20190418065909'),
+('20190823015952');
 
 

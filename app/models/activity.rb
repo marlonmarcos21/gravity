@@ -10,6 +10,10 @@ class Activity < PublicActivity::Activity
   include ActionView::Context
   include Rails.application.routes.url_helpers
 
+  belongs_to :recipient, polymorphic: true
+  belongs_to :owner, polymorphic: true
+  belongs_to :trackable, polymorphic: true
+
   scope :descending, -> { order(created_at: :desc) }
 
   class << self

@@ -3,16 +3,16 @@ source 'https://rubygems.org'
 ruby '2.6.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.2'
+gem 'rails'
 # Use postgresql as the database for Active Record
 gem 'pg'
 gem 'pg_search'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0.6'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'twitter-bootstrap-rails'
 # gem 'less-rails'
@@ -34,16 +34,16 @@ gem 'puma'
 gem 'puma_worker_killer'
 
 # Flexible authentication solution for Rails with Warden
-gem 'devise', '~> 4.4'
+gem 'devise'
 
-gem 'haml', '~> 5.0.4'
+gem 'haml'
 gem 'friendly_id'
 gem 'paperclip'
 gem 'paperclip-av-transcoder'
 gem 'aws-sdk-s3'
 gem 'dalli'
 gem 'tinymce-rails'
-gem 'tinymce-rails-imageupload', '~> 4.0.0.beta'
+gem 'tinymce-rails-imageupload'
 gem 'simple_form'
 gem 'country_select'
 gem 'kaminari'
@@ -53,10 +53,11 @@ gem 'html_truncator'
 gem 'rails_autolink'
 gem 'photoswipe-rails'
 gem 'acts_as_commentable_with_threading'
-gem 'sidekiq', '~> 4.2.10'
+gem 'sidekiq'
 gem 'public_activity'
 gem 'paper_trail'
 gem 'sitemap_generator'
+gem 'bootsnap'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
