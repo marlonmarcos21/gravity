@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/marlonmarcos21/tinymce-rails-imageupload.git
+  revision: 85609033ebdc5b901dbc00a852cfe152db5c9f81
+  specs:
+    tinymce-rails-imageupload (4.0.17.beta.3)
+      railties (>= 3.2)
+      tinymce-rails (~> 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -405,11 +413,8 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.9)
     timecop (0.9.1)
-    tinymce-rails (3.5.8.3)
+    tinymce-rails (4.9.4)
       railties (>= 3.1.1)
-    tinymce-rails-imageupload (3.5.8.6)
-      railties (>= 3.1)
-      tinymce-rails (~> 3.5.8.1)
     turbolinks (5.2.0)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -507,8 +512,8 @@ DEPENDENCIES
   spring-commands-rspec
   therubyracer
   timecop
-  tinymce-rails
-  tinymce-rails-imageupload
+  tinymce-rails (~> 4.9.4)
+  tinymce-rails-imageupload!
   turbolinks
   twitter-bootstrap-rails
   uglifier
