@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/marlonmarcos21/public_activity.git
+  revision: aff5b50ff474c9434e619c0fb0f8daa6acf47655
+  specs:
+    public_activity (2.0)
+      actionpack (>= 3.0.0)
+      activerecord (>= 3.0)
+      i18n (>= 0.5.0)
+      railties (>= 3.0.0)
+
+GIT
   remote: git://github.com/marlonmarcos21/tinymce-rails-imageupload.git
   revision: 85609033ebdc5b901dbc00a852cfe152db5c9f81
   specs:
@@ -78,7 +88,7 @@ GEM
       activerecord (>= 4.0.0, < 7.0)
     awesome_print (1.6.1)
     aws-eventstream (1.0.3)
-    aws-partitions (1.205.0)
+    aws-partitions (1.206.0)
     aws-sdk-core (3.64.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
@@ -164,7 +174,7 @@ GEM
       ffi (~> 1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    haml (5.0.4)
+    haml (5.1.2)
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.0)
@@ -260,11 +270,6 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_activity (1.6.3)
-      actionpack (>= 3.0.0)
-      activerecord (>= 3.0)
-      i18n (>= 0.5.0)
-      railties (>= 3.0.0)
     public_suffix (3.1.1)
     puma (4.1.0)
       nio4r (~> 2.0)
@@ -490,7 +495,7 @@ DEPENDENCIES
   photoswipe-rails
   pry-byebug
   pry-rails
-  public_activity
+  public_activity!
   puma
   puma_worker_killer
   rack-timeout
