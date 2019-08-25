@@ -47,7 +47,7 @@ class User < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_candidates
 
-  include PgSearch
+  include PgSearch::Model
   pg_search_scope :search,
                   against: [:first_name, :last_name],
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },

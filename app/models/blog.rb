@@ -30,7 +30,7 @@ class Blog < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: [:slugged, :finders]
 
-  include PgSearch
+  include PgSearch::Model
   pg_search_scope :search,
                   against: :title,
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },

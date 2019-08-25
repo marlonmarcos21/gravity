@@ -32,7 +32,7 @@ class Post < ApplicationRecord
 
   include AsLikeable
   include PostView
-  include PgSearch
+  include PgSearch::Model
   pg_search_scope :search,
                   against: :body,
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
