@@ -70,7 +70,7 @@ class PostsController < ApplicationController
     attrs[params[:name]] = params[:value]
 
     respond_to do |format|
-      if @post.update_attributes(attrs)
+      if @post.update(attrs)
         flash[:notice] = 'Post updated!'
         format.json do
           render json: {
