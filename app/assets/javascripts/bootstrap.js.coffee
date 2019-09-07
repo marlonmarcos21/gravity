@@ -207,13 +207,14 @@ $ ->
     $('#user_email').focus()
   )
 
-  $('.comments-header').click(->
+  $('.container').on('click', '.comments-header', ->
     $('.log-me-in').hide()
     $('.forgot-password').hide()
     $('.sign-in-form').removeClass('hidden')
     if $('.navbar-toggle').is(':visible')
       $('.navbar-toggle').click()
     $('#user_email').focus()
+    return
   )
 
   $('.cancel-log-in').click(->

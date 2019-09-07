@@ -3,27 +3,41 @@
     = render 'posts/post_preview', post: post
 
     .row
-      - if current_user
-        - if (post.private? && current_user.try(:is_friends_with?, post.user)) || !post.private? || current_user == post.user
-          %ul.post-likes-comment-section
-            %li
-              - if post.liked_by?(current_user)
-                = link_to unlike_post_path(post), method: :patch, data: { remote: true, id: post.id } do
-                  = fa_icon 'thumbs-up', id: "thumbs-up-#{post.id}"
-              - else
-                = link_to like_post_path(post), method: :patch, data: { remote: true, id: post.id } do
-                  = fa_icon 'thumbs-o-up', id: "thumbs-up-#{post.id}"
-            - likes_count = post.likes.count
-            %li
-              %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
-            %li.li-comment-section
-              - comment_count = post.comment_threads.count
-              - if comment_count.zero?
-                %h6= 'May comment ka?'
-              - else
-                %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
+      - likes_count = post.likes.count
+      - comments_count = post.comment_threads.count
 
-          = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
+      - if current_user && can?(:read, post)
+        %ul.post-likes-comment-section
+          %li
+            - if post.liked_by?(current_user)
+              = link_to unlike_post_path(post), method: :patch, data: { remote: true, id: post.id } do
+                = fa_icon 'thumbs-up', id: "thumbs-up-#{post.id}"
+            - else
+              = link_to like_post_path(post), method: :patch, data: { remote: true, id: post.id } do
+                = fa_icon 'thumbs-o-up', id: "thumbs-up-#{post.id}"
+          %li
+            %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
+          %li.li-comment-section
+            - if comments_count.zero?
+              %h6= 'May comment ka?'
+            - else
+              %h6= "#{comments_count} #{'Comment'.pluralize(comments_count)}"
+
+        = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
       - else
-        .comments-header
-          %h5 Sign in to read or post comments
+        %ul.post-likes-comment-section.comments-header
+          - if likes_count.zero? && comments_count.zero?
+            %li
+              %h6 Sign in to like or post comments
+          - else
+            - unless likes_count.zero?
+              %li
+                = fa_icon 'thumbs-up', id: "thumbs-up-#{post.id}"
+              %li
+                %h6{ id: "thumbs-up-text-#{post.id}" }
+                  = "#{likes_count} Likes"
+                  - unless comments_count.zero?
+                    |
+            - unless comments_count.zero?
+              %li.li-comment-section
+                %h6= "#{comments_count} #{'Comment'.pluralize(comments_count)}"
