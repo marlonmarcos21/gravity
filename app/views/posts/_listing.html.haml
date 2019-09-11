@@ -16,12 +16,9 @@
               = link_to like_post_path(post), method: :patch, data: { remote: true, id: post.id } do
                 = fa_icon 'thumbs-o-up', id: "thumbs-up-#{post.id}"
           %li
-            %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
+            %h6{ id: "thumbs-up-text-#{post.id}" }= likes_count.zero? ? "Like |" : "#{likes_count} #{'Like'.pluralize(likes_count)} |"
           %li.li-comment-section
-            - if comments_count.zero?
-              %h6= 'May comment ka?'
-            - else
-              %h6= "#{comments_count} #{'Comment'.pluralize(comments_count)}"
+            %h6= comments_count.zero? ? 'Comment' : "#{comments_count} #{'Comment'.pluralize(comments_count)}"
 
         = render 'comments/template', commentable: post, new_comment: Comment.build_from(post, current_user.id, nil)
       - else
@@ -35,7 +32,7 @@
                 = fa_icon 'thumbs-up', id: "thumbs-up-#{post.id}"
               %li
                 %h6{ id: "thumbs-up-text-#{post.id}" }
-                  = "#{likes_count} Likes"
+                  = "#{likes_count} #{'Like'.pluralize(likes_count)}"
                   - unless comments_count.zero?
                     |
             - unless comments_count.zero?
