@@ -4,13 +4,17 @@ const totalLikes = "<%= @total_likes %>";
 const parent = $(`#thumbs-up-${blogId}`).parent('a');
 if (persisted === 'true') {
   $(`#thumbs-up-${blogId}`).attr('class', 'fa fa-thumbs-up');
-  parent.attr('href', `/posts/${blogId}/unlike`);
+  parent.attr('href', `/blogs/${blogId}/unlike`);
 } else {
   $(`#thumbs-up-${blogId}`).attr('class', 'fa fa-thumbs-o-up');
-  parent.attr('href', `/posts/${blogId}/like`);
+  parent.attr('href', `/blogs/${blogId}/like`);
 }
 if (totalLikes == '0') {
-  $(`#thumbs-up-text-${blogId}`).text('Ayus ba? |');
+  $(`#thumbs-up-text-${blogId}`).text('Like |');
 } else {
-  $(`#thumbs-up-text-${blogId}`).text(`${totalLikes} ka Ayus! |`);
+  let text = 'Likes';
+  if (totalLikes == '1') {
+    text = 'Like';
+  }
+  $(`#thumbs-up-text-${blogId}`).text(`${totalLikes} ${text} |`);
 }

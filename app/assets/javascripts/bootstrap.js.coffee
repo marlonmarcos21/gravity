@@ -340,7 +340,7 @@ $(document).ajaxComplete((event, request) ->
     if (request.responseJSON.message == 'Comment deleted!')
       totalComments = parseInt(request.responseJSON.total_comments)
       if totalComments == 0
-        text = 'May comment ka?'
+        text = 'Comment'
       else if totalComments == 1
         text = '1 Comment'
       else

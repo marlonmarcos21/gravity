@@ -10,7 +10,11 @@ if (persisted === 'true') {
   parent.attr('href', `/posts/${postId}/like`);
 }
 if (totalLikes == '0') {
-  $(`#thumbs-up-text-${postId}`).text('Ayus ba? |');
+  $(`#thumbs-up-text-${postId}`).text('Like |');
 } else {
-  $(`#thumbs-up-text-${postId}`).text(`${totalLikes} ka Ayus! |`);
+  let text = 'Likes';
+  if (totalLikes == '1') {
+    text = 'Like';
+  }
+  $(`#thumbs-up-text-${postId}`).text(`${totalLikes} ${text} |`);
 }
