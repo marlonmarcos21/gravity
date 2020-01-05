@@ -111,6 +111,11 @@ form {
       width: 100% !important;
     }
   }
+  &.blogs {
+    .form-actions {
+      margin-left: -14px;
+    }
+  }
 }
 
 .select2-container {
