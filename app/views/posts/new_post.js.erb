@@ -183,7 +183,8 @@ const wysi = $('textarea#post_body').wysihtml5();
 const editor = $('#post_body').data('wysihtml5').editor;
 
 $('#new_post').submit(function(e) {
-  if (!editor.getValue()) {
+  const value = editor.getValue().replace(/&nbsp;/g, '').trim();
+  if (!value) {
     e.preventDefault();
     html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
     $(html).modal();
