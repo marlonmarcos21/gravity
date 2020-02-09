@@ -7,23 +7,25 @@ module PostView
 
     return body if a_tags.empty?
 
-    a_tags.map do |node|
+    a_tags.each do |node|
       youtube_id = get_youtube_id(node.attributes['href'].value)
-      if youtube_id.blank?
-        body
-      else
-        replace_with = "#{node}<br /><br />" + %(<iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>)
-        body.sub!(node.to_s, replace_with)
-      end
-    end.last
+      next if youtube_id.blank?
+      iframe = %(<br><br><iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>)
+      node.add_next_sibling iframe
+    end
+
+    html.to_html
   end
 
   private
 
-  def get_youtube_id(youtube_url)
-    uri = URI youtube_url
-    return uri.path.sub(%r{^/}, '') if youtube_url =~ /youtu\.be/
+  def get_youtube_id(url)
+    return unless url =~ /youtube.com/ || url =~ /youtu\.be/
+
+    uri = URI url
+    return uri.path.sub(%r{^/}, '') if url =~ /youtu\.be/
     return unless uri.query
+
     query = CGI::parse uri.query
     query['v'].try(:first)
   end
