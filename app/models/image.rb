@@ -19,7 +19,7 @@ class Image < ApplicationRecord
     s3_url_options: { virtual_host: true }
   }
 
-  ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}
+  ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}
 
   include WithAttachment
 

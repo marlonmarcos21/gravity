@@ -151,18 +151,22 @@ class PostsController < ApplicationController
   def create_media
     media_token = params[:media_token]
     return if media_token.blank?
+
     media_params = params[:post][:media_attributes]
     return if media_params.blank?
+
     media_params.each_pair do |_i, medium|
       if medium['source'].content_type == 'video/mp4'
-        Video.create(
+        Video.create!(
           token: media_token,
-          source: medium['source']
+          source: medium['source'],
+          attachable_type: 'Post'
         )
       else
-        Image.create(
+        Image.create!(
           token: media_token,
-          source: medium['source']
+          source: medium['source'],
+          attachable_type: 'Post'
         )
       end
     end
@@ -171,11 +175,13 @@ class PostsController < ApplicationController
   def destroy_media
     attrs = {
       source_file_name: params[:source_file_names],
-      token: params[:media_token]
+      token: params[:media_token],
+      attachable_type: 'Post'
     }
     imgs = Image.where(attrs)
     videos = Video.where(attrs)
     return false unless imgs.any? || videos.any?
+
     imgs.destroy_all
     videos.destroy_all
     post.reload if params[:id]
@@ -183,18 +189,21 @@ class PostsController < ApplicationController
 
   def attach_images(token, post_id)
     return if token.blank?
-    images = Image.where(token: token)
-    images.update_all(attachable_id: post_id, attachable_type: 'Post') if images.any?
+
+    images = Image.where(token: token, attachable_type: 'Post')
+    images.update_all(attachable_id: post_id) if images.exists?
   end
 
   def attach_videos(token, post_id)
     return if token.blank?
-    videos = Video.where(token: token)
-    videos.update_all(attachable_id: post_id, attachable_type: 'Post') if videos.any?
+
+    videos = Video.where(token: token, attachable_type: 'Post')
+    videos.update_all(attachable_id: post_id) if videos.exists?
   end
 
   def prepare_images
     return unless @post.try(:images).try(:any?)
+
     @images = @post.images.each_with_object({}) do |img, hash|
       style = img.gif? ? :original : :thumb
       hash[img.id.to_s] = {
