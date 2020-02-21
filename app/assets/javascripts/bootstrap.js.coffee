@@ -210,6 +210,7 @@ $ ->
   $('.container').on('click', '.comments-header', ->
     $('.log-me-in').hide()
     $('.forgot-password').hide()
+    $('.forgot-password-form').addClass('hidden')
     $('.sign-in-form').removeClass('hidden')
     if $('.navbar-toggle').is(':visible')
       $('.navbar-toggle').click()
