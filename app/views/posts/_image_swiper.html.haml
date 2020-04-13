@@ -7,8 +7,9 @@
       %br
 
 - if images.non_gif.any?
-  .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
-    - img_count = images.non_gif.length
+  - img_count = images.non_gif.length
+  - my_gallery_class = img_count > 1 ? 'my-gallery-multiple-images' : 'my-gallery-single-image'
+  .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery', class: my_gallery_class }
     - images.non_gif.each do |img|
       - render_style = img.render_style
       - style = img_count > 1 ? :thumb : render_style
