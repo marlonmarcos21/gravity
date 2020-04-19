@@ -5,27 +5,31 @@ class SearchController < ApplicationController
 
   def search
     @search_term = sanitize params[:search][:search]
+
     return if @search_term.blank?
-    user_search @search_term
-    post_search @search_term
-    blog_search @search_term
+
+    user_search
+    post_search
+    blog_search
   end
 
   private
 
-  def user_search(search_term)
-    @users = User.active.search(search_term)
+  def user_search
+    @users = User.active.search(@search_term)
   end
 
-  def post_search(search_term)
-    @posts = Post.includes(user: :user_profile)
-                 .published
-                 .search search_term
+  def post_search
+    @posts = Post
+               .includes(user: :user_profile)
+               .published
+               .search(@search_term)
   end
 
-  def blog_search(search_term)
-    @blogs = Blog.includes(user: :user_profile)
-                 .published
-                 .search search_term
+  def blog_search
+    @blogs = Blog
+               .includes(user: :user_profile)
+               .published
+               .search(@search_term)
   end
 end
