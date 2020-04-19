@@ -363,6 +363,28 @@ $(document).ajaxComplete((event, request) ->
       html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content
       $('.comment-body-' + request.responseJSON.comment_id).html(html)
 
+    if (request.responseJSON.key == 'blog_like_unlike')
+      blogId = request.responseJSON.blog_id
+      action = request.responseJSON.action
+      totalLikes = request.responseJSON.total_likes
+      parent = $('#thumbs-up-' + blogId).parent('a')
+      console.log('blog id...', blogId)
+      if (action == 'like')
+        $('#thumbs-up-' + blogId).attr('class', 'fa fa-thumbs-up')
+        parent.attr('href', '/blogs/' + blogId + '/unlike')
+      else
+        $('#thumbs-up-' + blogId).attr('class', 'fa fa-thumbs-o-up')
+        parent.attr('href', '/blogs/' + blogId + '/like')
+
+      if (totalLikes == 0)
+        $('#thumbs-up-text-' + blogId).text('Like |')
+      else
+        text = 'Likes'
+        if (totalLikes == 1)
+          text = 'Like'
+        $('#thumbs-up-text-' + blogId).text(totalLikes + ' ' + text + ' |')
+
+
   $.fn.editable.defaults.mode = 'inline'
   $('.editable-post-body').editable(
     ajaxOptions:

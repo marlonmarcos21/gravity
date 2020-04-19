@@ -36,10 +36,10 @@
           %ul.blog-likes-comment-section
             %li
               - if @blog.liked_by?(current_user)
-                = link_to unlike_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                = link_to unlike_blog_path(@blog), method: :patch, data: { remote: true, type: :json, id: @blog.id } do
                   = fa_icon 'thumbs-up', id: "thumbs-up-#{@blog.id}"
               - else
-                = link_to like_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                = link_to like_blog_path(@blog), method: :patch, data: { remote: true, type: :json, id: @blog.id } do
                   = fa_icon 'thumbs-o-up', id: "thumbs-up-#{@blog.id}"
             - likes_count = @blog.likes.count
             %li

@@ -104,27 +104,42 @@ class BlogsController < ApplicationController
   end
 
   def like
-    @like = @blog.likes.create(user: current_user)
-    @total_likes = @blog.likes.count
+    @blog.likes.create(user: current_user)
     @blog.create_activity :like, recipient: @blog.user
+    total_likes = @blog.likes.count
+
     respond_to do |format|
       flash[:notice] = 'Blog liked!'
       format.html { redirect_to @blog }
-      format.json { render json: { message: 'Blog liked!' } }
-      format.js
+      format.json {
+        render json: {
+          key: 'blog_like_unlike',
+          blog_id: @blog.id,
+          action: 'like',
+          total_likes: total_likes,
+          message: 'Blog liked!'
+        }
+      }
     end
   end
 
   def unlike
-    @like = @blog.likes.where(user: current_user).first
-    @like.destroy
+    @blog.likes.where(user: current_user).first.destroy
     @blog.create_activity :unlike, recipient: @blog.user
-    @total_likes = @blog.likes.count
+    total_likes = @blog.likes.count
+
     respond_to do |format|
       flash[:alert] = 'Blog unliked!'
       format.html { redirect_to @blog }
-      format.json { render json: { message: 'Blog unliked!' } }
-      format.js   { render :like }
+      format.json {
+        render json: {
+          key: 'blog_like_unlike',
+          blog_id: @blog.id,
+          action: 'unlike',
+          total_likes: total_likes,
+          message: 'Blog unliked!'
+        }
+      }
     end
   end
 
