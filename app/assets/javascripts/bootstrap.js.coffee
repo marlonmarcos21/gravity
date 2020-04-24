@@ -368,7 +368,6 @@ $(document).ajaxComplete((event, request) ->
       action = request.responseJSON.action
       totalLikes = request.responseJSON.total_likes
       parent = $('#thumbs-up-' + blogId).parent('a')
-      console.log('blog id...', blogId)
       if (action == 'like')
         $('#thumbs-up-' + blogId).attr('class', 'fa fa-thumbs-up')
         parent.attr('href', '/blogs/' + blogId + '/unlike')

@@ -90,6 +90,7 @@ class Blog < ApplicationRecord
 
   def should_generate_new_friendly_id?
     return if published? && !slug.blank?
+
     slug.blank? || title_changed?
   end
 end
