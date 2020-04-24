@@ -79,11 +79,12 @@ class UsersController < ApplicationController
 
   def update
     if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
-      params[:user].delete('password')
-      params[:user].delete('password_confirmation')
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
     end
 
     if @user.update(user_params)
+      bypass_sign_in(@user) if current_user == @user
       redirect_to @user, notice: 'User was successfully updated.'
     else
       render :edit
@@ -171,13 +172,17 @@ class UsersController < ApplicationController
 
   def user_params
     dob = params[:user][:user_profile_attributes][:date_of_birth]
-    params[:user][:user_profile_attributes][:date_of_birth] = Date.strptime(dob, '%m/%d/%Y').to_s unless dob.blank?
+    unless dob.blank?
+      dob = Date.strptime(dob, '%m/%d/%Y').to_s
+      params[:user][:user_profile_attributes][:date_of_birth] = dob
+    end
+
     permitted_params = [
       :email, :password, :password_confirmation, :profile_photo, :first_name, :last_name,
       user_profile_attributes: [
-        :id, :date_of_birth, :street_address1,
-        :street_address2, :city, :state, :country, :postal_code,
-        :phone_number, :mobile_number, :_destroy
+        :id, :date_of_birth, :street_address1, :street_address2,
+        :city, :state, :country, :postal_code, :phone_number,
+        :mobile_number, :_destroy
       ]
     ]
     params.require(:user).permit(*permitted_params)
