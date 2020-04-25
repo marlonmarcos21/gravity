@@ -113,27 +113,42 @@ class PostsController < ApplicationController
   end
 
   def like
-    @like = @post.likes.create(user: current_user)
-    @total_likes = @post.likes.count
+    @post.likes.create(user: current_user)
     @post.create_activity :like, recipient: @post.user
+    total_likes = @post.likes.count
+
     respond_to do |format|
       flash[:notice] = 'Post liked!'
       format.html { redirect_to posts_url }
-      format.json { render json: { message: 'Post liked!' } }
-      format.js
+      format.json {
+        render json: {
+          key: 'post_like_unlike',
+          post_id: @post.id,
+          action: 'like',
+          total_likes: total_likes,
+          message: 'Post liked!'
+        }
+      }
     end
   end
 
   def unlike
-    @like = @post.likes.where(user: current_user).first
-    @like.destroy
+    @post.likes.find_by(user: current_user).destroy
     @post.create_activity :unlike, recipient: @post.user
-    @total_likes = @post.likes.count
+    total_likes = @post.likes.count
+
     respond_to do |format|
       flash[:alert] = 'Post unliked!'
       format.html { redirect_to posts_url }
-      format.json { render json: { message: 'Post unliked!' } }
-      format.js   { render :like }
+      format.json {
+        render json: {
+          key: 'post_like_unlike',
+          post_id: @post.id,
+          action: 'unlike',
+          total_likes: total_likes,
+          message: 'Post unliked!'
+        }
+      }
     end
   end
 

@@ -124,7 +124,7 @@ class BlogsController < ApplicationController
   end
 
   def unlike
-    @blog.likes.where(user: current_user).first.destroy
+    @blog.likes.find_by(user: current_user).destroy
     @blog.create_activity :unlike, recipient: @blog.user
     total_likes = @blog.likes.count
 

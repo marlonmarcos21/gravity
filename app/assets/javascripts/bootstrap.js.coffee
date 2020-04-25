@@ -363,6 +363,26 @@ $(document).ajaxComplete((event, request) ->
       html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content
       $('.comment-body-' + request.responseJSON.comment_id).html(html)
 
+    if (request.responseJSON.key == 'post_like_unlike')
+      postId = request.responseJSON.post_id
+      action = request.responseJSON.action
+      totalLikes = request.responseJSON.total_likes
+      parent = $('#thumbs-up-' + postId).parent('a')
+      if (action == 'like')
+        $('#thumbs-up-' + postId).attr('class', 'fa fa-thumbs-up')
+        parent.attr('href', '/posts/' + postId + '/unlike')
+      else
+        $('#thumbs-up-' + postId).attr('class', 'fa fa-thumbs-o-up')
+        parent.attr('href', '/posts/' + postId + '/like')
+
+      if (totalLikes == 0)
+        $('#thumbs-up-text-' + postId).text('Like |')
+      else
+        text = 'Likes'
+        if (totalLikes == 1)
+          text = 'Like'
+        $('#thumbs-up-text-' + postId).text(totalLikes + ' ' + text + ' |')
+
     if (request.responseJSON.key == 'blog_like_unlike')
       blogId = request.responseJSON.blog_id
       action = request.responseJSON.action
