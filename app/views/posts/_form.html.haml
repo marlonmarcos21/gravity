@@ -46,23 +46,46 @@
 
       Dropzone.autoDiscover = false;
       const dz = new Dropzone('.dropzone', {
-        url: '/posts/upload_media',
+        url: '#',
         previewsContainer: '.dropzone-previews',
         addRemoveLinks: true,
-        uploadMultiple: true,
-        paramName1: 'post[media_attributes]',
-        paramName2: '[source]',
         autoQueue: false,
+        uploadMultiple: false,
+        parallelUploads: 1,
+        paramName1: 'file',
+        paramName2: [],
+        method: 'post',
         acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
         dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
-        dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
-      });
-
-      dz.on('addedfile', function(file) {
-        $('input[name=commit]').attr('disabled', true);
+        dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>',
+        headers: {'Accept': '*/*'},
+        accept: function(file, cb) {
+          $.ajax({
+            url: '/posts/presigned_url',
+            dataType: 'json',
+          }).done(function(data) {
+            file.uploadURL = data.url;
+            file.uploadFields = data.fields;
+            file.UUID = data.uuid;
+            cb();
+          });
+        },
       });
 
       dz.on('processing', function(file) {
+        $('input[name=commit]').attr('disabled', true);
+        dz.options.url = file.uploadURL;
+      });
+
+      dz.on('sending', function(file, xhr, formData) {
+        $('input[name=commit]').attr('disabled', true);
+        for (const field in file.uploadFields) {
+          formData.append(field, file.uploadFields[field]);
+        }
+        formData.append('Content-Type', file.type);
+      });
+
+      dz.on('addedfile', function(file) {
         $('input[name=commit]').attr('disabled', true);
       });
 
@@ -70,16 +93,22 @@
         $('input[name=commit]').attr('disabled', true);
       });
 
-      const authToken = $('meta[name=csrf-token]').attr('content');
-      const mediaToken = '#{raw(@media_token)}';
-      dz.on('sending', function(file, xhr, formData) {
-        $('input[name=commit]').attr('disabled', true);
-        formData.append('authenticity_token', authToken);
-        formData.append('media_token', mediaToken);
-      });
-
       dz.on('complete', function(file) {
         $('input[name=commit]').removeAttr('disabled');
+      });
+
+      const mediaToken = '#{raw(@media_token)}';
+      dz.on('success', function(file, resp) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(resp, 'text/xml');
+        const key = xmlDoc.getElementsByTagName('Key')[0].childNodes[0].nodeValue;
+        $.ajax({
+          url: '/posts/image_upload_callback',
+          data: {
+            media_token: mediaToken,
+            s3_key: key,
+          },
+        });
       });
 
       document.querySelector('.start-upload').onclick = function() {
@@ -96,7 +125,7 @@
       };
 
       let didRemoveFiles = false;
-      let filesRemoved = [];
+      let s3KeysfilesRemoved = [];
       const postId = '#{raw(@post.id)}';
       dz.on('removedfile', function(file) {
         if (postId === '') {
@@ -105,12 +134,12 @@
             type: 'DELETE',
             data: {
               media_token: mediaToken,
-              source_file_names: file.name
+              s3_key: `images/${file.UUID}/${file.name}`,
             }
           });
         } else {
           didRemoveFiles = true;
-          filesRemoved.push(file.name);
+          s3KeysfilesRemoved.push(`images/${file.UUID}/${file.name}`);
         }
       });
 
@@ -158,7 +187,7 @@
               type: 'DELETE',
               data: {
                 media_token: mediaToken,
-                source_file_names: filesRemoved
+                s3_key: s3KeysfilesRemoved,
               }
             });
           }

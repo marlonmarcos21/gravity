@@ -96,11 +96,8 @@ class PostsController < ApplicationController
   end
 
   def remove_media
-    if destroy_media == false
-      render json: { message: 'failed' }, status: 422
-    else
-      render json: { message: 'success' }, status: 200
-    end
+    destroy_media
+    render json: { message: 'success' }, status: 200
   end
 
   def destroy
@@ -152,6 +149,31 @@ class PostsController < ApplicationController
     end
   end
 
+  def presigned_url
+    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
+    uuid = SecureRandom.uuid
+    presigned_post = bucket.presigned_post(
+      key: "images/#{uuid}/${filename}",
+      success_action_status: '201',
+      allow_any: ['Content-Type'],
+      acl: 'public-read'
+    )
+    render json: {
+      url: presigned_post.url,
+      fields: presigned_post.fields,
+      uuid: uuid,
+    }, status: 200
+  end
+
+  def image_upload_callback
+    Image.create(
+      token: params[:media_token],
+      key: params[:s3_key],
+      attachable_type: 'Post'
+    )
+    render json: { message: 'success' }, status: 200
+  end
+
   private
 
   def post
@@ -189,13 +211,13 @@ class PostsController < ApplicationController
 
   def destroy_media
     attrs = {
-      source_file_name: params[:source_file_names],
+      key: params[:s3_key],
       token: params[:media_token],
       attachable_type: 'Post'
     }
     imgs = Image.where(attrs)
-    videos = Video.where(attrs)
-    return false unless imgs.any? || videos.any?
+    videos = Video.where(attrs.except(:key))
+    return unless imgs.any? || videos.any?
 
     imgs.destroy_all
     videos.destroy_all

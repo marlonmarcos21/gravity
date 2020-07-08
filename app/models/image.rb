@@ -28,6 +28,9 @@ class Image < ApplicationRecord
 
   after_post_process :save_image_dimensions
 
+  after_commit :process_from_s3_direct, on: :create
+  after_destroy :delete_uploaded_file
+
   scope :gif, -> { where(source_content_type: 'image/gif') }
   scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
 
@@ -58,6 +61,27 @@ class Image < ApplicationRecord
       self.width  = main_geometry.width
       self.height = main_geometry.height
     end
+  end
+
+  def process_from_s3_direct
+    return unless source.blank?
+
+    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
+    object = bucket.object(key)
+    uri = URI(object.presigned_url(:get))
+    file = uri.open
+    self.source = file
+    self.source_file_name = key.split('/').last
+    save
+    file.delete
+  end
+
+  def delete_uploaded_file
+    return unless key
+
+    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
+    object = bucket.object(key)
+    object.delete
   end
 
   def skip_gif
