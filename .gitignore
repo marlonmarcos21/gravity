@@ -17,6 +17,7 @@
 *.swo
 *.swp
 /.env
+dump.rdb
 node_modules/*
 public/assets
 public/packs

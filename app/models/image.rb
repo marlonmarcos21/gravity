@@ -28,7 +28,7 @@ class Image < ApplicationRecord
 
   after_post_process :save_image_dimensions
 
-  after_commit :process_from_s3_direct, on: :create
+  after_commit :enqueue_process_styles, on: :create
   after_destroy :delete_uploaded_file
 
   scope :gif, -> { where(source_content_type: 'image/gif') }
@@ -63,17 +63,11 @@ class Image < ApplicationRecord
     end
   end
 
-  def process_from_s3_direct
+  def enqueue_process_styles
     return unless source.blank?
 
-    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
-    object = bucket.object(key)
-    uri = URI(object.presigned_url(:get))
-    file = uri.open
-    self.source = file
-    self.source_file_name = key.split('/').last
-    save
-    file.delete
+    REDIS.sadd(token, id)
+    ImageJob.perform_later(id, 'process_styles')
   end
 
   def delete_uploaded_file
