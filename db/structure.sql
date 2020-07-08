@@ -303,7 +303,8 @@ CREATE TABLE public.images (
     updated_at timestamp without time zone NOT NULL,
     token character varying,
     width integer,
-    height integer
+    height integer,
+    key character varying
 );
 
 
@@ -1010,6 +1011,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20160817120411'),
 ('20160830152057'),
 ('20190418065909'),
-('20190823015952');
+('20190823015952'),
+('20200708013033');
 
 

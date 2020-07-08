@@ -4,6 +4,7 @@
 # t.string     :token
 # t.integer    :width
 # t.integer    :height
+# t.string     :key
 
 class Image < ApplicationRecord
   ATTACHMENT_OPTIONS = {
