@@ -93,6 +93,15 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    image_ids = @post.images.pluck(:id)
+    video_ids = @post.videos.pluck(:id)
+    if image_ids.any? || video_ids.any?
+      @post.images.update_all(attachable_id: nil)
+      @post.videos.update_all(attachable_id: nil)
+      ImageJob.perform_later(image_ids, 'delete') if image_ids.any?
+      VideoJob.perform_later(video_ids, 'delete') if video_ids.any?
+    end
+
     @post.destroy
     respond_to do |format|
       flash[:alert] = 'Post deleted!'

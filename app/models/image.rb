@@ -66,15 +66,14 @@ class Image < ApplicationRecord
   def enqueue_process_styles
     return unless source.blank?
 
-    REDIS.sadd(token, "post-#{id}")
+    REDIS.sadd(token, "image-#{id}")
     ImageJob.perform_later(id, 'process_styles')
   end
 
   def delete_uploaded_file
     return unless key
 
-    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
-    object = bucket.object(key)
+    object = BUCKET.object(key)
     object.delete
   end
 

@@ -16,7 +16,7 @@ class ImageJob < ApplicationJob
     image.source = file
     image.source_file_name = image.key.split('/').last
     image.save
-    REDIS.srem(image.token, "post-#{image.id}")
+    REDIS.srem(image.token, "image-#{image.id}")
     file.delete
   end
 

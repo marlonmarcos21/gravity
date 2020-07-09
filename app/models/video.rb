@@ -20,6 +20,7 @@ class Video < ApplicationRecord
   include WithAttachment
 
   after_commit :enqueue_process_styles, on: :create
+  after_destroy :delete_uploaded_file
 
   def aspect_ratio_display
     orig_width = width = source_meta['width']
@@ -44,5 +45,12 @@ class Video < ApplicationRecord
 
     REDIS.sadd(token, "video-#{id}")
     VideoJob.perform_later(id, 'process_styles')
+  end
+
+  def delete_uploaded_file
+    return unless key
+
+    object = BUCKET.object(key)
+    object.delete
   end
 end
