@@ -174,6 +174,11 @@ class PostsController < ApplicationController
     render json: { message: 'success' }, status: 200
   end
 
+  def pre_post_check
+    ready = REDIS.smembers(params[:media_token]).empty?
+    render json: { ready: ready }, status: 200
+  end
+
   private
 
   def post

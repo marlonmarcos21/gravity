@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       get 'more_published_posts'
       get 'presigned_url'
       get 'image_upload_callback'
+      get 'pre_post_check'
     end
 
     member do

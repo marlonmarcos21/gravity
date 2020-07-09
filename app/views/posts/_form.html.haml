@@ -31,14 +31,41 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      const mediaToken = '#{raw(@media_token)}';
       const wysi = $('textarea#post_body').wysihtml5();
       const editor = $('#post_body').data('wysihtml5').editor;
 
-      $('#new_post').submit(function(e) {
+      let postReady = false;
+      const form = $('form#new_post');
+      form.submit(function(e) {
         const value = editor.getValue().replace(/&nbsp;/g, '').trim();
         if (!value) {
           e.preventDefault();
           html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+          $(html).modal();
+          return false;
+        }
+
+        const image_count = $('.dropzone-previews').children('.dz-image-preview').length;
+        if (image_count === 0) {
+          return true;
+        }
+        if (postReady === false) {
+          $.ajax({
+            url: '/posts/pre_post_check',
+            data: {
+              media_token: mediaToken,
+            },
+          }).done(function(data) {
+            postReady = data.ready;
+          });
+        }
+
+        if (postReady === true) {
+          return true;
+        } else {
+          e.preventDefault();
+          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Images/Videos are still being processed, please try again in a few seconds...</p></div></div>';
           $(html).modal();
           return false;
         }
@@ -97,7 +124,6 @@
         $('input[name=commit]').removeAttr('disabled');
       });
 
-      const mediaToken = '#{raw(@media_token)}';
       dz.on('success', function(file, resp) {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(resp, 'text/xml');

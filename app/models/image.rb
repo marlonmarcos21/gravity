@@ -66,7 +66,7 @@ class Image < ApplicationRecord
   def enqueue_process_styles
     return unless source.blank?
 
-    REDIS.sadd(token, id)
+    REDIS.sadd(token, "post-#{id}")
     ImageJob.perform_later(id, 'process_styles')
   end
 
