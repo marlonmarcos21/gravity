@@ -82,8 +82,9 @@
         paramName1: 'file',
         paramName2: [],
         method: 'post',
-        acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
-        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
+        maxFilesize: 10000,
+        acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4, video/quicktime',
+        dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos here to upload',
         dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>',
         headers: {'Accept': '*/*'},
         accept: function(file, cb) {
