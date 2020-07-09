@@ -51,7 +51,7 @@
     .row
       .post-videos
         - post.videos.each do |video|
-          = video_tag video.source_url, controls: true, size: video.aspect_ratio_display
+          = video_tag video.source_url, controls: true
 - else
   = render 'posts/private_post', post: post
 
