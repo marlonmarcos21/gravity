@@ -182,11 +182,37 @@ if ($('.my-gallery').length) {
 const wysi = $('textarea#post_body').wysihtml5();
 const editor = $('#post_body').data('wysihtml5').editor;
 
-$('#new_post').submit(function(e) {
+
+let postReady = false;
+const form = $('#new_post');
+form.submit(function(e) {
   const value = editor.getValue().replace(/&nbsp;/g, '').trim();
   if (!value) {
     e.preventDefault();
-    html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    $(html).modal();
+    return false;
+  }
+
+  const image_count = $('.dropzone-previews').children('.dz-image-preview').length;
+  if (image_count === 0) {
+    return true;
+  }
+  if (postReady === false) {
+    $.ajax({
+      url: '/posts/pre_post_check',
+      data: {
+        media_token: newMediaToken,
+      },
+    }).done(function(data) {
+      postReady = data.ready;
+    });
+  }
+
+  if (postReady) {
+    return true;
+  } else {
+    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Images/Videos are still being processed, please try again in a few seconds...</p></div></div>';
     $(html).modal();
     return false;
   }
@@ -194,23 +220,46 @@ $('#new_post').submit(function(e) {
 
 Dropzone.autoDiscover = false;
 const dz = new Dropzone('.dropzone', {
-  url: '/posts/upload_media',
+  url: '#',
   previewsContainer: '.dropzone-previews',
   addRemoveLinks: true,
-  uploadMultiple: true,
-  paramName1: 'post[media_attributes]',
-  paramName2: '[source]',
   autoQueue: false,
+  uploadMultiple: false,
+  parallelUploads: 1,
+  paramName1: 'file',
+  paramName2: [],
+  method: 'post',
   acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
   dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
-  dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
-});
-
-dz.on('addedfile', function(file) {
-  $('input[name=commit]').attr('disabled', true);
+  dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>',
+  headers: {'Accept': '*/*'},
+  accept: function(file, cb) {
+    $.ajax({
+      url: '/posts/presigned_url',
+      dataType: 'json',
+    }).done(function(data) {
+      file.uploadURL = data.url;
+      file.uploadFields = data.fields;
+      file.UUID = data.uuid;
+      cb();
+    });
+  },
 });
 
 dz.on('processing', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+  dz.options.url = file.uploadURL;
+});
+
+dz.on('sending', function(file, xhr, formData) {
+  $('input[name=commit]').attr('disabled', true);
+  for (const field in file.uploadFields) {
+    formData.append(field, file.uploadFields[field]);
+  }
+  formData.append('Content-Type', file.type);
+});
+
+dz.on('addedfile', function(file) {
   $('input[name=commit]').attr('disabled', true);
 });
 
@@ -218,15 +267,22 @@ dz.on('uploadprogress', function(file) {
   $('input[name=commit]').attr('disabled', true);
 });
 
-const authToken = $('meta[name=csrf-token]').attr('content');
-dz.on('sending', function(file, xhr, formData) {
-  $('input[name=commit]').attr('disabled', true);
-  formData.append('authenticity_token', authToken);
-  formData.append('media_token', newMediaToken);
-});
-
 dz.on('complete', function(file) {
   $('input[name=commit]').removeAttr('disabled');
+});
+
+dz.on('success', function(file, resp) {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(resp, 'text/xml');
+  const key = xmlDoc.getElementsByTagName('Key')[0].childNodes[0].nodeValue;
+  $.ajax({
+    url: '/posts/media_upload_callback',
+    data: {
+      media_token: newMediaToken,
+      s3_key: key,
+      content_type: file.type,
+    },
+  });
 });
 
 document.querySelector('.start-upload').onclick = function() {

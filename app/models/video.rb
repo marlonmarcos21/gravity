@@ -19,6 +19,8 @@ class Video < ApplicationRecord
 
   include WithAttachment
 
+  after_commit :enqueue_process_styles, on: :create
+
   def aspect_ratio_display
     orig_width = width = source_meta['width']
     orig_height = height = source_meta['height']
@@ -33,5 +35,14 @@ class Video < ApplicationRecord
     end
 
     "#{width}x#{height}"
+  end
+
+  private
+
+  def enqueue_process_styles
+    return unless source.blank?
+
+    REDIS.sadd(token, "video-#{id}")
+    VideoJob.perform_later(id, 'process_styles')
   end
 end

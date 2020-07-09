@@ -87,20 +87,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def upload_media
-    if create_media
-      render json: { message: 'success' }, status: 200
-    else
-      render json: { message: 'failed' }, status: 422
-    end
-  end
-
   def remove_media
-    if destroy_media == false
-      render json: { message: 'failed' }, status: 422
-    else
-      render json: { message: 'success' }, status: 200
-    end
+    destroy_media
+    render json: { message: 'success' }, status: 200
   end
 
   def destroy
@@ -152,6 +141,41 @@ class PostsController < ApplicationController
     end
   end
 
+  def presigned_url
+    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
+    uuid = SecureRandom.uuid
+    presigned_post = bucket.presigned_post(
+      key: "uploads/#{uuid}/${filename}",
+      success_action_status: '201',
+      allow_any: ['Content-Type'],
+      acl: 'public-read'
+    )
+    render json: {
+      url: presigned_post.url,
+      fields: presigned_post.fields,
+      uuid: uuid,
+    }, status: 200
+  end
+
+  def media_upload_callback
+    opts = {
+      token: params[:media_token],
+      key: params[:s3_key],
+      attachable_type: 'Post'
+    }
+    if params[:content_type].starts_with?('video')
+      Video.create(**opts)
+    else
+      Image.create(**opts)
+    end
+    render json: { message: 'success' }, status: 200
+  end
+
+  def pre_post_check
+    ready = REDIS.smembers(params[:media_token]).empty?
+    render json: { ready: ready }, status: 200
+  end
+
   private
 
   def post
@@ -163,42 +187,24 @@ class PostsController < ApplicationController
     params.require(:post).permit(*permitted_params)
   end
 
-  def create_media
-    media_token = params[:media_token]
-    return if media_token.blank?
-
-    media_params = params[:post][:media_attributes]
-    return if media_params.blank?
-
-    media_params.each_pair do |_i, medium|
-      if medium['source'].content_type == 'video/mp4'
-        Video.create!(
-          token: media_token,
-          source: medium['source'],
-          attachable_type: 'Post'
-        )
-      else
-        Image.create!(
-          token: media_token,
-          source: medium['source'],
-          attachable_type: 'Post'
-        )
-      end
-    end
-  end
-
   def destroy_media
     attrs = {
-      source_file_name: params[:source_file_names],
+      key: params[:s3_key],
       token: params[:media_token],
       attachable_type: 'Post'
     }
     imgs = Image.where(attrs)
-    videos = Video.where(attrs)
-    return false unless imgs.any? || videos.any?
+    videos = Video.where(attrs.except(:key))
+    return unless imgs.any? || videos.any?
 
-    imgs.destroy_all
-    videos.destroy_all
+    if imgs.any?
+      imgs.update_all(attachable_id: nil)
+      ImageJob.perform_later(imgs.pluck(:id), 'delete')
+    end
+    if videos.any?
+      videos.update_all(attachable_id: nil)
+      VideoJob.perform_later(videos.pluck(:id), 'delete')
+    end
     post.reload if params[:id]
   end
 

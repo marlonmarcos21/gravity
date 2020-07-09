@@ -4,6 +4,7 @@
 # t.string     :token
 # t.integer    :width
 # t.integer    :height
+# t.string     :key
 
 class Image < ApplicationRecord
   ATTACHMENT_OPTIONS = {
@@ -26,6 +27,9 @@ class Image < ApplicationRecord
   before_post_process :skip_gif
 
   after_post_process :save_image_dimensions
+
+  after_commit :enqueue_process_styles, on: :create
+  after_destroy :delete_uploaded_file
 
   scope :gif, -> { where(source_content_type: 'image/gif') }
   scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
@@ -57,6 +61,21 @@ class Image < ApplicationRecord
       self.width  = main_geometry.width
       self.height = main_geometry.height
     end
+  end
+
+  def enqueue_process_styles
+    return unless source.blank?
+
+    REDIS.sadd(token, "post-#{id}")
+    ImageJob.perform_later(id, 'process_styles')
+  end
+
+  def delete_uploaded_file
+    return unless key
+
+    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
+    object = bucket.object(key)
+    object.delete
   end
 
   def skip_gif

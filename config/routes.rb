@@ -20,6 +20,9 @@ Rails.application.routes.draw do
       post 'upload_media'
       delete 'remove_media'
       get 'more_published_posts'
+      get 'presigned_url'
+      get 'media_upload_callback'
+      get 'pre_post_check'
     end
 
     member do

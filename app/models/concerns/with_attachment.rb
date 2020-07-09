@@ -6,8 +6,6 @@ module WithAttachment
 
     has_attached_file :source, const_get(:ATTACHMENT_OPTIONS)
 
-    validates_attachment_presence :source
-
     validates_attachment_content_type :source, content_type: const_get(:ALLOWED_CONTENT_TYPE)
 
     validates :token, presence: true
