@@ -8,13 +8,9 @@ class VideoJob < ApplicationJob
 
   private
 
-  def bucket
-    @bucket ||= Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
-  end
-
   def process_styles(videos)
     video = videos.first
-    object = bucket.object(video.key)
+    object = BUCKET.object(video.key)
     uri = URI(object.presigned_url(:get))
     file = uri.open
     video.source = file

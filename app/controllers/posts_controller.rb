@@ -142,9 +142,8 @@ class PostsController < ApplicationController
   end
 
   def presigned_url
-    bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
     uuid = SecureRandom.uuid
-    presigned_post = bucket.presigned_post(
+    presigned_post = BUCKET.presigned_post(
       key: "uploads/#{uuid}/${filename}",
       success_action_status: '201',
       allow_any: ['Content-Type'],

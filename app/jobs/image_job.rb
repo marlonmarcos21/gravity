@@ -8,13 +8,9 @@ class ImageJob < ApplicationJob
 
   private
 
-  def bucket
-    @bucket ||= Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
-  end
-
   def process_styles(images)
     image = images.first
-    object = bucket.object(image.key)
+    object = BUCKET.object(image.key)
     uri = URI(object.presigned_url(:get))
     file = uri.open
     image.source = file
