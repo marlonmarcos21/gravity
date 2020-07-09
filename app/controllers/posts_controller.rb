@@ -87,14 +87,6 @@ class PostsController < ApplicationController
     end
   end
 
-  def upload_media
-    if create_media
-      render json: { message: 'success' }, status: 200
-    else
-      render json: { message: 'failed' }, status: 422
-    end
-  end
-
   def remove_media
     destroy_media
     render json: { message: 'success' }, status: 200
@@ -153,7 +145,7 @@ class PostsController < ApplicationController
     bucket = Aws::S3::Resource.new.bucket(ENV['AWS_S3_BUCKET'])
     uuid = SecureRandom.uuid
     presigned_post = bucket.presigned_post(
-      key: "images/#{uuid}/${filename}",
+      key: "uploads/#{uuid}/${filename}",
       success_action_status: '201',
       allow_any: ['Content-Type'],
       acl: 'public-read'
@@ -165,12 +157,17 @@ class PostsController < ApplicationController
     }, status: 200
   end
 
-  def image_upload_callback
-    Image.create(
+  def media_upload_callback
+    opts = {
       token: params[:media_token],
       key: params[:s3_key],
       attachable_type: 'Post'
-    )
+    }
+    if params[:content_type].starts_with?('video')
+      Video.create(**opts)
+    else
+      Image.create(**opts)
+    end
     render json: { message: 'success' }, status: 200
   end
 
@@ -190,30 +187,6 @@ class PostsController < ApplicationController
     params.require(:post).permit(*permitted_params)
   end
 
-  def create_media
-    media_token = params[:media_token]
-    return if media_token.blank?
-
-    media_params = params[:post][:media_attributes]
-    return if media_params.blank?
-
-    media_params.each_pair do |_i, medium|
-      if medium['source'].content_type == 'video/mp4'
-        Video.create!(
-          token: media_token,
-          source: medium['source'],
-          attachable_type: 'Post'
-        )
-      else
-        Image.create!(
-          token: media_token,
-          source: medium['source'],
-          attachable_type: 'Post'
-        )
-      end
-    end
-  end
-
   def destroy_media
     attrs = {
       key: params[:s3_key],
@@ -224,8 +197,14 @@ class PostsController < ApplicationController
     videos = Video.where(attrs.except(:key))
     return unless imgs.any? || videos.any?
 
-    imgs.destroy_all
-    videos.destroy_all
+    if imgs.any?
+      imgs.update_all(attachable_id: nil)
+      ImageJob.perform_later(imgs.pluck(:id), 'delete')
+    end
+    if videos.any?
+      videos.update_all(attachable_id: nil)
+      VideoJob.perform_later(videos.pluck(:id), 'delete')
+    end
     post.reload if params[:id]
   end
 

@@ -129,10 +129,11 @@
         const xmlDoc = parser.parseFromString(resp, 'text/xml');
         const key = xmlDoc.getElementsByTagName('Key')[0].childNodes[0].nodeValue;
         $.ajax({
-          url: '/posts/image_upload_callback',
+          url: '/posts/media_upload_callback',
           data: {
             media_token: mediaToken,
             s3_key: key,
+            content_type: file.type,
           },
         });
       });

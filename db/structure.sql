@@ -544,7 +544,8 @@ CREATE TABLE public.videos (
     attachable_type character varying,
     token character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    key character varying
 );
 
 
@@ -1012,6 +1013,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20160830152057'),
 ('20190418065909'),
 ('20190823015952'),
-('20200708013033');
+('20200708013033'),
+('20200709004904');
 
 
