@@ -17,7 +17,6 @@ Rails.application.routes.draw do
 
   resources :posts do
     collection do
-      post 'upload_media'
       delete 'remove_media'
       get 'more_published_posts'
       get 'presigned_url'
