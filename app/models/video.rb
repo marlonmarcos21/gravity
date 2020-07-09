@@ -19,8 +19,16 @@ class Video < ApplicationRecord
 
   include WithAttachment
 
-  after_commit :enqueue_process_styles, on: :create
+  # after_commit :enqueue_process_styles, on: :create
   after_destroy :delete_uploaded_file
+
+  def source_url
+    object = BUCKET.object(key)
+    uri = URI(object.presigned_url(:get, virtual_host: true))
+    uri.port = nil
+    uri.scheme = 'https'
+    uri.to_s
+  end
 
   def aspect_ratio_display
     orig_width = width = source_meta['width']
