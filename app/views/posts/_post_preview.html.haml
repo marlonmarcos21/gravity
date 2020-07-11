@@ -51,7 +51,7 @@
     .row
       .post-videos
         - post.videos.each do |video|
-          = video_tag video.source_url, controls: true, preload: :metadata
+          = video_tag video.source_url, controls: true, preload: :auto
 - else
   = render 'posts/private_post', post: post
 
