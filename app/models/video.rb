@@ -1,36 +1,31 @@
-# t.attachment :source
 # t.json       :source_meta
 # t.references :attachable, polymorphic: true
 # t.string     :token
+# t.string     :key
 
 class Video < ApplicationRecord
-  ATTACHMENT_OPTIONS = {
-    styles: { geometry: '150x100!', format: 'jpg', time: 10 },
-    processors: [:transcoder],
-    storage: :s3,
-    s3_credentials: "#{Rails.root}/config/s3.yml",
-    s3_region: ENV['AWS_S3_REGION'],
-    s3_protocol: :https,
-    s3_permissions: :private,
-    s3_url_options: { virtual_host: true }
-  }
+  belongs_to :attachable, polymorphic: true
 
-  ALLOWED_CONTENT_TYPE = %r{\Avideo\/(mp4|quicktime|x-msvideo)\Z}
+  validates :token, presence: true
 
-  include WithAttachment
-
-  # after_commit :enqueue_process_styles, on: :create
+  after_commit :enqueue_process_metadata, on: :create
   after_destroy :delete_uploaded_file
 
   def source_url
     object = BUCKET.object(key)
-    uri = URI(object.presigned_url(:get, virtual_host: true))
-    uri.port = nil
-    uri.scheme = 'https'
-    uri.to_s
+    get_s3_url(object)
+  end
+
+  def screenshot_url
+    return if source_meta.blank?
+
+    object = BUCKET.object(source_meta['screenshot_key'])
+    get_s3_url(object)
   end
 
   def aspect_ratio_display
+    return if source_meta.blank?
+
     orig_width = width = source_meta['width']
     orig_height = height = source_meta['height']
     aspect = source_meta['aspect']
@@ -48,11 +43,9 @@ class Video < ApplicationRecord
 
   private
 
-  def enqueue_process_styles
-    return unless source.blank?
-
+  def enqueue_process_metadata
     REDIS.sadd(token, "video-#{id}")
-    VideoJob.perform_later(id, 'process_styles')
+    VideoJob.perform_later(id, 'process_metadata')
   end
 
   def delete_uploaded_file
@@ -60,5 +53,12 @@ class Video < ApplicationRecord
 
     object = BUCKET.object(key)
     object.delete
+  end
+
+  def get_s3_url(object)
+    uri = URI(object.presigned_url(:get, virtual_host: true))
+    uri.port = nil
+    uri.scheme = 'https'
+    uri.to_s
   end
 end

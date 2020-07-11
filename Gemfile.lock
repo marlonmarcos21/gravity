@@ -72,8 +72,6 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     autoprefixer-rails (9.7.4)
       execjs
-    av (0.9.0)
-      cocaine (~> 0.5.3)
     awesome_nested_set (3.2.0)
       activerecord (>= 4.0.0, < 7.0)
     awesome_print (1.6.1)
@@ -107,8 +105,6 @@ GEM
     byebug (11.1.1)
     cancancan (3.0.2)
     climate_control (0.2.0)
-    cocaine (0.5.8)
-      climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.2)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
@@ -239,9 +235,6 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
-    paperclip-av-transcoder (0.6.4)
-      av (~> 0.9.0)
-      paperclip (>= 2.5.2)
     parallel (1.19.1)
     parallel_tests (2.31.0)
       parallel
@@ -401,6 +394,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    streamio-ffmpeg (3.0.2)
+      multi_json (~> 1.8)
     temple (0.8.2)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
@@ -480,7 +475,6 @@ DEPENDENCIES
   listen
   paper_trail
   paperclip
-  paperclip-av-transcoder
   parallel_tests
   pg
   pg_search
@@ -508,6 +502,7 @@ DEPENDENCIES
   sitemap_generator
   spring
   spring-commands-rspec
+  streamio-ffmpeg
   therubyracer
   timecop
   tinymce-rails (~> 4.9.4)

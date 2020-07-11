@@ -535,10 +535,6 @@ ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
 
 CREATE TABLE public.videos (
     id integer NOT NULL,
-    source_file_name character varying,
-    source_content_type character varying,
-    source_file_size integer,
-    source_updated_at timestamp without time zone,
     source_meta json,
     attachable_id integer,
     attachable_type character varying,
@@ -1014,6 +1010,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190418065909'),
 ('20190823015952'),
 ('20200708013033'),
-('20200709004904');
+('20200709004904'),
+('20200711153125');
 
 
