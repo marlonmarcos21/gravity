@@ -19,7 +19,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  DEFAULT_AVATAR = 'https://static-prod.gravity.ph/dev_files/default-avatar.png'.freeze
+  DEFAULT_AVATAR = "https://#{ENV['AWS_S3_BUCKET']}/dev_files/default-avatar.png".freeze
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 

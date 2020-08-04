@@ -4,8 +4,7 @@ class Meta
   attr_accessor :title, :type, :description, :url, :image, :author
 
   def render
-    tags = inject_meta_tags
-    (tags * "\n").html_safe
+    inject_meta_tags.join("\n").html_safe
   end
 
   private
