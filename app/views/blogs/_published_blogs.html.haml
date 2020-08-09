@@ -7,7 +7,7 @@
       %span.published-blogs-pagination-page
         %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_blogs_path(page: next_page) }
           %em Loading more
-          = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
+          = image_tag loading_spinner_image
   - else
     %span.end-of-internet
       %em Congratulations, you have reached the end of internet!

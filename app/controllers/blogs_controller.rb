@@ -7,7 +7,7 @@ class BlogsController < ApplicationController
   def index
     pb_scope = Blog.includes(:user).published.descending
     @blogs   = pb_scope.page(1)
-    @has_more_results = !pb_scope.page(2).empty?
+    @has_more_results = pb_scope.page(2).exists?
   end
 
   def more_published_blogs
@@ -15,7 +15,7 @@ class BlogsController < ApplicationController
     page = params[:page].blank? ? 2 : params[:page].to_i
     @next_page = page + 1
     @blogs = pb_scope.page(page)
-    @has_more_results = !pb_scope.page(@next_page).empty?
+    @has_more_results = pb_scope.page(@next_page).exists?
 
     respond_to do |format|
       format.html { render :index }
@@ -104,27 +104,42 @@ class BlogsController < ApplicationController
   end
 
   def like
-    @like = @blog.likes.create(user: current_user)
-    @total_likes = @blog.likes.count
+    @blog.likes.create(user: current_user)
     @blog.create_activity :like, recipient: @blog.user
+    total_likes = @blog.likes.count
+
     respond_to do |format|
       flash[:notice] = 'Blog liked!'
       format.html { redirect_to @blog }
-      format.json { render json: { message: 'Blog liked!' } }
-      format.js
+      format.json {
+        render json: {
+          key: 'blog_like_unlike',
+          blog_id: @blog.id,
+          action: 'like',
+          total_likes: total_likes,
+          message: 'Blog liked!'
+        }
+      }
     end
   end
 
   def unlike
-    @like = @blog.likes.where(user: current_user).first
-    @like.destroy
+    @blog.likes.find_by(user: current_user).destroy
     @blog.create_activity :unlike, recipient: @blog.user
-    @total_likes = @blog.likes.count
+    total_likes = @blog.likes.count
+
     respond_to do |format|
       flash[:alert] = 'Blog unliked!'
       format.html { redirect_to @blog }
-      format.json { render json: { message: 'Blog unliked!' } }
-      format.js   { render :like }
+      format.json {
+        render json: {
+          key: 'blog_like_unlike',
+          blog_id: @blog.id,
+          action: 'unlike',
+          total_likes: total_likes,
+          message: 'Blog unliked!'
+        }
+      }
     end
   end
 
@@ -136,7 +151,7 @@ class BlogsController < ApplicationController
 
   def blog_params
     params[:blog][:body] = params['tinymce-container']
-    permitted_params = %i(title body published)
+    permitted_params = %i(title body)
     params.require(:blog).permit(*permitted_params)
   end
 

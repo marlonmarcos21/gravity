@@ -7,14 +7,16 @@
       %br
 
 - if images.non_gif.any?
-  .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery' }
-    - img_count = images.non_gif.length
+  - img_count = images.non_gif.length
+  - my_gallery_class = img_count > 1 ? 'my-gallery-multiple-images' : 'my-gallery-single-image'
+  .my-gallery{ itemscope: true, itemtype: 'http://schema.org/ImageGallery', class: my_gallery_class }
     - images.non_gif.each do |img|
-      - style = img_count > 1 ? :thumb : (img.width > img.height ? :main : :portrait)
-      - fig_class = img_count > 1 ? '' : 'single-image'
-      %figure{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject', class: fig_class }
-        %a{ href: img.source_url(:main), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
-          = image_tag img.source_url(style), itemprop: 'thumbnail'
+      - render_style = img.render_style
+      - style = img_count > 1 ? :thumb : render_style
+      - fig_class = img_count > 1 ? '' : 'grid-item--width2 single-image'
+      .grid-item{ itemprop: 'associatedMedia', itemscope: true, itemtype: 'http://schema.org/ImageObject', class: fig_class }
+        %a{ href: img.source_url(style: render_style), itemprop: 'contentUrl', 'data-size' => "#{img.width}x#{img.height}" }
+          = image_tag img.source_url(style: style), itemprop: 'thumbnail'
 
   .pswp{ tabindex: '-1', role: 'dialog', 'aria-hidden' => 'true' }
     .pswp__bg

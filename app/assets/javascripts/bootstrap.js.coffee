@@ -25,6 +25,10 @@ $ ->
     return
   )
 
+  $('body').on('click', '.modal-backdrop', ->
+    $('.btn-modal-close').click()
+  )
+
   $('.alert .close').remove();
   $('.alert').delay(3000).fadeOut('slow')
 
@@ -91,7 +95,7 @@ $ ->
 
       eTarget = e.target || e.srcElement
       clickedListItem = closest(eTarget, (el) ->
-        return (el.tagName && el.tagName.toUpperCase() == 'FIGURE')
+        return (el.tagName && el.tagName.toUpperCase() == 'DIV')
       )
 
       if (!clickedListItem)
@@ -198,24 +202,39 @@ $ ->
 
   $('.log-me-in').click(->
     $(this).hide()
+    $('.forgot-password').hide()
     $('.sign-in-form').removeClass('hidden')
     $('#user_email').focus()
+  )
+
+  $('.container').on('click', '.comments-header', ->
+    $('.log-me-in').hide()
+    $('.forgot-password').hide()
+    $('.forgot-password-form').addClass('hidden')
+    $('.sign-in-form').removeClass('hidden')
+    if $('.navbar-toggle').is(':visible')
+      $('.navbar-toggle').click()
+    $('#user_email').focus()
+    return
   )
 
   $('.cancel-log-in').click(->
     $('.sign-in-form').addClass('hidden')
     $('.log-me-in').show()
+    $('.forgot-password').show()
   )
 
   $('.forgot-password').click(->
     $(this).hide()
+    $('.log-me-in').hide()
     $('.sign-in-form').addClass('hidden')
     $('.forgot-password-form').removeClass('hidden')
+    $('#user_email_forgot_pw').focus()
   )
 
   $('.cancel-forgot-password').click(->
     $('.forgot-password-form').addClass('hidden')
-    $('.sign-in-form').removeClass('hidden')
+    $('.log-me-in').show()
     $('.forgot-password').show()
   )
 
@@ -224,7 +243,7 @@ $ ->
     pass = $('input#user_password').val().trim()
     if (email == '' || pass == '')
       e.preventDefault()
-      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and/or Password required!</p></div></div>'
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Email and Password required!</p></div></div>'
       $(html).modal()
       return false
   )
@@ -238,8 +257,16 @@ $ ->
       return false
   )
 
-  $('.search-form').submit((e) ->
-    if ($('#search_search').val().trim() == '' || !$('#search_search').val())
+  $('.desktop-search-form').submit((e) ->
+    if ($(this).find('#search_search').val().trim() == '')
+      e.preventDefault();
+      html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
+      $(html).modal()
+      return false
+  )
+
+  $('.mobile-search-form').submit((e) ->
+    if ($(this).find('#search_search').val().trim() == '')
       e.preventDefault();
       html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Search is blank, it defeats its purpose in life!</p></div></div>'
       $(html).modal()
@@ -314,7 +341,7 @@ $(document).ajaxComplete((event, request) ->
     if (request.responseJSON.message == 'Comment deleted!')
       totalComments = parseInt(request.responseJSON.total_comments)
       if totalComments == 0
-        text = 'May comment ka?'
+        text = 'Comment'
       else if totalComments == 1
         text = '1 Comment'
       else
@@ -335,6 +362,47 @@ $(document).ajaxComplete((event, request) ->
     if (request.responseJSON.content && request.responseJSON.comment_id)
       html = '<i class="fa fa-edit"></i> ' + request.responseJSON.content
       $('.comment-body-' + request.responseJSON.comment_id).html(html)
+
+    if (request.responseJSON.key == 'post_like_unlike')
+      postId = request.responseJSON.post_id
+      action = request.responseJSON.action
+      totalLikes = request.responseJSON.total_likes
+      parent = $('#thumbs-up-' + postId).parent('a')
+      if (action == 'like')
+        $('#thumbs-up-' + postId).attr('class', 'fa fa-thumbs-up')
+        parent.attr('href', '/posts/' + postId + '/unlike')
+      else
+        $('#thumbs-up-' + postId).attr('class', 'fa fa-thumbs-o-up')
+        parent.attr('href', '/posts/' + postId + '/like')
+
+      if (totalLikes == 0)
+        $('#thumbs-up-text-' + postId).text('Like |')
+      else
+        text = 'Likes'
+        if (totalLikes == 1)
+          text = 'Like'
+        $('#thumbs-up-text-' + postId).text(totalLikes + ' ' + text + ' |')
+
+    if (request.responseJSON.key == 'blog_like_unlike')
+      blogId = request.responseJSON.blog_id
+      action = request.responseJSON.action
+      totalLikes = request.responseJSON.total_likes
+      parent = $('#thumbs-up-' + blogId).parent('a')
+      if (action == 'like')
+        $('#thumbs-up-' + blogId).attr('class', 'fa fa-thumbs-up')
+        parent.attr('href', '/blogs/' + blogId + '/unlike')
+      else
+        $('#thumbs-up-' + blogId).attr('class', 'fa fa-thumbs-o-up')
+        parent.attr('href', '/blogs/' + blogId + '/like')
+
+      if (totalLikes == 0)
+        $('#thumbs-up-text-' + blogId).text('Like |')
+      else
+        text = 'Likes'
+        if (totalLikes == 1)
+          text = 'Like'
+        $('#thumbs-up-text-' + blogId).text(totalLikes + ' ' + text + ' |')
+
 
   $.fn.editable.defaults.mode = 'inline'
   $('.editable-post-body').editable(
@@ -397,7 +465,7 @@ $(document).ajaxComplete((event, request) ->
 
       eTarget = e.target || e.srcElement
       clickedListItem = closest(eTarget, (el) ->
-        return (el.tagName && el.tagName.toUpperCase() == 'FIGURE')
+        return (el.tagName && el.tagName.toUpperCase() == 'DIV')
       )
 
       if (!clickedListItem)

@@ -36,20 +36,17 @@
           %ul.blog-likes-comment-section
             %li
               - if @blog.liked_by?(current_user)
-                = link_to unlike_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                = link_to unlike_blog_path(@blog), method: :patch, data: { remote: true, type: :json, id: @blog.id } do
                   = fa_icon 'thumbs-up', id: "thumbs-up-#{@blog.id}"
               - else
-                = link_to like_blog_path(@blog), method: :patch, data: { remote: true, id: @blog.id } do
+                = link_to like_blog_path(@blog), method: :patch, data: { remote: true, type: :json, id: @blog.id } do
                   = fa_icon 'thumbs-o-up', id: "thumbs-up-#{@blog.id}"
             - likes_count = @blog.likes.count
             %li
-              %h6{ id: "thumbs-up-text-#{@blog.id}" }= likes_count.zero? ? "Ayus ba? |" : "#{likes_count} ka Ayus! |"
+              %h6{ id: "thumbs-up-text-#{@blog.id}" }= likes_count.zero? ? 'Like |' : "#{likes_count} #{'Like'.pluralize(likes_count)} |"
             %li.li-comment-section
               - comment_count = @blog.comment_threads.count
-              - if comment_count.zero?
-                %h6= 'May comment ka?'
-              - else
-                %h6= "#{comment_count} #{'Comment'.pluralize(comment_count)}"
+              %h6= comment_count.zero? ? 'Comment' : "#{comment_count} #{'Comment'.pluralize(comment_count)}"
 
           = render 'comments/template', commentable: @blog, new_comment: @new_comment
         - else
@@ -59,7 +56,7 @@
     .row
       .blog-actions.spacer
         = link_to 'Back', blogs_path, class: 'btn btn-default'
-        
+
         - if can? :publish, @blog
           = link_to 'Edit', edit_blog_path(@blog), class: 'btn btn-default'
           = link_to 'Delete', blog_path(@blog), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

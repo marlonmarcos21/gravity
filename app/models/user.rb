@@ -19,7 +19,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  DEFAULT_AVATAR = 'https://static-prod.gravity.ph/dev_files/default-avatar.png'.freeze
+  DEFAULT_AVATAR = "https://#{ENV['AWS_S3_BUCKET']}/dev_files/default-avatar.png".freeze
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
@@ -43,10 +43,11 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name,  presence: true
 
+  extend FriendlyId::FinderMethods
   extend FriendlyId
   friendly_id :slug_candidates
 
-  include PgSearch
+  include PgSearch::Model
   pg_search_scope :search,
                   against: [:first_name, :last_name],
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },

@@ -6,11 +6,21 @@
   height: 17px;
   padding-top: 0px;
   margin-top: 0px;
+  -webkit-box-shadow: unset !important;
+  box-shadow: unset !important;
   .form-group {
     margin-right: -10px;
     .input-sm {
       height: 22px !important;
       padding: 5px 5px !important;
+    }
+    .form-control {
+      @media(max-width: 767px) {
+        width: 85%;
+      }
+      &#search_search {
+        width: auto !important;
+      }
     }
   }
   .nav-form-submit, .nav-form-cancel {
@@ -29,6 +39,7 @@
       font-size: 12px;
       top: 4px;
       right: 6px;
+      color: #fff;
     }
   }
 }
@@ -84,6 +95,7 @@ form {
       }
       .start-upload {
         margin-right: 5px;
+        margin-top: 1px;
         display: inline-block;
         text-decoration: none;
         cursor: pointer;
@@ -98,6 +110,11 @@ form {
     }
     iframe {
       width: 100% !important;
+    }
+  }
+  &.blogs {
+    .form-actions {
+      margin-left: -14px;
     }
   }
 }
@@ -298,4 +315,10 @@ form {
 
 .li-comment-section {
   cursor: pointer;
+}
+
+#new-blog-container {
+  h3 {
+    margin-left: -16px;
+  }
 }

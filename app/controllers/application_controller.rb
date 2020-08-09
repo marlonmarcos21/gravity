@@ -15,11 +15,13 @@ class ApplicationController < ActionController::Base
   end
 
   def activities
-    return [] unless current_user
-    @activities = current_user.activities_as_recipient
-                              .for_notification
-                              .descending
-                              .limit(10)
+    return Activity.none unless current_user
+
+    @activities = current_user
+                    .activities_as_recipient
+                    .for_notification
+                    .descending
+                    .limit(10)
   end
 
   protected
@@ -32,6 +34,7 @@ class ApplicationController < ActionController::Base
 
   def flash_to_headers
     return unless request.xhr?
+
     response.headers['X-Message'] = flash_message
     response.headers['X-Message-Type'] = flash_type.to_s
     flash.discard

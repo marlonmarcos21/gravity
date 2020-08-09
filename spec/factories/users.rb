@@ -5,10 +5,10 @@ FactoryBot.define do
 
   factory :user do
     email
-    first_name 'Stan'
-    last_name  'Smith'
-    password   '123123123'
-    password_confirmation '123123123'
+    first_name { 'Stan' }
+    last_name { 'Smith' }
+    password { '123123123' }
+    password_confirmation { '123123123' }
 
     factory :user_with_profile do
       after :create do |user|

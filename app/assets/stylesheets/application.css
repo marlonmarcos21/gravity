@@ -18,7 +18,8 @@
  *= require bootstrap-editable
  *= require bootstrap-wysihtml5-0.0.2
  *= require wysiwyg-color
- *= require photoswipe
+ *= require photoswipe/photoswipe
+ *= require photoswipe/default-skin/default-skin
  *= require_tree .
  *= require_self
  */

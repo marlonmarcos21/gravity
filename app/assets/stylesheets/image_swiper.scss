@@ -3,18 +3,29 @@
   .my-gallery {
     width: 100%;
     float: left;
+    &.my-gallery-multiple-images {
+      display: inline-flex;
+      flex-wrap: wrap;
+    }
     img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
     }
-
-    figure {
-      display: block;
+    .grid-item {
       float: left;
+      width: 150px;
       margin: 0 5px 5px 0;
-      &.single-image {
+      &.grid-item--width2 {
         width: 100%;
       }
     }
+  }
+}
+
+.post-videos {
+  text-align: center;
+  video {
+    max-width: 100%;
+    max-height: 500px;
   }
 }

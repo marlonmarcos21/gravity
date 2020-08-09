@@ -5,6 +5,5 @@
         = link_to 'New Blog', new_blog_path, class: 'new-blog-btn btn btn-default pull-right'
 
     .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#blogs-container
-      %h2.text-center All Blogs
       %hr
       = render 'published_blogs', has_more_results: @has_more_results

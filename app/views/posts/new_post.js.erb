@@ -1,6 +1,6 @@
 $('#posts-container').prepend("<%= escape_javascript(render('listing', posts: [@new_post])) %>");
-var new_media_token = "<%= @media_token %>";
-$('input[name=media_token]').val(new_media_token);
+const newMediaToken = "<%= @media_token %>";
+$('input[name=media_token]').val(newMediaToken);
 $('html, body').animate({
   scrollTop: 510
 }, 500);
@@ -8,7 +8,7 @@ $('html, body').animate({
 $('#post-index-form form').remove();
 $('#post-index-form').prepend("<%= escape_javascript(render('form', is_remote: true)) %>");
 
-var initPhotoSwipeFromDOM = function(gallerySelector) {
+const initPhotoSwipeFromDOM = function(gallerySelector) {
   var parseThumbnailElements = function(el) {
     var thumbElements = el.childNodes,
         numNodes = thumbElements.length,
@@ -57,7 +57,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     e.preventDefault ? e.preventDefault() : e.returnValue = false;
     var eTarget = e.target || e.srcElement;
     var clickedListItem = closest(eTarget, function(el) {
-      return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+      return (el.tagName && el.tagName.toUpperCase() === 'DIV');
     });
 
     if (!clickedListItem) {
@@ -179,37 +179,88 @@ if ($('.my-gallery').length) {
   initPhotoSwipeFromDOM('.my-gallery');
 }
 
-var wysi = $('textarea#post_body').wysihtml5();
-var editor = $('#post_body').data('wysihtml5').editor;
+const wysi = $('textarea#post_body').wysihtml5();
+const editor = $('#post_body').data('wysihtml5').editor;
 
-$('#new_post').submit(function(e) {
-  if (!editor.getValue()) {
+
+let postReady = false;
+const form = $('#new_post');
+form.submit(function(e) {
+  const value = editor.getValue().replace(/&nbsp;/g, '').trim();
+  if (!value) {
     e.preventDefault();
-    html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    $(html).modal();
+    return false;
+  }
+
+  const image_count = $('.dropzone-previews').children('.dz-image-preview').length;
+  if (image_count === 0) {
+    return true;
+  }
+  if (postReady === false) {
+    $.ajax({
+      url: '/posts/pre_post_check',
+      data: {
+        media_token: newMediaToken,
+      },
+    }).done(function(data) {
+      postReady = data.ready;
+    });
+  }
+
+  if (postReady) {
+    return true;
+  } else {
+    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Images/Videos are still being processed, please try again in a few seconds...</p></div></div>';
     $(html).modal();
     return false;
   }
 });
 
 Dropzone.autoDiscover = false;
-var dz = new Dropzone('.dropzone', {
-  url: '/posts/upload_media',
+const dz = new Dropzone('.dropzone', {
+  url: '#',
   previewsContainer: '.dropzone-previews',
   addRemoveLinks: true,
-  uploadMultiple: true,
-  paramName1: 'post[media_attributes]',
-  paramName2: '[source]',
   autoQueue: false,
-  acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4',
-  dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos(mp4) here to upload',
-  dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>'
-});
-
-dz.on('addedfile', function(file) {
-  $('input[name=commit]').attr('disabled', true);
+  uploadMultiple: false,
+  parallelUploads: 1,
+  paramName1: 'file',
+  paramName2: [],
+  method: 'post',
+  maxFilesize: 10000,
+  acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, video/mp4, video/quicktime',
+  dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos here to upload',
+  dictRemoveFile: '\<i class="fa fa-trash" aria-hidden="true"\>\</i\>',
+  headers: {'Accept': '*/*'},
+  accept: function(file, cb) {
+    $.ajax({
+      url: '/posts/presigned_url',
+      dataType: 'json',
+    }).done(function(data) {
+      file.uploadURL = data.url;
+      file.uploadFields = data.fields;
+      file.UUID = data.uuid;
+      cb();
+    });
+  },
 });
 
 dz.on('processing', function(file) {
+  $('input[name=commit]').attr('disabled', true);
+  dz.options.url = file.uploadURL;
+});
+
+dz.on('sending', function(file, xhr, formData) {
+  $('input[name=commit]').attr('disabled', true);
+  for (const field in file.uploadFields) {
+    formData.append(field, file.uploadFields[field]);
+  }
+  formData.append('Content-Type', file.type);
+});
+
+dz.on('addedfile', function(file) {
   $('input[name=commit]').attr('disabled', true);
 });
 
@@ -217,15 +268,22 @@ dz.on('uploadprogress', function(file) {
   $('input[name=commit]').attr('disabled', true);
 });
 
-var auth_token = $('meta[name=csrf-token]').attr('content');
-dz.on('sending', function(file, xhr, formData) {
-  $('input[name=commit]').attr('disabled', true);
-  formData.append('authenticity_token', auth_token);
-  formData.append('media_token', new_media_token);
-});
-
 dz.on('complete', function(file) {
   $('input[name=commit]').removeAttr('disabled');
+});
+
+dz.on('success', function(file, resp) {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(resp, 'text/xml');
+  const key = xmlDoc.getElementsByTagName('Key')[0].childNodes[0].nodeValue;
+  $.ajax({
+    url: '/posts/media_upload_callback',
+    data: {
+      media_token: newMediaToken,
+      s3_key: key,
+      content_type: file.type,
+    },
+  });
 });
 
 document.querySelector('.start-upload').onclick = function() {
@@ -246,8 +304,8 @@ dz.on('removedfile', function(file) {
     url: '/posts/remove_media',
     type: 'DELETE',
     data: {
-      media_token: media_token,
-      source_file_name: file.name
+      media_token: newMediaToken,
+      source_file_names: file.name
     }
   });
 });
@@ -255,7 +313,7 @@ dz.on('removedfile', function(file) {
 $('a.cancel-post').click(function(e) {
   e.preventDefault();
   editor.clear();
-  editor.setValue("<%= current_user.first_name %>What's happening?", true);
+  editor.setValue("<%= current_user.first_name %>, What's happening?", true);
   $.each(dz.files, function(k, v) {
     dz.removeFile(v);
   });
@@ -263,4 +321,14 @@ $('a.cancel-post').click(function(e) {
     scrollTop: 0
   }, 0);
   $('input[name=commit]').removeAttr('disabled');
+  $(this).css('background-color', 'transparent');
+  $(this).css('color', '#00868B');
+  $(this).on('mouseenter', function() {
+    $(this).css('background-color', '#00868B');
+    $(this).css('color', '#fff');
+  });
+  $(this).on('mouseleave', function() {
+    $(this).css('background-color', 'transparent');
+    $(this).css('color', '#00868B');
+  });
 });

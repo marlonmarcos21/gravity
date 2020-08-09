@@ -4,37 +4,42 @@
 # t.string     :token
 # t.integer    :width
 # t.integer    :height
+# t.string     :key
 
 class Image < ApplicationRecord
-  belongs_to :attachable, polymorphic: true
+  ATTACHMENT_OPTIONS = {
+    styles: {
+      thumb: { geometry: '150x', processors: [:thumbnail] },
+      main: { geometry: '1024x', processors: [:thumbnail] }
+    },
+    storage: :s3,
+    s3_credentials: "#{Rails.root}/config/s3.yml",
+    s3_region: ENV['AWS_S3_REGION'],
+    s3_protocol: :https,
+    s3_permissions: :private,
+    s3_url_options: { virtual_host: true }
+  }
 
-  has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] },
-                                       main: { geometry: '800x', processors: [:thumbnail] },
-                                       portrait: { geometry: 'x500', processors: [:thumbnail] } },
-                             storage: :s3,
-                             s3_credentials: "#{Rails.root}/config/s3.yml",
-                             s3_region: ENV['AWS_S3_REGION'],
-                             s3_protocol: :https,
-                             s3_permissions: :private,
-                             s3_url_options: { virtual_host: true }
+  ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}
 
-  validates_attachment_presence :source
-  validates_attachment_content_type :source, content_type: %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}
-  validates :token, presence: true
+  include WithAttachment
 
   before_post_process :skip_gif
 
   after_post_process :save_image_dimensions
 
+  after_commit :enqueue_process_styles, on: :create
+  after_destroy :delete_uploaded_file
+
   scope :gif, -> { where(source_content_type: 'image/gif') }
   scope :non_gif, -> { where.not(source_content_type: 'image/gif') }
 
-  def source_url(style = :original, expires_in = 3600)
-    presigned_url = source.expiring_url(expires_in.to_i, style)
-    uri = URI presigned_url
-    uri.port = nil
-    uri.scheme = 'https'
-    uri.to_s
+  def render_style
+    small_image? ? :original : :main
+  end
+
+  def small_image?
+    width < 1024
   end
 
   def gif?
@@ -45,9 +50,31 @@ class Image < ApplicationRecord
 
   def save_image_dimensions
     return if gif?
-    geometry    = Paperclip::Geometry.from_file(source.queued_for_write[:main])
-    self.width  = geometry.width
-    self.height = geometry.height
+
+    main_geometry = Paperclip::Geometry.from_file(source.queued_for_write[:main])
+    orig_geometry = Paperclip::Geometry.from_file(source.queued_for_write[:original])
+
+    if main_geometry.width > orig_geometry.width
+      self.width  = orig_geometry.width
+      self.height = orig_geometry.height
+    else
+      self.width  = main_geometry.width
+      self.height = main_geometry.height
+    end
+  end
+
+  def enqueue_process_styles
+    return unless source.blank?
+
+    REDIS.sadd(token, "image-#{id}")
+    ImageJob.perform_later(id, 'process_styles')
+  end
+
+  def delete_uploaded_file
+    return unless key
+
+    object = BUCKET.object(key)
+    object.delete
   end
 
   def skip_gif

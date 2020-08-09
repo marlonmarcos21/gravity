@@ -12,6 +12,8 @@ class Blog < ApplicationRecord
 
   validates :user, presence: true
 
+  validate :validate_publishing
+
   has_paper_trail on: :update, only: %i(title body)
 
   scope :published,   -> { where(published: true) }
@@ -26,10 +28,11 @@ class Blog < ApplicationRecord
   include AsLikeable
   include BlogView
 
+  extend FriendlyId::FinderMethods
   extend FriendlyId
   friendly_id :title, use: [:slugged, :finders]
 
-  include PgSearch
+  include PgSearch::Model
   pg_search_scope :search,
                   against: :title,
                   using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
@@ -44,10 +47,7 @@ class Blog < ApplicationRecord
           recipient: proc { |_controller, model| model.user }
 
   def publish!
-    return update_attribute :published, true if publishable?
-    errors.add(:title, %(can't be blank when publising)) if title.blank?
-    errors.add(:body, %(must be at least 800 characters)) if body.length < 800
-    false
+    return update published: true
   end
 
   def unpublish!
@@ -59,10 +59,23 @@ class Blog < ApplicationRecord
     datetime.strftime '%a, %b %e, %Y %R'
   end
 
-  private
-
   def publishable?
     !title.blank? && body.length >= 800
+  end
+
+  private
+
+  def publishing?
+    return false unless published_changed?
+
+    !published_was && published?
+  end
+
+  def validate_publishing
+    return unless publishing?
+
+    errors.add(:title, %(can't be blank when publising)) if title.blank?
+    errors.add(:body, %(must be at least 800 characters)) if body.length < 800
   end
 
   def strip_title
@@ -71,11 +84,13 @@ class Blog < ApplicationRecord
 
   def set_published_at
     return unless published?
+
     self.published_at = Time.zone.now
   end
 
   def should_generate_new_friendly_id?
     return if published? && !slug.blank?
+
     slug.blank? || title_changed?
   end
 end

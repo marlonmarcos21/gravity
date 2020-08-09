@@ -29,7 +29,13 @@ class Ability
       post.user == current_user
     end
 
-    can [:create, :upload_media, :remove_media], Post do
+    can [
+      :create,
+      :remove_media,
+      :presigned_url,
+      :media_upload_callback,
+      :pre_post_check
+    ], Post do
       current_user.persisted?
     end
 

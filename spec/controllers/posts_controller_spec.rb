@@ -2,12 +2,10 @@ require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
   let(:token) { SecureRandom.urlsafe_base64(30) }
-  let(:valid_attributes) { { body: 'Post body'  } }
-  let(:unpermitted_attributes) { { tae: 'ka'  } }
+  let(:valid_attributes) { { body: 'Post body' } }
+  let(:unpermitted_attributes) { { tae: 'ka' } }
 
-  before do
-    @post = FactoryBot.create(:post)
-  end
+  before { @post = FactoryBot.create(:post) }
 
   describe 'GET #index' do
     it 'assigns all posts as @posts' do
@@ -169,9 +167,7 @@ RSpec.describe PostsController, type: :controller do
     end
 
     describe 'actions to own post' do
-      before do
-        @post.update_attribute :user, user
-      end
+      before { @post.update_attribute :user, user }
 
       describe 'GET #edit' do
         it 'assigns the requested post as @post' do
@@ -321,33 +317,35 @@ RSpec.describe PostsController, type: :controller do
         end
       end
 
-      describe '#remove_modia' do
+      describe '#remove_media' do
         let(:image) { FactoryBot.create(:image, token: token) }
 
         subject do
-          VCR.use_cassette 's3/destroy', match_requests_on: [:host, :method], record: :new_episodes do
-            post :remove_media,
-                 params: {
-                   media_token: @token,
-                   source_file_name: image.source_file_name
-                 },
-                format: :json,
-                xhr: true
+          VCR.use_cassette(
+            's3/destroy',
+            match_requests_on: [:host, :method],
+            record: :new_episodes
+          ) do
+            post(
+              :remove_media,
+              params: {
+                media_token: @token,
+                source_file_names: image.source_file_name
+              },
+              format: :json,
+              xhr: true
+            )
           end
         end
 
-        before do
-          image
-        end
+        before { image }
 
         describe 'successful removal' do
-          before do
-            @token = token
-          end
+          before { @token = token }
 
           it 'removes the media for the post' do
             expect { subject }.to change(Image, :count).by(-1)
-            expect(Image.find_by_id(image.id)).to be_nil
+            expect(Image.find_by(id: image.id)).to be_nil
           end
         end
 

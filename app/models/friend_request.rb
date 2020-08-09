@@ -8,7 +8,7 @@ class FriendRequest < ApplicationRecord
   belongs_to :user
   belongs_to :requester, class_name: 'User', foreign_key: :requester_id
 
-  has_many   :friends
+  has_many :friends
 
   validates :user,      presence: true
   validates :requester, presence: true

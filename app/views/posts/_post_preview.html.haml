@@ -42,16 +42,16 @@
           = fa_icon 'lock'
         = post.embed_youtube.html_safe
 
-  - if post.images.any?
+  - if post.images.exists?
     .row
       .post-images
         = render 'posts/image_swiper', images: post.images
 
-  - if post.videos.any?
+  - if post.videos.exists?
     .row
       .post-videos
         - post.videos.each do |video|
-          = video_tag video.source_url, controls: true, size: video.aspect_ratio_display
+          = video_tag video.source_url, controls: true, preload: :auto, size: video.aspect_ratio_display, poster: video.screenshot_url
 - else
   = render 'posts/private_post', post: post
 

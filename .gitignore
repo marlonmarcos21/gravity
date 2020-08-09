@@ -17,9 +17,15 @@
 *.swo
 *.swp
 /.env
+dump.rdb
+node_modules/*
 public/assets
+public/packs
+public/packs/*
 public/assets/*
 public/sitemap.xml.gz
 
 zeus.json
 custom_plan.rb
+
+.tool-versions

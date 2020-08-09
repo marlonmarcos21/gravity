@@ -5,6 +5,19 @@
         = fa_icon 'bars'
       %a.navbar-brand{ 'page-scroll' => true, href: current_page?(root_path) ? '#page-top' : root_path }
         %span G
+      - if current_user
+        .mobile-search
+          = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form mobile-search-form' } do |f|
+            %p= f.input :search, wrapper: :horizontal_form, label: false, placeholder: 'Search', input_html: { class: 'form-control input-sm' }
+            .input-group-btn
+              %button.btn.btn-default.search-submit{ type: 'submit' }
+                = fa_icon 'search'
+        .mobile-notifications.pull-right
+          .dropdown.inline
+            %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown' }
+              = fa_icon 'fa'
+            .dropdown-menu.notifications
+              = render 'shared/activity', activities: activities
 
     .collapse.navbar-collapse.navbar-main-collapse
       %ul.nav.navbar-nav.left-menus
@@ -18,8 +31,8 @@
           %a.page-scroll{ href: about_path }
             About
         - if current_user
-          %li
-            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form search-form' } do |f|
+          %li.desktop-search
+            = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form desktop-search-form' } do |f|
               %p= f.input :search, wrapper: :horizontal_form, label: false, placeholder: 'Search', input_html: { class: 'form-control input-sm' }
               .input-group-btn
                 %button.btn.btn-default.search-submit{ type: 'submit' }
@@ -27,10 +40,9 @@
       .collapse.navbar-collapse.navbar-right.navbar-main-collapse
         - if current_user
           %ul.nav.navbar-nav
-            %li.dropdown.inline
+            %li.dropdown.inline.desktop-notifications
               %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', title: 'Notifications', 'data-toggle' => 'dropdown' }
                 = fa_icon 'fa'
-                Notifications
               .dropdown-menu.notifications
                 = render 'shared/activity', activities: activities
             %li.dropdown.nav-user-dropdown{ role: 'presentation' }
@@ -52,16 +64,16 @@
         - else
           %ul.nav.navbar-nav.sign-in
             %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
+            %span.btn-xs.btn.forgot-password Forgot Password?
             .sign-in-form.hidden
-              %span.btn-xs.btn.forgot-password Forgot Password?
-              = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+              = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
                 %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
                 %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
                 %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-log-in Cancel
             .forgot-password-form.hidden
-              = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-right' }, wrapper: :horizontal_form do |f|
+              = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
                 %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { id: 'user_email_forgot_pw', class: 'input-sm' }
                 %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
                 %p.nav-form-cancel

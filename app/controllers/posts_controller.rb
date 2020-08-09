@@ -2,13 +2,12 @@ class PostsController < ApplicationController
   load_and_authorize_resource
 
   before_action :post, only: %i(show edit update destroy editable like unlike)
-
   before_action :prepare_images, only: :edit
-  before_action :media_token,    only: %i(new index create)
+  before_action :media_token, only: %i(new index create)
 
   def index
     pp_scope = Post.includes(:user).published.descending
-    @has_more_results = !pp_scope.page(2).empty?
+    @has_more_results = pp_scope.page(2).exists?
     @post  = Post.new
     @posts = pp_scope.page(1)
   end
@@ -18,7 +17,7 @@ class PostsController < ApplicationController
     page = params[:page].blank? ? 2 : params[:page].to_i
     @next_page = page + 1
     @posts = pp_scope.page(page)
-    @has_more_results = !pp_scope.page(@next_page).empty?
+    @has_more_results = pp_scope.page(@next_page).exists?
     respond_to :js
   end
 
@@ -71,7 +70,7 @@ class PostsController < ApplicationController
     attrs[params[:name]] = params[:value]
 
     respond_to do |format|
-      if @post.update_attributes(attrs)
+      if @post.update(attrs)
         flash[:notice] = 'Post updated!'
         format.json do
           render json: {
@@ -88,23 +87,21 @@ class PostsController < ApplicationController
     end
   end
 
-  def upload_media
-    if create_media
-      render json: { message: 'success' }, status: 200
-    else
-      render json: { message: 'failed' }, status: 422
-    end
-  end
-
   def remove_media
-    if destroy_media == false
-      render json: { message: 'failed' }, status: 422
-    else
-      render json: { message: 'success' }, status: 200
-    end
+    destroy_media
+    render json: { message: 'success' }, status: 200
   end
 
   def destroy
+    image_ids = @post.images.pluck(:id)
+    video_ids = @post.videos.pluck(:id)
+    if image_ids.any? || video_ids.any?
+      @post.images.update_all(attachable_id: nil)
+      @post.videos.update_all(attachable_id: nil)
+      ImageJob.perform_later(image_ids, 'delete') if image_ids.any?
+      VideoJob.perform_later(video_ids, 'delete') if video_ids.any?
+    end
+
     @post.destroy
     respond_to do |format|
       flash[:alert] = 'Post deleted!'
@@ -114,28 +111,77 @@ class PostsController < ApplicationController
   end
 
   def like
-    @like = @post.likes.create(user: current_user)
-    @total_likes = @post.likes.count
+    @post.likes.create(user: current_user)
     @post.create_activity :like, recipient: @post.user
+    total_likes = @post.likes.count
+
     respond_to do |format|
       flash[:notice] = 'Post liked!'
       format.html { redirect_to posts_url }
-      format.json { render json: { message: 'Post liked!' } }
-      format.js
+      format.json {
+        render json: {
+          key: 'post_like_unlike',
+          post_id: @post.id,
+          action: 'like',
+          total_likes: total_likes,
+          message: 'Post liked!'
+        }
+      }
     end
   end
 
   def unlike
-    @like = @post.likes.where(user: current_user).first
-    @like.destroy
+    @post.likes.find_by(user: current_user).destroy
     @post.create_activity :unlike, recipient: @post.user
-    @total_likes = @post.likes.count
+    total_likes = @post.likes.count
+
     respond_to do |format|
       flash[:alert] = 'Post unliked!'
       format.html { redirect_to posts_url }
-      format.json { render json: { message: 'Post unliked!' } }
-      format.js   { render :like }
+      format.json {
+        render json: {
+          key: 'post_like_unlike',
+          post_id: @post.id,
+          action: 'unlike',
+          total_likes: total_likes,
+          message: 'Post unliked!'
+        }
+      }
     end
+  end
+
+  def presigned_url
+    uuid = SecureRandom.uuid
+    presigned_post = BUCKET.presigned_post(
+      key: "uploads/#{uuid}/${filename}",
+      success_action_status: '201',
+      allow_any: ['Content-Type'],
+      acl: 'public-read'
+    )
+    render json: {
+      url: presigned_post.url,
+      fields: presigned_post.fields,
+      uuid: uuid,
+    }, status: 200
+  end
+
+  def media_upload_callback
+    opts = {
+      token: params[:media_token],
+      key: params[:s3_key],
+      attachable_type: 'Post'
+    }
+    if params[:content_type].starts_with?('video')
+      Video.create(**opts)
+    else
+      Image.create(**opts)
+    end
+    render json: { message: 'success' }, status: 200
+  end
+
+  def pre_post_check
+    ready = REDIS.smembers(params[:media_token]).empty?
+    render json: { ready: ready }, status: 200
   end
 
   private
@@ -149,63 +195,55 @@ class PostsController < ApplicationController
     params.require(:post).permit(*permitted_params)
   end
 
-  def create_media
-    media_token = params[:media_token]
-    return if media_token.blank?
-    media_params = params[:post][:media_attributes]
-    return if media_params.blank?
-    media_params.each_pair do |_i, medium|
-      if medium['source'].content_type == 'video/mp4'
-        Video.create(
-          token: media_token,
-          source: medium['source']
-        )
-      else
-        Image.create(
-          token: media_token,
-          source: medium['source']
-        )
-      end
-    end
-  end
-
   def destroy_media
     attrs = {
-      source_file_name: params[:source_file_name],
-      token: params[:media_token]
+      key: params[:s3_key],
+      token: params[:media_token],
+      attachable_type: 'Post'
     }
-    img = Image.where(attrs).first
-    video = Video.where(attrs).first
-    return false unless img || video
-    img.try(:destroy)
-    video.try(:destroy)
+    imgs = Image.where(attrs)
+    videos = Video.where(attrs.except(:key))
+    return unless imgs.any? || videos.any?
+
+    if imgs.any?
+      imgs.update_all(attachable_id: nil)
+      ImageJob.perform_later(imgs.pluck(:id), 'delete')
+    end
+    if videos.any?
+      videos.update_all(attachable_id: nil)
+      VideoJob.perform_later(videos.pluck(:id), 'delete')
+    end
+    post.reload if params[:id]
   end
 
   def attach_images(token, post_id)
     return if token.blank?
-    images = Image.where(token: token)
-    images.update_all(attachable_id: post_id, attachable_type: 'Post') if images.any?
+
+    images = Image.where(token: token, attachable_type: 'Post')
+    images.update_all(attachable_id: post_id) if images.exists?
   end
 
   def attach_videos(token, post_id)
     return if token.blank?
-    videos = Video.where(token: token)
-    videos.update_all(attachable_id: post_id, attachable_type: 'Post') if videos.any?
+
+    videos = Video.where(token: token, attachable_type: 'Post')
+    videos.update_all(attachable_id: post_id) if videos.exists?
   end
 
   def prepare_images
     return unless @post.try(:images).try(:any?)
-    img_hash = @post.images.each_with_object({}) do |img, hash|
+
+    @images = @post.images.each_with_object({}) do |img, hash|
+      style = img.gif? ? :original : :thumb
       hash[img.id.to_s] = {
-        img_url: img.source_url(:main),
-        img_url_thumb: img.source_url(:thumb),
+        img_url: img.source_url(style: :original),
+        img_url_thumb: img.source_url(style: style),
         size: img.source_file_size,
         file_name: img.source_file_name,
         width: img.width,
         height: img.height
       }
-    end
-    @images = img_hash.to_json
+    end.to_json
   end
 
   def media_token

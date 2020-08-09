@@ -6,7 +6,7 @@
       %span.published-posts-pagination-page
         %a.published-posts-pagination-link{ data: { remote: true }, href: more_published_posts_user_path(@user) }
           %em Load More
-          = image_tag 'https://static-prod.gravity.ph/assets/loading.gif'
+          = image_tag loading_spinner_image
   - else
     %span.end-of-internet
       %em Congratulations, you have reached the end of internet!
