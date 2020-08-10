@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   before_action :blog, only: %i(show edit update destroy publish unpublish like unlike)
   before_action :image_token, only: :new
