@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   before_action :post, only: %i(show edit update destroy editable like unlike)
   before_action :prepare_images, only: :edit
@@ -34,6 +34,7 @@ class PostsController < ApplicationController
   end
 
   def create
+    @post = Post.new(post_params)
     @post.user = current_user
     medium_token = params.delete :media_token
     respond_to do |format|
