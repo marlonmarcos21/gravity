@@ -6,23 +6,23 @@ class PostsController < ApplicationController
   before_action :media_token, only: %i(new index create)
 
   def index
-    pp_scope = Post.includes(:user).published.descending
-    @has_more_results = pp_scope.page(2).exists?
-    @post  = Post.new
-    @posts = pp_scope.page(1)
+    posts_scope       = posts_collection
+    @has_more_results = posts_scope.page(2).exists?
+    @post             = Post.new
+    @posts            = posts_scope.page(1)
   end
 
   def more_published_posts
-    pp_scope          = Post.includes(:user).published.descending
+    posts_scope       = posts_collection
     page              = params[:page].blank? ? 2 : params[:page].to_i
     @next_page        = page + 1
-    @posts            = pp_scope.page(page)
-    @has_more_results = pp_scope.page(@next_page).exists?
+    @has_more_results = posts_scope.page(@next_page).exists?
+    @posts            = posts_scope.page(page)
     respond_to :js
   end
 
   def show
-    @new_comment = Comment.build_from(@post, current_user.id, nil) if current_user
+    @new_comment = Comment.build_from(@post, current_user.id) if current_user
   end
 
   def new
@@ -190,12 +190,16 @@ class PostsController < ApplicationController
 
   private
 
+  def posts_collection
+    current_user ? Post.all_viewable : Post.for_public_view
+  end
+
   def post
     @post = Post.includes(:images).find(params[:id])
   end
 
   def post_params
-    permitted_params = %i(body published private)
+    permitted_params = %i(body published public)
     params.require(:post).permit(*permitted_params)
   end
 

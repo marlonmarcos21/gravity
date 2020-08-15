@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
         CommentMailer.delay.new_comment(@comment.id) unless current_user == @commentable.user
         @commentable.create_activity :comment
         @total_comments = @commentable.comment_threads.count
-        @new_comment = Comment.build_from(@commentable, current_user.try(:id), nil)
+        @new_comment = Comment.build_from(@commentable, current_user.try(:id))
         flash[:notice] = 'Comment posted!'
 
         template = if make_child_comment

@@ -24,7 +24,7 @@ class BlogsController < ApplicationController
   end
 
   def show
-    @new_comment = Comment.build_from(@blog, current_user.id, nil) if current_user
+    @new_comment = Comment.build_from(@blog, current_user.id) if current_user
   end
 
   def new

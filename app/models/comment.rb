@@ -31,11 +31,11 @@ class Comment < ApplicationRecord
     # Helper class method that allows you to build a comment
     # by passing a commentable object, a user_id, and comment text
     # example in readme
-    def build_from(obj, user_id, comment)
+    def build_from(obj, user_id, comment = nil)
       new \
         commentable: obj,
-        body: comment,
-        user_id: user_id
+        user_id: user_id,
+        body: comment
     end
 
     # Helper class method to look up a commentable object

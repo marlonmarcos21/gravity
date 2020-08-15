@@ -1,6 +1,6 @@
 - posts.each do |post|
   .post-preview{ id: "post-#{post.id}" }
-    = render 'posts/post_preview', post: post
+    = render 'posts/post_view', post: post
 
     .row
       - likes_count = post.likes.count
