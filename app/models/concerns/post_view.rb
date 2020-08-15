@@ -10,7 +10,11 @@ module PostView
     a_tags.each do |node|
       youtube_id = get_youtube_id(node.attributes['href'].value)
       next if youtube_id.blank?
-      iframe = %(<br><br><iframe width="560" height="315" src="https://www.youtube.com/embed/#{youtube_id}" frameborder="0" allowfullscreen></iframe>)
+
+      iframe = '<br><br><iframe width="560" height="315" '\
+        "src=\"https://www.youtube.com/embed/#{youtube_id}\""\
+        'frameborder="0" allowfullscreen></iframe>'
+
       node.add_next_sibling iframe
     end
 
@@ -26,7 +30,7 @@ module PostView
     return uri.path.sub(%r{^/}, '') if url =~ /youtu\.be/
     return unless uri.query
 
-    query = CGI::parse uri.query
+    query = CGI.parse uri.query
     query['v'].try(:first)
   end
 end

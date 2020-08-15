@@ -7,11 +7,12 @@
 class BlogMedium < ApplicationRecord
   belongs_to :attachable, polymorphic: true
 
-  has_attached_file :source, styles: { thumb: { geometry: '150x', processors: [:thumbnail] } },
-                             storage: :s3,
-                             s3_credentials: "#{Rails.root}/config/s3.yml",
-                             s3_region: ENV['AWS_S3_REGION'],
-                             s3_protocol: :https
+  has_attached_file :source,
+                    styles: { thumb: { geometry: '150x', processors: [:thumbnail] } },
+                    storage: :s3,
+                    s3_credentials: Rails.root.join('config/s3.yml'),
+                    s3_region: ENV['AWS_S3_REGION'],
+                    s3_protocol: :https
 
   validates_attachment_presence :source
   validates_attachment_content_type :source, content_type: %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}

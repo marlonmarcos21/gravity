@@ -5,7 +5,7 @@
 class Friend < ApplicationRecord
   belongs_to :friend_request
   belongs_to :user
-  belongs_to :friend, class_name: 'User', foreign_key: :friend_id
+  belongs_to :friend, class_name: 'User'
 
   validates :friend_request, presence: true
   validates :user,           presence: true

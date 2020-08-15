@@ -34,18 +34,21 @@ class CommentsController < ApplicationController
     attrs[params[:name]] = params[:value]
 
     respond_to do |format|
-      if @comment.update_attributes(attrs)
+      if @comment.update(attrs)
         flash[:notice] = 'Comment updated!'
         format.json do
           render json: {
             message: 'success',
             comment_id: @comment.id,
             content: @comment.body
-          }, status: 200
+          }, status: :ok
         end
       else
         flash[:alert] = 'Comment update failed!'
-        format.json { render json: { message: 'failed' }, status: 422 }
+        format.json do
+          render json: { message: 'failed' },
+                 status: :unprocessable_entity
+        end
       end
     end
   end

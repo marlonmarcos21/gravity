@@ -13,14 +13,14 @@ class Image < ApplicationRecord
       main: { geometry: '1024x', processors: [:thumbnail] }
     },
     storage: :s3,
-    s3_credentials: "#{Rails.root}/config/s3.yml",
+    s3_credentials: Rails.root.join('config/s3.yml'),
     s3_region: ENV['AWS_S3_REGION'],
     s3_protocol: :https,
     s3_permissions: :private,
     s3_url_options: { virtual_host: true }
-  }
+  }.freeze
 
-  ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}
+  ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}.freeze
 
   include WithAttachment
 
@@ -28,8 +28,9 @@ class Image < ApplicationRecord
 
   after_post_process :save_image_dimensions
 
-  after_commit :enqueue_process_styles, on: :create
   after_destroy :delete_uploaded_file
+
+  after_commit :enqueue_process_styles, on: :create
 
   scope :gif, -> { where(source_content_type: 'image/gif') }
   scope :non_gif, -> { where.not(source_content_type: 'image/gif') }

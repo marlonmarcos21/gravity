@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
-  before_action :user, only: [:show, :edit, :update, :destroy, :friend_request]
+  before_action :user, only: %i(show edit update destroy)
 
   def show
     pp_scope = @user.posts.published.descending
@@ -66,8 +66,7 @@ class UsersController < ApplicationController
     @user.user_profile = UserProfile.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     if @user.save
@@ -122,7 +121,7 @@ class UsersController < ApplicationController
       if current_user.accept_friend_request!(@user)
         UserMailer.delay.accept_friend_request(current_user, @user)
         @user.create_activity :accept_friend_request
-        @post = Post.find_by_id params[:post_id] if params[:post_id]
+        @post = Post.find_by(params[:post_id]) if params[:post_id]
         flash[:notice] = 'Request accepted!'
         format.html { redirect_to :back }
         format.js
@@ -179,12 +178,15 @@ class UsersController < ApplicationController
 
     permitted_params = [
       :email, :password, :password_confirmation, :profile_photo, :first_name, :last_name,
-      user_profile_attributes: [
-        :id, :date_of_birth, :street_address1, :street_address2,
-        :city, :state, :country, :postal_code, :phone_number,
-        :mobile_number, :_destroy
-      ]
+      {
+        user_profile_attributes: [
+          :id, :date_of_birth, :street_address1, :street_address2,
+          :city, :state, :country, :postal_code, :phone_number,
+          :mobile_number, :_destroy
+        ]
+      }
     ]
+
     params.require(:user).permit(*permitted_params)
   end
 end

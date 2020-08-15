@@ -111,7 +111,7 @@ class BlogsController < ApplicationController
     respond_to do |format|
       flash[:notice] = 'Blog liked!'
       format.html { redirect_to @blog }
-      format.json {
+      format.json do
         render json: {
           key: 'blog_like_unlike',
           blog_id: @blog.id,
@@ -119,7 +119,7 @@ class BlogsController < ApplicationController
           total_likes: total_likes,
           message: 'Blog liked!'
         }
-      }
+      end
     end
   end
 
@@ -131,7 +131,7 @@ class BlogsController < ApplicationController
     respond_to do |format|
       flash[:alert] = 'Blog unliked!'
       format.html { redirect_to @blog }
-      format.json {
+      format.json do
         render json: {
           key: 'blog_like_unlike',
           blog_id: @blog.id,
@@ -139,7 +139,7 @@ class BlogsController < ApplicationController
           total_likes: total_likes,
           message: 'Blog unliked!'
         }
-      }
+      end
     end
   end
 
@@ -161,6 +161,7 @@ class BlogsController < ApplicationController
 
   def attach_images(img_token)
     return if img_token.blank?
+
     images = BlogMedium.where(token: img_token)
     images.update_all(attachable_id: @blog.id, attachable_type: 'Blog') if images.any?
   end

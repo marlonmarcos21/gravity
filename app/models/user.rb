@@ -23,20 +23,25 @@ class User < ApplicationRecord
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
-  has_many :posts
-  has_many :blogs
-  has_many :likes
+  has_many :posts, dependent: :destroy
+  has_many :blogs, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
-  has_many :friends
-  has_many :friend_requests
-  has_many :requested_friends, class_name: 'FriendRequest', foreign_key: :requester_id
+  has_many :friends, dependent: :destroy
+  has_many :friend_requests, dependent: :destroy
+  has_many :requested_friends,
+           class_name: 'FriendRequest',
+           foreign_key: :requester_id,
+           inverse_of: :requester,
+           dependent: :destroy
 
-  has_attached_file :profile_photo, styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
-                                    storage: :s3,
-                                    s3_credentials: "#{Rails.root}/config/s3.yml",
-                                    s3_region: ENV['AWS_S3_REGION'],
-                                    s3_protocol: :https,
-                                    default_url: DEFAULT_AVATAR
+  has_attached_file :profile_photo,
+                    styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
+                    storage: :s3,
+                    s3_credentials: Rails.root.join('config/s3.yml'),
+                    s3_region: ENV['AWS_S3_REGION'],
+                    s3_protocol: :https,
+                    default_url: DEFAULT_AVATAR
 
   validates_attachment_content_type :profile_photo, content_type: %r{\Aimage/.*\Z}
 
@@ -50,8 +55,10 @@ class User < ApplicationRecord
   include PgSearch::Model
   pg_search_scope :search,
                   against: [:first_name, :last_name],
-                  using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
-                             trigram: { threshold: 0.6 } }
+                  using: {
+                    tsearch: { prefix: true, tsvector_column: 'tsv_name' },
+                    trigram: { threshold: 0.6 }
+                  }
 
   include PublicActivity::Model
   tracked skip_defaults: true,
@@ -137,26 +144,31 @@ class User < ApplicationRecord
   def accept_friend_request!(other_user)
     friend_request = friend_request_from(other_user)
     return false unless friend_request
+
     friends.create(
       friend: other_user,
       friend_request: friend_request
     )
+
     other_user.friends.create(
       friend: self,
       friend_request: friend_request
     )
+
     friend_request.update(status: 'accepted')
   end
 
   def cancel_friend_request!(other_user)
     friend_request = other_user.friend_request_from(self)
     return false unless friend_request
+
     friend_request.update(status: 'canceled')
   end
 
   def reject_friend_request!(other_user)
     friend_request = friend_request_from(other_user)
     return false unless friend_request
+
     friend_request.update(status: 'rejected')
   end
 

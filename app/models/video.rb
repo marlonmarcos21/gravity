@@ -8,8 +8,9 @@ class Video < ApplicationRecord
 
   validates :token, presence: true
 
-  after_commit :enqueue_process_metadata, on: :create
   after_destroy :delete_uploaded_file
+
+  after_commit :enqueue_process_metadata, on: :create
 
   def source_url
     object = BUCKET.object(key)
