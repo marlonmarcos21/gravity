@@ -9,15 +9,6 @@
 
   .dropzone
     .dropzone-previews
-  .pull-right.dropzone-action-buttons
-    %a.start-upload
-      %span.btn.btn-default.btn-xs
-        = fa_icon 'cloud-upload'
-        Start Upload
-    %a.cancel-upload
-      %span.btn.btn-danger.btn-xs
-        = fa_icon 'ban'
-        Cancel Upload
 
   = f.input :public, hint: 'Public posts can be viewed by everyone'
 
@@ -76,7 +67,6 @@
         url: '#',
         previewsContainer: '.dropzone-previews',
         addRemoveLinks: true,
-        autoQueue: false,
         uploadMultiple: false,
         parallelUploads: 1,
         paramName1: 'file',
@@ -138,19 +128,6 @@
           },
         });
       });
-
-      document.querySelector('.start-upload').onclick = function() {
-        dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
-      };
-
-      document.querySelector('.cancel-upload').onclick = function() {
-        $.each(dz.files, function(k, v) {
-          if (v.hasOwnProperty('status') && v.status !== 'success') {
-            dz.removeFile(v);
-          }
-        });
-        $('input[name=commit]').removeAttr('disabled');
-      };
 
       let didRemoveFiles = false;
       let s3KeysfilesRemoved = [];
