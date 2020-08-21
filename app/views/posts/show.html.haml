@@ -4,7 +4,7 @@
 .row
   .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1#posts-container
     .post-preview{ id: "post-#{@post.id}" }
-      = render 'posts/post_preview', post: @post, ajax: 'false'
+      = render 'posts/post_view', post: @post, ajax: 'false'
 
       .row
         - if current_user

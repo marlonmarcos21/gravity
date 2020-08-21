@@ -374,7 +374,7 @@ CREATE TABLE public.posts (
     published_at timestamp without time zone,
     tsv_name tsvector,
     slug character varying,
-    private boolean DEFAULT false
+    public boolean DEFAULT false
 );
 
 
@@ -887,6 +887,13 @@ CREATE INDEX index_likes_on_user_id ON public.likes USING btree (user_id);
 
 
 --
+-- Name: index_posts_on_public; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_posts_on_public ON public.posts USING btree (public);
+
+
+--
 -- Name: index_posts_on_tsv_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1011,6 +1018,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190823015952'),
 ('20200708013033'),
 ('20200709004904'),
-('20200711153125');
+('20200711153125'),
+('20200815221529');
 
 

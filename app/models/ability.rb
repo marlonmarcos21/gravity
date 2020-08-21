@@ -20,7 +20,7 @@ class Ability
     can :more_published_posts, Post
 
     can :read, Post do |post|
-      !post.private? ||
+      post.public? ||
         (post.private? && (post.user == current_user ||
                             current_user.is_friends_with?(post.user)))
     end

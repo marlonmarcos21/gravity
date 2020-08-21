@@ -2,12 +2,16 @@
 # t.boolean    :published
 # t.references :user
 # t.datetime   :published_at
-# t.boolean    :private
+# t.boolean    :public, default: false
 
 class Post < ApplicationRecord
   belongs_to :user
 
-  has_one :main_image, -> { where(main_image: true) }, class_name: 'Image', as: :attachable
+  has_one :main_image,
+          -> { where(main_image: true) },
+          class_name: 'Image',
+          as: :attachable,
+          inverse_of: :attachable
 
   has_many :images, as: :attachable, dependent: :destroy
   has_many :videos, as: :attachable, dependent: :destroy
@@ -19,24 +23,27 @@ class Post < ApplicationRecord
 
   has_paper_trail on: :update, only: :body
 
-  scope :published,   -> { where(published: true) }
-  scope :unpublished, -> { where(published: false) }
-  scope :descending,  -> { order(published_at: :desc) }
-  scope :recent,      -> (limit) { published.descending.limit(limit) }
-  scope :non_public,  -> { where(private: true) }
-  scope :non_private, -> { where(private: false) }
-
-  before_create :set_published_at
+  scope :published,       -> { where(published: true) }
+  scope :unpublished,     -> { where(published: false) }
+  scope :descending,      -> { order(published_at: :desc) }
+  scope :recent,          ->(limit) { published.descending.limit(limit) }
+  scope :is_public,       -> { where(public: true) }
+  scope :all_viewable,    -> { includes(:user).published.descending }
+  scope :for_public_view, -> { all_viewable.is_public }
 
   before_save :strip_body, if: :body_changed?
+
+  before_create :set_published_at
 
   include AsLikeable
   include PostView
   include PgSearch::Model
   pg_search_scope :search,
                   against: :body,
-                  using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
-                             trigram: { threshold: 0.2 } },
+                  using: {
+                    tsearch: { prefix: true, tsvector_column: 'tsv_name' },
+                    trigram: { threshold: 0.2 }
+                  },
                   order_within_rank: 'posts.published_at DESC'
 
   acts_as_commentable
@@ -48,6 +55,10 @@ class Post < ApplicationRecord
 
   def date_meta
     published_at.strftime '%a, %b %e, %Y %R'
+  end
+
+  def private?
+    !public?
   end
 
   private

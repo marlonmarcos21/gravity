@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.6.4'
+ruby '2.7.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
@@ -83,6 +83,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'parallel_tests'
+  gem 'rubocop-rails'
 end
 
 group :test do

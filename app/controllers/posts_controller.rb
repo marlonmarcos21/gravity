@@ -6,23 +6,23 @@ class PostsController < ApplicationController
   before_action :media_token, only: %i(new index create)
 
   def index
-    pp_scope = Post.includes(:user).published.descending
-    @has_more_results = pp_scope.page(2).exists?
-    @post  = Post.new
-    @posts = pp_scope.page(1)
+    posts_scope       = posts_collection
+    @has_more_results = posts_scope.page(2).exists?
+    @post             = Post.new
+    @posts            = posts_scope.page(1)
   end
 
   def more_published_posts
-    pp_scope = Post.includes(:user).published.descending
-    page = params[:page].blank? ? 2 : params[:page].to_i
-    @next_page = page + 1
-    @posts = pp_scope.page(page)
-    @has_more_results = pp_scope.page(@next_page).exists?
+    posts_scope       = posts_collection
+    page              = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page        = page + 1
+    @has_more_results = posts_scope.page(@next_page).exists?
+    @posts            = posts_scope.page(page)
     respond_to :js
   end
 
   def show
-    @new_comment = Comment.build_from(@post, current_user.id, nil) if current_user
+    @new_comment = Comment.build_from(@post, current_user.id) if current_user
   end
 
   def new
@@ -79,18 +79,21 @@ class PostsController < ApplicationController
             post_id: @post.id,
             content: @post.embed_youtube,
             private: @post.private?
-          }, status: 200
+          }, status: :ok
         end
       else
         flash[:alert] = 'Post update failed!'
-        format.json { render json: { message: 'failed' }, status: 422 }
+        format.json do
+          render json: { message: 'failed' },
+                 status: :unprocessable_entity
+        end
       end
     end
   end
 
   def remove_media
     destroy_media
-    render json: { message: 'success' }, status: 200
+    render json: { message: 'success' }, status: :ok
   end
 
   def destroy
@@ -119,7 +122,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       flash[:notice] = 'Post liked!'
       format.html { redirect_to posts_url }
-      format.json {
+      format.json do
         render json: {
           key: 'post_like_unlike',
           post_id: @post.id,
@@ -127,7 +130,7 @@ class PostsController < ApplicationController
           total_likes: total_likes,
           message: 'Post liked!'
         }
-      }
+      end
     end
   end
 
@@ -139,7 +142,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       flash[:alert] = 'Post unliked!'
       format.html { redirect_to posts_url }
-      format.json {
+      format.json do
         render json: {
           key: 'post_like_unlike',
           post_id: @post.id,
@@ -147,7 +150,7 @@ class PostsController < ApplicationController
           total_likes: total_likes,
           message: 'Post unliked!'
         }
-      }
+      end
     end
   end
 
@@ -162,8 +165,8 @@ class PostsController < ApplicationController
     render json: {
       url: presigned_post.url,
       fields: presigned_post.fields,
-      uuid: uuid,
-    }, status: 200
+      uuid: uuid
+    }, status: :ok
   end
 
   def media_upload_callback
@@ -177,22 +180,26 @@ class PostsController < ApplicationController
     else
       Image.create(**opts)
     end
-    render json: { message: 'success' }, status: 200
+    render json: { message: 'success' }, status: :ok
   end
 
   def pre_post_check
     ready = REDIS.smembers(params[:media_token]).empty?
-    render json: { ready: ready }, status: 200
+    render json: { ready: ready }, status: :ok
   end
 
   private
+
+  def posts_collection
+    current_user ? Post.all_viewable : Post.for_public_view
+  end
 
   def post
     @post = Post.includes(:images).find(params[:id])
   end
 
   def post_params
-    permitted_params = %i(body published private)
+    permitted_params = %i(body published public)
     params.require(:post).permit(*permitted_params)
   end
 

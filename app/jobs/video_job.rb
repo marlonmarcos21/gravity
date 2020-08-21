@@ -24,7 +24,7 @@ class VideoJob < ApplicationJob
       width: movie.width,
       height: movie.height,
       aspect: movie.width / movie.height.to_f,
-      screenshot_key: screenshot_obj.key,
+      screenshot_key: screenshot_obj.key
     }
     video.source_meta = metadata
     video.save

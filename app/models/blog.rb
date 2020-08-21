@@ -18,7 +18,7 @@ class Blog < ApplicationRecord
 
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
-  scope :recent,      -> (limit) { published.order(published_at: :desc).limit(limit) }
+  scope :recent,      ->(limit) { published.order(published_at: :desc).limit(limit) }
   scope :descending,  -> { order(published_at: :desc) }
 
   before_save :strip_title, if: :title_changed?
@@ -35,8 +35,10 @@ class Blog < ApplicationRecord
   include PgSearch::Model
   pg_search_scope :search,
                   against: :title,
-                  using:   { tsearch: { prefix: true, tsvector_column: 'tsv_name' },
-                             trigram: { threshold: 0.2 } },
+                  using: {
+                    tsearch: { prefix: true, tsvector_column: 'tsv_name' },
+                    trigram: { threshold: 0.2 }
+                  },
                   order_within_rank: 'blogs.published_at DESC'
 
   acts_as_commentable
@@ -47,7 +49,7 @@ class Blog < ApplicationRecord
           recipient: proc { |_controller, model| model.user }
 
   def publish!
-    return update published: true
+    update published: true
   end
 
   def unpublish!

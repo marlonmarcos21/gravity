@@ -1,5 +1,6 @@
 module ApplicationHelper
   def render_meta_tags(model)
+    meta = Meta.new
     meta.description = strip_content!(model.body)
     meta.url = url_for(
       action: :show,
@@ -23,6 +24,7 @@ module ApplicationHelper
 
     meta.image ||= home_image
     meta.image = meta.image.sub('https', 'http')
+
     content_for :meta_tags, meta.render
   end
 
@@ -36,38 +38,6 @@ module ApplicationHelper
 
   def about_image
     "https://#{ENV['AWS_S3_BUCKET']}/assets/about.jpg"
-  end
-
-  def custom_drop_down(name, opts = {})
-    html_class = 'dropdown'
-    html_class += " #{opts[:class]}" unless opts[:class].blank?
-    content_tag :li, class: html_class do
-      custom_drop_down_link(name, opts) + custom_drop_down_list { yield }
-    end
-  end
-
-  private
-
-  def meta
-    @meta ||= Meta.new
-  end
-
-  def custom_drop_down_link(name, opts = {})
-    path = opts[:path] || '#'
-    link_to(
-      custom_name_and_caret(name),
-      path,
-      class: "dropdown-toggle #{opts[:class]}",
-      'data-toggle' => 'dropdown'
-    )
-  end
-
-  def custom_drop_down_list(&block)
-    content_tag :ul, class: 'dropdown-menu', &block
-  end
-
-  def custom_name_and_caret(name)
-    "#{name} #{content_tag(:b, nil, class: 'caret')}"
   end
 
   def strip_content!(text)

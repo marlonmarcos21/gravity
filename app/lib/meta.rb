@@ -10,10 +10,7 @@ class Meta
   private
 
   def meta(property, content, property_type = 'og')
-    content_tag :meta,
-                nil,
-                property: "#{property_type}:#{property}",
-                content: content
+    tag.meta(property: "#{property_type}:#{property}", content: content)
   end
 
   def inject_meta_tags(property_type = 'og')
@@ -24,7 +21,7 @@ class Meta
 
       value = Array[value].flatten
       value.each do |content|
-        tags << meta(attr_name[1..-1], content, property_type)
+        tags << meta(attr_name[1..], content, property_type)
       end
     end
 

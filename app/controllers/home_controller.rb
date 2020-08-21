@@ -2,8 +2,7 @@ class HomeController < ApplicationController
   before_action :recent_posts
   before_action :recent_blogs
 
-  def index
-  end
+  def index; end
 
   private
 
