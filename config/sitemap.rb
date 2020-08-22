@@ -25,7 +25,7 @@ SitemapGenerator::Sitemap.create do
   #     add article_path(article), :lastmod => article.updated_at
   #   end
 
-  Post.published.non_private.find_each do |post|
+  Post.for_public_view.find_each do |post|
     add post_path(post), lastmod: post.updated_at
   end
 
