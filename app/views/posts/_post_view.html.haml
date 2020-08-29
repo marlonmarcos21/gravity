@@ -51,7 +51,7 @@
     .row
       .post-videos
         - post.videos.each do |video|
-          = video_tag video.source_url, controls: true, preload: :auto, size: video.aspect_ratio_display, poster: video.screenshot_url
+          = video_tag video.source_url, controls: true, preload: :none, size: video.aspect_ratio_display, poster: video.screenshot_url
 - else
   = render 'posts/private_post', post: post
 
