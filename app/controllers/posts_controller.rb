@@ -239,11 +239,9 @@ class PostsController < ApplicationController
   end
 
   def prepare_images
-    return unless @post.try(:images).try(:any?)
-
-    @images = @post.images.each_with_object({}) do |img, hash|
+    images = @post.images.each_with_object({}) do |img, hash|
       style = img.gif? ? :original : :thumb
-      hash[img.id.to_s] = {
+      hash[SecureRandom.uuid] = {
         img_url: img.source_url(style: :original),
         img_url_thumb: img.source_url(style: style),
         size: img.source_file_size,
@@ -251,7 +249,20 @@ class PostsController < ApplicationController
         width: img.width,
         height: img.height
       }
-    end.to_json
+    end
+
+    videos = @post.videos.each_with_object({}) do |video, hash|
+      hash[SecureRandom.uuid] = {
+        img_url: video.source_url,
+        img_url_thumb: video.screenshot_url,
+        size: 2048,
+        file_name: 'screenshot.jpg',
+        width: video.source_meta['width'],
+        height: video.source_meta['height']
+      }
+    end
+
+    @images = images.merge(videos).to_json
   end
 
   def media_token

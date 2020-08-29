@@ -158,7 +158,7 @@
 
       let images = '#{raw(@images)}';
       if (images !== '') {
-        images = JSON.parse('#{raw(@images)}');
+        images = JSON.parse(images);
         for (const img in images) {
           const mockFile = {name: images[img].file_name, size: images[img].size};
           dz.emit('addedfile', mockFile);
