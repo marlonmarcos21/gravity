@@ -30,7 +30,8 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @media_token = @post.images.first.try(:token) || media_token
+    media = @post.images.first || @post.videos.first
+    @media_token = media.try(:token) || media_token
   end
 
   def create
@@ -195,7 +196,7 @@ class PostsController < ApplicationController
   end
 
   def post
-    @post = Post.includes(:images).find(params[:id])
+    @post = Post.includes(:images, :videos).find(params[:id])
   end
 
   def post_params
@@ -210,15 +211,15 @@ class PostsController < ApplicationController
       attachable_type: 'Post'
     }
     imgs = Image.where(attrs)
-    videos = Video.where(attrs.except(:key))
+    videos = Video.where(attrs)
     return unless imgs.any? || videos.any?
 
     if imgs.any?
-      imgs.update_all(attachable_id: nil)
+      imgs.update_all(attachable_id: nil, attachable_type: nil)
       ImageJob.perform_later(imgs.pluck(:id), 'delete')
     end
     if videos.any?
-      videos.update_all(attachable_id: nil)
+      videos.update_all(attachable_id: nil, attachable_type: nil)
       VideoJob.perform_later(videos.pluck(:id), 'delete')
     end
     post.reload if params[:id]
@@ -247,7 +248,8 @@ class PostsController < ApplicationController
         size: img.source_file_size,
         file_name: img.source_file_name,
         width: img.width,
-        height: img.height
+        height: img.height,
+        s3_key: img.key
       }
     end
 
@@ -256,9 +258,10 @@ class PostsController < ApplicationController
         img_url: video.source_url,
         img_url_thumb: video.screenshot_url,
         size: 2048,
-        file_name: 'screenshot.jpg',
+        file_name: video.key.split('/').last,
         width: video.source_meta['width'],
-        height: video.source_meta['height']
+        height: video.source_meta['height'],
+        s3_key: video.key
       }
     end
 
