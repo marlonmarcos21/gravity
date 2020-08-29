@@ -14,8 +14,11 @@ class VideoJob < ApplicationJob
     uri = URI(object.presigned_url(:get))
     file = uri.open
     movie = FFMPEG::Movie.new(file.path)
-    filename = video.key.split('/').last
-    screenshot_obj = BUCKET.object("uploads/#{SecureRandom.uuid}/#{filename}")
+    filename = 'screenshot.jpg'
+    s3_key = video.key.split('/')
+    s3_key.pop
+    s3_key << filename
+    screenshot_obj = BUCKET.object(s3_key.join('/'))
     screenshot_filepath = Rails.root.join('tmp', filename)
     screenshot = movie.screenshot(screenshot_filepath.to_s, seek_time: 5)
     screenshot_file = File.open(screenshot.path)

@@ -22,6 +22,10 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
       const mediaToken = '#{raw(@media_token)}';
       const wysi = $('textarea#post_body').wysihtml5();
       const editor = $('#post_body').data('wysihtml5').editor;
@@ -41,7 +45,10 @@
         if (image_count === 0) {
           return true;
         }
-        if (postReady === false) {
+
+        $('input[name=commit]').attr('disabled', true);
+
+        while (postReady === false) {
           $.ajax({
             url: '/posts/pre_post_check',
             data: {
@@ -50,6 +57,7 @@
           }).done(function(data) {
             postReady = data.ready;
           });
+          sleep(3000);
         }
 
         if (postReady === true) {
