@@ -223,7 +223,6 @@ const dz = new Dropzone('.dropzone', {
   url: '#',
   previewsContainer: '.dropzone-previews',
   addRemoveLinks: true,
-  autoQueue: false,
   uploadMultiple: false,
   parallelUploads: 1,
   paramName1: 'file',
@@ -286,26 +285,13 @@ dz.on('success', function(file, resp) {
   });
 });
 
-document.querySelector('.start-upload').onclick = function() {
-  dz.enqueueFiles(dz.getFilesWithStatus(Dropzone.ADDED));
-};
-
-document.querySelector('.cancel-upload').onclick = function() {
-  $.each(dz.files, function(k, v) {
-    if (v.hasOwnProperty('status') && v.status !== 'success') {
-      dz.removeFile(v);
-    }
-  });
-  $('input[name=commit]').removeAttr('disabled');
-};
-
 dz.on('removedfile', function(file) {
   $.ajax({
     url: '/posts/remove_media',
     type: 'DELETE',
     data: {
       media_token: newMediaToken,
-      source_file_names: file.name
+      s3_key: `uploads/${file.UUID}/${file.name}`,
     }
   });
 });
