@@ -147,17 +147,17 @@
         }
       });
 
-      let images = '#{raw(@images)}';
-      if (images !== '') {
-        images = JSON.parse(images);
-        for (const img in images) {
+      let media = '#{raw(@media)}';
+      if (media !== '') {
+        media = JSON.parse(media);
+        for (const idx in media) {
           const mockFile = {
-            name: images[img].file_name,
-            size: images[img].size,
-            s3_key: images[img].s3_key,
+            name: media[idx].file_name,
+            size: media[idx].size,
+            s3_key: media[idx].s3_key,
           };
           dz.emit('addedfile', mockFile);
-          dz.emit('thumbnail', mockFile, images[img].img_url_thumb);
+          dz.emit('thumbnail', mockFile, media[idx].media_url_thumb);
           dz.emit('complete', mockFile);
           dz.files.push(mockFile);
         }
