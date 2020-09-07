@@ -56,5 +56,8 @@ Rails.application.routes.draw do
   get 'search', to: 'search#search'
   get 'about',  to: 'about#index'
 
+  get 'set_light_mode', to: 'application#set_light_mode'
+  get 'set_dark_mode', to: 'application#set_dark_mode'
+
   root to: 'posts#index'
 end

@@ -14,6 +14,16 @@ class ApplicationController < ActionController::Base
     redirect_to redirect_page, alert: exception.message
   end
 
+  def set_light_mode
+    cookies.delete(:dark_mode)
+    redirect_to root_path
+  end
+
+  def set_dark_mode
+    cookies[:dark_mode] = { value: true }
+    redirect_to root_path
+  end
+
   def activities
     return Activity.none unless current_user
 

@@ -57,6 +57,19 @@
                 %li
                   %a{ href: new_blog_path }
                     = fa_icon('newspaper-o') + ' New Blog'
+                %li#dark_mode_switch
+                  - if cookies[:dark_mode]
+                    %a{ href: set_light_mode_path }
+                      = fa_icon 'moon-o'
+                      %label.switch
+                        %input{ type: 'checkbox', checked: :checked, onclick: 'setThemeMode("/set_light_mode")' }
+                        %span.slider.round
+                  - else
+                    %a{ href: set_dark_mode_path }
+                      = fa_icon 'moon-o'
+                      %label.switch
+                        %input{ type: 'checkbox', checked: false, onclick: 'setThemeMode("/set_dark_mode")' }
+                        %span.slider.round
                 %li
                   = link_to(destroy_user_session_path, method: :delete) do
                     = fa_icon 'power-off'
@@ -78,3 +91,11 @@
                 %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
                 %p.nav-form-cancel
                   %span.btn-xs.btn.cancel-forgot-password Cancel
+
+- content_for :footer_scripts do
+  :javascript
+    function setThemeMode(path) {
+      $('#dark_mode_switch').on('click', 'input', function() {
+        window.location.href = path;
+      });
+    }

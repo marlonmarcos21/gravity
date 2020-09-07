@@ -22,9 +22,18 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
-      const mediaToken = '#{raw(@media_token)}';
-      const wysi = $('textarea#post_body').wysihtml5();
+      $('textarea#post_body').wysihtml5();
       const editor = $('#post_body').data('wysihtml5').editor;
+      const mediaToken = '#{raw(@media_token)}';
+
+      const isDarkMode = '#{raw(cookies[:dark_mode])}';
+      if (isDarkMode) {
+        $('iframe.wysihtml5-sandbox').load(function() {
+          $(this).contents().find('head').append(
+            $("<style type='text/css'>\n  body.wysihtml5-editor { background-color: #000 !important; color: #fff !important; }\n</style>")
+          );
+        });
+      }
 
       let postReady = false;
       const form = $('form#new_post');

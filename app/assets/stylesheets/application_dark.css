@@ -20,9 +20,9 @@
  *= require wysiwyg-color
  *= require photoswipe/photoswipe
  *= require photoswipe/default-skin/default-skin
- *= require forms
+ *= require forms_dark
  *= require image_swiper
  *= require bootstrap_and_overrides
- *= require my_theme
+ *= require my_theme_dark
  *= require_self
  */
