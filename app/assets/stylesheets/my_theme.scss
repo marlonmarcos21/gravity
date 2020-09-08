@@ -887,11 +887,21 @@ hr {
   height: 20px;
 }
 
+.switch.boolean.optional {
+  margin-top: 50px;
+} 
+
 /* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+.switch_label {
+  margin-left: 45px;
+  cursor: pointer;
+  font-weight: normal;
 }
 
 /* The slider */
@@ -940,4 +950,9 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.post_public_hint {
+  margin-top: -18px !important;
+  margin-bottom: 20px !important;
 }
