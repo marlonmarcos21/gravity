@@ -47,22 +47,16 @@ class ApplicationController < ActionController::Base
   def flash_to_headers
     return unless request.xhr?
 
+    flash_message, flash_type = flash_message_and_type
     response.headers['X-Message'] = flash_message
     response.headers['X-Message-Type'] = flash_type.to_s
     flash.discard
   end
 
-  def flash_message
+  def flash_message_and_type
     %i(alert notice).each do |type|
-      return flash[type] unless flash[type].blank?
+      return [flash[type], type] unless flash[type].blank?
     end
-    nil
-  end
-
-  def flash_type
-    %i(alert notice).each do |type|
-      return type unless flash[type].blank?
-    end
-    nil
+    [nil, nil]
   end
 end
