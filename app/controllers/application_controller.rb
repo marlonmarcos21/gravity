@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_dark_mode
-    cookies[:dark_mode] = { value: true }
+    cookies.permanent[:dark_mode] = true
     redirect_to root_path
   end
 
