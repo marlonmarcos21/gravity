@@ -228,7 +228,7 @@ a {
     }
   }
   .navbar-right {
-    margin-bottom: -5px;
+    margin-bottom: 0px;
     li {
       list-style: none;
     }
@@ -278,6 +278,10 @@ a {
       border-bottom: 1px solid rgba(white, 0.3);
     }
   }
+}
+
+.navbar-right.anonymous {
+  margin-top: 14px;
 }
 
 .intro {

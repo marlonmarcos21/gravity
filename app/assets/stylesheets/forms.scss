@@ -4,12 +4,13 @@
 .navbar-form {
   display: inline-flex;
   height: 17px;
-  padding-top: 0px;
-  margin-top: 0px;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+  margin-right: -10px !important;
   -webkit-box-shadow: unset !important;
   box-shadow: unset !important;
   .form-group {
-    margin-right: -10px;
+    margin-right: -10px !important;
     .input-sm {
       height: 22px !important;
       padding: 5px 5px !important;

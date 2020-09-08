@@ -37,7 +37,7 @@
               .input-group-btn
                 %button.btn.btn-default.search-submit{ type: 'submit' }
                   = fa_icon 'search'
-      .collapse.navbar-collapse.navbar-right.navbar-main-collapse
+      .collapse.navbar-collapse.navbar-right.navbar-main-collapse{ class: current_user ? '' : 'anonymous' }
         - if current_user
           %ul.nav.navbar-nav
             %li.dropdown.inline.desktop-notifications
@@ -75,22 +75,35 @@
                     = fa_icon 'power-off'
                     Sign Out
         - else
-          %ul.nav.navbar-nav.sign-in
-            %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
-            %span.btn-xs.btn.forgot-password Forgot Password?
-            .sign-in-form.hidden
-              = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
-                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
-                %p= f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
-                %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
-                %p.nav-form-cancel
-                  %span.btn-xs.btn.cancel-log-in Cancel
-            .forgot-password-form.hidden
-              = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
-                %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { id: 'user_email_forgot_pw', class: 'input-sm' }
-                %p.nav-form-submit= f.submit 'Reset Password', class: 'btn-xs btn-default'
-                %p.nav-form-cancel
-                  %span.btn-xs.btn.cancel-forgot-password Cancel
+          %ul.nav.navbar-nav
+          %button.btn-xs.btn-default.btn-lg.log-me-in Sign In
+          %span.btn-xs.btn.forgot-password Forgot Password?
+          %span.sign-in-form.hidden
+            = simple_form_for User.new, as: :user, url: user_session_path, html: { class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
+              = f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { class: 'input-sm' }
+              = f.input :password, wrapper: :horizontal_form, label: false, placeholder: 'Password', input_html: { class: 'input-sm' }
+              %p.nav-form-submit= f.submit 'Sign in', class: 'btn-xs btn-default'
+              %p.nav-form-cancel
+                %span.btn-xs.btn.cancel-log-in Cancel
+          %span.forgot-password-form.hidden
+            = simple_form_for User.new, as: :user, url: user_password_path, html: { id: 'new_user_forgot_pw', class: 'login form-horizontal navbar-form pull-left' }, wrapper: :horizontal_form do |f|
+              %p= f.input :email, wrapper: :horizontal_form, label: false, placeholder: 'Email', autofocus: true, input_html: { id: 'user_email_forgot_pw', class: 'input-sm' }
+              %p.nav-form-submit= f.submit 'Reset', class: 'btn-xs btn-default'
+              %p.nav-form-cancel
+                %span.btn-xs.btn.cancel-forgot-password Cancel
+          %span#dark_mode_switch
+            - if cookies[:dark_mode]
+              %a{ href: set_light_mode_path }
+                = fa_icon 'moon-o'
+                %label.switch
+                  %input{ type: 'checkbox', checked: :checked, onclick: 'setThemeMode("/set_light_mode")' }
+                  %span.slider.round
+            - else
+              %a{ href: set_dark_mode_path }
+                = fa_icon 'moon-o'
+                %label.switch
+                  %input{ type: 'checkbox', checked: false, onclick: 'setThemeMode("/set_dark_mode")' }
+                  %span.slider.round
 
 - content_for :footer_scripts do
   :javascript
