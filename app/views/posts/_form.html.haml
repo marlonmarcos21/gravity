@@ -11,9 +11,10 @@
     .dropzone-previews
 
   %label.switch.boolean.optional{ for: 'post_public' }
+    %input{ type: 'hidden', name: 'post[public]', value: '0' }
     %span.switch_label
       Public
-    %input.boolean.optional#post_public{ type: 'checkbox', checked: @post.public?, name: 'post[public]' }
+    %input.boolean.optional#post_public{ type: 'checkbox', checked: @post.public?, name: 'post[public]', value: '1' }
     %span.slider.round
   %p.help-block.post_public_hint
     Public posts can be viewed by everyone
