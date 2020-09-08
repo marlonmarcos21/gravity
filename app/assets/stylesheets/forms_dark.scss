@@ -111,8 +111,19 @@ form {
     }
   }
   &.blogs {
+    #blog_title {
+      background-color: #000;
+      color: #fff;
+    }
     .form-actions {
       margin-left: -14px;
+    }
+  }
+  textarea {
+    background-color: #000 !important;
+    color: #fff !important;
+    &.form-control:focus {
+      border-color: #fff;
     }
   }
 }

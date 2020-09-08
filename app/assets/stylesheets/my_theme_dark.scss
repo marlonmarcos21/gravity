@@ -87,7 +87,8 @@ p {
 }
 
 .blog-container {
-  background-color: #fff;
+  background-color: #000;
+  color: #fff;
   padding: 15px;
   border-radius: 3px;
   .row {
@@ -604,7 +605,7 @@ body {
   height: 150px;
   margin: 0 auto;
   border: 1px solid $primary;
-  background: #fff;
+  background-color: #1e1e1e;
   position: fixed;
   top: 200px;
   border-radius: 3px;
@@ -748,7 +749,7 @@ hr {
 }
 
 #profile-tab {
-  background-color: #fff;
+  background-color: #000;
   border-radius: 3px;
 }
 
@@ -786,7 +787,7 @@ hr {
   }
   .dropdown-menu {
     margin-top: -6px;
-    background-color: #fff;
+    background-color: #1e1e1e;
     min-width: 100px;
     a:hover {
       color: $tertiary;
@@ -816,22 +817,21 @@ hr {
   font-size: 18px;
 }
 
-#about-img {
-  max-width: 500px;
-  height: auto !important;
-  @media(max-width: 543px) {
-    max-width: 300px !important;
+#about-page {
+  background: #000;
+  #about-img {
+    max-width: 500px;
+    height: auto !important;
+    @media(max-width: 543px) {
+      max-width: 300px !important;
+    }
+    @media(min-width: 544px) and (max-width: 767px) {
+      max-width: 400px !important;
+    }
+    @media(min-width: 768px) and (max-width: 992px) {
+      max-width: 500px !important;
+    }
   }
-  @media(min-width: 544px) and (max-width: 767px) {
-    max-width: 400px !important;
-  }
-  @media(min-width: 768px) and (max-width: 992px) {
-    max-width: 500px !important;
-  }
-}
-
-.white-bg {
-  background: #fff;
 }
 
 .post-likes-comment-section, .blog-likes-comment-section {

@@ -228,7 +228,7 @@ a {
     }
   }
   .navbar-right {
-    margin-bottom: 0px;
+    margin-bottom: -5px;
     li {
       list-style: none;
     }
@@ -816,22 +816,21 @@ hr {
   font-size: 18px;
 }
 
-#about-img {
-  max-width: 500px;
-  height: auto !important;
-  @media(max-width: 543px) {
-    max-width: 300px !important;
-  }
-  @media(min-width: 544px) and (max-width: 767px) {
-    max-width: 400px !important;
-  }
-  @media(min-width: 768px) and (max-width: 992px) {
-    max-width: 500px !important;
-  }
-}
-
-.white-bg {
+#about-page {
   background: #fff;
+  #about-img {
+    max-width: 500px;
+    height: auto !important;
+    @media(max-width: 543px) {
+      max-width: 300px !important;
+    }
+    @media(min-width: 544px) and (max-width: 767px) {
+      max-width: 400px !important;
+    }
+    @media(min-width: 768px) and (max-width: 992px) {
+      max-width: 500px !important;
+    }
+  }
 }
 
 .post-likes-comment-section, .blog-likes-comment-section {
