@@ -13,7 +13,7 @@
   %label.switch.boolean.optional{ for: 'post_public' }
     %span.switch_label
       Public
-    %input.boolean.optional#post_public{ type: 'checkbox', checked: @post.persisted?, name: 'post[public]',  }
+    %input.boolean.optional#post_public{ type: 'checkbox', checked: @post.public?, name: 'post[public]' }
     %span.slider.round
   %p.help-block.post_public_hint
     Public posts can be viewed by everyone
