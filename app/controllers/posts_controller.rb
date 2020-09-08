@@ -2,8 +2,8 @@ class PostsController < ApplicationController
   authorize_resource
 
   before_action :post, only: %i(show edit update destroy editable like unlike)
-  before_action :prepare_images, only: :edit
   before_action :media_token, only: %i(new index create)
+  before_action :prepare_media_data, only: :edit
 
   def index
     posts_scope       = posts_collection
@@ -41,8 +41,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.save
         flash[:notice] = 'Post created'
-        attach_images medium_token, @post.id
-        attach_videos medium_token, @post.id
+        attach_media medium_token, @post.id
         @new_post = @post
         @post = Post.new
         format.html { redirect_to @new_post }
@@ -59,8 +58,7 @@ class PostsController < ApplicationController
     medium_token = params.delete :media_token
 
     if @post.update(post_params)
-      attach_images medium_token, @post.id
-      attach_videos medium_token, @post.id
+      attach_media medium_token, @post.id
       redirect_to @post, notice: 'Post updated'
     else
       render :edit
@@ -225,26 +223,24 @@ class PostsController < ApplicationController
     post.reload if params[:id]
   end
 
-  def attach_images(token, post_id)
+  def attach_media(token, post_id)
     return if token.blank?
 
-    images = Image.where(token: token, attachable_type: 'Post')
-    images.update_all(attachable_id: post_id) if images.exists?
+    Image
+      .where(token: token, attachable_type: 'Post')
+      .update_all(attachable_id: post_id)
+
+    Video
+      .where(token: token, attachable_type: 'Post')
+      .update_all(attachable_id: post_id)
   end
 
-  def attach_videos(token, post_id)
-    return if token.blank?
-
-    videos = Video.where(token: token, attachable_type: 'Post')
-    videos.update_all(attachable_id: post_id) if videos.exists?
-  end
-
-  def prepare_images
-    images = @post.images.each_with_object({}) do |img, hash|
+  def prepare_media_data
+    images = @post.images.each_with_object([]) do |img, ary|
       style = img.gif? ? :original : :thumb
-      hash[SecureRandom.uuid] = {
-        img_url: img.source_url(style: :original),
-        img_url_thumb: img.source_url(style: style),
+      ary << {
+        media_url: img.source_url(style: :original),
+        media_url_thumb: img.source_url(style: style),
         size: img.source_file_size,
         file_name: img.source_file_name,
         width: img.width,
@@ -253,10 +249,10 @@ class PostsController < ApplicationController
       }
     end
 
-    videos = @post.videos.each_with_object({}) do |video, hash|
-      hash[SecureRandom.uuid] = {
-        img_url: video.source_url,
-        img_url_thumb: video.screenshot_url,
+    videos = @post.videos.each_with_object([]) do |video, ary|
+      ary << {
+        media_url: video.source_url,
+        media_url_thumb: video.screenshot_url,
         size: 2048,
         file_name: video.key.split('/').last,
         width: video.source_meta['width'],
@@ -265,7 +261,7 @@ class PostsController < ApplicationController
       }
     end
 
-    @images = images.merge(videos).to_json
+    @media = (images + videos).to_json
   end
 
   def media_token

@@ -10,8 +10,20 @@ class ApplicationController < ActionController::Base
   helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_page = request.env['HTTP_REFERER'] || root_url
+    redirect_page = request.env['HTTP_REFERER'] || root_path
     redirect_to redirect_page, alert: exception.message
+  end
+
+  def set_light_mode
+    cookies.delete(:dark_mode)
+    redirect_page = request.env['HTTP_REFERER'] || root_path
+    redirect_to redirect_page
+  end
+
+  def set_dark_mode
+    cookies.permanent[:dark_mode] = true
+    redirect_page = request.env['HTTP_REFERER'] || root_path
+    redirect_to redirect_page
   end
 
   def activities
@@ -35,22 +47,16 @@ class ApplicationController < ActionController::Base
   def flash_to_headers
     return unless request.xhr?
 
+    flash_message, flash_type = flash_message_and_type
     response.headers['X-Message'] = flash_message
     response.headers['X-Message-Type'] = flash_type.to_s
     flash.discard
   end
 
-  def flash_message
+  def flash_message_and_type
     %i(alert notice).each do |type|
-      return flash[type] unless flash[type].blank?
+      return [flash[type], type] unless flash[type].blank?
     end
-    nil
-  end
-
-  def flash_type
-    %i(alert notice).each do |type|
-      return type unless flash[type].blank?
-    end
-    nil
+    [nil, nil]
   end
 end

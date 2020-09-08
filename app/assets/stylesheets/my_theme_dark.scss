@@ -5,8 +5,8 @@ body {
   width: 100%;
   height: 100%;
   font-family: "Lora","Helvetica Neue",Helvetica,Arial,sans-serif;
-  color: #000;
-  background-color: #e9ebee;
+  color: #fff;
+  background-color: #1e1e1e;
 }
 
 html {
@@ -44,7 +44,7 @@ p {
 }
 
 .post-preview, .blog-preview {
-  background-color: #fff;
+  background-color: #000;
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 3px;
@@ -80,14 +80,15 @@ p {
 }
 .post-body, .blog-body {
   font-size: 15px;
-  color: #000;
+  color: #fff;
 }
 .delete-post, .delete-blog {
   text-align: right;
 }
 
 .blog-container {
-  background-color: #fff;
+  background-color: #000;
+  color: #fff;
   padding: 15px;
   border-radius: 3px;
   .row {
@@ -604,7 +605,7 @@ body {
   height: 150px;
   margin: 0 auto;
   border: 1px solid $primary;
-  background: #fff;
+  background-color: #1e1e1e;
   position: fixed;
   top: 200px;
   border-radius: 3px;
@@ -748,7 +749,7 @@ hr {
 }
 
 #profile-tab {
-  background-color: #fff;
+  background-color: #000;
   border-radius: 3px;
 }
 
@@ -786,7 +787,7 @@ hr {
   }
   .dropdown-menu {
     margin-top: -6px;
-    background-color: #fff;
+    background-color: #1e1e1e;
     min-width: 100px;
     a:hover {
       color: $tertiary;
@@ -817,7 +818,7 @@ hr {
 }
 
 #about-page {
-  background: #fff;
+  background: #000;
   #about-img {
     max-width: 500px;
     height: auto !important;
