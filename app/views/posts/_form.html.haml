@@ -10,7 +10,14 @@
   .dropzone
     .dropzone-previews
 
-  = f.input :public, hint: 'Public posts can be viewed by everyone'
+  %label.switch.boolean.optional{ for: 'post_public' }
+    %input{ type: 'hidden', name: 'post[public]', value: '0' }
+    %span.switch_label
+      Public
+    %input.boolean.optional#post_public{ type: 'checkbox', checked: @post.public?, name: 'post[public]', value: '1' }
+    %span.slider.round
+  %p.help-block.post_public_hint
+    Public posts can be viewed by everyone
 
   .form-actions
     = f.button :submit, class: 'btn-primary'
@@ -22,9 +29,18 @@
 - content_for :footer_scripts do
   :javascript
     $(document).ready(function() {
-      const mediaToken = '#{raw(@media_token)}';
-      const wysi = $('textarea#post_body').wysihtml5();
+      $('textarea#post_body').wysihtml5();
       const editor = $('#post_body').data('wysihtml5').editor;
+      const mediaToken = '#{raw(@media_token)}';
+
+      const isDarkMode = '#{raw(cookies[:dark_mode])}';
+      if (isDarkMode) {
+        $('iframe.wysihtml5-sandbox').load(function() {
+          $(this).contents().find('head').append(
+            $("<style type='text/css'>\n  body.wysihtml5-editor { background-color: #000 !important; color: #fff !important; }\n</style>")
+          );
+        });
+      }
 
       let postReady = false;
       const form = $('form#new_post');

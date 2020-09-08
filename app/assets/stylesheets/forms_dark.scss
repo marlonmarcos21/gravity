@@ -111,8 +111,19 @@ form {
     }
   }
   &.blogs {
+    #blog_title {
+      background-color: #000;
+      color: #fff;
+    }
     .form-actions {
       margin-left: -14px;
+    }
+  }
+  textarea {
+    background-color: #000 !important;
+    color: #fff !important;
+    &.form-control:focus {
+      border-color: #fff;
     }
   }
 }
@@ -225,7 +236,7 @@ form {
   }
 }
 #tinymce-container {
-  background-color: #fff;
+  background-color: #000;
   min-height: 700px;
   height: auto;
   padding: 10px;
@@ -255,7 +266,7 @@ form {
 }
 
 #post-index-form {
-  background-color: #fff;
+  background-color: #000;
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 5px;
@@ -319,4 +330,13 @@ form {
   h3 {
     margin-left: -16px;
   }
+}
+
+iframe.wysihtml5-sandbox {
+  background-color: #000 !important;
+}
+
+textarea#post_body {
+  background-color: #000 !important;
+  color: #fff !important;
 }

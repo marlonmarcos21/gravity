@@ -65,3 +65,7 @@
 .wysiwyg-color-orange {
   color: orange;
 }
+
+.wysihtml5-editor {
+  background-color: #000 !important;
+}
