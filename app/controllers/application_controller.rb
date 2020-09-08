@@ -10,18 +10,20 @@ class ApplicationController < ActionController::Base
   helper_method :activities
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_page = request.env['HTTP_REFERER'] || root_url
+    redirect_page = request.env['HTTP_REFERER'] || root_path
     redirect_to redirect_page, alert: exception.message
   end
 
   def set_light_mode
     cookies.delete(:dark_mode)
-    redirect_to root_path
+    redirect_page = request.env['HTTP_REFERER'] || root_path
+    redirect_to redirect_page
   end
 
   def set_dark_mode
     cookies.permanent[:dark_mode] = true
-    redirect_to root_path
+    redirect_page = request.env['HTTP_REFERER'] || root_path
+    redirect_to redirect_page
   end
 
   def activities
