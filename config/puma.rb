@@ -10,7 +10,7 @@ threads min_threads_count, max_threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port        ENV.fetch("PORT") { 3000 }
+port ENV.fetch("PORT") { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 #
@@ -35,16 +35,6 @@ pidfile ENV.fetch("PIDFILE") { "tmp/puma.pid" }
 preload_app!
 
 before_fork do
-  unless Rails.env == 'development'
-    PumaWorkerKiller.config do |config|
-      config.ram = (ENV['SYSTEM_RAM'] || 1024).to_i
-      config.frequency = 10
-      config.percent_usage = 0.98
-      config.rolling_restart_frequency = 6 * 3600
-    end
-    PumaWorkerKiller.start
-  end
-
   ActiveRecord::Base.connection.disconnect!
 end
 
