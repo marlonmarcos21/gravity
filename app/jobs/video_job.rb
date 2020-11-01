@@ -9,30 +9,31 @@ class VideoJob < ApplicationJob
   private
 
   def process_metadata(videos)
-    video = videos.first
-    object = BUCKET.object(video.key)
-    uri = URI(object.presigned_url(:get))
-    file = uri.open
-    movie = FFMPEG::Movie.new(file.path)
-    s3_key = video.key.split('/')
-    filename = s3_key.pop.split('.')
-    filename.pop
-    filename << 'jpg'
-    filename = filename.join('.')
-    s3_key << filename
-    screenshot_obj = BUCKET.object(s3_key.join('/'))
+    video     = videos.first
+    object    = BUCKET.object(video.key)
+    file      = URI(object.presigned_url(:get)).open
+    movie     = FFMPEG::Movie.new(file.path)
+    key_parts = video.key.split('/')
+    filename  = key_parts.pop.sub(/\.[\S]*$/, '.jpg')
+    s3_key    = "#{key_parts.join('/')}/#{filename}"
+
+    screenshot_obj      = BUCKET.object(s3_key)
     screenshot_filepath = Rails.root.join('tmp', filename)
-    screenshot = movie.screenshot(screenshot_filepath.to_s, seek_time: 5)
-    screenshot_file = File.open(screenshot.path)
+    duration            = movie.duration.to_i
+    seek_time           = duration > 9 ? 5 : duration / 2
+    screenshot          = movie.screenshot(screenshot_filepath.to_s, seek_time: seek_time)
+    screenshot_file     = File.open(screenshot.path)
+
     screenshot_obj.upload_file(screenshot_file)
-    metadata = {
+
+    video.source_meta = {
       width: movie.width,
       height: movie.height,
       aspect: movie.width / movie.height.to_f,
       screenshot_key: screenshot_obj.key
     }
-    video.source_meta = metadata
     video.save
+
     REDIS.srem(video.token, "video-#{video.id}")
     file.delete
     File.delete(screenshot_file)
