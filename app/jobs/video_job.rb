@@ -18,16 +18,16 @@ class VideoJob < ApplicationJob
     s3_key    = "#{key_parts.join('/')}/#{filename}"
 
     screenshot_obj      = BUCKET.object(s3_key)
-    screenshot_filepath = Rails.root.join('tmp', filename)
     duration            = movie.duration.to_i
     seek_time           = duration > 9 ? 5 : duration / 2
-    screenshot          = movie.screenshot(screenshot_filepath.to_s, seek_time: seek_time)
+    screenshot_filepath = Rails.root.join('tmp', filename)
+    screenshot          = movie.screenshot(screenshot_filepath, seek_time: seek_time)
     screenshot_file     = File.open(screenshot.path)
 
     screenshot_obj.upload_file(screenshot_file)
 
     video.source_meta = {
-      width: movie.width,
+      width:  movie.width,
       height: movie.height,
       aspect: movie.width / movie.height.to_f,
       screenshot_key: screenshot_obj.key
