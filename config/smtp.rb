@@ -3,7 +3,7 @@ SMTP_SETTINGS = {
   authentication: :plain,
   domain: 'gravity.ph',
   enable_starttls_auto: true,
-  user_name: ENV.fetch('SENDGRID_USERNAME'),
-  password: ENV.fetch('SENDGRID_PASSWORD'),
+  user_name: 'apikey',
+  password: ENV.fetch('SENDGRID_API_KEY'),
   port: '587'
 }
