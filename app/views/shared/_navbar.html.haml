@@ -14,8 +14,11 @@
                 = fa_icon 'search'
         .mobile-notifications.pull-right
           .dropdown.inline
-            %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown' }
-              = fa_icon 'fa'
+            %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown', onclick: 'clearNotifications()' }
+              = fa_icon 'bell'
+              - unless notification_count.try(:zero?)
+                %span#notification-badge
+                  = notification_count
             .dropdown-menu.notifications
               = render 'shared/activity', activities: activities
 
