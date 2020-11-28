@@ -7,11 +7,17 @@ class ApplicationController < ActionController::Base
 
   after_action :flash_to_headers
 
-  helper_method :activities
+  helper_method :activities, :notification_count
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_page = request.env['HTTP_REFERER'] || root_path
-    redirect_to redirect_page, alert: exception.message
+    if request.xhr?
+      response.headers['X-Message'] = exception.message
+      response.headers['X-Message-Type'] = 'alert'
+      render json: { errors: exception.message }, status: :forbidden
+    else
+      redirect_page = request.env['HTTP_REFERER'] || root_path
+      redirect_to redirect_page, alert: exception.message
+    end
   end
 
   def set_light_mode
@@ -26,14 +32,36 @@ class ApplicationController < ActionController::Base
     redirect_to redirect_page
   end
 
+  def clear_notifications
+    raise CanCan::AccessDenied.new('Unauthorized') unless current_user
+
+    current_user
+      .activities_as_recipient
+      .for_notification
+      .unread
+      .update_all(is_read: true)
+  end
+
   def activities
     return Activity.none unless current_user
 
-    @activities = current_user
-                    .activities_as_recipient
-                    .for_notification
-                    .descending
-                    .limit(10)
+    current_user
+      .activities_as_recipient
+      .for_notification
+      .descending
+      .limit(10)
+  end
+
+  def notification_count
+    count = current_user
+              .activities_as_recipient
+              .for_notification
+              .unread
+              .count
+
+    return count if count < 10
+
+    '9+'
   end
 
   protected

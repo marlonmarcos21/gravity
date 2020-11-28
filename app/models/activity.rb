@@ -11,6 +11,7 @@ class Activity < PublicActivity::Activity
   include Rails.application.routes.url_helpers
 
   scope :descending, -> { order(created_at: :desc) }
+  scope :unread,     -> { where(is_read: false) }
 
   class << self
     def for_notification

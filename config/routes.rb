@@ -58,6 +58,7 @@ Rails.application.routes.draw do
 
   get 'set_light_mode', to: 'application#set_light_mode'
   get 'set_dark_mode', to: 'application#set_dark_mode'
+  patch 'clear_notifications', to: 'application#clear_notifications'
 
   root to: 'posts#index'
 end

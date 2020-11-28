@@ -771,6 +771,10 @@ hr {
     font-size: 12px;
     color: #fff;
     margin-left: -30px;
+    line-height: 2.0;
+    .unread {
+      background: $tertiary;
+    }
     a {
       &:hover {
         color: $tertiary;
@@ -958,4 +962,16 @@ input:checked + .slider:before {
 .post_public_hint {
   margin-top: -18px !important;
   margin-bottom: 20px !important;
+}
+
+#notification-badge {
+  position: absolute;
+  top: 7px;
+  right: 2px;
+  padding: 0px 7px;
+  border-radius: 100%;
+  background: red;
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
 }

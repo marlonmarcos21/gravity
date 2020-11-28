@@ -41,8 +41,11 @@
         - if current_user
           %ul.nav.navbar-nav
             %li.dropdown.inline.desktop-notifications
-              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', title: 'Notifications', 'data-toggle' => 'dropdown' }
-                = fa_icon 'fa'
+              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', title: 'Notifications', 'data-toggle' => 'dropdown', onclick: 'clearNotifications()' }
+                = fa_icon 'bell'
+                - unless notification_count.try(:zero?)
+                  %span#notification-badge
+                    = notification_count
               .dropdown-menu.notifications
                 = render 'shared/activity', activities: activities
             %li.dropdown.nav-user-dropdown{ role: 'presentation' }
@@ -111,4 +114,25 @@
       $('#dark_mode_switch').on('click', 'input', function() {
         window.location.href = path;
       });
+    }
+
+    let clickCount = 0;
+
+    function clearNotifications() {
+      if (clickCount > 0) {
+        $('#activities-container ul li').each(function() {
+          $(this).removeClass('unread');
+          $(this).addClass('read');
+        });
+
+        return;
+      }
+
+      $('#notification-badge').addClass('hidden');
+      $.ajax({
+        url: '#{clear_notifications_path}',
+        method: 'patch',
+        dataType: 'json',
+      })
+      clickCount++;
     }
