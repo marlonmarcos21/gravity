@@ -17,7 +17,7 @@
             %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown', onclick: 'clearNotifications()' }
               = fa_icon 'bell'
               - unless notification_count.try(:zero?)
-                %span#notification-badge
+                %span#mobile-notification-badge
                   = notification_count
             .dropdown-menu.notifications
               = render 'shared/activity', activities: activities
@@ -131,7 +131,11 @@
         return;
       }
 
-      $('#notification-badge').addClass('hidden');
+      setTimeout(function() {
+        $('#notification-badge').addClass('hidden');
+        $('#mobile-notification-badge').addClass('hidden');
+      }, 1000);
+
       $.ajax({
         url: '#{clear_notifications_path}',
         method: 'patch',
