@@ -6,13 +6,8 @@ class PasswordsController < Devise::PasswordsController
   def create
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
-
     redirect_page = request.env['HTTP_REFERER'] || root_url
-    if successfully_sent?(resource)
-      redirect_to redirect_page, notice: 'Email sent, please check and follow instructions provided'
-    else
-      redirect_to redirect_page, alert: 'Email does not exist'
-    end
+    redirect_to redirect_page, notice: 'Email sent, please check and follow instructions provided'
   end
 
   def edit
