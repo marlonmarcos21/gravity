@@ -4,7 +4,7 @@
 # t.string     :key
 
 class Video < ApplicationRecord
-  belongs_to :attachable, polymorphic: true
+  belongs_to :attachable, polymorphic: true, optional: true
 
   validates :token, presence: true
 

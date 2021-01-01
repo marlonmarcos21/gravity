@@ -8,8 +8,8 @@ RSpec.describe Ability do
   subject { Ability.new(@user) }
 
   describe 'Post' do
-    let(:post) { FactoryBot.create(:post, user: user) }
-    let(:private_post) { FactoryBot.create(:post, private: true, user: user) }
+    let(:post) { FactoryBot.create(:post, user: user, public: true) }
+    let(:private_post) { FactoryBot.create(:post, user: user) }
 
     describe 'more_published_posts' do
       context 'when anonymous' do
@@ -94,11 +94,11 @@ RSpec.describe Ability do
       end
     end
 
-    describe 'create, upload_media & remove_media' do
+    describe 'create, media_upload_callback & remove_media' do
       let(:new_post) { FactoryBot.build(:post) }
 
       context 'when anonymous' do
-        %i(create upload_media remove_media).each do |action|
+        %i(create media_upload_callback remove_media presigned_url pre_post_check).each do |action|
           it { should_not be_able_to(action, new_post) }
         end
       end
@@ -108,7 +108,7 @@ RSpec.describe Ability do
           @user = user
         end
 
-        %i(create upload_media remove_media).each do |action|
+        %i(create media_upload_callback remove_media presigned_url pre_post_check).each do |action|
           it { should be_able_to(action, new_post) }
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe Ability do
           @user = other_user
         end
 
-        %i(create upload_media remove_media).each do |action|
+        %i(create media_upload_callback remove_media presigned_url pre_post_check).each do |action|
           it { should be_able_to(action, new_post) }
         end
       end

@@ -48,7 +48,7 @@ RSpec.describe Post, type: :model do
 
     describe '#date_meta' do
       it do
-        expect(@post.date_meta).to eql('Wed, Aug 24, 2016 23:39')
+        expect(@post.date_meta).to eql('Wed, Aug 24, 2016 11:39')
       end
     end
   end

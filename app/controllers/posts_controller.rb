@@ -174,12 +174,16 @@ class PostsController < ApplicationController
       key: params[:s3_key],
       attachable_type: 'Post'
     }
+
     if params[:content_type].starts_with?('video')
-      Video.create(**opts)
+      Video.create!(**opts)
     else
-      Image.create(**opts)
+      Image.create!(**opts)
     end
+
     render json: { message: 'success' }, status: :ok
+  rescue ActiveRecord::RecordInvalid
+    render json: { message: 'failed' }, status: :unprocessable_entity
   end
 
   def pre_post_check

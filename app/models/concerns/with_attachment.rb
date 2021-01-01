@@ -2,7 +2,7 @@ module WithAttachment
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :attachable, polymorphic: true
+    belongs_to :attachable, polymorphic: true, optional: true
 
     has_attached_file :source, const_get(:ATTACHMENT_OPTIONS)
 
