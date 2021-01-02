@@ -38,7 +38,7 @@ module Paperclip
         end
         str.force_encoding(Encoding::ASCII_8BIT)
       end
-      str.gsub!(/[^*\/\-:.0-9A-Z_a-z]/, URI::TBLENCWWWCOMP_)
+      str.gsub!(%r{[^*/\-:.0-9A-Z_a-z]}, URI::TBLENCWWWCOMP_)
       str.force_encoding(Encoding::US_ASCII)
     end
   end

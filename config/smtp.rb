@@ -6,4 +6,4 @@ SMTP_SETTINGS = {
   user_name: 'apikey',
   password: ENV.fetch('SENDGRID_API_KEY'),
   port: '587'
-}
+}.freeze

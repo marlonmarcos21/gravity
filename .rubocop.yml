@@ -15,6 +15,9 @@ Layout/MultilineMethodCallIndentation:
 Layout/SpaceAroundOperators:
   Enabled: false
 
+Layout/HashAlignment:
+  Enabled: false
+
 Style/PercentLiteralDelimiters:
   Enabled: false
 
@@ -171,6 +174,9 @@ Style/SlicingWithRange:
 Style/StringConcatenation:
   Enabled: true
 
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
 Rails/ActiveRecordCallbacksOrder:
   Enabled: true
 
@@ -207,14 +213,87 @@ Rails/ShortI18n:
 Rails/WhereExists:
   Enabled: false
 
+Layout/SpaceBeforeBrackets:
+  Enabled: true
+
+Lint/AmbiguousAssignment:
+  Enabled: true
+
+Lint/DuplicateBranch:
+  Enabled: true
+
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: true
+
+Lint/EmptyBlock:
+  Enabled: true
+
+Lint/EmptyClass:
+  Enabled: true
+
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: true
+
+Lint/ToEnumArguments:
+  Enabled: true
+
+Lint/UnexpectedBlockArity:
+  Enabled: true
+
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: true
+
+Style/ArgumentsForwarding:
+  Enabled: true
+
+Style/CollectionCompact:
+  Enabled: true
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: true
+
+Style/HashExcept:
+  Enabled: true
+
+Style/NegatedIfElseCondition:
+  Enabled: true
+
+Style/NilLambda:
+  Enabled: true
+
+Style/RedundantArgument:
+  Enabled: true
+
+Style/SwapValues:
+  Enabled: true
+
+Rails/AfterCommitOverride:
+  Enabled: true
+
+Rails/AttributeDefaultBlockValue:
+  Enabled: true
+
+Rails/SquishedSQLHeredocs:
+  Enabled: true
+
+Rails/WhereEquals:
+  Enabled: true
+
+Rails/WhereNot:
+  Enabled: true
+
+Metrics/BlockLength:
+  Enabled: false
+
 AllCops:
   Include:
     - 'app/**/*.rb'
-  Exclude:
     - 'config/**/*.rb'
+  Exclude:
     - 'spec/**/*.rb'
     - 'db/**/*'
     - 'bin/**/*'
     - 'script/**/*'
     - '**/Rakefile'
     - '**/config.ru'
+  SuggestExtensions: false

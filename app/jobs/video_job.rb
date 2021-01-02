@@ -14,7 +14,7 @@ class VideoJob < ApplicationJob
     file      = URI(object.presigned_url(:get)).open
     movie     = FFMPEG::Movie.new(file.path)
     key_parts = video.key.split('/')
-    filename  = key_parts.pop.sub(/\.[\S]*$/, '.jpg')
+    filename  = key_parts.pop.sub(/\.\S*$/, '.jpg')
     s3_key    = "#{key_parts.join('/')}/#{filename}"
 
     screenshot_obj      = BUCKET.object(s3_key)

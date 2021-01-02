@@ -3,7 +3,7 @@ module CollectiveIdea
     module NestedSet
       def acts_as_nested_set_relate_parent!
         options = {
-          class_name:    self.base_class.to_s,
+          class_name:    base_class.to_s,
           foreign_key:   parent_column_name,
           primary_key:   primary_column_name,
           counter_cache: acts_as_nested_set_options[:counter_cache],

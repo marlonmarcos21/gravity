@@ -9,8 +9,4 @@ class PasswordsController < Devise::PasswordsController
     redirect_page = request.env['HTTP_REFERER'] || root_url
     redirect_to redirect_page, notice: 'Email sent, please check and follow instructions provided'
   end
-
-  def edit
-    super
-  end
 end
