@@ -10,8 +10,7 @@ class VideoJob < ApplicationJob
 
   def process_metadata(videos)
     video     = videos.first
-    object    = BUCKET.object(video.key)
-    file      = URI(object.presigned_url(:get)).open
+    file      = URI(video.source_url).open
     movie     = FFMPEG::Movie.new(file.path)
     key_parts = video.key.split('/')
     filename  = key_parts.pop.sub(/\.\S*$/, '.jpg')

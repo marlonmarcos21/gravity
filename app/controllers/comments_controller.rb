@@ -74,9 +74,7 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    permitted_params = %i(
-      body commentable_id commentable_type
-    )
+    permitted_params = %i(body commentable_id commentable_type)
     params.require(:comment).permit(*permitted_params)
   end
 
