@@ -53,15 +53,17 @@ class ApplicationController < ActionController::Base
   end
 
   def notification_count
-    count = current_user
-              .activities_as_recipient
-              .for_notification
-              .unread
-              .count
+    Rails.cache.fetch("user/#{current_user.id}notification-count") do
+      count = current_user
+                .activities_as_recipient
+                .for_notification
+                .unread
+                .count
 
-    return count if count < 10
+      return count if count < 10
 
-    '9+'
+      '9+'
+    end
   end
 
   protected

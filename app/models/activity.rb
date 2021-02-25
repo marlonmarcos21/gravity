@@ -1,3 +1,13 @@
+class PublicActivity::Activity
+  after_commit :clear_notifications_count, on: :create
+
+  private
+
+  def clear_notifications_count
+    Rails.cache.delete "user/#{recipient_id}notification-count"
+  end
+end
+
 class Activity < PublicActivity::Activity
   EXCLUDED_NOTIFICATION_KEYS = %w(
     user.cancel_friend_request
