@@ -4,7 +4,7 @@ class PublicActivity::Activity
   private
 
   def clear_notifications_count
-    Rails.cache.delete "user/#{recipient_id}notification-count"
+    Rails.cache.delete "user/#{recipient_id}/notification-count"
   end
 end
 

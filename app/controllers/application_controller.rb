@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def notification_count
-    Rails.cache.fetch("user/#{current_user.id}notification-count") do
+    Rails.cache.fetch("user/#{current_user.id}/notification-count") do
       count = current_user
                 .activities_as_recipient
                 .for_notification
