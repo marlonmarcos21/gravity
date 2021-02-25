@@ -138,7 +138,6 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    dalli (2.7.11)
     database_cleaner (1.6.2)
     debug_inspector (1.0.0)
     devise (4.7.3)
@@ -482,7 +481,6 @@ DEPENDENCIES
   cancancan
   coffee-rails
   country_select
-  dalli
   database_cleaner (~> 1.6.0)
   devise
   dotenv-rails
