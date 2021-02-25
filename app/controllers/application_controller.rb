@@ -40,6 +40,8 @@ class ApplicationController < ActionController::Base
       .for_notification
       .unread
       .update_all(is_read: true)
+
+    Rails.cache.delete "user/#{current_user.id}/notification-count"
   end
 
   def activities
