@@ -433,6 +433,8 @@ GEM
     timecop (0.9.4)
     tinymce-rails (4.9.11)
       railties (>= 3.1.1)
+    trix (0.10.1)
+      rails
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -532,6 +534,7 @@ DEPENDENCIES
   timecop
   tinymce-rails (~> 4.9.4)
   tinymce-rails-imageupload!
+  trix
   turbolinks
   twitter-bootstrap-rails
   uglifier

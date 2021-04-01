@@ -23,6 +23,8 @@
  *= require forms_dark
  *= require image_swiper
  *= require bootstrap_and_overrides
+ *= require trix
+ *= require actiontext
  *= require my_theme_dark
  *= require_self
  */

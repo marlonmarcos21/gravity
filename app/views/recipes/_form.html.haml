@@ -1,0 +1,8 @@
+= form_with model: @recipe do |f|
+  .row
+    = f.label :ingredients
+    = f.rich_text_area :ingredients
+
+  .row
+    = f.label :instructions
+    = f.rich_text_area :instructions

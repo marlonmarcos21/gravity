@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :recipes
+
   resources :comments, only: [:create, :destroy] do
     member do
       patch 'editable'

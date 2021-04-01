@@ -23,6 +23,8 @@
  *= require forms
  *= require image_swiper
  *= require bootstrap_and_overrides
+ *= require actiontext
+ *= require trix
  *= require my_theme
  *= require_self
  */
