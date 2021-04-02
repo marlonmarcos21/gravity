@@ -23,9 +23,10 @@ class User < ApplicationRecord
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
-  has_many :posts, dependent: :destroy
-  has_many :blogs, dependent: :destroy
-  has_many :likes, dependent: :destroy
+  has_many :posts,   dependent: :destroy
+  has_many :blogs,   dependent: :destroy
+  has_many :recipes, dependent: :destroy
+  has_many :likes,   dependent: :destroy
 
   has_many :friends, dependent: :destroy
   has_many :friend_requests, dependent: :destroy

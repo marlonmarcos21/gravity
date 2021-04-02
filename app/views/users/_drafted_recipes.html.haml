@@ -1,0 +1,27 @@
+.row
+  .col-lg-12.col-md-12
+    = render 'recipes/listing', recipes: recipes
+    .text-center
+      - if more_results
+        %nav.drafted-recipes-pagination
+          %span.drafted-recipes-pagination-page
+            %a.drafted-recipes-pagination-link{ data: { remote: 'true' }, href: more_drafted_recipes_user_path(@user, dbpage: @dbpage) }
+              %em Load More
+      - else
+        %span.end-of-internet
+          %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#drafted-recipes-link').click(function() {
+        $('#published-posts-tab').hide();
+        $('#published-blogs-tab').hide();
+        $('#drafted-blogs-tab').hide();
+        $('#drafted-recipes-tab').show();
+      });
+
+      $('#drafted-recipes-tab').on('click', '.drafted-recipes-pagination-link', function() {
+        $(this).hide();
+      });
+    });

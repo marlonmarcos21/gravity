@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get 'more_published_posts'
       get 'more_published_blogs'
       get 'more_drafted_blogs'
+      get 'more_drafted_recipes'
       patch 'send_friend_request'
       patch 'accept_friend_request'
       patch 'reject_friend_request'

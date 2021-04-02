@@ -8,16 +8,19 @@ class UsersController < ApplicationController
     dp_scope = @user.posts.unpublished.order(updated_at: :desc)
     pb_scope = @user.blogs.published.descending
     db_scope = @user.blogs.unpublished.order(updated_at: :desc)
+    dr_scope = @user.recipes.unpublished.order(updated_at: :desc)
 
     @published_posts = pp_scope.page(1)
     @drafted_posts   = dp_scope.page(1)
     @published_blogs = pb_scope.page(1)
     @drafted_blogs   = db_scope.page(1)
+    @drafted_recipes = dr_scope.page(1)
 
     @more_published_posts_results = !pp_scope.page(2).empty?
     @more_drafted_posts_results   = !dp_scope.page(2).empty?
     @more_published_blogs_results = !pb_scope.page(2).empty?
     @more_drafted_blogs_results   = !db_scope.page(2).empty?
+    @more_drafted_recipes_results = !dr_scope.page(2).empty?
   end
 
   def more_published_posts
@@ -49,11 +52,22 @@ class UsersController < ApplicationController
   end
 
   def more_drafted_blogs
-    db_scope = @user.blogs.unpublished.order(updated_at: :desc)
-    @dbpage  = (params[:dbpage] || 2).to_i + 1
-
+    db_scope       = @user.blogs.unpublished.order(updated_at: :desc)
+    @dbpage        = (params[:dbpage] || 2).to_i + 1
     @drafted_blogs = db_scope.page(params[:dbpage] || 2)
     @more_results  = !db_scope.page(@dbpage).empty?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
+  end
+
+  def more_drafted_recipes
+    recipe_scope     = @user.recipes.unpublished.order(updated_at: :desc)
+    @drpage          = (params[:drpage] || 2).to_i + 1
+    @drafted_recipes = recipe_scope.page(params[:drpage] || 2)
+    @more_results    = !recipe_scope.page(@drpage).empty?
 
     respond_to do |format|
       format.html { render :show }
