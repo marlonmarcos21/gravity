@@ -48,6 +48,10 @@ Rails.application.routes.draw do
   resources :recipe_media, except: :index
 
   resources :recipes do
+    collection do
+      get 'more_published_recipes'
+    end
+
     member do
       patch 'publish'
       patch 'unpublish'

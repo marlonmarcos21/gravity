@@ -14,15 +14,29 @@ class Recipe < ApplicationRecord
 
   validates :title, presence: true
 
+  scope :published,   -> { where(published: true) }
+  scope :unpublished, -> { where(published: false) }
+  scope :descending,  -> { order(updated_at: :desc) }
+
+  before_save :strip_title, if: :title_changed?
+
   def publish!
-    update_attribute published: true
+    update_attribute :published, true
   end
 
   def unpublish!
     update_attribute :published, false
   end
 
+  def date_meta
+    updated_at.strftime '%a, %b %e, %Y %R'
+  end
+
   private
+
+  def strip_title
+    title.strip!
+  end
 
   def should_generate_new_friendly_id?
     return if published? && !slug.blank?

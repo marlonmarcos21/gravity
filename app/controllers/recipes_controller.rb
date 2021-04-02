@@ -2,10 +2,25 @@ class RecipesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    recipe_scope = Recipe.includes(:user).published.descending
+    @recipes     = recipe_scope.page(1)
+    @has_more_results = recipe_scope.page(2).exists?
+  end
+
+  def more_published_recipes
+    recipe_scope = Recipe.includes(:user).published.descending
+    page = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page = page + 1
+    @recipes = recipe_scope.page(page)
+    @has_more_results = recipe_scope.page(@next_page).exists?
+
+    respond_to do |format|
+      format.html { render :index }
+      format.js
+    end
   end
 
   def show
-    @recipe = Recipe.find(params[:id])
   end
 
   def new
