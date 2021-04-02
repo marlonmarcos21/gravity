@@ -7,12 +7,10 @@ class Ability
     @current_user = user || User.new
 
     can(:manage, :all) && return if current_user.id == 1
-    can(:create, RecipeMedium) do
-      current_user.persisted?
-    end
 
     post_permissions
     blog_permissions
+    recipe_media_permissions
     recipe_permissions
     user_permissions
     comment_permissions
@@ -76,19 +74,27 @@ class Ability
     end
   end
 
-  def recipe_permissions
-    can :more_published_blogs, Recipe
+  def recipe_media_permissions
+    can [:read, :create], RecipeMedium do
+      current_user.persisted?
+    end
 
+    can [:update, :destroy], RecipeMedium do |file|
+      file.user == current_user
+    end
+  end
+
+  def recipe_permissions
     can :read, Recipe do |recipe|
       recipe.published? || recipe.user == current_user
     end
 
-    can [:update, :destroy, :publish, :unpublish], Recipe do |recipe|
-      recipe.user == current_user
-    end
-
     can :create, Recipe do
       current_user.persisted?
+    end
+
+    can [:update, :destroy, :publish, :unpublish], Recipe do |recipe|
+      recipe.user == current_user
     end
   end
 

@@ -539,7 +539,8 @@ CREATE TABLE public.recipe_media (
     id bigint NOT NULL,
     file_data text,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    user_id bigint
 );
 
 
@@ -572,7 +573,8 @@ CREATE TABLE public.recipes (
     published boolean DEFAULT false,
     user_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    slug character varying
 );
 
 
@@ -1231,6 +1233,13 @@ CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
+-- Name: index_recipe_media_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_recipe_media_on_user_id ON public.recipe_media USING btree (user_id);
+
+
+--
 -- Name: index_recipes_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1370,6 +1379,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210401215608'),
 ('20210401220056'),
 ('20210401220057'),
-('20210402143119');
+('20210402143119'),
+('20210402172548'),
+('20210402172722');
 
 

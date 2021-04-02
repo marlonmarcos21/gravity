@@ -1,17 +1,13 @@
 class RecipeMediaController < ApplicationController
-  authorize_resource
+  load_and_authorize_resource
 
-  before_action :set_recipe_medium, only: [:show, :edit, :update, :destroy]
-
-  def show
-  end
+  def show; end
 
   def new
     @recipe_medium = RecipeMedium.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @recipe_medium = RecipeMedium.new(recipe_medium_params)

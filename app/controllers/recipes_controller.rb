@@ -1,7 +1,5 @@
 class RecipesController < ApplicationController
-  authorize_resource
-
-  before_action :set_recipe, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   def index
   end
@@ -46,10 +44,6 @@ class RecipesController < ApplicationController
   end
 
   private
-
-  def set_recipe
-    @recipe = Recipe.find(params[:id])
-  end
 
   def recipe_params
     params.require(:recipe).permit(:ingredients, :instructions)
