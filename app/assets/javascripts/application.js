@@ -23,5 +23,6 @@
 //= require photoswipe
 //= require trix
 //= require trix_upload
+//= require trix_upload_button
 //= require rails-ujs
 //= require_tree .

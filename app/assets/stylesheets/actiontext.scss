@@ -35,3 +35,9 @@
     }
   }
 }
+
+trix-toolbar {
+  button.attach::before {
+    background-image: url(data:image/svg+xml,%3Csvg%20height%3D%2224%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M19.4%2010a7.5%207.5%200%200%200-14-2A6%206%200%200%200%206%2020h13a5%205%200%201%200%20.4-10zM14%2013v4h-4v-4H7l5-5%205%205h-3z%22%2F%3E%3C%2Fsvg%3E);
+  }
+}
