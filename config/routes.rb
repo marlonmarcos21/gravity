@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   end
 
   resources :recipes
+  resources :recipe_media, except: :index
 
   resources :comments, only: [:create, :destroy] do
     member do

@@ -532,6 +532,37 @@ ALTER SEQUENCE public.posts_id_seq OWNED BY public.posts.id;
 
 
 --
+-- Name: recipe_media; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.recipe_media (
+    id bigint NOT NULL,
+    file_data text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: recipe_media_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.recipe_media_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recipe_media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.recipe_media_id_seq OWNED BY public.recipe_media.id;
+
+
+--
 -- Name: recipes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -823,6 +854,13 @@ ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_
 
 
 --
+-- Name: recipe_media id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipe_media ALTER COLUMN id SET DEFAULT nextval('public.recipe_media_id_seq'::regclass);
+
+
+--
 -- Name: recipes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -967,6 +1005,14 @@ ALTER TABLE ONLY public.likes
 
 ALTER TABLE ONLY public.posts
     ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recipe_media recipe_media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipe_media
+    ADD CONSTRAINT recipe_media_pkey PRIMARY KEY (id);
 
 
 --
@@ -1323,6 +1369,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201128112105'),
 ('20210401215608'),
 ('20210401220056'),
-('20210401220057');
+('20210401220057'),
+('20210402143119');
 
 

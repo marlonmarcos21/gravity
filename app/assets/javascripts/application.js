@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery.easing
-//= require jquery_ujs
 //= require twitter/bootstrap
 //= require bootstrap-datepicker/core
 //= require bootstrap-editable
@@ -23,4 +22,6 @@
 //= require dropzone.min
 //= require photoswipe
 //= require trix
+//= require trix_upload
+//= require rails-ujs
 //= require_tree .

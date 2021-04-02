@@ -1,0 +1,7 @@
+.row
+  .col-lg-8.col-lg-offset-2.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+    = @recipe.ingredients
+
+.row
+  .col-lg-8.col-lg-offset-2.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
+    = @recipe.instructions
