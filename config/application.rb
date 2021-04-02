@@ -57,5 +57,9 @@ module Gravity
     config.generators { |g| g.template_engine :haml }
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.to_prepare do
+      ActionText::ContentHelper.allowed_tags << 'video'
+    end
   end
 end

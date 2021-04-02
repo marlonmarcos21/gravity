@@ -1,0 +1,5 @@
+%figure.attachment{ class: 'attachment--preview' }
+  = video_tag(remote_video.url, controls: true, preload: :none)
+  - if caption = remote_video.try(:caption)
+    %figcaption.attachment__caption
+      = caption

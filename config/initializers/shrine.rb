@@ -5,12 +5,13 @@ s3_opts = {
   bucket: ENV['AWS_S3_BUCKET'],
   region: ENV['AWS_S3_REGION'],
   access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-  secret_access_key: ENV['AWS_ACCESS_SECRET']
+  secret_access_key: ENV['AWS_ACCESS_SECRET'],
+  public: true
 }
 
 Shrine.storages = {
-  cache: Shrine::Storage::S3.new(prefix: 'cache', **s3_opts),
-  store: Shrine::Storage::S3.new(prefix: 'store', **s3_opts)
+  cache: Shrine::Storage::S3.new(upload_options: { acl: "public-read" }, prefix: 'cache', **s3_opts),
+  store: Shrine::Storage::S3.new(upload_options: { acl: "public-read" }, prefix: 'store', **s3_opts)
 }
 
 Shrine.plugin :activerecord           # loads Active Record integration
