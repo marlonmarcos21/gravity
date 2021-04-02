@@ -19,6 +19,6 @@
     - if current_user && can?(:publish, recipe)
       .row
         %p.delete-recipe
-          = link_to blog_path(recipe), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
+          = link_to recipe_path(recipe), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
             = fa_icon 'trash'
     %hr

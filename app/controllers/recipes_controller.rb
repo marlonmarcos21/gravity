@@ -50,10 +50,10 @@ class RecipesController < ApplicationController
   end
 
   def destroy
-    @blog.destroy
+    @recipe.destroy
     respond_to do |format|
-      flash[:notice] = 'Blog successfully deleted!'
-      format.html { redirect_to blogs_url }
+      flash[:notice] = 'Recipe successfully deleted!'
+      format.html { redirect_to recipes_url }
       format.json { render json: { message: 'Blog deleted!' } }
     end
   end
