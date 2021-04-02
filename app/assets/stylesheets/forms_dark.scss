@@ -119,6 +119,21 @@ form {
       margin-left: -14px;
     }
   }
+  &.recipes {
+    #recipe_title {
+      background-color: #000;
+      color: #fff;
+    }
+    #recipe_ingredients {
+      background-color: #000;
+    }
+    #recipe_instructions {
+      background-color: #000;
+    }
+    .form-actions {
+      margin-left: -14px;
+    }
+  }
   textarea {
     background-color: #000 !important;
     color: #fff !important;

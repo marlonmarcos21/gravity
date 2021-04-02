@@ -1,15 +1,15 @@
-= form_with model: @recipe do |f|
-  .row
-    = f.label :title
-    = f.text_field :title
+= form_with model: @recipe, class: 'simple_form form-horizontal recipes' do |f|
+  .row.form-group
+    = f.label :title, class: 'control-label'
+    = f.text_field :title, class: 'form-control'
 
-  .row
-    = f.label :ingredients
+  .row.form-group
+    = f.label :ingredients, class: 'control-label'
     = f.rich_text_area :ingredients
 
-  .row
-    = f.label :instructions
+  .row.form-group
+    = f.label :instructions, class: 'control-label'
     = f.rich_text_area :instructions
 
-  .row
+  .form-actions
     = f.submit
