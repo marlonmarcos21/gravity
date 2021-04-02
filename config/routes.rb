@@ -45,8 +45,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :recipes
   resources :recipe_media, except: :index
+
+  resources :recipes do
+    member do
+      patch 'publish'
+      patch 'unpublish'
+    end
+  end
 
   resources :comments, only: [:create, :destroy] do
     member do

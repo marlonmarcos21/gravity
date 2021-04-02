@@ -43,6 +43,19 @@ class RecipesController < ApplicationController
     end
   end
 
+  def publish
+    if @recipe.publish!
+      redirect_to @recipe, notice: 'Recipe published!'
+    else
+      render :edit, alert: 'Error publishing recipe!'
+    end
+  end
+
+  def unpublish
+    @recipe.unpublish!
+    redirect_to @recipe, alert: 'Recipe unpublished!'
+  end
+
   private
 
   def recipe_params

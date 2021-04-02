@@ -10,8 +10,6 @@ class Blog < ApplicationRecord
 
   has_many :blog_media, as: :attachable, dependent: :destroy
 
-  validates :user, presence: true
-
   validate :validate_publishing
 
   has_paper_trail on: :update, only: %i(title body)
