@@ -76,7 +76,7 @@ module ActionText
     mattr_accessor(:allowed_attributes) do
       sanitizer.class.allowed_attributes +
       ActionText::Attachment::ATTRIBUTES +
-      %w(controls preload)
+      %w(controls preload size poster)
     end
     mattr_accessor(:scrubber)
 

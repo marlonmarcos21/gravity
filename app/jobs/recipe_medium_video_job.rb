@@ -1,8 +1,8 @@
-class VideoJob < ApplicationJob
+class RecipeMediumVideoJob < ApplicationJob
   queue_as :default
 
   def perform(video_id, method)
-    video = Video.find_by(id: video_id)
+    video = RecipeMedium.find_by(id: video_id)
     return unless video
 
     send(method, video)
@@ -11,11 +11,10 @@ class VideoJob < ApplicationJob
   private
 
   def process_metadata(video)
-    file      = URI(video.source_url).open
-    movie     = FFMPEG::Movie.new(file.path)
-    key_parts = video.key.split('/')
-    filename  = key_parts.pop.sub(/\.\S*$/, '.jpg')
-    s3_key    = "#{key_parts.join('/')}/#{filename}"
+    file  = URI(video.file_url).open
+    movie = FFMPEG::Movie.new(file.path)
+    filename = video.file_metadata['metadata']['filename'].sub(/\.\S*$/, '.jpg')
+    s3_key   = "#{video.file_metadata['storage']}/#{SecureRandom.uuid}/#{filename}"
 
     screenshot_obj      = BUCKET.object(s3_key)
     duration            = movie.duration.to_i
@@ -24,9 +23,9 @@ class VideoJob < ApplicationJob
     screenshot          = movie.screenshot(screenshot_filepath.path, seek_time: seek_time)
     screenshot_file     = File.open(screenshot.path)
 
-    screenshot_obj.upload_file(screenshot_file)
+    screenshot_obj.upload_file(screenshot_file, acl: 'public-read')
 
-    video.source_meta = {
+    video.video_meta = {
       width:  movie.width,
       height: movie.height,
       aspect: movie.width / movie.height.to_f,
@@ -34,7 +33,6 @@ class VideoJob < ApplicationJob
     }
     video.save
 
-    REDIS.srem(video.token, "video-#{video.id}")
     file.delete
     File.delete(screenshot_file)
   end

@@ -540,7 +540,9 @@ CREATE TABLE public.recipe_media (
     file_data text,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    user_id bigint
+    user_id bigint,
+    video_meta jsonb DEFAULT '{}'::jsonb,
+    s3_id character varying
 );
 
 
@@ -1381,6 +1383,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210401220057'),
 ('20210402143119'),
 ('20210402172548'),
-('20210402172722');
+('20210402172722'),
+('20210402221047'),
+('20210402222639');
 
 
