@@ -1,5 +1,6 @@
 class RecipeMediaController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
 
   def show; end
 
@@ -11,6 +12,7 @@ class RecipeMediaController < ApplicationController
 
   def create
     @recipe_medium = RecipeMedium.new(recipe_medium_params)
+    @recipe_medium.user = current_user
 
     respond_to do |format|
       if @recipe_medium.save
