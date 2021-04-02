@@ -24,7 +24,7 @@
         var scrolled = parseInt($(window).scrollTop());
         var height = parseInt($(document).height() - $(window).height()) - 100;
         if (scrolled >= height && nextPage === 2) {
-          $('.published-blogs-pagination').hide();
+          $('.published-recipes-pagination').hide();
           $.ajax({
             method: 'GET',
             url: '#{more_published_recipes_recipes_path}',

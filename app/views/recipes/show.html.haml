@@ -12,9 +12,12 @@
       %hr
 
 .row
-  .col-lg-8.col-lg-offset-2.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+  .col-lg-8.col-lg-offset-2.recipe-contents-container.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+    %h4 Ingredients
     = @recipe.ingredients
 
-.row
-  .col-lg-8.col-lg-offset-2.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
+  .spacer
+
+  .col-lg-8.col-lg-offset-2.recipe-contents-container.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
+    %h4 Instructions
     = @recipe.instructions

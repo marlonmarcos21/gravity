@@ -86,7 +86,7 @@ p {
   text-align: right;
 }
 
-.blog-container {
+.blog-container, .recipe-contents-container {
   background-color: #000;
   color: #fff;
   padding: 15px;
@@ -754,7 +754,8 @@ hr {
 }
 
 .published-posts-pagination-page,
-.published-blogs-pagination-page, {
+.published-blogs-pagination-page,
+.published-recipes-pagination-page {
   em {
     color: $primary;
   }

@@ -20,6 +20,7 @@ function uploadAttachment(attachment) {
       return attachment.setAttributes({
         url: data.url,
         href: data.url,
+        src: data.url,
       })
     }
   }
