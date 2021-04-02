@@ -122,6 +122,9 @@ form {
     #recipe_instructions {
       background-color: #fff;
     }
+    .form-actions {
+      margin-left: -14px;
+    }
   }
 }
 
@@ -324,6 +327,12 @@ form {
 }
 
 #new-blog-container {
+  h3 {
+    margin-left: -16px;
+  }
+}
+
+#new-recipe-container {
   h3 {
     margin-left: -16px;
   }

@@ -347,6 +347,12 @@ form {
   }
 }
 
+#new-recipe-container {
+  h3 {
+    margin-left: -16px;
+  }
+}
+
 iframe.wysihtml5-sandbox {
   background-color: #000 !important;
 }
@@ -354,4 +360,10 @@ iframe.wysihtml5-sandbox {
 textarea#post_body {
   background-color: #000 !important;
   color: #fff !important;
+}
+
+trix-toolbar {
+  .button_group {
+    background-color: #ccc;
+  }
 }
