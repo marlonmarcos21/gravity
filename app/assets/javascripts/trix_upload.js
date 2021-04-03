@@ -1,13 +1,14 @@
 function uploadAttachment(attachment) {
   var file = attachment.file;
   var form = new FormData;
+  var csrfToken = $('input[name="authenticity_token"]').val();
 
   form.append('Content-Type', file.type);
   form.append('recipe_medium[file]', file);
 
   var xhr = new XMLHttpRequest;
   xhr.open('POST', '/recipe_media.json', true);
-  xhr.setRequestHeader('X-CSRF-Token', Rails.csrfToken());
+  xhr.setRequestHeader('X-CSRF-Token', csrfToken);
 
   xhr.upload.onprogress = function(event) {
     var progress = event.loaded / event.total * 100;
