@@ -56,7 +56,6 @@ gem 'public_activity'
 gem 'paper_trail'
 gem 'sitemap_generator'
 gem 'bootsnap'
-gem 'trix'
 gem 'shrine'
 
 group :development, :test do
