@@ -85,6 +85,8 @@ class Ability
   end
 
   def recipe_permissions
+    can :more_published_recipes, Recipe
+
     can :read, Recipe do |recipe|
       recipe.published? || recipe.user == current_user
     end
@@ -99,9 +101,14 @@ class Ability
   end
 
   def user_permissions
-    can [:read, :more_published_posts, :more_published_blogs], User
+    can [
+      :read,
+      :more_published_posts,
+      :more_published_blogs,
+      :more_published_recipes
+    ], User
 
-    can [:update, :more_drafted_blogs], User do |user|
+    can [:update, :more_drafted_blogs, :more_drafted_recipes], User do |user|
       current_user == user
     end
 
