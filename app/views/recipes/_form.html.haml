@@ -1,0 +1,26 @@
+= form_with model: @recipe, class: 'simple_form form-horizontal recipes' do |f|
+  = "Errors: #{@recipe.errors.full_messages.inspect}" unless @recipe.errors.empty?
+
+  .row.form-group
+    = f.label :title, class: 'control-label'
+    = f.text_field :title, class: 'form-control'
+
+  .row.form-group
+    = f.label :description, class: 'control-label'
+    = f.rich_text_area :description
+
+  .row.form-group
+    = f.label :ingredients, class: 'control-label'
+    = f.rich_text_area :ingredients
+
+  .row.form-group
+    = f.label :instructions, class: 'control-label'
+    = f.rich_text_area :instructions
+
+  .form-actions
+    - if @recipe.persisted?
+      = f.submit 'Update Recipe', type: :submit, class: 'btn btn-default'
+      = link_to 'Cancel', recipes_path(@recipe), class: 'btn btn-default'
+    - else
+      = f.submit 'Create Recipe', type: :submit, class: 'btn btn-default'
+      = link_to 'Cancel', recipes_path, class: 'btn btn-default'

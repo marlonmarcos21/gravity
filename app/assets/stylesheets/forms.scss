@@ -115,6 +115,20 @@ form {
       margin-left: -14px;
     }
   }
+  &.recipes {
+    #recipe_description {
+      background-color: #fff;
+    }
+    #recipe_ingredients {
+      background-color: #fff;
+    }
+    #recipe_instructions {
+      background-color: #fff;
+    }
+    .form-actions {
+      margin-left: -14px;
+    }
+  }
 }
 
 .select2-container {
@@ -316,6 +330,12 @@ form {
 }
 
 #new-blog-container {
+  h3 {
+    margin-left: -16px;
+  }
+}
+
+#new-recipe-container {
   h3 {
     margin-left: -16px;
   }

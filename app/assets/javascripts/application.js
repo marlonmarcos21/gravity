@@ -22,4 +22,6 @@
 //= require select2
 //= require dropzone.min
 //= require photoswipe
+//= require trix/dist/trix
+//= require trix_upload
 //= require_tree .

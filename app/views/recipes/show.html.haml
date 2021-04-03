@@ -1,0 +1,31 @@
+.row
+  .col-lg-8.col-lg-offset-2.recipe-contents-container{ id: "recipe-#{@recipe.id}" }
+    .row
+      - if can? :publish, @recipe
+        .blog-header
+          - if @recipe.published?
+            = link_to 'Unpublish', unpublish_recipe_path(@recipe), method: :patch, class: 'btn btn-default'
+            %a.fb-xfbml-parse-ignore.btn.btn-default{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{recipe_url(@recipe)}', 'Gravity', 'width=400,height=300')" }
+              = fa_icon('facebook') + ' Share'
+          - else
+            = link_to 'Publish', publish_recipe_path(@recipe), method: :patch, class: 'btn btn-default'
+      %hr
+
+    .row
+      %h1= @recipe.title
+
+    .row
+      .row.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+        = @recipe.description
+
+      .spacer
+
+      .recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+        %h4 Ingredients
+        = @recipe.ingredients
+
+      .spacer
+
+      .row.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
+        %h4 Instructions
+        = @recipe.instructions

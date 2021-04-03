@@ -1,15 +1,16 @@
 class VideoJob < ApplicationJob
   queue_as :default
 
-  def perform(video_ids, method)
-    videos = Video.where(id: video_ids)
-    send(method, videos)
+  def perform(video_id, method)
+    video = Video.find_by(id: video_id)
+    return unless video
+
+    send(method, video)
   end
 
   private
 
-  def process_metadata(videos)
-    video     = videos.first
+  def process_metadata(video)
     file      = URI(video.source_url).open
     movie     = FFMPEG::Movie.new(file.path)
     key_parts = video.key.split('/')

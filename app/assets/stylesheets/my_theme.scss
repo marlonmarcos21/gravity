@@ -43,7 +43,7 @@ p {
   margin-bottom: 5px;
 }
 
-.post-preview, .blog-preview {
+.post-preview, .blog-preview, .recipe-preview {
   background-color: #fff;
   padding: 15px;
   margin-bottom: 10px;
@@ -61,7 +61,7 @@ p {
   }
 }
 
-.post-meta, .blog-meta, .user-meta {
+.post-meta, .blog-meta, .user-meta, .recipe-meta {
   font-size: 10px;
   margin-bottom: 5px;
   color: gray;
@@ -86,7 +86,7 @@ p {
   text-align: right;
 }
 
-.blog-container {
+.blog-container, .recipe-contents-container {
   background-color: #fff;
   padding: 15px;
   border-radius: 3px;
@@ -429,7 +429,7 @@ a {
     }
   }
 
-  #post-index-form, .post-preview, .blog-preview {
+  #post-index-form, .post-preview, .blog-preview, .recipe-preview {
     border-radius: 0;
   }
 
@@ -753,7 +753,8 @@ hr {
 }
 
 .published-posts-pagination-page,
-.published-blogs-pagination-page, {
+.published-blogs-pagination-page,
+.published-recipes-pagination-page {
   em {
     color: $primary;
   }
@@ -986,4 +987,19 @@ input:checked + .slider:before {
   color: white;
   font-size: 8px;
   font-weight: bold;
+}
+
+.recipe-preview {
+  .recipe-description {
+    width: 55%;
+    margin-right: 2%;
+    a {
+      font-size: 15px;
+      color: #000;
+    }
+  }
+}
+
+.clearfix {
+  clear: both;
 }

@@ -1,0 +1,21 @@
+$('#drafted-recipes-tab').append("<%= escape_javascript(render('drafted_recipes', recipes: @drafted_recipes, more_results: @more_results)) %>");
+
+var moreResults = "<%= @has_more_results %>" 
+var nextPage = "<%= @next_page %>"
+var checker = true
+$(window).scroll(function() {
+  if ($('#drafted-recipes-tab').is(':visible')) {
+    var scrolled = parseInt($(window).scrollTop());
+    var height = parseInt($(document).height() - $(window).height()) - 120;
+    if (scrolled >= height  && checker === true && moreResults === 'true') {
+      $('.drafted-recipes-pagination').show();
+      $.ajax({
+        method: 'GET',
+        url: "<%= more_drafted_recipes_user_path %>",
+        dataType: 'script',
+        data: { page: nextPage }
+      });
+      checker = false;
+    }
+  }
+});

@@ -10,6 +10,8 @@ class Ability
 
     post_permissions
     blog_permissions
+    recipe_media_permissions
+    recipe_permissions
     user_permissions
     comment_permissions
   end
@@ -72,10 +74,41 @@ class Ability
     end
   end
 
-  def user_permissions
-    can [:read, :more_published_posts, :more_published_blogs], User
+  def recipe_media_permissions
+    can [:read, :create], RecipeMedium do
+      current_user.persisted?
+    end
 
-    can [:update, :more_drafted_blogs], User do |user|
+    can [:update, :destroy], RecipeMedium do |file|
+      file.user == current_user
+    end
+  end
+
+  def recipe_permissions
+    can :more_published_recipes, Recipe
+
+    can :read, Recipe do |recipe|
+      recipe.published? || recipe.user == current_user
+    end
+
+    can :create, Recipe do
+      current_user.persisted?
+    end
+
+    can [:update, :destroy, :publish, :unpublish], Recipe do |recipe|
+      recipe.user == current_user
+    end
+  end
+
+  def user_permissions
+    can [
+      :read,
+      :more_published_posts,
+      :more_published_blogs,
+      :more_published_recipes
+    ], User
+
+    can [:update, :more_drafted_blogs, :more_drafted_recipes], User do |user|
       current_user == user
     end
 

@@ -8,10 +8,10 @@ require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
+require 'action_text/engine'
 # require 'active_storage/engine'
 # require 'action_cable/engine'
 # require 'action_mailbox/engine'
-# require 'action_text/engine'
 # require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -57,5 +57,9 @@ module Gravity
     config.generators { |g| g.template_engine :haml }
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.to_prepare do
+      ActionText::ContentHelper.allowed_tags << 'video'
+    end
   end
 end

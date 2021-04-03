@@ -30,6 +30,9 @@
         %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: blogs_path }
             Blogs
+        %li{ class: current_page?(recipes_path) ? 'active' : 'inactive' }
+          %a.page-scroll{ href: recipes_path }
+            Recipes
         %li{ class: current_page?(about_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: about_path }
             About

@@ -58,6 +58,8 @@
         - if current_user == @user || can?(:manage, :all)
           %li
             %a#drafted-blogs-link{ href: '#drafted-blogs-tab', 'data-toggle' => 'tab' } Drafted Blogs
+          %li
+            %a#drafted-recipes-link{ href: '#drafted-recipes-tab', 'data-toggle' => 'tab' } Drafted Recipes
 
       .tab-content.user-tab-content
         - if current_user
@@ -77,3 +79,6 @@
         - if can?(:manage, :all) || current_user == @user
           #drafted-blogs-tab.tab-pane.fade
             = render 'drafted_blogs', blogs: @drafted_blogs, more_results: @more_drafted_blogs_results
+
+          #drafted-recipes-tab.tab-pane.fade
+            = render 'drafted_recipes', recipes: @drafted_recipes, more_results: @more_drafted_recipes_results

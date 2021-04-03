@@ -1,0 +1,35 @@
+- recipes.each do |recipe|
+  .recipe-preview
+    .row
+      %p.recipe-author
+        %a{ href: user_path(recipe.user) }
+          %h4.user-name
+            = image_tag recipe.user.profile_photo_url(:thumb), id: 'user-listing-profile-photo'
+            = recipe.user.name
+
+    .row
+      %p.recipe-meta
+        = fa_icon 'clock-o'
+        = recipe.date_meta
+
+    .row
+      %a.recipe-link{ href: recipe_path(recipe) }
+        %h3.recipe-title= recipe.title
+      - if recipe.image_preview.present?
+        .col.recipe-description.pull-left
+          %a.recipe-link{ href: recipe_path(recipe) }
+            %p= recipe.stripped_teaser.html_safe
+        .col.recipe-preview-image.pull-left
+          %p= recipe.image_preview.html_safe
+        .clearfix
+      - else
+        %a.recipe-link{ href: recipe_path(recipe) }
+          %p.recipe-description-only= recipe.stripped_teaser.html_safe
+
+
+    - if current_user && can?(:publish, recipe)
+      .row
+        %p.delete-recipe
+          = link_to recipe_path(recipe), method: :delete, data: { confirm: 'Pag Sure!', ajax: true }, class: 'btn btn-trash btn-xs btn-danger' do
+            = fa_icon 'trash'
+    %hr

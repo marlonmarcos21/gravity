@@ -1,0 +1,7 @@
+%figure.attachment{ class: 'attachment--preview' }
+  - s3_id = remote_video.url.split('/').last.split('.').first
+  - recipe_medium = RecipeMedium.find_by(s3_id: s3_id)
+  = video_tag(recipe_medium.file_url, controls: true, preload: :none, size: recipe_medium.aspect_ratio_display, poster: recipe_medium.screenshot_url)
+  - if caption = remote_video.try(:caption)
+    %figcaption.attachment__caption
+      = caption

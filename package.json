@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "trix": "^1.2.0"
+  }
+}

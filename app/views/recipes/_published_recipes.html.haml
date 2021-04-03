@@ -1,0 +1,37 @@
+- next_page = 2 if local_assigns[:next_page].blank?
+
+= render 'listing', recipes: @recipes
+.text-center
+  - if has_more_results
+    %nav.published-recipes-pagination
+      %span.published-recipes-pagination-page
+        %a.published-recipes-pagination-link{ data: { remote: 'true' }, href: more_published_recipes_recipes_path(page: next_page) }
+          %em Loading more
+          = image_tag loading_spinner_image
+  - else
+    %span.end-of-internet
+      %em Congratulations, you have reached the end of internet!
+
+- content_for :footer_scripts do
+  :javascript
+    $(document).ready(function() {
+      $('#recipes-container').on('click', '.published-recipes-pagination-link', function() {
+        $(this).hide();
+      });
+
+      var nextPage = 2;
+      $(window).scroll(function() {
+        var scrolled = parseInt($(window).scrollTop());
+        var height = parseInt($(document).height() - $(window).height()) - 100;
+        if (scrolled >= height && nextPage === 2) {
+          $('.published-recipes-pagination').hide();
+          $.ajax({
+            method: 'GET',
+            url: '#{more_published_recipes_recipes_path}',
+            dataType: 'script',
+            data: { page: nextPage }
+          });
+          nextPage = 3;
+        }
+      });
+    });
