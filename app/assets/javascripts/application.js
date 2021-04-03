@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery.easing
+//= require jquery_ujs
 //= require twitter/bootstrap
 //= require bootstrap-datepicker/core
 //= require bootstrap-editable
