@@ -21,6 +21,24 @@ class Recipe < ApplicationRecord
 
   before_save :strip_title, if: :title_changed?
 
+  def stripped_teaser
+    html = Nokogiri::HTML.fragment(description.body.to_s)
+    attachments = html.search('action-text-attachment')
+    attachments.each { |node| node.remove }
+    html.to_html
+  end
+
+  def image_preview
+    html = Nokogiri::HTML.fragment(description.body.to_s)
+    img = html.search('img').first
+    return '' unless img
+
+    img.set_attribute('style', 'max-width: 300px;')
+    img.remove_attribute('width')
+    img.remove_attribute('height')
+    img.to_html
+  end
+
   def publish!
     update_attribute :published, true
   end

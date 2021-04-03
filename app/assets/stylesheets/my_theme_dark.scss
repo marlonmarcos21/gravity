@@ -989,3 +989,18 @@ input:checked + .slider:before {
   font-size: 8px;
   font-weight: bold;
 }
+
+.recipe-preview {
+  .recipe-description {
+    width: 55%;
+    margin-right: 2%;
+  }
+  .recipe-link {
+    font-size: 15px;
+    color: #fff;
+  }
+}
+
+.clearfix {
+  clear: both;
+}
