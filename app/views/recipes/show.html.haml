@@ -1,5 +1,5 @@
 .row
-  .col-lg-8.col-lg-offset-2.recipe-container{ id: "recipe-#{@recipe.id}" }
+  .col-lg-8.col-lg-offset-2.recipe-contents-container{ id: "recipe-#{@recipe.id}" }
     .row
       - if can? :publish, @recipe
         .blog-header
@@ -11,13 +11,21 @@
             = link_to 'Publish', publish_recipe_path(@recipe), method: :patch, class: 'btn btn-default'
       %hr
 
-.row
-  .col-lg-8.col-lg-offset-2.recipe-contents-container.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
-    %h4 Ingredients
-    = @recipe.ingredients
+    .row
+      %h1= @recipe.title
 
-  .spacer
+    .row
+      .row.recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+        = @recipe.description
 
-  .col-lg-8.col-lg-offset-2.recipe-contents-container.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
-    %h4 Instructions
-    = @recipe.instructions
+      .spacer
+
+      .recipe-ingredients-container{ id: "ingredients-recipe-#{@recipe.id}" }
+        %h4 Ingredients
+        = @recipe.ingredients
+
+      .spacer
+
+      .row.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
+        %h4 Instructions
+        = @recipe.instructions

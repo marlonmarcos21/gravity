@@ -116,6 +116,9 @@ form {
     }
   }
   &.recipes {
+    #recipe_description {
+      background-color: #fff;
+    }
     #recipe_ingredients {
       background-color: #fff;
     }

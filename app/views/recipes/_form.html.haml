@@ -6,6 +6,10 @@
     = f.text_field :title, class: 'form-control'
 
   .row.form-group
+    = f.label :description, class: 'control-label'
+    = f.rich_text_area :description
+
+  .row.form-group
     = f.label :ingredients, class: 'control-label'
     = f.rich_text_area :ingredients
 
