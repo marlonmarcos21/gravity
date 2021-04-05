@@ -29,3 +29,13 @@
       .row.recipe-instructions-container{ id: "instructions-recipe-#{@recipe.id}" }
         %h4 Instructions
         = @recipe.instructions
+
+        %hr.spacer
+
+      .row
+        .recipe-actions.spacer
+          = link_to 'Back', recipes_path, class: 'btn btn-default'
+
+          - if can? :publish, @recipe
+            = link_to 'Edit', edit_recipe_path(@recipe), class: 'btn btn-default'
+            = link_to 'Delete', recipe_path(@recipe), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

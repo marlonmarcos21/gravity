@@ -25,7 +25,18 @@ class Recipe < ApplicationRecord
     html = Nokogiri::HTML.fragment(description.body.to_s)
     attachments = html.search('action-text-attachment')
     attachments.each { |node| node.remove }
-    html.to_html
+    teaser = html.to_html
+
+    teaser += '<h4>Ingredients</h4>'
+
+    html = Nokogiri::HTML.fragment(ingredients.body.to_s)
+    attachments = html.search('action-text-attachment')
+    attachments.each { |node| node.remove }
+    teaser += html.to_html
+
+    teaser += '<i>Read more . . .</i>'
+
+    teaser
   end
 
   def image_preview
