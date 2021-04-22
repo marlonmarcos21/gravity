@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :recipe_media, except: :index
+  resources :recipe_media, except: [:index]
 
   resources :recipes do
     collection do

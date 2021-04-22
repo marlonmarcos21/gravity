@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
-  authorize_resource
+  load_and_authorize_resource
 
-  before_action :post, only: %i(show edit update destroy editable like unlike)
   before_action :media_token, only: %i(new index create)
   before_action :prepare_media_data, only: :edit
 
@@ -197,10 +196,6 @@ class PostsController < ApplicationController
     current_user ? Post.all_viewable : Post.for_public_view
   end
 
-  def post
-    @post = Post.includes(:images, :videos).find(params[:id])
-  end
-
   def post_params
     permitted_params = %i(body published public)
     params.require(:post).permit(*permitted_params)
@@ -269,6 +264,6 @@ class PostsController < ApplicationController
   end
 
   def media_token
-    @media_token = SecureRandom.urlsafe_base64(30)
+    @media_token ||= SecureRandom.urlsafe_base64(30)
   end
 end

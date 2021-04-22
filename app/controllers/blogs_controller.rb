@@ -1,7 +1,6 @@
 class BlogsController < ApplicationController
-  authorize_resource
+  load_and_authorize_resource
 
-  before_action :blog, only: %i(show edit update destroy publish unpublish like unlike)
   before_action :image_token, only: :new
 
   def index
@@ -145,10 +144,6 @@ class BlogsController < ApplicationController
 
   private
 
-  def blog
-    @blog = Blog.includes(:blog_media).find(params[:id])
-  end
-
   def blog_params
     params[:blog][:body] = params['tinymce-container']
     permitted_params = %i(title body)
@@ -156,7 +151,7 @@ class BlogsController < ApplicationController
   end
 
   def image_token
-    @image_token = SecureRandom.urlsafe_base64(30)
+    @image_token ||= SecureRandom.urlsafe_base64(30)
   end
 
   def attach_images(img_token)

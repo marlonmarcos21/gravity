@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
-  before_action :user, only: %i(show edit update destroy)
-
   def show
     pp_scope = @user.posts.published.descending
     dp_scope = @user.posts.unpublished.order(updated_at: :desc)
@@ -178,10 +176,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def user
-    @user = User.includes(:user_profile, :posts, :blogs).find(params[:id])
-  end
 
   def user_params
     dob = params[:user][:user_profile_attributes][:date_of_birth]

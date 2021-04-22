@@ -1,5 +1,6 @@
 class RecipeMediaController < ApplicationController
   load_and_authorize_resource except: :create
+
   authorize_resource only: :create
 
   def show; end
@@ -11,22 +12,22 @@ class RecipeMediaController < ApplicationController
   def edit; end
 
   def create
-    @recipe_medium = RecipeMedium.new(recipe_medium_params)
-    @recipe_medium.user = current_user
+    recipe_medium = RecipeMedium.new(recipe_medium_params)
+    recipe_medium.user = current_user
 
     respond_to do |format|
-      if @recipe_medium.save
-        format.html { redirect_to @recipe_medium, notice: 'File was successfully created.' }
+      if recipe_medium.save
+        format.html { redirect_to recipe_medium, notice: 'File was successfully created.' }
         format.json do
           render json: {
-            id: @recipe_medium.id,
-            file_data: @recipe_medium.file_data,
-            url: @recipe_medium.file_url
+            id: recipe_medium.id,
+            file_data: recipe_medium.file_data,
+            url: recipe_medium.file_url
           }, status: :created
         end
       else
         format.html { render :new }
-        format.json { render json: @recipe_medium.errors, status: :unprocessable_entity }
+        format.json { render json: recipe_medium.errors, status: :unprocessable_entity }
       end
     end
   end
