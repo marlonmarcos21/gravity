@@ -189,7 +189,7 @@ form.submit(function(e) {
   const value = editor.getValue().replace(/&nbsp;/g, '').trim();
   if (!value) {
     e.preventDefault();
-    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-default btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
+    const html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Post is blank, it defeats its purpose in life!</p></div></div>';
     $(html).modal();
     return false;
   }
