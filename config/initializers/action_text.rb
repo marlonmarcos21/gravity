@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails-html-sanitizer"
+require 'rails-html-sanitizer'
 
 module ActionText
   module Attachables
@@ -9,20 +9,19 @@ module ActionText
 
       class << self
         def from_node(node)
-          if node["url"] && content_type_is_video?(node["content-type"])
-            new(attributes_from_node(node))
-          end
+          return unless node['url'] && content_type_is_video?(node['content-type'])
+
+          new(attributes_from_node(node))
         end
 
         private
 
         def content_type_is_video?(content_type)
-          content_type.to_s.match?(/^video(\/.+|$)/)
+          content_type.to_s.match?(%r{^video(/.+|$)})
         end
 
         def attributes_from_node(node)
-          { url: node["url"],
-            content_type: node["content-type"] }
+          { url: node['url'], content_type: node['content-type'] }
         end
       end
 
@@ -34,7 +33,7 @@ module ActionText
       end
 
       def attachable_plain_text_representation(caption)
-        "[#{caption || "Video"}]"
+        "[#{caption || 'Video'}]"
       end
 
       def to_partial_path
@@ -50,17 +49,19 @@ module ActionText
 
     class << self
       def from_node(node)
-        if attachable = attachable_from_sgid(node["sgid"])
-          attachable
-        elsif attachable = ActionText::Attachables::ContentAttachment.from_node(node)
-          attachable
-        elsif attachable = ActionText::Attachables::RemoteImage.from_node(node)
-          attachable
-        elsif attachable = ActionText::Attachables::RemoteVideo.from_node(node)
-          attachable
-        else
-          ActionText::Attachables::MissingAttachable
-        end
+        attachable = attachable_from_sgid(node['sgid'])
+        return attachable if attachable
+
+        attachable = ActionText::Attachables::ContentAttachment.from_node(node)
+        return attachable if attachable
+
+        attachable = ActionText::Attachables::RemoteImage.from_node(node)
+        return attachable if attachable
+
+        attachable = ActionText::Attachables::RemoteVideo.from_node(node)
+        return attachable if attachable
+
+        ActionText::Attachables::MissingAttachable
       end
     end
   end
@@ -71,12 +72,12 @@ module ActionText
     mattr_accessor(:sanitizer) { Rails::Html::Sanitizer.safe_list_sanitizer.new }
     mattr_accessor(:allowed_tags) do
       sanitizer.class.allowed_tags +
-      [ActionText::Attachment::TAG_NAME, "figure", "figcaption", "video"]
+        [ActionText::Attachment::TAG_NAME, 'figure', 'figcaption', 'video']
     end
     mattr_accessor(:allowed_attributes) do
       sanitizer.class.allowed_attributes +
-      ActionText::Attachment::ATTRIBUTES +
-      %w(controls preload size poster)
+        ActionText::Attachment::ATTRIBUTES +
+        %w(controls preload size poster)
     end
     mattr_accessor(:scrubber)
 
@@ -90,13 +91,15 @@ module ActionText
     end
 
     def render_action_text_attachments(content)
-      content.render_attachments do |attachment|
+      rendered_attachments = content.render_attachments do |attachment|
         unless attachment.in?(content.gallery_attachments)
           attachment.node.tap do |node|
             node.inner_html = render(attachment, in_gallery: false).chomp
           end
         end
-      end.render_attachment_galleries do |attachment_gallery|
+      end
+
+      rendered_attachments.render_attachment_galleries do |attachment_gallery|
         render(layout: attachment_gallery, object: attachment_gallery) do
           attachment_gallery.attachments.map do |attachment|
             attachment.node.inner_html = render(attachment, in_gallery: true).chomp
