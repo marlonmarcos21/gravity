@@ -1018,3 +1018,12 @@ input:checked + .slider:before {
 .clearfix {
   clear: both;
 }
+
+.recipe-categories-container {
+  ul {
+    list-style: none;
+    line-height: 2;
+    width: 200px;
+    margin-left: -25px;
+  }
+}

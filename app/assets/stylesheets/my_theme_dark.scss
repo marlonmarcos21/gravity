@@ -1023,3 +1023,12 @@ input:checked + .slider:before {
 #recipe_category_id {
   color: #000;
 }
+
+.recipe-categories-container {
+  ul {
+    list-style: none;
+    line-height: 2;
+    width: 200px;
+    margin-left: -25px;
+  }
+}
