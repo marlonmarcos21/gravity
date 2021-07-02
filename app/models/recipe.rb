@@ -1,9 +1,12 @@
 # t.string     :title
 # t.boolean    :published, default: false
-# t.references :user, index: true
+# t.references :user,      index: true
+# t.references :category,  index :true
+# t.datetime   :published_at
 
 class Recipe < ApplicationRecord
   belongs_to :user
+  belongs_to :category, class_name: 'RecipeCategory'
 
   has_rich_text :description
   has_rich_text :ingredients
@@ -17,7 +20,7 @@ class Recipe < ApplicationRecord
 
   scope :published,   -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
-  scope :descending,  -> { order(updated_at: :desc) }
+  scope :descending,  -> { order(published_at: :desc) }
 
   before_save :strip_title, if: :title_changed?
 
@@ -51,15 +54,15 @@ class Recipe < ApplicationRecord
   end
 
   def publish!
-    update_attribute :published, true
+    update(published: true, published_at: Time.zone.now)
   end
 
   def unpublish!
-    update_attribute :published, false
+    update(published: false, published_at: nil)
   end
 
   def date_meta
-    updated_at.strftime '%a, %b %e, %Y %R'
+    published_at.strftime '%a, %b %e, %Y %R'
   end
 
   private

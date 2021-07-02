@@ -59,6 +59,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :recipe_categories, only: [] do
+    member do
+      get 'recipes'
+    end
+  end
+
   resources :comments, only: [:create, :destroy] do
     member do
       patch 'editable'

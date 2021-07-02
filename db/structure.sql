@@ -532,6 +532,38 @@ ALTER SEQUENCE public.posts_id_seq OWNED BY public.posts.id;
 
 
 --
+-- Name: recipe_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.recipe_categories (
+    id bigint NOT NULL,
+    title character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    slug character varying
+);
+
+
+--
+-- Name: recipe_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.recipe_categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recipe_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.recipe_categories_id_seq OWNED BY public.recipe_categories.id;
+
+
+--
 -- Name: recipe_media; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -576,7 +608,9 @@ CREATE TABLE public.recipes (
     user_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    slug character varying
+    slug character varying,
+    category_id bigint,
+    published_at timestamp without time zone
 );
 
 
@@ -858,6 +892,13 @@ ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_
 
 
 --
+-- Name: recipe_categories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipe_categories ALTER COLUMN id SET DEFAULT nextval('public.recipe_categories_id_seq'::regclass);
+
+
+--
 -- Name: recipe_media id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1009,6 +1050,14 @@ ALTER TABLE ONLY public.likes
 
 ALTER TABLE ONLY public.posts
     ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recipe_categories recipe_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipe_categories
+    ADD CONSTRAINT recipe_categories_pkey PRIMARY KEY (id);
 
 
 --
@@ -1235,10 +1284,24 @@ CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
+-- Name: index_recipe_categories_on_title; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recipe_categories_on_title ON public.recipe_categories USING btree (title);
+
+
+--
 -- Name: index_recipe_media_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_recipe_media_on_user_id ON public.recipe_media USING btree (user_id);
+
+
+--
+-- Name: index_recipes_on_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_recipes_on_category_id ON public.recipes USING btree (category_id);
 
 
 --
@@ -1319,6 +1382,14 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.users FOR EACH R
 
 
 --
+-- Name: recipes fk_rails_22f4e84158; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipes
+    ADD CONSTRAINT fk_rails_22f4e84158 FOREIGN KEY (category_id) REFERENCES public.recipe_categories(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1385,6 +1456,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210402172548'),
 ('20210402172722'),
 ('20210402221047'),
-('20210402222639');
+('20210402222639'),
+('20210702033618'),
+('20210702033807'),
+('20210702041504');
 
 

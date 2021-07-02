@@ -1,6 +1,6 @@
 - next_page = 2 if local_assigns[:next_page].blank?
 
-= render 'listing', recipes: @recipes
+= render 'recipes/listing', recipes: @recipes
 .text-center
   - if has_more_results
     %nav.published-recipes-pagination

@@ -30,9 +30,11 @@
         %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: blogs_path }
             Blogs
-        %li{ class: current_page?(recipes_path) ? 'active' : 'inactive' }
-          %a.page-scroll{ href: recipes_path }
+        %li.dropdown{ role: 'presentation', class: current_page?(recipes_path) ? 'active' : 'inactive' }
+          %a.dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
             Recipes
+          .dropdown-menu.recipe_categories
+            = render 'shared/recipe_categories', recipe_categories: recipe_categories
         %li{ class: current_page?(about_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: about_path }
             About

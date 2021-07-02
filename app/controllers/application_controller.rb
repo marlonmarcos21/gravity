@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   after_action :flash_to_headers
 
-  helper_method :activities, :notification_count
+  helper_method :activities, :notification_count, :recipe_categories
 
   rescue_from CanCan::AccessDenied do |exception|
     if request.xhr?
@@ -65,6 +65,12 @@ class ApplicationController < ActionController::Base
       return count if count < 10
 
       '9+'
+    end
+  end
+
+  def recipe_categories
+    Rails.cache.fetch('recipe-categories') do
+      RecipeCategory.order(:title)
     end
   end
 
