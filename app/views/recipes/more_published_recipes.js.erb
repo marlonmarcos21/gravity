@@ -1,8 +1,15 @@
-$('#recipes-container').append("<%= escape_javascript(render('published_recipes', recipes: @recipes, has_more_results: @has_more_results, next_page: @next_page)) %>");
+$('#recipes-container').append("<%= escape_javascript(render('recipes/published_recipes', recipes: @recipes, through_category: @through_category, has_more_results: @has_more_results, next_page: @next_page)) %>");
 
-var moreResults = "<%= @has_more_results %>" 
-var nextPage = "<%= @next_page %>"
-var checker = true
+const throughCategory = <%= @through_category %>;
+const moreResults = "<%= @has_more_results %>";
+const nextPage = "<%= @next_page %>";
+let checker = true
+
+let url = "<%= more_published_recipes_recipes_path %>";
+if (throughCategory) {
+  url = "<%= more_published_recipes_recipe_category_path(@recipe_category) %>";
+}
+
 $(window).scroll(function() {
   var scrolled = parseInt($(window).scrollTop());
   var height = parseInt($(document).height() - $(window).height()) - 100;
@@ -10,7 +17,7 @@ $(window).scroll(function() {
     $('.published-recipes-pagination').hide();
     $.ajax({
       method: 'GET',
-      url: "<%= more_published_recipes_recipes_path %>",
+      url: url,
       dataType: 'script',
       data: { page: nextPage }
     });

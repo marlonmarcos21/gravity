@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   resources :recipe_categories, only: [] do
     member do
       get 'recipes'
+      get 'more_published_recipes'
     end
   end
 

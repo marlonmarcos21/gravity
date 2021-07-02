@@ -5,9 +5,14 @@
   - if has_more_results
     %nav.published-recipes-pagination
       %span.published-recipes-pagination-page
-        %a.published-recipes-pagination-link{ data: { remote: 'true' }, href: more_published_recipes_recipes_path(page: next_page) }
-          %em Loading more
-          = image_tag loading_spinner_image
+        - if through_category
+          %a.published-recipes-pagination-link{ data: { remote: 'true' }, href: more_published_recipes_recipe_category_path(@recipe_category, page: next_page) }
+            %em Loading more
+            = image_tag loading_spinner_image
+        - else
+          %a.published-recipes-pagination-link{ data: { remote: 'true' }, href: more_published_recipes_recipes_path(page: next_page) }
+            %em Loading more
+            = image_tag loading_spinner_image
   - else
     %span.end-of-internet
       %em Congratulations, you have reached the end of internet!
@@ -19,7 +24,13 @@
         $(this).hide();
       });
 
+      const throughCategory = #{through_category};
+      var url = '#{more_published_recipes_recipes_path}';
+      if (throughCategory) {
+        url = '/recipe_categories/#{@recipe_category.try(:slug)}/more_published_recipes';
+      }
       var nextPage = 2;
+
       $(window).scroll(function() {
         var scrolled = parseInt($(window).scrollTop());
         var height = parseInt($(document).height() - $(window).height()) - 100;
@@ -27,7 +38,7 @@
           $('.published-recipes-pagination').hide();
           $.ajax({
             method: 'GET',
-            url: '#{more_published_recipes_recipes_path}',
+            url: url,
             dataType: 'script',
             data: { page: nextPage }
           });
