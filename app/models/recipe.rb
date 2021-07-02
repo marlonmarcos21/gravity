@@ -62,7 +62,8 @@ class Recipe < ApplicationRecord
   end
 
   def date_meta
-    published_at.strftime '%a, %b %e, %Y %R'
+    datetime = published_at || updated_at
+    datetime.strftime '%a, %b %e, %Y %R'
   end
 
   private
