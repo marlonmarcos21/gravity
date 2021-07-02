@@ -7,7 +7,7 @@ let checker = true
 
 let url = "<%= more_published_recipes_recipes_path %>";
 if (throughCategory) {
-  url = "<%= more_published_recipes_recipe_category_path(@recipe_category) %>";
+  url = '/recipe_categories/#{@recipe_category.try(:slug)}/more_published_recipes';
 }
 
 $(window).scroll(function() {
