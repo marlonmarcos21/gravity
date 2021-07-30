@@ -15,16 +15,8 @@
     .row
       %a.recipe-link{ href: recipe_path(recipe) }
         %h3.recipe-title= recipe.title
-      - if recipe.image_preview.present?
-        .col.recipe-description.pull-left
-          %a.recipe-link{ href: recipe_path(recipe) }
-            %p= recipe.stripped_teaser.html_safe
-        .col.recipe-preview-image.pull-left
-          %p= recipe.image_preview.html_safe
-        .clearfix
-      - else
-        %a.recipe-link{ href: recipe_path(recipe) }
-          %p.recipe-description-only= recipe.stripped_teaser.html_safe
+      %a.recipe-link{ href: recipe_path(recipe) }
+        %p.recipe-description-only= recipe.stripped_teaser.html_safe
 
     %hr
 

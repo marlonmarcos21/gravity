@@ -2,7 +2,10 @@
 # t.string :slug
 
 class RecipeCategory < ApplicationRecord
-  has_many :recipes, foreign_key: :category_id
+  has_many :recipes,
+           foreign_key: :category_id,
+           inverse_of: :category,
+           dependent: :restrict_with_error
 
   extend FriendlyId::FinderMethods
   extend FriendlyId
