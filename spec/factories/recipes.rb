@@ -1,5 +1,4 @@
-FactoryBot.define do
-  factory :recipe do
-    
-  end
-end
+# FactoryBot.define do
+#   factory :recipe do
+#   end
+# end
