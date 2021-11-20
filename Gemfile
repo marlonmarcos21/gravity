@@ -15,12 +15,9 @@ gem 'uglifier'
 gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'twitter-bootstrap-rails'
-# gem 'less-rails'
 gem 'font-awesome-rails', github: 'bokmann/font-awesome-rails'
 gem 'select2-rails'
 gem 'bootstrap-datepicker-rails'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
