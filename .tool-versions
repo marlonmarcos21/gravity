@@ -1,4 +1,4 @@
-ruby 3.0.0
+ruby 3.0.3
 redis 6.2.6
 postgres 12.8
 nodejs 16.13.0

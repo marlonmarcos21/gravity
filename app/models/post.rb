@@ -11,7 +11,8 @@ class Post < ApplicationRecord
           -> { where(main_image: true) },
           class_name: 'Image',
           as: :attachable,
-          inverse_of: :attachable
+          inverse_of: :attachable,
+          dependent: nil
 
   has_many :images, as: :attachable, dependent: :destroy
   has_many :videos, as: :attachable, dependent: :destroy

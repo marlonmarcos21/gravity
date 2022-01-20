@@ -24,7 +24,7 @@ module DataSeeder
     def posts(count = 50)
       count.times do
         Post.create(
-          body: Faker::Lorem.paragraph(4),
+          body: Faker::Lorem.paragraph(sentence_count: 4),
           published: true,
           user_id: 2
         )
