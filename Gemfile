@@ -84,7 +84,6 @@ end
 
 group :test do
   gem 'database_cleaner', '~> 1.6.0'
-  gem 'resque_spec'
   gem 'rspec-activejob'
   gem 'shoulda-matchers', require: false
   gem 'simplecov', require: false
