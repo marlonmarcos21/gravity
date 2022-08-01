@@ -42,7 +42,6 @@
         });
       }
 
-      let postReady = false;
       const form = $('form#new_post');
       form.submit(function(e) {
         const value = editor.getValue().replace(/&nbsp;/g, '').trim();
@@ -56,24 +55,6 @@
         const image_count = $('.dropzone-previews').children('.dz-image-preview').length;
         if (image_count === 0) {
           return true;
-        }
-
-        $.ajax({
-          url: '/posts/pre_post_check',
-          data: {
-            media_token: mediaToken,
-          },
-        }).done(function(data) {
-          postReady = data.ready;
-        });
-
-        if (postReady === true) {
-          return true;
-        } else {
-          e.preventDefault();
-          html = '<div class="modal" id="confirmationDialog"><a data-dismiss="modal" class="blank-post btn btn-modal-close btn-xs">×</a><div class="modal-body"><p>Images/Videos are still being processed, please try again in a few seconds...</p></div></div>';
-          $(html).modal();
-          return false;
         }
       });
 
@@ -127,7 +108,25 @@
       });
 
       dz.on('complete', function(file) {
-        $('input[name=commit]').removeAttr('disabled');
+        let postReady = false;
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        async function checkPostReadiness() {
+          while (!postReady) {
+            $.ajax({
+              url: '/posts/pre_post_check',
+              data: {
+                media_token: mediaToken,
+              },
+            }).done(function(data) {
+              if (data.ready) {
+                postReady = true;
+                $('input[name=commit]').removeAttr('disabled');
+              }
+            });
+            await sleep(5000);
+          }
+        }
+        checkPostReadiness();
       });
 
       dz.on('success', function(file, resp) {
