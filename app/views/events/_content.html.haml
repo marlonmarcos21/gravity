@@ -1,0 +1,27 @@
+.row
+  .col-lg-8.col-lg-offset-2.event-contents-container{ id: "event-#{@event.id}" }
+    .row
+      - if can? :publish, @event
+        .blog-header
+          - if @event.published?
+            = link_to 'Unpublish', unpublish_event_path(@event), method: :patch, class: 'btn btn-default'
+            %a.fb-xfbml-parse-ignore.btn.btn-default{ href: "javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=#{event_url(@event)}', 'Gravity', 'width=400,height=300')" }
+              = fa_icon('facebook') + ' Share'
+          - else
+            = link_to 'Publish', publish_event_path(@event), method: :patch, class: 'btn btn-default'
+      %hr
+
+    .row
+      %h1= @event.title
+
+    .row
+      .event-body-container{ id: "body-event-#{@event.id}" }
+        = @event.body
+
+        %hr.spacer
+
+      - if can? :publish, @event
+        .row
+          .event-actions.spacer
+            = link_to 'Edit', edit_event_path(@event), class: 'btn btn-default'
+            = link_to 'Delete', event_path(@event), method: :delete, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger'

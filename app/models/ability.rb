@@ -14,6 +14,7 @@ class Ability
     recipe_permissions
     user_permissions
     comment_permissions
+    event_permissions
   end
 
   private
@@ -152,6 +153,16 @@ class Ability
 
     can :editable, Comment do |comment|
       comment.user == current_user
+    end
+  end
+
+  def event_permissions
+    can :read, Event do |event|
+      event.published? || event.user == current_user
+    end
+
+    can :rsvp, Event do |event|
+      event.published?
     end
   end
 end

@@ -1,0 +1,50 @@
+= render 'content'
+
+- if @event.published?
+  .spacer
+
+  .row
+    .col-lg-8.col-lg-offset-2.event-rsvp-container
+      = form_with model: @rsvp, class: 'simple_form form-horizontal rsvp', url: rsvp_event_path(@event) do |f|
+        = "Errors: #{@rsvp.errors.full_messages.inspect}" unless @rsvp.errors.empty?
+
+        .row.form-group
+          .event-rsvp-name
+            = f.text_field :name, class: 'form-control', placeholder: 'Guest Name', required: true, name: "rsvp[names][]"
+          <br>
+          %buton{ class: 'btn btn-default', onclick: "addMoreGuest()" }
+            = fa_icon 'plus'
+            %b Add Guest
+          <br>
+
+        .row.form-group
+          = f.text_field :phone, class: 'form-control', placeholder: 'Phone'
+
+        .row.form-group
+          = f.text_field :email, class: 'form-control', placeholder: 'Email'
+
+        .row.form-group
+          = f.text_area :notes, class: 'form-control', placeholder: 'Food allergies if any', rows: 4
+
+        .form-actions
+          = f.submit 'Decline', class: 'btn btn-danger'
+          = f.submit 'Accept',  class: 'btn btn-default'
+
+
+  - content_for :footer_scripts do
+    :javascript
+      let additionalGuests = 0;
+
+      function addMoreGuest() {
+        if (additionalGuests < 3) {
+          $('.event-rsvp-name').append(
+            '<div class="more-guest-container" style="margin:20px 0;"><input class="form-control" placeholder="Additional Guest Name" name="rsvp[names][]" style="width:97%;float:left"><div style="color:red !important;cursor:pointer;" onclick="removeGuest()">&nbsp&nbsp<i class="fa fa-trash fa-lg" style="margin-top:10px;"></i></div></div>'
+          );
+          additionalGuests++;
+        }
+      }
+
+      function removeGuest() {
+        $('.more-guest-container').last().remove();
+        additionalGuests--;
+      }

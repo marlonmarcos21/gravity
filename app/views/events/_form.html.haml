@@ -1,0 +1,18 @@
+= form_with model: @event, class: 'simple_form form-horizontal events' do |f|
+  = "Errors: #{@event.errors.full_messages.inspect}" unless @event.errors.empty?
+
+  .row.form-group
+    = f.label :title, class: 'control-label'
+    = f.text_field :title, class: 'form-control'
+
+  .row.form-group
+    = f.label :body, class: 'control-label'
+    = f.rich_text_area :body
+
+  .form-actions
+    - if @event.persisted?
+      = f.submit 'Update Event', type: :submit, class: 'btn btn-default'
+      = link_to 'Cancel', event_path(@event), class: 'btn btn-default'
+    - else
+      = f.submit 'Create Event', type: :submit, class: 'btn btn-default'
+      = link_to 'Cancel', root_path, class: 'btn btn-default'

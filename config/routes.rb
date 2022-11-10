@@ -59,6 +59,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :events, except: [:index] do
+    member do
+      post 'rsvp'
+      get 'rsvps'
+      patch 'publish'
+      patch 'unpublish'
+    end
+  end
+
   resources :recipe_categories, only: [] do
     member do
       get 'recipes'

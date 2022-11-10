@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -355,6 +341,41 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
+-- Name: events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.events (
+    id bigint NOT NULL,
+    title character varying NOT NULL,
+    published boolean DEFAULT false,
+    user_id bigint NOT NULL,
+    published_at timestamp without time zone,
+    slug character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
+
+
+--
 -- Name: friend_requests; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -634,6 +655,43 @@ ALTER SEQUENCE public.recipes_id_seq OWNED BY public.recipes.id;
 
 
 --
+-- Name: rsvps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rsvps (
+    id bigint NOT NULL,
+    event_id bigint NOT NULL,
+    name character varying NOT NULL,
+    email character varying,
+    phone character varying,
+    notes text,
+    status character varying NOT NULL,
+    parent_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: rsvps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.rsvps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rsvps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.rsvps_id_seq OWNED BY public.rsvps.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -857,6 +915,13 @@ ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.com
 
 
 --
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.events_id_seq'::regclass);
+
+
+--
 -- Name: friend_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -910,6 +975,13 @@ ALTER TABLE ONLY public.recipe_media ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.recipes ALTER COLUMN id SET DEFAULT nextval('public.recipes_id_seq'::regclass);
+
+
+--
+-- Name: rsvps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rsvps ALTER COLUMN id SET DEFAULT nextval('public.rsvps_id_seq'::regclass);
 
 
 --
@@ -1013,6 +1085,14 @@ ALTER TABLE ONLY public.comments
 
 
 --
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: friend_requests friend_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1074,6 +1154,14 @@ ALTER TABLE ONLY public.recipe_media
 
 ALTER TABLE ONLY public.recipes
     ADD CONSTRAINT recipes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rsvps rsvps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rsvps
+    ADD CONSTRAINT rsvps_pkey PRIMARY KEY (id);
 
 
 --
@@ -1207,6 +1295,20 @@ CREATE INDEX index_comments_on_user_id ON public.comments USING btree (user_id);
 
 
 --
+-- Name: index_events_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_slug ON public.events USING btree (slug);
+
+
+--
+-- Name: index_events_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_user_id ON public.events USING btree (user_id);
+
+
+--
 -- Name: index_friend_requests_on_requester_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1312,6 +1414,20 @@ CREATE INDEX index_recipes_on_user_id ON public.recipes USING btree (user_id);
 
 
 --
+-- Name: index_rsvps_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rsvps_on_event_id ON public.rsvps USING btree (event_id);
+
+
+--
+-- Name: index_rsvps_on_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rsvps_on_parent_id ON public.rsvps USING btree (parent_id);
+
+
+--
 -- Name: index_user_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1379,6 +1495,22 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.posts FOR EACH R
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('tsv_name', 'pg_catalog.simple', 'first_name', 'last_name');
+
+
+--
+-- Name: events fk_rails_0cb5590091; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_0cb5590091 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: rsvps fk_rails_115d52081c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rsvps
+    ADD CONSTRAINT fk_rails_115d52081c FOREIGN KEY (event_id) REFERENCES public.events(id);
 
 
 --
@@ -1459,6 +1591,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210402222639'),
 ('20210702033618'),
 ('20210702033807'),
-('20210702041504');
+('20210702041504'),
+('20221109224315'),
+('20221109230404');
 
 

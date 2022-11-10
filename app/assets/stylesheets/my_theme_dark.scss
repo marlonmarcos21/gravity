@@ -86,7 +86,7 @@ p {
   text-align: right;
 }
 
-.blog-container, .recipe-contents-container {
+.blog-container, .recipe-contents-container, .event-contents-container, .event-rsvp-container {
   background-color: #000;
   color: #fff;
   padding: 15px;
@@ -1030,5 +1030,19 @@ input:checked + .slider:before {
     line-height: 2;
     width: 200px;
     margin-left: -23px;
+  }
+}
+
+#event-rsvps {
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  th, td {
+    border-bottom: 1px solid #ddd;
+  }
+
+  td:nth-child(even), th:nth-child(even) {
+    background-color: #333;
   }
 }

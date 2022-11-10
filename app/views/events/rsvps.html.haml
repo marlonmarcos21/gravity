@@ -1,0 +1,22 @@
+.row
+  .col-lg-8.col-lg-offset-2.event-rsvp-container{ id: "event-#{@event.id}" }
+    %table#event-rsvps{ style: "border-bottom:1px solid #ddd;text-align:left" }
+      %tr
+        %td Name
+        %td Additional Guests
+        %td Email
+        %td Phone
+        %td Notes
+        %td Status
+
+      %tr
+        - @rsvps.each do |rsvp|
+          %td= rsvp.name
+          %td
+            %ul
+              - rsvp.children.pluck(:name).each do |name|
+                %li= name
+          %td= rsvp.email
+          %td= rsvp.phone
+          %td= rsvp.notes
+          %td= rsvp.status.titleize
