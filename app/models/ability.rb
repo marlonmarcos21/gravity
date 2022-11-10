@@ -157,11 +157,11 @@ class Ability
   end
 
   def event_permissions
-    can [:new, :create], Event do |event|
+    can :create, Event do |event|
       current_user.persisted?
     end
 
-    can [:update, :destroy, :publish, :unpublish], Recipe do |recipe|
+    can [:update, :destroy, :publish, :unpublish], Event do |recipe|
       recipe.user == current_user
     end
 
