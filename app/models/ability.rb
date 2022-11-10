@@ -161,7 +161,7 @@ class Ability
       current_user.persisted?
     end
 
-    can [:update, :destroy, :publish, :unpublish], Event do |recipe|
+    can [:update, :destroy, :publish, :unpublish, :rsvps], Event do |recipe|
       recipe.user == current_user
     end
 

@@ -9,8 +9,8 @@
         %td Notes
         %td Status
 
-      %tr
-        - @rsvps.each do |rsvp|
+      - @rsvps.each do |rsvp|
+        %tr
           %td= rsvp.name
           %td
             %ul
