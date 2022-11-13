@@ -3,6 +3,8 @@
 - if @event.published?
   .spacer
 
+  %h2.text-center RSVP
+
   .row
     .col-lg-8.col-lg-offset-2.event-rsvp-container
       = form_with model: @rsvp, class: 'simple_form form-horizontal rsvp', url: rsvp_event_path(@event) do |f|
@@ -29,7 +31,6 @@
         .form-actions
           = f.submit 'Decline', class: 'btn btn-danger'
           = f.submit 'Accept',  class: 'btn btn-default'
-
 
   - content_for :footer_scripts do
     :javascript

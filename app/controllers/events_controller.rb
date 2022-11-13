@@ -5,25 +5,33 @@ class EventsController < ApplicationController
     if request.get?
       @rsvp = Rsvp.new
     else
-      parent = Rsvp.create!(
-        event: @event,
-        name: rsvp_params[:names].shift,
-        email: rsvp_params[:email].presence,
-        phone: rsvp_params[:phone].presence,
-        notes: rsvp_params[:notes].presence,
-        status: params[:commit] == 'Accept' ? 'accepted' : 'declined'
-      )
-
-      rsvp_params[:names].each do |name|
-        Rsvp.create!(
+      if params[:commit] == 'Accept' && rsvp_params[:email].presence.nil? && rsvp_params[:phone].presence.nil?
+        flash[:error] = 'Please provide either an email or a phone number.'
+      else
+        parent = Rsvp.create(
           event: @event,
-          name: name,
+          name: rsvp_params[:names].shift,
           email: rsvp_params[:email].presence,
           phone: rsvp_params[:phone].presence,
           notes: rsvp_params[:notes].presence,
-          status: params[:commit] == 'Accept' ? 'accepted' : 'declined',
-          parent: parent
+          status: params[:commit] == 'Accept' ? 'accepted' : 'declined'
         )
+
+        if parent.persisted?
+          rsvp_params[:names].each do |name|
+            next if name.blank?
+
+            Rsvp.create(
+              event: @event,
+              name: name,
+              email: rsvp_params[:email].presence,
+              phone: rsvp_params[:phone].presence,
+              notes: rsvp_params[:notes].presence,
+              status: params[:commit] == 'Accept' ? 'accepted' : 'declined',
+              parent: parent
+            )
+          end
+        end
       end
 
       redirect_to @event
