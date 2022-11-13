@@ -31,6 +31,8 @@ class EventsController < ApplicationController
               parent: parent
             )
           end
+
+          flash[:notice] = 'Thank you! Your RSVP has been saved.'
         end
       end
 
