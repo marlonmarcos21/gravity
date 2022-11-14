@@ -352,7 +352,8 @@ CREATE TABLE public.events (
     published_at timestamp without time zone,
     slug character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    og_image_source text
 );
 
 
@@ -1593,6 +1594,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210702033807'),
 ('20210702041504'),
 ('20221109224315'),
-('20221109230404');
+('20221109230404'),
+('20221114151639');
 
 

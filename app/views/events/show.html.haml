@@ -1,3 +1,6 @@
+- content_for(:meta_tags) do
+  = render_meta_tags @event
+
 = render 'content'
 
 - if @event.published?

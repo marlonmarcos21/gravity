@@ -13,6 +13,9 @@ module ApplicationHelper
       meta.type    = 'article'
       meta.image   = model.blog_media.order(:id).first.try(:source_url)
       meta.author  = model.user.name
+    elsif model.is_a?(Event)
+      meta.title   = strip_content!(model.title)
+      meta.image   = model.og_image_source.presence || home_image
     else
       meta.title   = 'Gravity'
       image        = model.images.first
