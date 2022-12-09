@@ -11,6 +11,9 @@ class VideoJob < ApplicationJob
   private
 
   def process_metadata(video)
+    object = BUCKET.object(video.key)
+    object.acl.put(acl: 'private')
+
     file      = URI(video.source_url).open
     movie     = FFMPEG::Movie.new(file.path)
     key_parts = video.key.split('/')
