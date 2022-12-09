@@ -2,8 +2,8 @@ class ImageJob < ApplicationJob
   queue_as :default
 
   def perform(image_ids, method)
-    image = Image.where(id: image_ids)
-    send(method, image)
+    images = Image.where(id: image_ids)
+    send(method, images)
   end
 
   private
@@ -11,6 +11,7 @@ class ImageJob < ApplicationJob
   def process_styles(images)
     image = images.first
     object = BUCKET.object(image.key)
+    object.acl.put(acl: 'private')
     uri = URI(object.presigned_url(:get))
     file = uri.open
     image.source = file
