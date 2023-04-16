@@ -48,6 +48,9 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
+Metrics/BlockNesting:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
@@ -59,6 +62,9 @@ Naming/PredicateName:
 
 Style/ColonMethodCall:
   Enabled: true
+
+Style/SymbolProc:
+  Enabled: false
 
 Rails/Present:
   Enabled: false
@@ -285,7 +291,7 @@ Rails/WhereNot:
 Metrics/BlockLength:
   Enabled: false
 
-Gemspec/DateAssignment: # (new in 1.10)
+Gemspec/DeprecatedAttributeAssignment: # (new in 1.10)
   Enabled: true
 Lint/DeprecatedConstants: # (new in 1.8)
   Enabled: true

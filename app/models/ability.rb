@@ -157,7 +157,7 @@ class Ability
   end
 
   def event_permissions
-    can :create, Event do |event|
+    can :create, Event do
       current_user.persisted?
     end
 

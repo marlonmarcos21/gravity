@@ -8,7 +8,7 @@ class Rsvp < ApplicationRecord
   belongs_to :event
   belongs_to :parent, class_name: 'Rsvp', optional: true
 
-  has_many :children, class_name: 'Rsvp', foreign_key: :parent_id
+  has_many :children, class_name: 'Rsvp', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
   enum status: {
     accepted: 'accepted',
