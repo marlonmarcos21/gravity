@@ -1,3 +1,5 @@
+import 'trix/dist/trix';
+
 function uploadAttachment(attachment) {
   var file = attachment.file;
   var form = new FormData;
