@@ -1,5 +1,17 @@
-# t.string :title, unique: true
-# t.string :slug
+# == Schema Information
+#
+# Table name: recipe_categories
+#
+#  id         :bigint           not null, primary key
+#  slug       :string
+#  title      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_recipe_categories_on_title  (title) UNIQUE
+#
 
 class RecipeCategory < ApplicationRecord
   has_many :recipes,

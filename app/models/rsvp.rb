@@ -1,8 +1,27 @@
-# t.string :name
-# t.string :email
-# t.string :phone
-# t.text   :notes
-# t.string :status
+# == Schema Information
+#
+# Table name: rsvps
+#
+#  id         :bigint           not null, primary key
+#  email      :string
+#  name       :string           not null
+#  notes      :text
+#  phone      :string
+#  status     :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  event_id   :bigint           not null
+#  parent_id  :bigint
+#
+# Indexes
+#
+#  index_rsvps_on_event_id   (event_id)
+#  index_rsvps_on_parent_id  (parent_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (event_id => events.id)
+#
 
 class Rsvp < ApplicationRecord
   belongs_to :event

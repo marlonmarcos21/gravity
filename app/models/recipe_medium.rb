@@ -1,6 +1,19 @@
-# t.text   file_data
-# t.jsonb  video_meta
-# t.string s3_id
+# == Schema Information
+#
+# Table name: recipe_media
+#
+#  id         :bigint           not null, primary key
+#  file_data  :text
+#  video_meta :jsonb
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  s3_id      :string
+#  user_id    :bigint
+#
+# Indexes
+#
+#  index_recipe_media_on_user_id  (user_id)
+#
 
 class RecipeMedium < ApplicationRecord
   include ImageUploader[:file]

@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: posts
+#
+#  id           :integer          not null, primary key
+#  body         :text
+#  public       :boolean          default(FALSE)
+#  published    :boolean          default(TRUE)
+#  published_at :datetime
+#  slug         :string
+#  tsv_name     :tsvector
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :integer
+#
+# Indexes
+#
+#  index_posts_on_public    (public)
+#  index_posts_on_tsv_name  (tsv_name) USING gin
+#  index_posts_on_user_id   (user_id)
+#
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do

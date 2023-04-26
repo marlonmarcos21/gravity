@@ -1,8 +1,26 @@
-# t.string     :title
-# t.boolean    :published, default: false
-# t.references :user,      index: true
-# t.references :category,  index :true
-# t.datetime   :published_at
+# == Schema Information
+#
+# Table name: recipes
+#
+#  id           :bigint           not null, primary key
+#  published    :boolean          default(FALSE)
+#  published_at :datetime
+#  slug         :string
+#  title        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  category_id  :bigint
+#  user_id      :bigint
+#
+# Indexes
+#
+#  index_recipes_on_category_id  (category_id)
+#  index_recipes_on_user_id      (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => recipe_categories.id)
+#
 
 class Recipe < ApplicationRecord
   belongs_to :user

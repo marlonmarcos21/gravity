@@ -1,7 +1,20 @@
-# t.json       :source_meta
-# t.references :attachable, polymorphic: true
-# t.string     :token
-# t.string     :key
+# == Schema Information
+#
+# Table name: videos
+#
+#  id              :integer          not null, primary key
+#  attachable_type :string
+#  key             :string
+#  source_meta     :json
+#  token           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  attachable_id   :integer
+#
+# Indexes
+#
+#  index_videos_on_attachable_type_and_attachable_id  (attachable_type,attachable_id)
+#
 
 class Video < ApplicationRecord
   belongs_to :attachable, polymorphic: true, optional: true

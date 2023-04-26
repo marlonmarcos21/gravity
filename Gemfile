@@ -82,6 +82,7 @@ group :development do
   gem 'spring'
   gem 'parallel_tests'
   gem 'rubocop-rails'
+  gem 'annotate'
 end
 
 group :test do
