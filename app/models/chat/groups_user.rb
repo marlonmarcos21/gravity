@@ -21,6 +21,7 @@
 #  fk_rails_...  (chat_group_id => chat_groups.id)
 #  fk_rails_...  (user_id => users.id)
 #
+
 class Chat::GroupsUser < ApplicationRecord
   belongs_to :user
   belongs_to :chat_group, class_name: 'Chat::Group', inverse_of: :groups_users

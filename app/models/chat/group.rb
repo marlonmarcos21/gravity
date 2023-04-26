@@ -8,6 +8,7 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
+
 class Chat::Group < ApplicationRecord
   has_many :messages,         class_name: 'Chat::Message',        foreign_key: :chat_group_id
   has_many :message_receipts, class_name: 'Chat::MessageReceipt', foreign_key: :chat_group_id

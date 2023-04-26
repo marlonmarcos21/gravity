@@ -89,6 +89,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :chats
+
   get 'search', to: 'search#search'
   get 'about',  to: 'about#index'
 

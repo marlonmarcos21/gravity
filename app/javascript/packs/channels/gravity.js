@@ -1,6 +1,6 @@
 import consumer from './consumer'
 
-consumer.subscriptions.create('GravityChannel', {
+const channelSubscription = consumer.subscriptions.create({channel: 'GravityChannel'}, {
   // received(data) {
   //   // new Gravity(data["title"], { body: data["body"] })
   //   console.log('tae ka');
@@ -12,7 +12,7 @@ consumer.subscriptions.create('GravityChannel', {
 
   appendLine(data) {
     const html = this.createLine(data)
-    const element = document.querySelector("[id='posts-container']")
+    const element = document.querySelector("[id='users']")
     element.insertAdjacentHTML("beforebegin", html)
   },
 
@@ -30,3 +30,18 @@ consumer.subscriptions.create('GravityChannel', {
     console.log("Connected to the room!");
   }
 })
+
+// setTimeout(
+//   () => channelSubscription.send({sent_by: "Paul", body: "This is a cool chat app."}),
+//   5000
+// );
+
+// window.sendMessage = (sent_by, body) => {
+//   channelSubscription.send({sent_by: sent_by, body: body})
+// }
+
+const sendMessage = (sentBy, body) => {
+  channelSubscription.send({sent_by: sentBy, body: body})
+}
+
+export default sendMessage

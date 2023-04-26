@@ -19,6 +19,7 @@
 #  fk_rails_...  (chat_group_id => chat_groups.id)
 #  fk_rails_...  (sender_id => users.id)
 #
+
 class Chat::Message < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :group,  class_name: 'Chat::Group', foreign_key: :chat_group_id

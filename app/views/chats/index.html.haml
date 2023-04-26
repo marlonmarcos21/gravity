@@ -1,0 +1,13 @@
+.container
+  %h5= "Hi #{current_user.first_name}"
+  #users= render @users
+
+  %a.send-message{ href: '#', onclick: 'sendMessage("Bon", "Yo!")' }
+    = "Send Message"
+
+- content_for :footer_scripts do
+  = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  :javascript
+    function sendMessage(sentBy, body) {
+      Packs.application.sendMessage(sentBy, body);
+    }

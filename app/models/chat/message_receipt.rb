@@ -23,6 +23,7 @@
 #  fk_rails_...  (chat_message_id => chat_messages.id)
 #  fk_rails_...  (user_id => users.id)
 #
+
 class Chat::MessageReceipt < ApplicationRecord
   enum receipt_type: {
   	inbox: 'inbox',

@@ -5,6 +5,10 @@ class GravityChannel < ApplicationCable::Channel
     stream_for current_user
   end
 
+  def receive(data)
+    broadcast_to(current_user, data)
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end
