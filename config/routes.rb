@@ -1,7 +1,13 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   Rails.application.routes.default_url_options[:host] = Rails.application.config.action_mailer.default_url_options[:host].freeze
 
   devise_for :users, controllers: { sessions: 'sessions', passwords: 'passwords' }
+
+  authenticate :user, lambda { |u| u.id == 1 } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :users, except: [:index] do
     member do

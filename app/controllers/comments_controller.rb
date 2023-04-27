@@ -7,14 +7,14 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        CommentMailer.delay.new_comment(@comment.id) unless current_user == @commentable.user
+        CommentMailer.new_comment(@comment.id).deliver_later unless current_user == @commentable.user
         @commentable.create_activity :comment
         @total_comments = @commentable.comment_threads.count
         @new_comment = Comment.build_from(@commentable, current_user.try(:id))
         flash[:notice] = 'Comment posted!'
 
         template = if make_child_comment
-                     CommentMailer.delay.reply_comment(@comment.id) unless current_user == @parent_comment.user
+                     CommentMailer.reply_comment(@comment.id).deliver_later unless current_user == @parent_comment.user
                      @commentable.create_activity :reply_comment, recipient: @parent_comment.user
                      :new_reply
                    else

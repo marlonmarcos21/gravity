@@ -114,7 +114,7 @@ class UsersController < ApplicationController
         format.html { redirect_to :back }
         format.js   { render nothing: true, content_type: 'text/html' }
       elsif current_user.send_friend_request_to(@user)
-        UserMailer.delay.send_friend_request(@user, current_user)
+        UserMailer.send_friend_request(@user, current_user).deliver_later
         @user.create_activity :send_friend_request
         @post = @user.posts.published.first
         flash[:notice] = 'Request sent!'
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
   def accept_friend_request
     respond_to do |format|
       if current_user.accept_friend_request!(@user)
-        UserMailer.delay.accept_friend_request(current_user, @user)
+        UserMailer.accept_friend_request(current_user, @user).deliver_later
         @user.create_activity :accept_friend_request
         @post = Post.find_by(params[:post_id]) if params[:post_id]
         flash[:notice] = 'Request accepted!'
