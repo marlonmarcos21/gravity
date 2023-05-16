@@ -2,15 +2,15 @@
   = stylesheet_pack_tag 'application'
 
 .container
-  .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+  .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
     %h5= "Hi #{current_user.first_name}"
     %a.send-message{ href: '#', onclick: 'sendMessage("Bon", "Yo!")' }
       = "Send Message"
 
     %hr.spacer
 
-  .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
-    = react_component('ChatList')
+  .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+    = react_component('ChatList', { currentUser: current_user.as_json })
 
 - content_for :footer_scripts do
   = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'

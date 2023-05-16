@@ -11,231 +11,132 @@ import {
   ConversationList,
   Conversation,
   ConversationHeader,
-  VoiceCallButton,
-  VideoCallButton,
   InfoButton,
   TypingIndicator,
   MessageSeparator,
-} from "@chatscope/chat-ui-kit-react";
-import "../styles/chat.scss";
+  MessageGroup,
+} from '@chatscope/chat-ui-kit-react';
+import '../styles/chat.scss';
 
-const Chat = () => {
+let groups = [];
+
+const Chat = (props) => {
+  const [msgGroups, setMsgGroups] = useState([]);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [stopFetching, setStopFetching] = useState(false);
+  const groupIdRef = useRef(0);
+  const msgIdRef = useRef(0);
+  const inputRef = useRef();
+  const pageRef = useRef(1);
+
+  const handleMessage = (msg) => {
+    if (groups.length > 0) {
+      const lastGroup = groups[0];
+
+      if (lastGroup.senderId === msg.sender_id) {
+        // Add to group
+        const newMsg = {_id: `m-${++msgIdRef.current}`, message: msg.body, sender: String(msg.sender_id)}
+        const newMessages = [newMsg].concat([...lastGroup.messages]);
+        const newGroup = { ...lastGroup, messages: newMessages};
+        groups.shift();
+        const newGroups = [newGroup].concat(groups);
+        groups = newGroups;
+      } else {
+        // Sender different than last sender - create new group 
+        const newGroup = {
+          _id: `g-${++groupIdRef.current}`,
+          direction: msg.sender_id === props.currentUser.id ? 'outgoing' : 'incoming',
+          senderId: msg.sender_id,
+          messages: [{
+            _id: `m-${++msgIdRef.current}`,
+            message: msg.body,
+            sender: String(msg.sender_id),
+          }]
+        };
+        groups = [newGroup].concat(groups);
+      }
+    } else {
+      const newGroup = {
+        _id: `g-${++groupIdRef.current}`,
+        direction:  msg.sender_id === props.currentUser.id ? 'outgoing' : 'incoming',
+        senderId: msg.sender_id,
+        messages: [{
+          _id: `m-${++msgIdRef.current}`,
+          message: msg.body,
+          sender: String(msg.sender_id),
+        }]
+      };
+      groups = [newGroup];
+    }
+  };
+
+  const getMessages = (page = 1) => {
+    try {
+      axios.get(`/chats/${props.chatGroup.id}?page=${page}`).then(r => {
+        if (r.data.length > 0) {
+          r.data.forEach(msg => {
+            handleMessage(msg);
+          });
+          setMsgGroups(groups);
+        } else {
+          setStopFetching(true);
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => getMessages(), []);
+
+  useEffect(() => {
+    if (loadingMore === true) {
+      if (groups.length !== 0) {
+        ++pageRef.current;
+      }
+
+      setLoadingMore(false);
+      if (!stopFetching) {
+        getMessages(pageRef.current);
+      }
+    }
+  }, [loadingMore]);
+
+  const onYReachStart = () => setLoadingMore(true);
+
   return (
-    <div style={{height: "500px"}}>
+    <div style={{flexGrow: 1}}>
       <ChatContainer>
         <ConversationHeader>
-          <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name="Emily" />
-          <ConversationHeader.Content userName="Emily" info="Active 10 mins ago" />
+          <Avatar src={props.chatGroup.avatarSrc} name={props.chatGroup.firstName} />
+          <ConversationHeader.Content userName={props.chatGroup.firstName} info="Active 10 mins ago" />
           <ConversationHeader.Actions>
-            <VoiceCallButton />
-            <VideoCallButton />
             <InfoButton />
-          </ConversationHeader.Actions>          
+          </ConversationHeader.Actions>     
         </ConversationHeader>
-        <MessageList typingIndicator={<TypingIndicator content="Emily is typing" />}>
 
-          <MessageSeparator content="Saturday, 30 November 2019" />
-            
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "single"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
+        <MessageList
+          loadingMorePosition="top"
+          disableOnYReachWhenNoScroll={true}
+          typingIndicator={<TypingIndicator/>}
+          onYReachStart={onYReachStart}
+        >
+          {groups.map(g => (
+            <MessageGroup style={{padding: '5px'}} key={g._id} data-id={g._id} direction={g.direction}>
+              <MessageGroup.Messages key={g._id}>
+                {g.messages.map((m, i) => (
+                  <Message key={m._id} data-id={m._id} model={m}>
+                    {i === 0 && g.senderId != props.currentUser.id &&
+                      <Avatar src={props.chatGroup.avatarSrc} />
+                    }
+                  </Message>
+                ))}
+              </MessageGroup.Messages>
+            </MessageGroup>
+          ))}
+        </MessageList>
 
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Marlon",
-            direction: "outgoing",
-            position: "single"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "first"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "normal"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "normal"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "last"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "first"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "normal"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "normal"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "last"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "first"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "last"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
-
-          <MessageSeparator content="Saturday, 31 November 2019" />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "single"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Marlon",
-            direction: "outgoing",
-            position: "single"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "first"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "normal"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "normal"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "last"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "first"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "normal"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "normal"
-          }} />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            direction: "outgoing",
-            position: "last"
-          }} />
-            
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "first"
-          }} avatarSpacer />
-
-          <Message model={{
-            message: "Hello my friend",
-            sentTime: "15 mins ago",
-            sender: "Emily",
-            direction: "incoming",
-            position: "last"
-          }}>
-            <Avatar src="https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892" name={"Emily"} />
-          </Message>
-            
-          </MessageList>
-        <MessageInput placeholder="Type message here" />        
+        <MessageInput placeholder="Type message here" ref={inputRef} />
       </ChatContainer>
     </div>
   );

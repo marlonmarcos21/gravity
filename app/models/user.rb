@@ -203,6 +203,12 @@ class User < ApplicationRecord
     Activity.where(recipient: self)
   end
 
+  def as_json(opts = {})
+    super(opts).except('tsv_name').merge(
+      profile_photo: profile_photo_url(:thumb)
+    )
+  end
+
   private
 
   def slug_candidates

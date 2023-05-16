@@ -10,15 +10,16 @@ import {
   MessageInput,
   ConversationList,
   Conversation,
-} from "@chatscope/chat-ui-kit-react";
+} from '@chatscope/chat-ui-kit-react';
 import Chat from './Chat';
-import "../styles/chat.scss";
+import '../styles/chat.scss';
 
-const ChatList = () => {
+const ChatList = (props) => {
   const [conversations, setConversations] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
   const [chatWindowHtml, setChatWindowHtml] = useState(null);
+  const pageRef = useRef(1);
 
   const getConversations = (page = 1) => {
     try {
@@ -34,11 +35,7 @@ const ChatList = () => {
     }
   };
 
-  if (conversations.length === 0) {
-    getConversations()
-  }
-
-  const pageRef = useRef(1);
+  useEffect(() => getConversations(), []);
 
   useEffect(() => {
     if (loadingMore === true) {
@@ -57,19 +54,23 @@ const ChatList = () => {
 
   const onYReachEnd = () => setLoadingMore(true);
 
-  const showChatWindowHtml = (chatGroupId) => {
+  const showChatWindowHtml = (chatGroup) => {
     const chatWindowHtml_ = (
       <React.Fragment>
-        <Chat key={'chat-group-' + chatGroupId} />
+        <Chat
+          key={'chat-group-' + chatGroup.id}
+          currentUser={props.currentUser}
+          chatGroup={chatGroup}
+        />
       </React.Fragment>
     )
     setChatWindowHtml(chatWindowHtml_)
   }
 
   return (
-    <div>
+    <div style={{display: 'flex', height: '500px'}}>
       <ConversationList
-        style={{height: "340px"}}
+        style={{width: '40%', height: '500px'}}
         scrollable
         loadingMore={loadingMore}
         onYReachEnd={onYReachEnd}
@@ -80,7 +81,7 @@ const ChatList = () => {
               key={'conversation-list-id-' + d.id}
               name={d.firstName}
               info={d.message}
-              onClick={() => showChatWindowHtml(d.id)}
+              onClick={() => showChatWindowHtml(d)}
             >
               <Avatar src={d.avatarSrc} name={d.firstName} />
             </Conversation>

@@ -32,5 +32,38 @@ module DataSeeder
         )
       end
     end
+
+    def messages(chat_group_id, count = 50)
+      chat_group = Chat::Group.find(chat_group_id)
+      participants = chat_group.participants
+      total = 0
+
+      until total >= 50
+        sender = participants.sample
+        rand(1..3).times do
+          msg = chat_group.messages.build(
+            sender: sender,
+            body: Faker::Lorem.sentences.join(' ')
+          )
+
+          msg.receipts.build(
+            chat_group_id: chat_group.id,
+            receipt_type: 'outbox',
+            user: sender,
+            message: msg
+          )
+
+          msg.receipts.build(
+            chat_group_id: chat_group.id,
+            receipt_type: 'inbox',
+            user: (participants - [sender]).first,
+            message: msg
+          )
+
+          msg.save!
+          total += 1
+        end
+      end
+    end
   end
 end
