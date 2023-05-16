@@ -22,7 +22,7 @@
 
 class Chat::Message < ApplicationRecord
   belongs_to :sender, class_name: 'User'
-  belongs_to :group,  class_name: 'Chat::Group', foreign_key: :chat_group_id
+  belongs_to :group,  class_name: 'Chat::Group', foreign_key: :chat_group_id, touch: true
 
   has_many :receipts, class_name: 'Chat::MessageReceipt', foreign_key: :chat_message_id
 end

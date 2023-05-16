@@ -15,7 +15,8 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-export { default as sendMessage } from './channels/gravity'
+// export { default as sendMessage } from './channels/gravity';
+// export { default as createConsumer } from './channels/consumer';
 
 // Support component names relative to this directory:
 var componentRequireContext = require.context("components", true);

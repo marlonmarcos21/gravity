@@ -16,6 +16,8 @@ import {
   MessageSeparator,
   MessageGroup,
 } from '@chatscope/chat-ui-kit-react';
+import consumer from '../packs/channels/consumer'
+// import sendMessage from '../packs/channels/gravity'
 import '../styles/chat.scss';
 
 let groups = [];
@@ -29,18 +31,36 @@ const Chat = (props) => {
   const inputRef = useRef();
   const pageRef = useRef(1);
 
-  const handleMessage = (msg) => {
+  const handleMessage = (msg, append) => {
     if (groups.length > 0) {
-      const lastGroup = groups[0];
+      let lastGroup;
+
+      if (append) {
+        lastGroup = groups[groups.length - 1];
+      } else {
+        lastGroup = groups[0];
+      }
 
       if (lastGroup.senderId === msg.sender_id) {
         // Add to group
         const newMsg = {_id: `m-${++msgIdRef.current}`, message: msg.body, sender: String(msg.sender_id)}
-        const newMessages = [newMsg].concat([...lastGroup.messages]);
+        let newMessages;
+
+        if (append) {
+          newMessages = [...lastGroup.messages].concat(newMsg);
+        } else {
+          newMessages = [newMsg].concat([...lastGroup.messages]);
+        }
+
         const newGroup = { ...lastGroup, messages: newMessages};
-        groups.shift();
-        const newGroups = [newGroup].concat(groups);
-        groups = newGroups;
+
+        if (append) {
+          groups = groups.slice(0, -1).concat(newGroup);
+        } else {
+          groups.shift();
+          const newGroups = [newGroup].concat(groups);
+          groups = newGroups;
+        }
       } else {
         // Sender different than last sender - create new group 
         const newGroup = {
@@ -53,7 +73,12 @@ const Chat = (props) => {
             sender: String(msg.sender_id),
           }]
         };
-        groups = [newGroup].concat(groups);
+
+        if (append) {
+          groups = groups.concat(newGroup);
+        } else {
+          groups = [newGroup].concat(groups);
+        }
       }
     } else {
       const newGroup = {
@@ -87,7 +112,51 @@ const Chat = (props) => {
     }
   };
 
+  const handleSendMessage = (body) => {
+    const subscriptions = consumer.subscriptions.subscriptions;
+    const existingSubscription = subscriptions.filter(s => {
+      return JSON.parse(s.identifier).room_id === props.chatGroup.id;
+    });
+
+    existingSubscription[0].send({
+      sent_by: props.currentUser.id,
+      body: body,
+    })
+
+    const msg = {
+      sender_id: props.currentUser.id,
+      body: body,
+    }
+    handleMessage(msg, true);
+    setMsgGroups(groups);
+  };
+
   useEffect(() => getMessages(), []);
+
+  useEffect(() => {
+    groups = [];
+    const subscriptions = consumer.subscriptions.subscriptions;
+    const existingSubscription = subscriptions.filter(s => {
+      return JSON.parse(s.identifier).room_id === props.chatGroup.id;
+    });
+
+    if (existingSubscription.length === 0) {
+      consumer.subscriptions.create({channel: 'GravityChannel', room_id: props.chatGroup.id}, {
+        received(data) {
+          if (data['sent_by'] === props.currentUser.id) {
+            return;
+          }
+
+          const msg = {
+            sender_id: data['sent_by'],
+            body: data['body'],
+          }
+          handleMessage(msg, true);
+          setMsgGroups(groups);
+        },
+      });
+    }
+  }, [props.chatGroup.id]);
 
   useEffect(() => {
     if (loadingMore === true) {
@@ -122,11 +191,11 @@ const Chat = (props) => {
           onYReachStart={onYReachStart}
         >
           {groups.map(g => (
-            <MessageGroup style={{padding: '5px'}} key={g._id} data-id={g._id} direction={g.direction}>
+            <MessageGroup style={{padding: '8px'}} key={g._id} data-id={g._id} direction={g.direction}>
               <MessageGroup.Messages key={g._id}>
                 {g.messages.map((m, i) => (
-                  <Message key={m._id} data-id={m._id} model={m}>
-                    {i === 0 && g.senderId != props.currentUser.id &&
+                  <Message key={m._id} data-id={m._id} model={m} style={{padding: '2px'}} avatarSpacer={g.messages[i + 1] && g.senderId != props.currentUser.id}>
+                    {!g.messages[i + 1] && g.senderId != props.currentUser.id &&
                       <Avatar src={props.chatGroup.avatarSrc} />
                     }
                   </Message>
@@ -136,7 +205,7 @@ const Chat = (props) => {
           ))}
         </MessageList>
 
-        <MessageInput placeholder="Type message here" ref={inputRef} />
+        <MessageInput placeholder="Type message here" onSend={m => handleSendMessage(m)} ref={inputRef} />
       </ChatContainer>
     </div>
   );
