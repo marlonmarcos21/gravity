@@ -55,6 +55,9 @@ class User < ApplicationRecord
            inverse_of: :requester,
            dependent: :destroy
 
+  has_many :groups_users, class_name: 'Chat::GroupsUser', dependent: :destroy
+  has_many :chat_groups, class_name: 'Chat::Group', through: :groups_users
+
   has_attached_file :profile_photo,
                     styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
                     storage: :s3,

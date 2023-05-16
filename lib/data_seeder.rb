@@ -1,24 +1,26 @@
 module DataSeeder
   class << self
-    def users
+    def users(count = 50)
       password = '123123123'
-      user1 = User.create(
+      user = User.create(
         email: 'user1@example.com',
         first_name: 'First',
         last_name: 'User',
         password: password,
         password_confirmation: password
       )
-      UserProfile.create(user: user1)
+      UserProfile.create(user: user)
 
-      user2 = User.create(
-        email: 'user2@example.com',
-        first_name: 'Second',
-        last_name: 'User',
-        password: password,
-        password_confirmation: password
-      )
-      UserProfile.create(user: user2)
+      count.times do
+        user = User.create(
+          email: Faker::Internet.email,
+          first_name: Faker::Name.first_name,
+          last_name: Faker::Name.last_name,
+          password: password,
+          password_confirmation: password
+        )
+        UserProfile.create(user: user)
+      end
     end
 
     def posts(count = 50)

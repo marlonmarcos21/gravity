@@ -1,5 +1,4 @@
 class ChatsController < ApplicationController
-  # load_and_authorize_resource
   authorize_resource
 
   def index
@@ -7,17 +6,22 @@ class ChatsController < ApplicationController
   end
 
   def conversations
-    id = (params[:page].presence || 1).to_i
-    data = 10.times.map do |i|
-      d = {
-        id: id,
-        firstName: "Marlon #{id}",
-        lastName: "Marcos",
-        message: "The quick brown fox jumps over the lazy dog.",
-        avatarSrc: "https://static-dev.gravity.ph/users/profile_photos/000/000/001/thumb/mm.jpg?1642640892"
+    page = (params[:page].presence || 1).to_i
+    chat_groups =
+      current_user
+        .chat_groups
+        .merge(Chat::GroupsUser.joined)
+        .order(updated_at: :desc)
+        .page(page)
+
+    data = chat_groups.map do |cg|
+      other_user = cg.users.where.not(id: current_user.id).first  # TODO: optimize
+      {
+        id: cg.id,
+        firstName: cg.chat_room_name.presence || "#{other_user.first_name} #{other_user.last_name}",
+        message: "Test message",
+        avatarSrc: other_user.profile_photo_url(:thumb)
       }
-      id += 1
-      d
     end
 
     render json: data
