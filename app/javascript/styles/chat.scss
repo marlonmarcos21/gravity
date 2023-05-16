@@ -1,0 +1,11 @@
+@import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
+
+.account-evolution{
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0 1.5rem;
+  @media (max-width: 600px) {
+    margin-top: 0.25rem;
+    padding: 0 0.95rem;
+  }
+}

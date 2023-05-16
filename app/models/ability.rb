@@ -15,6 +15,7 @@ class Ability
     user_permissions
     comment_permissions
     event_permissions
+    chat_permissions
   end
 
   private
@@ -171,6 +172,12 @@ class Ability
 
     can :rsvp, Event do |event|
       event.published?
+    end
+  end
+
+  def chat_permissions
+    can [:read, :conversations], :chat do
+      current_user.persisted?
     end
   end
 end

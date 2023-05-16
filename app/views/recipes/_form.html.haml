@@ -28,3 +28,6 @@
     - else
       = f.submit 'Create Recipe', type: :submit, class: 'btn btn-default'
       = link_to 'Cancel', recipes_path, class: 'btn btn-default'
+
+- content_for :footer_scripts do
+  = javascript_pack_tag 'trix_upload', 'data-turbolinks-track': 'reload'

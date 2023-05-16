@@ -55,7 +55,6 @@ gem 'sitemap_generator'
 gem 'bootsnap'
 gem 'shrine'
 gem 'redis', '~> 4'
-gem 'webpacker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -97,3 +96,7 @@ group :test do
   gem 'fakeweb'
   gem 'rails-controller-testing'
 end
+
+gem "shakapacker", "= 6.6"
+
+gem "react-rails", "= 2.7"

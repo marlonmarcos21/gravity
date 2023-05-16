@@ -40,5 +40,4 @@
           = Time.zone.now.strftime '%Y'
 
     = javascript_include_tag 'application'
-    = javascript_pack_tag 'trix_upload', 'data-turbolinks-track': 'reload'
     = yield(:footer_scripts) if content_for?(:footer_scripts)
