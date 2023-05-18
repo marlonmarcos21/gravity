@@ -11,19 +11,19 @@ import {
   ConversationList,
   Conversation,
   ConversationHeader,
-  InfoButton,
   TypingIndicator,
   MessageSeparator,
   MessageGroup,
 } from '@chatscope/chat-ui-kit-react';
 import consumer from '../packs/channels/consumer'
-// import sendMessage from '../packs/channels/gravity'
 import '../styles/chat.scss';
 
 let groups = [];
 
 const Chat = (props) => {
+  const { currentUser, chatGroup } = props;
   const [msgGroups, setMsgGroups] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
   const groupIdRef = useRef(0);
@@ -65,7 +65,7 @@ const Chat = (props) => {
         // Sender different than last sender - create new group 
         const newGroup = {
           _id: `g-${++groupIdRef.current}`,
-          direction: msg.sender_id === props.currentUser.id ? 'outgoing' : 'incoming',
+          direction: msg.sender_id === currentUser.id ? 'outgoing' : 'incoming',
           senderId: msg.sender_id,
           messages: [{
             _id: `m-${++msgIdRef.current}`,
@@ -83,7 +83,7 @@ const Chat = (props) => {
     } else {
       const newGroup = {
         _id: `g-${++groupIdRef.current}`,
-        direction:  msg.sender_id === props.currentUser.id ? 'outgoing' : 'incoming',
+        direction:  msg.sender_id === currentUser.id ? 'outgoing' : 'incoming',
         senderId: msg.sender_id,
         messages: [{
           _id: `m-${++msgIdRef.current}`,
@@ -97,7 +97,7 @@ const Chat = (props) => {
 
   const getMessages = (page = 1) => {
     try {
-      axios.get(`/chats/${props.chatGroup.id}?page=${page}`).then(r => {
+      axios.get(`/chats/${chatGroup.id}?page=${page}`).then(r => {
         if (r.data.length > 0) {
           r.data.forEach(msg => {
             handleMessage(msg);
@@ -115,20 +115,23 @@ const Chat = (props) => {
   const handleSendMessage = (body) => {
     const subscriptions = consumer.subscriptions.subscriptions;
     const existingSubscription = subscriptions.filter(s => {
-      return JSON.parse(s.identifier).room_id === props.chatGroup.id;
+      return JSON.parse(s.identifier).room_id === chatGroup.id;
     });
 
-    existingSubscription[0].send({
-      sent_by: props.currentUser.id,
-      body: body,
-    })
-
-    const msg = {
-      sender_id: props.currentUser.id,
-      body: body,
-    }
-    handleMessage(msg, true);
+    existingSubscription[0].send({sent_by: currentUser.id, body});
+    handleMessage({sender_id: currentUser.id, body }, true);
     setMsgGroups(groups);
+  };
+
+  const notifyIsTyping = (value) => {
+    const subscriptions = consumer.subscriptions.subscriptions;
+    const existingSubscription = subscriptions.filter(s => {
+      return JSON.parse(s.identifier).room_id === chatGroup.id;
+    });
+
+    if (existingSubscription.length >= 1) {
+      existingSubscription[0].send({user_id: currentUser.id, is_typing: value});
+    }
   };
 
   useEffect(() => getMessages(), []);
@@ -136,27 +139,25 @@ const Chat = (props) => {
   useEffect(() => {
     groups = [];
     const subscriptions = consumer.subscriptions.subscriptions;
-    const existingSubscription = subscriptions.filter(s => {
-      return JSON.parse(s.identifier).room_id === props.chatGroup.id;
-    });
-
-    if (existingSubscription.length === 0) {
-      consumer.subscriptions.create({channel: 'GravityChannel', room_id: props.chatGroup.id}, {
-        received(data) {
-          if (data['sent_by'] === props.currentUser.id) {
+    subscriptions.forEach(s => s.unsubscribe());
+    consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroup.id}, {
+      received(data) {
+        if ('is_typing' in data) {
+          if (data.user_id !== currentUser.id) {
+            setIsTyping(data.is_typing);
+          }
+        } else {
+          if (data.sent_by === currentUser.id) {
             return;
           }
 
-          const msg = {
-            sender_id: data['sent_by'],
-            body: data['body'],
-          }
-          handleMessage(msg, true);
+          handleMessage({sender_id: data.sent_by, body: data.body}, true);
           setMsgGroups(groups);
-        },
-      });
-    }
-  }, [props.chatGroup.id]);
+          setIsTyping(false);
+        }
+      },
+    });
+  }, [chatGroup.id]);
 
   useEffect(() => {
     if (loadingMore === true) {
@@ -177,26 +178,23 @@ const Chat = (props) => {
     <div style={{flexGrow: 1}}>
       <ChatContainer>
         <ConversationHeader>
-          <Avatar src={props.chatGroup.avatarSrc} name={props.chatGroup.firstName} />
-          <ConversationHeader.Content userName={props.chatGroup.firstName} info="Active 10 mins ago" />
-          <ConversationHeader.Actions>
-            <InfoButton />
-          </ConversationHeader.Actions>     
+          <Avatar src={chatGroup.avatarSrc} name={chatGroup.firstName} />
+          <ConversationHeader.Content userName={chatGroup.firstName} info="Active 10 mins ago" />
         </ConversationHeader>
 
         <MessageList
           loadingMorePosition="top"
           disableOnYReachWhenNoScroll={true}
-          typingIndicator={<TypingIndicator/>}
+          typingIndicator={isTyping && <TypingIndicator/>}
           onYReachStart={onYReachStart}
         >
           {groups.map(g => (
             <MessageGroup style={{padding: '8px'}} key={g._id} data-id={g._id} direction={g.direction}>
               <MessageGroup.Messages key={g._id}>
                 {g.messages.map((m, i) => (
-                  <Message key={m._id} data-id={m._id} model={m} style={{padding: '2px'}} avatarSpacer={g.messages[i + 1] && g.senderId != props.currentUser.id}>
-                    {!g.messages[i + 1] && g.senderId != props.currentUser.id &&
-                      <Avatar src={props.chatGroup.avatarSrc} />
+                  <Message key={m._id} data-id={m._id} model={m} style={{padding: '2px'}} avatarSpacer={g.messages[i + 1] && g.senderId != currentUser.id}>
+                    {!g.messages[i + 1] && g.senderId != currentUser.id &&
+                      <Avatar src={chatGroup.avatarSrc} />
                     }
                   </Message>
                 ))}
@@ -205,7 +203,12 @@ const Chat = (props) => {
           ))}
         </MessageList>
 
-        <MessageInput placeholder="Type message here" onSend={m => handleSendMessage(m)} ref={inputRef} />
+        <MessageInput
+          placeholder="Type message here"
+          ref={inputRef}
+          onSend={m => handleSendMessage(m)}
+          onChange={m => { notifyIsTyping(m.length > 0) }}
+        />
       </ChatContainer>
     </div>
   );

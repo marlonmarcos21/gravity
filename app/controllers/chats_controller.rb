@@ -11,6 +11,7 @@ class ChatsController < ApplicationController
     chat_groups =
       current_user
         .chat_groups
+        .includes(:last_message)
         .merge(Chat::GroupsUser.joined)
         .order(updated_at: :desc)
         .page(page)
@@ -20,7 +21,7 @@ class ChatsController < ApplicationController
       {
         id: cg.id,
         firstName: cg.chat_room_name.presence || "#{other_user.first_name} #{other_user.last_name}",
-        message: "Test message",
+        message: cg.last_message&.body,
         avatarSrc: other_user.profile_photo_url(:thumb)
       }
     end
@@ -44,7 +45,7 @@ class ChatsController < ApplicationController
     return if chat_group&.participants&.exists?(id: current_user.id)
 
     render(
-      json: { error: 'Invalid or unauthorized to access chat group'},
+      json: { error: 'Invalid or unauthorized to access chat group' },
       status: :unprocessable_entity
     )
   end

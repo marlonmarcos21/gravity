@@ -5,9 +5,11 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { sessions: 'sessions', passwords: 'passwords' }
 
+  # rubocop:disable Style/Lambda
   authenticate :user, lambda { |u| u.id == 1 } do
     mount Sidekiq::Web => '/sidekiq'
   end
+  # rubocop:enable Style/Lambda
 
   resources :users, except: [:index] do
     member do

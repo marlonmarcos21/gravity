@@ -8,7 +8,7 @@ class GravityChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    create_message(data)
+    create_message(data) unless data.key?('is_typing')
     broadcast_to(chat_group, data)
   end
 

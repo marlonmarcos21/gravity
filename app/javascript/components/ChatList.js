@@ -15,6 +15,7 @@ import Chat from './Chat';
 import '../styles/chat.scss';
 
 const ChatList = (props) => {
+  const { currentUser } = props;
   const [conversations, setConversations] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
@@ -59,7 +60,7 @@ const ChatList = (props) => {
       <React.Fragment>
         <Chat
           key={'chat-group-' + chatGroup.id}
-          currentUser={props.currentUser}
+          currentUser={currentUser}
           chatGroup={chatGroup}
         />
       </React.Fragment>
@@ -78,7 +79,7 @@ const ChatList = (props) => {
         {conversations.map(d => {
           return (
             <Conversation
-              key={'conversation-list-id-' + d.id}
+              key={'conversation-list-' + d.id}
               name={d.firstName}
               info={d.message}
               onClick={() => showChatWindowHtml(d)}

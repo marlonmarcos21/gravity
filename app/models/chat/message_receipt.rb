@@ -25,12 +25,9 @@
 #
 
 class Chat::MessageReceipt < ApplicationRecord
-  enum receipt_type: {
-  	inbox: 'inbox',
-  	outbox: 'outbox'
-  }
+  enum receipt_type: { inbox: 'inbox', outbox: 'outbox' }
 
   belongs_to :user
-  belongs_to :message, class_name: 'Chat::Message', foreign_key: :chat_message_id
-  belongs_to :group,   class_name: 'Chat::Group',   foreign_key: :chat_group_id
+  belongs_to :message, class_name: 'Chat::Message', foreign_key: :chat_message_id, inverse_of: :receipts
+  belongs_to :group,   class_name: 'Chat::Group',   foreign_key: :chat_group_id, inverse_of: :message_receipts
 end

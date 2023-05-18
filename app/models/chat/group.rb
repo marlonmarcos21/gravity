@@ -10,10 +10,25 @@
 #
 
 class Chat::Group < ApplicationRecord
-  has_many :messages,         class_name: 'Chat::Message',        foreign_key: :chat_group_id
-  has_many :message_receipts, class_name: 'Chat::MessageReceipt', foreign_key: :chat_group_id
-  has_many :groups_users,     class_name: 'Chat::GroupsUser',     foreign_key: :chat_group_id
-  has_many :users,            through: :groups_users
+  has_many :messages,
+           class_name: 'Chat::Message',
+           foreign_key: :chat_group_id,
+           dependent: :restrict_with_error,
+           inverse_of: :group
+
+  has_many :message_receipts,
+           class_name: 'Chat::MessageReceipt',
+           foreign_key: :chat_group_id,
+           dependent: :restrict_with_error,
+           inverse_of: :group
+
+  has_many :groups_users,
+           class_name: 'Chat::GroupsUser',
+           foreign_key: :chat_group_id,
+           dependent: :destroy,
+           inverse_of: :chat_group
+
+  has_many :users, through: :groups_users
 
   has_many :participants,
            -> { where(chat_groups_users: { joined: true }) },
@@ -24,6 +39,13 @@ class Chat::Group < ApplicationRecord
            -> { where(chat_message_receipts: { receipt_type: 'inbox', is_read: false }) },
            through: :message_receipts,
            source: :message
+
+  has_one :last_message,
+          -> { order('created_at DESC') },
+          class_name: 'Chat::Message',
+          foreign_key: :chat_group_id,
+          dependent: :restrict_with_error,
+          inverse_of: :group
 
   scope :group_chat,     -> { where(is_group_chat: true) }
   scope :non_group_chat, -> { where(is_group_chat: false) }
