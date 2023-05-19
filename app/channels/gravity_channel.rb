@@ -8,7 +8,12 @@ class GravityChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    create_message(data) unless data.key?('is_typing')
+    if data.key?('body')
+      create_message(data)
+    elsif data.key?('is_read')
+      update_receipts
+    end
+
     broadcast_to(chat_group, data)
   end
 
@@ -32,7 +37,8 @@ class GravityChannel < ApplicationCable::Channel
       chat_group_id: chat_group.id,
       receipt_type: 'outbox',
       user: current_user,
-      message: msg
+      message: msg,
+      is_read: true
     )
 
     chat_group.participants.where.not(id: current_user.id).each do |p|
@@ -45,5 +51,14 @@ class GravityChannel < ApplicationCable::Channel
     end
 
     msg.save!
+  end
+
+  def update_receipts
+    chat_group
+      .message_receipts
+      .inbox
+      .unread
+      .where(user: current_user)
+      .update_all(is_read: true)
   end
 end

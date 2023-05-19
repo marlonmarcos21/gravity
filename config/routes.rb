@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   resources :chats do
     collection do
       get :conversations
+      get '/conversations/:id', to: 'chats#conversation'
     end
   end
 
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
   get 'set_light_mode', to: 'application#set_light_mode'
   get 'set_dark_mode', to: 'application#set_dark_mode'
   patch 'clear_notifications', to: 'application#clear_notifications'
+  patch 'clear_message_count', to: 'application#clear_message_count'
 
   root to: 'posts#index'
 end

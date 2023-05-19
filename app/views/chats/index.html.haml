@@ -3,18 +3,8 @@
 
 .container
   .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
-    %h5= "Hi #{current_user.first_name}"
-    %a.send-message{ href: '#', onclick: 'sendMessage("Bon", "Yo!")' }
-      = "Send Message"
-
-    %hr.spacer
+  
+  %hr.spacer
 
   .col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
-    = react_component('ChatList', { currentUser: current_user.as_json })
-
-- content_for :footer_scripts do
-  = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
-  :javascript
-    function sendMessage(sentBy, body) {
-      Packs.application.sendMessage(sentBy, body);
-    }
+    = react_component('ChatList', { currentUser: current_user.as_json, autoScroll: true })

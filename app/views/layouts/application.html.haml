@@ -14,6 +14,7 @@
       = stylesheet_link_tag 'application_dark', media: 'all', 'data-turbolinks-track': 'reload'
     - else
       = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application'
     = favicon_link_tag 'favicon.ico', rel: 'shortcut icon'
     %link{ href: '//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic', rel: 'stylesheet', type: 'text/css' }
     %link{ href: '//fonts.googleapis.com/css?family=Montserrat:400,700', rel: 'stylesheet', type: 'text/css' }
@@ -40,4 +41,5 @@
           = Time.zone.now.strftime '%Y'
 
     = javascript_include_tag 'application'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
     = yield(:footer_scripts) if content_for?(:footer_scripts)

@@ -1,7 +1,7 @@
 class ChatsController < ApplicationController
   authorize_resource class: false
 
-  before_action :authorize_chat_group_access, only: :show
+  before_action :authorize_chat_group_access, only: %i(conversation show)
 
   def index
     @users = User.where.not(id: current_user.id)
@@ -25,6 +25,18 @@ class ChatsController < ApplicationController
         avatarSrc: other_user.profile_photo_url(:thumb)
       }
     end
+
+    render json: data
+  end
+
+  def conversation
+    other_user = chat_group.users.where.not(id: current_user.id).first  # TODO: optimize
+    data = {
+      id: chat_group.id,
+      firstName: chat_group.chat_room_name.presence || "#{other_user.first_name} #{other_user.last_name}",
+      message: chat_group.last_message&.body,
+      avatarSrc: other_user.profile_photo_url(:thumb)
+    }
 
     render json: data
   end

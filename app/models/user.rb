@@ -57,6 +57,8 @@ class User < ApplicationRecord
 
   has_many :groups_users, class_name: 'Chat::GroupsUser', dependent: :destroy
   has_many :chat_groups, class_name: 'Chat::Group', through: :groups_users
+  has_many :messages, class_name: 'Chat::Message', dependent: :destroy
+  has_many :message_receipts, class_name: 'Chat::MessageReceipt', dependent: :destroy
 
   has_attached_file :profile_photo,
                     styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },

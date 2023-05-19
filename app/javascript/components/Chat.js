@@ -112,6 +112,20 @@ const Chat = (props) => {
     }
   };
 
+  const getConversation = () => {
+    try {
+      axios.get(`/chats/conversations/${chatGroup.id}`).then(r => {
+        if (r.data) {
+          chatGroup.firstName = r.data.firstName;
+          chatGroup.message = r.data.message;
+          chatGroup.avatarSrc = r.data.avatarSrc;
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleSendMessage = (body) => {
     const subscriptions = consumer.subscriptions.subscriptions;
     const existingSubscription = subscriptions.filter(s => {
@@ -134,14 +148,21 @@ const Chat = (props) => {
     }
   };
 
-  useEffect(() => getMessages(), []);
+  useEffect(() => {
+    getMessages();
+    if (!chatGroup.avatarSrc) getConversation();
+  }, []);
 
   useEffect(() => {
     groups = [];
+
     const subscriptions = consumer.subscriptions.subscriptions;
     subscriptions.forEach(s => s.unsubscribe());
-    consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroup.id}, {
+
+    const subscription = consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroup.id}, {
       received(data) {
+        if ('is_read' in data) return;
+
         if ('is_typing' in data) {
           if (data.user_id !== currentUser.id) {
             setIsTyping(data.is_typing);
@@ -157,6 +178,8 @@ const Chat = (props) => {
         }
       },
     });
+
+    subscription.send({is_read: true});
   }, [chatGroup.id]);
 
   useEffect(() => {
@@ -179,7 +202,7 @@ const Chat = (props) => {
       <ChatContainer>
         <ConversationHeader>
           <Avatar src={chatGroup.avatarSrc} name={chatGroup.firstName} />
-          <ConversationHeader.Content userName={chatGroup.firstName} info="Active 10 mins ago" />
+          <ConversationHeader.Content userName={chatGroup.firstName} info="" />
         </ConversationHeader>
 
         <MessageList

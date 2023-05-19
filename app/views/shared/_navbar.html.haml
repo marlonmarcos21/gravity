@@ -21,23 +21,37 @@
                   = notification_count
             .dropdown-menu.notifications
               = render 'shared/activity', activities: activities
+        - unless current_page?(chats_path)
+          .mobile-messages.pull-right
+            .dropdown.inline
+              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown', onclick: 'clearMessageCount()' }
+                = fa_icon 'comments'
+                - unless message_count.try(:zero?)
+                  %span#mobile-notification-badge
+                    = message_count
+              .dropdown-menu.notifications
+                = react_component('ChatList', { currentUser: current_user.as_json })
 
     .collapse.navbar-collapse.navbar-main-collapse
       %ul.nav.navbar-nav.left-menus
         %li{ class: current_page?(posts_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: posts_path }
             Posts
+
         %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: blogs_path }
             Blogs
+
         %li.dropdown{ role: 'presentation', class: current_page?(recipes_path) ? 'active' : 'inactive' }
           %a.dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
             Recipes
           .dropdown-menu.recipe_categories
             = render 'shared/recipe_categories', recipe_categories: recipe_categories
+
         %li{ class: current_page?(about_path) ? 'active' : 'inactive' }
           %a.page-scroll{ href: about_path }
             About
+
         - if current_user
           %li.desktop-search
             = simple_form_for :search, url: search_path, method: :get, html: { class: 'login form-horizontal navbar-form desktop-search-form' } do |f|
@@ -45,6 +59,7 @@
               .input-group-btn
                 %button.btn.btn-default.search-submit{ type: 'submit' }
                   = fa_icon 'search'
+
       .collapse.navbar-collapse.navbar-right.navbar-main-collapse{ class: current_user ? '' : 'anonymous' }
         - if current_user
           %ul.nav.navbar-nav
@@ -56,6 +71,17 @@
                     = notification_count
               .dropdown-menu.notifications
                 = render 'shared/activity', activities: activities
+
+            - unless current_page?(chats_path)
+              %li.dropdown.inline.desktop-notifications
+                %a.dropdown-toggle.tooltip-info.messages-anchor{ href: '#', rel: 'tooltip', title: 'Messages', 'data-toggle' => 'dropdown', onclick: 'clearMessageCount()' }
+                  = fa_icon 'comments'
+                  - unless message_count.try(:zero?)
+                    %span#notification-badge
+                      = message_count
+                .dropdown-menu.messages
+                  = react_component('ChatList', { autoScroll: false, currentUser: current_user.as_json })
+
             %li.dropdown.nav-user-dropdown{ role: 'presentation' }
               %a.dropdown-toggle.nav-user-dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup' => 'true', 'aria-expanded' => 'false', 'data-toggle' => 'dropdown' }
                 = image_tag current_user.profile_photo_url(:thumb), id: 'nav-profile-photo'
@@ -65,9 +91,11 @@
                 %li
                   %a{ href: user_path(current_user) }
                     = fa_icon('user-secret') + ' Profile'
+
                 %li
                   %a{ href: new_blog_path }
                     = fa_icon('newspaper-o') + ' New Blog'
+
                 %li#dark_mode_switch
                   - if cookies[:dark_mode]
                     %a{ href: set_light_mode_path }
@@ -81,6 +109,7 @@
                       %label.switch
                         %input{ type: 'checkbox', checked: false, onclick: 'setThemeMode("/set_dark_mode")' }
                         %span.slider.round
+
                 %li
                   = link_to(destroy_user_session_path, method: :delete) do
                     = fa_icon 'power-off'
@@ -145,6 +174,19 @@
         url: '#{clear_notifications_path}',
         method: 'patch',
         dataType: 'json',
-      })
+      });
       clickCount++;
+    }
+
+    function clearMessageCount() {
+      setTimeout(function() {
+        $('#notification-badge').addClass('hidden');
+        $('#mobile-notification-badge').addClass('hidden');
+      }, 1000);
+
+      $.ajax({
+        url: '#{clear_message_count_path}',
+        method: 'patch',
+        dataType: 'json',
+      });
     }

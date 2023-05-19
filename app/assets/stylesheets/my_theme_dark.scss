@@ -868,7 +868,24 @@ hr {
   display: none;
   @media(max-width: 767px) {
     display: block;
-    margin-right: 18px;
+    margin-right: 38px;
+    margin-top: -24px;
+  }
+  .notifications {
+    margin-top: 15px;
+    left: -186px;
+    width: 250px;
+  }
+  ul {
+    list-style: none;
+  }
+}
+
+.mobile-messages {
+  display: none;
+  @media(max-width: 767px) {
+    display: block;
+    margin-right: 12px;
     margin-top: -24px;
   }
   .notifications {

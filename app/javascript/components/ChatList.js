@@ -15,7 +15,7 @@ import Chat from './Chat';
 import '../styles/chat.scss';
 
 const ChatList = (props) => {
-  const { currentUser } = props;
+  const { autoScroll, currentUser } = props;
   const [conversations, setConversations] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
@@ -36,7 +36,14 @@ const ChatList = (props) => {
     }
   };
 
-  useEffect(() => getConversations(), []);
+  useEffect(() => {
+    getConversations();
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const chatGroupId = urlParams.get('chat_group_id');
+    if (chatGroupId) showChatWindowHtml({id: chatGroupId});
+  }, []);
 
   useEffect(() => {
     if (loadingMore === true) {
@@ -53,7 +60,9 @@ const ChatList = (props) => {
     }
   }, [loadingMore]);
 
-  const onYReachEnd = () => setLoadingMore(true);
+  const onYReachEnd = () => {
+    if (autoScroll) setLoadingMore(true);
+  };
 
   const showChatWindowHtml = (chatGroup) => {
     const chatWindowHtml_ = (
@@ -69,9 +78,9 @@ const ChatList = (props) => {
   }
 
   return (
-    <div style={{display: 'flex', height: '500px'}}>
+    <div id="main-chat-container" style={{display: 'flex', height: '500px', width: autoScroll ? '100%' : '350px'}}>
       <ConversationList
-        style={{width: '40%', height: '500px'}}
+        style={{width: autoScroll ? '40%' : '100%', height: '500px'}}
         scrollable
         loadingMore={loadingMore}
         onYReachEnd={onYReachEnd}
@@ -82,7 +91,7 @@ const ChatList = (props) => {
               key={'conversation-list-' + d.id}
               name={d.firstName}
               info={d.message}
-              onClick={() => showChatWindowHtml(d)}
+              onClick={() => autoScroll ? showChatWindowHtml(d) : window.location.replace(`/chats?chat_group_id=${d.id}`)}
             >
               <Avatar src={d.avatarSrc} name={d.firstName} />
             </Conversation>
