@@ -128,24 +128,22 @@ const Chat = (props) => {
 
   const handleSendMessage = (body) => {
     const subscriptions = consumer.subscriptions.subscriptions;
-    const existingSubscription = subscriptions.filter(s => {
+    const existingSubscription = subscriptions.find(s => {
       return JSON.parse(s.identifier).room_id === chatGroup.id;
     });
 
-    existingSubscription[0].send({sent_by: currentUser.id, body});
+    existingSubscription.send({sent_by: currentUser.id, body});
     handleMessage({sender_id: currentUser.id, body }, true);
     setMsgGroups(groups);
   };
 
   const notifyIsTyping = (value) => {
     const subscriptions = consumer.subscriptions.subscriptions;
-    const existingSubscription = subscriptions.filter(s => {
+    const existingSubscription = subscriptions.find(s => {
       return JSON.parse(s.identifier).room_id === chatGroup.id;
     });
 
-    if (existingSubscription.length >= 1) {
-      existingSubscription[0].send({user_id: currentUser.id, is_typing: value});
-    }
+    existingSubscription.send({user_id: currentUser.id, is_typing: value});
   };
 
   useEffect(() => {
@@ -175,11 +173,14 @@ const Chat = (props) => {
           handleMessage({sender_id: data.sent_by, body: data.body}, true);
           setMsgGroups(groups);
           setIsTyping(false);
+          this.send({is_read: true});
         }
       },
     });
 
-    subscription.send({is_read: true});
+    setTimeout(() => {
+      subscription.send({is_read: true});
+    }, 1000);
   }, [chatGroup.id]);
 
   useEffect(() => {

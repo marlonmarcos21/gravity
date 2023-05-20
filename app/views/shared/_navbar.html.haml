@@ -24,7 +24,7 @@
         - unless current_page?(chats_path)
           .mobile-messages.pull-right
             .dropdown.inline
-              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown', onclick: 'clearMessageCount()' }
+              %a.dropdown-toggle.tooltip-info{ href: '#', rel: 'tooltip', 'data-toggle' => 'dropdown' }
                 = fa_icon 'comments'
                 - unless message_count.try(:zero?)
                   %span#mobile-notification-badge
@@ -74,7 +74,7 @@
 
             - unless current_page?(chats_path)
               %li.dropdown.inline.desktop-notifications
-                %a.dropdown-toggle.tooltip-info.messages-anchor{ href: '#', rel: 'tooltip', title: 'Messages', 'data-toggle' => 'dropdown', onclick: 'clearMessageCount()' }
+                %a.dropdown-toggle.tooltip-info.messages-anchor{ href: '#', rel: 'tooltip', title: 'Messages', 'data-toggle' => 'dropdown' }
                   = fa_icon 'comments'
                   - unless message_count.try(:zero?)
                     %span#notification-badge
@@ -176,17 +176,4 @@
         dataType: 'json',
       });
       clickCount++;
-    }
-
-    function clearMessageCount() {
-      setTimeout(function() {
-        $('#notification-badge').addClass('hidden');
-        $('#mobile-notification-badge').addClass('hidden');
-      }, 1000);
-
-      $.ajax({
-        url: '#{clear_message_count_path}',
-        method: 'patch',
-        dataType: 'json',
-      });
     }
