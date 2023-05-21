@@ -61,7 +61,7 @@ const ChatList = (props) => {
   }, [loadingMore]);
 
   const onYReachEnd = () => {
-    if (autoScroll) setLoadingMore(true);
+    if (autoScroll && !stopFetching) setLoadingMore(true);
   };
 
   const showChatWindowHtml = (chatGroup) => {
@@ -82,7 +82,7 @@ const ChatList = (props) => {
       <ConversationList
         style={{width: autoScroll ? '40%' : '100%', height: '500px'}}
         scrollable
-        loadingMore={loadingMore}
+        loadingMore={!stopFetching && loadingMore}
         onYReachEnd={onYReachEnd}
       >
         {conversations.map(d => {
