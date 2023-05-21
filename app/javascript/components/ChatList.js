@@ -3,16 +3,18 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
-  MainContainer,
-  ChatContainer,
-  MessageList,
   Message,
   MessageInput,
   ConversationList,
   Conversation,
 } from '@chatscope/chat-ui-kit-react';
 import Chat from './Chat';
-import '../styles/chat.scss';
+import consumer from '../packs/channels/consumer'
+import '../styles/Chat.scss';
+
+const getCurrentDimension = () => {
+  return window.innerWidth;
+}
 
 const ChatList = (props) => {
   const { autoScroll, currentUser } = props;
@@ -20,12 +22,30 @@ const ChatList = (props) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
   const [chatWindowHtml, setChatWindowHtml] = useState(null);
+  const [lastMessageMapping, setLastMessageMapping] = useState({});
+  const [windowWidth, setWindowWidth] = useState(getCurrentDimension());
   const pageRef = useRef(1);
+
+  const subscribe = (chatGroupId) => {
+    consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroupId, chat_list: true}, {
+      received(data) {
+        if ('is_read' in data) return;
+        if ('is_typing' in data) return;
+
+        const newMsgMap = {}
+        newMsgMap[chatGroupId] = data.body
+        setLastMessageMapping({...lastMessageMapping, ...newMsgMap});
+      },
+    });
+  };
 
   const getConversations = (page = 1) => {
     try {
       axios.get(`/chats/conversations?page=${page}`).then(r => {
         if (r.data.length > 0) {
+          r.data.forEach(chatGroup => {
+            subscribe(chatGroup.id)
+          });
           setConversations(conversations.concat(r.data));
         } else {
           setStopFetching(true);
@@ -79,25 +99,27 @@ const ChatList = (props) => {
 
   return (
     <div id="main-chat-container" style={{display: 'flex', height: '500px', width: autoScroll ? '100%' : '350px'}}>
-      <ConversationList
-        style={{width: autoScroll ? '40%' : '100%', height: '500px'}}
-        scrollable
-        loadingMore={!stopFetching && loadingMore}
-        onYReachEnd={onYReachEnd}
-      >
-        {conversations.map(d => {
-          return (
-            <Conversation
-              key={'conversation-list-' + d.id}
-              name={d.firstName}
-              info={d.message}
-              onClick={() => autoScroll ? showChatWindowHtml(d) : window.location.replace(`/chats?chat_group_id=${d.id}`)}
-            >
-              <Avatar src={d.avatarSrc} name={d.firstName} />
-            </Conversation>
-          )
-        })}
-      </ConversationList>
+      {(!chatWindowHtml || (chatWindowHtml && windowWidth > 768)) &&
+        <ConversationList
+          style={{height: '500px'}}
+          scrollable
+          loadingMore={!stopFetching && loadingMore}
+          onYReachEnd={onYReachEnd}
+        >
+          {conversations.map(d => {
+            return (
+              <Conversation
+                key={'conversation-list-' + d.id}
+                name={d.firstName}
+                info={lastMessageMapping[d.id] || d.message}
+                onClick={() => autoScroll ? showChatWindowHtml(d) : window.location.replace(`/chats?chat_group_id=${d.id}`)}
+              >
+                <Avatar src={d.avatarSrc} name={d.firstName} />
+              </Conversation>
+            )
+          })}
+        </ConversationList>
+      }
       {chatWindowHtml}
     </div>
   );

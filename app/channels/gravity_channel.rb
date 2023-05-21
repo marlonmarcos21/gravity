@@ -2,14 +2,15 @@
 
 class GravityChannel < ApplicationCable::Channel
   def subscribed
-    reject if chat_group.nil? || chat_group.participants.exclude?(current_user)
-
+    reject if chat_group.nil?
     stream_for chat_group
+    stream_from "chat_group_#{chat_group.id}" if params[:chat_list]
   end
 
   def receive(data)
     if data.key?('body')
       create_message(data)
+      broadcast_to("chat_group_#{chat_group.id}", data)
     elsif data.key?('is_read')
       update_receipts
     end
@@ -24,7 +25,11 @@ class GravityChannel < ApplicationCable::Channel
   private
 
   def chat_group
-    @chat_group ||= Chat::Group.find_by(id: params[:room_id])
+    @chat_group ||=
+      Chat::Group
+        .joins(:participants)
+        .merge(User.where(id: current_user.id))
+        .find_by(id: params[:room_id])
   end
 
   def create_message(data)

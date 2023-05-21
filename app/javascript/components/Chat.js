@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
-  MainContainer,
   ChatContainer,
   MessageList,
   Message,
@@ -16,7 +15,7 @@ import {
   MessageGroup,
 } from '@chatscope/chat-ui-kit-react';
 import consumer from '../packs/channels/consumer'
-import '../styles/chat.scss';
+import '../styles/Chat.scss';
 
 let groups = [];
 
@@ -126,24 +125,20 @@ const Chat = (props) => {
     }
   };
 
-  const handleSendMessage = (body) => {
+  const getExistingSubscription = () => {
     const subscriptions = consumer.subscriptions.subscriptions;
-    const existingSubscription = subscriptions.find(s => {
-      return JSON.parse(s.identifier).room_id === chatGroup.id;
+    return subscriptions.find(s => {
+      const identifier = JSON.parse(s.identifier);
+      return !identifier.chat_list && identifier.room_id === chatGroup.id;
     });
+  };
 
-    existingSubscription.send({sent_by: currentUser.id, body});
-    handleMessage({sender_id: currentUser.id, body }, true);
-    setMsgGroups(groups);
+  const handleSendMessage = (body) => {
+    getExistingSubscription().send({sent_by: currentUser.id, body});
   };
 
   const notifyIsTyping = (value) => {
-    const subscriptions = consumer.subscriptions.subscriptions;
-    const existingSubscription = subscriptions.find(s => {
-      return JSON.parse(s.identifier).room_id === chatGroup.id;
-    });
-
-    existingSubscription.send({user_id: currentUser.id, is_typing: value});
+    getExistingSubscription().send({user_id: currentUser.id, is_typing: value});
   };
 
   useEffect(() => {
@@ -154,33 +149,30 @@ const Chat = (props) => {
   useEffect(() => {
     groups = [];
 
-    const subscriptions = consumer.subscriptions.subscriptions;
-    subscriptions.forEach(s => s.unsubscribe());
+    let subscription = getExistingSubscription();
 
-    const subscription = consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroup.id}, {
-      received(data) {
-        if ('is_read' in data) return;
+    if (!subscription) {
+      subscription = consumer.subscriptions.create({channel: 'GravityChannel', room_id: chatGroup.id}, {
+        received(data) {
+          if ('is_read' in data) return;
 
-        if ('is_typing' in data) {
-          if (data.user_id !== currentUser.id) {
-            setIsTyping(data.is_typing);
+          if ('is_typing' in data) {
+            if (data.user_id !== currentUser.id) {
+              setIsTyping(data.is_typing);
+            }
+          } else {
+            handleMessage({sender_id: data.sent_by, body: data.body}, true);
+            setMsgGroups(groups);
+            setIsTyping(false);
+            this.send({is_read: true});
           }
-        } else {
-          if (data.sent_by === currentUser.id) {
-            return;
-          }
+        },
+      });
 
-          handleMessage({sender_id: data.sent_by, body: data.body}, true);
-          setMsgGroups(groups);
-          setIsTyping(false);
-          this.send({is_read: true});
-        }
-      },
-    });
-
-    setTimeout(() => {
-      subscription.send({is_read: true});
-    }, 1000);
+      setTimeout(() => {
+        subscription.send({is_read: true});
+      }, 1000);
+    }
   }, [chatGroup.id]);
 
   useEffect(() => {
@@ -199,7 +191,8 @@ const Chat = (props) => {
   const onYReachStart = () => setLoadingMore(true);
 
   return (
-    <div style={{flexGrow: 1}}>
+    <div className="chat-group-container" style={{flexGrow: 1}}>
+      <span id="mobile-back-to-list"><a href="/chats">&#x2190; Back to List</a></span>
       <ChatContainer>
         <ConversationHeader>
           <Avatar src={chatGroup.avatarSrc} name={chatGroup.firstName} />
