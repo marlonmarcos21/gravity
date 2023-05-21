@@ -10,7 +10,7 @@ import {
 } from '@chatscope/chat-ui-kit-react';
 import Chat from './Chat';
 import consumer from '../packs/channels/consumer'
-import '../styles/Chat.scss';
+import '../styles/chat.scss';
 
 const getCurrentDimension = () => {
   return window.innerWidth;

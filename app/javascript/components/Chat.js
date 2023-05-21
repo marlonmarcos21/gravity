@@ -15,7 +15,7 @@ import {
   MessageGroup,
 } from '@chatscope/chat-ui-kit-react';
 import consumer from '../packs/channels/consumer'
-import '../styles/Chat.scss';
+import '../styles/chat.scss';
 
 let groups = [];
 
