@@ -898,6 +898,11 @@ hr {
   }
 }
 
+.dropdown-menu.messages {
+  display: inline-table;
+  margin-top: -5px;
+}
+
 .desktop-search, .desktop-notifications {
   @media(max-width: 767px) {
     display: none !important;

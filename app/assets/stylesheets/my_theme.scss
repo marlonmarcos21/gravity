@@ -897,6 +897,12 @@ hr {
   }
 }
 
+.dropdown-menu.messages {
+  display: inline-table;
+  margin-top: -5px;
+  background-color: white;
+}
+
 .desktop-search, .desktop-notifications {
   @media(max-width: 767px) {
     display: none !important;
