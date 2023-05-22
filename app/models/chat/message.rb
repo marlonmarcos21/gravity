@@ -33,4 +33,16 @@ class Chat::Message < ApplicationRecord
            foreign_key: :chat_message_id,
            inverse_of: :message,
            dependent: :destroy
+
+  has_many :attachments,
+           class_name: 'Chat::MessageAttachment',
+           foreign_key: :chat_message_id,
+           inverse_of: :message,
+           dependent: :destroy
+
+  def as_json(opts = {})
+    super(opts).except('tsv_name').merge(
+      'attachment' => attachments.map(&:source_url).first  # TODO: support multiple attachments
+    )
+  end
 end

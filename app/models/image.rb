@@ -40,6 +40,8 @@ class Image < ApplicationRecord
 
   include WithAttachment
 
+  validates :token, presence: true
+
   before_post_process :skip_gif
 
   after_post_process :save_image_dimensions

@@ -45,6 +45,7 @@ class ChatsController < ApplicationController
     messages =
       chat_group
         .messages
+        .includes(:attachments)
         .order(created_at: :desc)
         .page(page)
 

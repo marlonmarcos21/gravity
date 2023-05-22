@@ -55,6 +55,13 @@ class GravityChannel < ApplicationCable::Channel
       )
     end
 
+    if data['attachment'].present?
+      msg.attachments.build(
+        source: data['attachment'],
+        source_file_name: data['file_name']
+      )
+    end
+
     msg.save!
   end
 

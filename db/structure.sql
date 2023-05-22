@@ -368,6 +368,41 @@ ALTER SEQUENCE public.chat_groups_users_id_seq OWNED BY public.chat_groups_users
 
 
 --
+-- Name: chat_message_attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_message_attachments (
+    id bigint NOT NULL,
+    source_content_type character varying,
+    source_file_name character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone,
+    chat_message_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_message_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_message_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_message_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_message_attachments_id_seq OWNED BY public.chat_message_attachments.id;
+
+
+--
 -- Name: chat_message_receipts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1057,6 +1092,13 @@ ALTER TABLE ONLY public.chat_groups_users ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: chat_message_attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments ALTER COLUMN id SET DEFAULT nextval('public.chat_message_attachments_id_seq'::regclass);
+
+
+--
 -- Name: chat_message_receipts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1253,6 +1295,14 @@ ALTER TABLE ONLY public.chat_groups
 
 ALTER TABLE ONLY public.chat_groups_users
     ADD CONSTRAINT chat_groups_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_message_attachments chat_message_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments
+    ADD CONSTRAINT chat_message_attachments_pkey PRIMARY KEY (id);
 
 
 --
@@ -1494,6 +1544,13 @@ CREATE INDEX index_chat_groups_users_on_user_id ON public.chat_groups_users USIN
 --
 
 CREATE UNIQUE INDEX index_chat_groups_users_on_user_id_and_chat_group_id ON public.chat_groups_users USING btree (user_id, chat_group_id);
+
+
+--
+-- Name: index_chat_message_attachments_on_chat_message_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_message_attachments_on_chat_message_id ON public.chat_message_attachments USING btree (chat_message_id);
 
 
 --
@@ -1845,6 +1902,14 @@ ALTER TABLE ONLY public.chat_groups_users
 
 
 --
+-- Name: chat_message_attachments fk_rails_f99b81690f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments
+    ADD CONSTRAINT fk_rails_f99b81690f FOREIGN KEY (chat_message_id) REFERENCES public.chat_messages(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -1905,6 +1970,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230426170730'),
 ('20230426170739'),
 ('20230426170757'),
-('20230426171448');
+('20230426171448'),
+('20230522114300');
 
 

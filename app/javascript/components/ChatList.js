@@ -85,10 +85,15 @@ const ChatList = (props) => {
   };
 
   const showChatWindowHtml = (chatGroup) => {
+    const key = 'chat-group-' + chatGroup.id
+    if (chatWindowHtml && chatWindowHtml.props.children.key === key) {
+      return;
+    }
+
     const chatWindowHtml_ = (
       <React.Fragment>
         <Chat
-          key={'chat-group-' + chatGroup.id}
+          key={key}
           currentUser={currentUser}
           chatGroup={chatGroup}
         />

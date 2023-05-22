@@ -25,10 +25,15 @@ const Chat = (props) => {
   const [isTyping, setIsTyping] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [stopFetching, setStopFetching] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [fileUploaded, setFileUploaded] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [filePreview, setFilePreview] = useState('');
   const groupIdRef = useRef(0);
   const msgIdRef = useRef(0);
   const inputRef = useRef();
   const pageRef = useRef(1);
+  const hiddenFileInput = useRef(null);
 
   const handleMessage = (msg, append) => {
     if (groups.length > 0) {
@@ -42,13 +47,27 @@ const Chat = (props) => {
 
       if (lastGroup.senderId === msg.sender_id) {
         // Add to group
-        const newMsg = {_id: `m-${++msgIdRef.current}`, message: msg.body, sender: String(msg.sender_id)}
+        const newMsgs = [{
+          _id: `m-${++msgIdRef.current}`,
+          message: msg.body,
+          sender: String(msg.sender_id),
+        }];
+
+        if (msg.attachment) {
+          newMsgs.push({
+            _id: `m-${++msgIdRef.current}`,
+            message: '',
+            sender: String(msg.sender_id),
+            attachment: msg.attachment,
+          });
+        }
+
         let newMessages;
 
         if (append) {
-          newMessages = [...lastGroup.messages].concat(newMsg);
+          newMessages = [...lastGroup.messages].concat(newMsgs);
         } else {
-          newMessages = [newMsg].concat([...lastGroup.messages]);
+          newMessages = newMsgs.concat([...lastGroup.messages]);
         }
 
         const newGroup = { ...lastGroup, messages: newMessages};
@@ -73,6 +92,15 @@ const Chat = (props) => {
           }]
         };
 
+        if (msg.attachment) {
+          newGroup.messages.push({
+            _id: `m-${++msgIdRef.current}`,
+            message: msg.body,
+            sender: String(msg.sender_id),
+            attachment: msg.attachment,
+          });
+        }
+
         if (append) {
           groups = groups.concat(newGroup);
         } else {
@@ -90,6 +118,14 @@ const Chat = (props) => {
           sender: String(msg.sender_id),
         }]
       };
+      if (msg.attachment) {
+        newGroup.messages.push({
+          _id: `m-${++msgIdRef.current}`,
+          message: '',
+          sender: String(msg.sender_id),
+          attachment: msg.attachment,
+        });
+      }
       groups = [newGroup];
     }
   };
@@ -134,11 +170,26 @@ const Chat = (props) => {
   };
 
   const handleSendMessage = (body) => {
-    getExistingSubscription().send({sent_by: currentUser.id, body});
+    setInputValue('');
+
+    if (filePreview !== '') {
+      body = body.replace(filePreview, '').trim();
+    }
+
+    const payload = {sent_by: currentUser.id, body};
+
+    if (selectedFile) {
+      payload.attachment = selectedFile;
+      payload.file_name = fileUploaded.name;
+      URL.revokeObjectURL(fileUploaded);
+    }
+
+    getExistingSubscription().send(payload);
   };
 
   const notifyIsTyping = (value) => {
-    getExistingSubscription().send({user_id: currentUser.id, is_typing: value});
+    setInputValue(value);
+    getExistingSubscription().send({user_id: currentUser.id, is_typing: value.length > 0});
   };
 
   useEffect(() => {
@@ -161,7 +212,7 @@ const Chat = (props) => {
               setIsTyping(data.is_typing);
             }
           } else {
-            handleMessage({sender_id: data.sent_by, body: data.body}, true);
+            handleMessage({sender_id: data.sent_by, body: data.body, attachment: data.attachment}, true);
             setMsgGroups(groups);
             setIsTyping(false);
             this.send({is_read: true});
@@ -190,6 +241,25 @@ const Chat = (props) => {
 
   const onYReachStart = () => setLoadingMore(true);
 
+  const handleAttachClick = () => {
+    hiddenFileInput.current.click();
+  };
+
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+    setFileUploaded(file);
+
+    const blob = URL.createObjectURL(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedFile(reader.result);
+    };
+    reader.readAsDataURL(file);
+    const preview = `<img width="200" src="${blob}" />` 
+    setFilePreview(preview)
+    setInputValue((inputValue + preview).trim());
+  };
+
   return (
     <div className="chat-group-container" style={{flexGrow: 1}}>
       <span id="mobile-back-to-list"><a href="/chats">&#x2190; Back to List</a></span>
@@ -213,6 +283,7 @@ const Chat = (props) => {
                     {!g.messages[i + 1] && g.senderId != currentUser.id &&
                       <Avatar src={chatGroup.avatarSrc} />
                     }
+                    {m.attachment && <Message.ImageContent src={m.attachment} width={200} />}
                   </Message>
                 ))}
               </MessageGroup.Messages>
@@ -222,11 +293,21 @@ const Chat = (props) => {
 
         <MessageInput
           placeholder="Type message here"
+          value={inputValue}
           ref={inputRef}
           onSend={m => handleSendMessage(m)}
-          onChange={m => { notifyIsTyping(m.length > 0) }}
+          onAttachClick={handleAttachClick}
+          onChange={m => { notifyIsTyping(m) }}
         />
       </ChatContainer>
+
+      <input
+        type="file"
+        name="file"
+        ref={hiddenFileInput}
+        onChange={handleFileChange}
+        style={{display:'none'}}
+      />
     </div>
   );
 }
