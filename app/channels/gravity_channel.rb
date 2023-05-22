@@ -8,14 +8,14 @@ class GravityChannel < ApplicationCable::Channel
   end
 
   def receive(data)
+    broadcast_to(chat_group, data)
+
     if data.key?('body')
-      create_message(data)
       broadcast_to("chat_group_#{chat_group.id}", data)
+      create_message(data)
     elsif data.key?('is_read')
       update_receipts
     end
-
-    broadcast_to(chat_group, data)
   end
 
   def unsubscribed

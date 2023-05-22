@@ -80,7 +80,7 @@ module Paperclip
         less_than_or_equal_to: :<=,
         greater_than: :>,
         greater_than_or_equal_to: :>=
-      }
+      }.freeze
 
       def validate_each(record, base_attr_name, _value)
         attr_name = "#{base_attr_name}_file_size".to_sym

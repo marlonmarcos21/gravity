@@ -23,7 +23,7 @@
 class Chat::MessageAttachment < ApplicationRecord
   ATTACHMENT_OPTIONS = {
     styles: {
-      thumb: { geometry: '200x', processors: [:thumbnail] },
+      thumb: { geometry: '200x', processors: [:thumbnail] }
     },
     storage: :s3,
     s3_credentials: Rails.root.join('config/s3.yml'),
