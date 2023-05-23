@@ -176,12 +176,15 @@ const Chat = (props) => {
       body = body.replace(filePreview, '').trim();
     }
 
+    handleMessage({sender_id: currentUser.id, body, attachment: URL.createObjectURL(fileUploaded)}, true);
+
     const payload = {sent_by: currentUser.id, body};
 
     if (selectedFile) {
       payload.attachment = selectedFile;
       payload.file_name = fileUploaded.name;
       URL.revokeObjectURL(fileUploaded);
+      setFileUploaded(null);
     }
 
     getExistingSubscription().send(payload);
@@ -212,7 +215,9 @@ const Chat = (props) => {
               setIsTyping(data.is_typing);
             }
           } else {
-            handleMessage({sender_id: data.sent_by, body: data.body, attachment: data.attachment}, true);
+            if (currentUser.id !== data.sent_by) {
+              handleMessage({sender_id: data.sent_by, body: data.body, attachment: data.attachment}, true);
+            }
             setMsgGroups(groups);
             setIsTyping(false);
             this.send({is_read: true});
@@ -255,8 +260,8 @@ const Chat = (props) => {
       setSelectedFile(reader.result);
     };
     reader.readAsDataURL(file);
-    const preview = `<img width="200" src="${blob}" />` 
-    setFilePreview(preview)
+    const preview = `<br><img width="200" src="${blob}" />`;
+    setFilePreview(preview);
     setInputValue((inputValue + preview).trim());
   };
 
