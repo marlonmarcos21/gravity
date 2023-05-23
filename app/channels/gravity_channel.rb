@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GravityChannel < ApplicationCable::Channel
+  include AfterCommitEverywhere
+
   def subscribed
     reject if chat_group.nil?
     stream_for chat_group
@@ -57,12 +59,16 @@ class GravityChannel < ApplicationCable::Channel
 
     if data['attachment'].present?
       msg.attachments.build(
-        source: data['attachment'],
         source_file_name: data['file_name']
       )
     end
 
     msg.save!
+
+    after_commit do
+      attachment_id = msg.attachments.first&.id
+      MessageAttachmentJob.perform_later(attachment_id, data['attachment']) if attachment_id
+    end
   end
 
   def update_receipts

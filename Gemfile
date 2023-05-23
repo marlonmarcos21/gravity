@@ -55,6 +55,7 @@ gem 'sitemap_generator'
 gem 'bootsnap'
 gem 'shrine'
 gem 'redis', '~> 4'
+gem 'after_commit_everywhere'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

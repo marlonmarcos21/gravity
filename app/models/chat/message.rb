@@ -41,7 +41,9 @@ class Chat::Message < ApplicationRecord
            dependent: :destroy
 
   def as_json(opts = {})
-    super(opts).except('tsv_name').merge(
+    super(opts).merge(
+      'sent_date'  => created_at.to_date,
+      'sent_time'  => created_at.strftime('%H:%M'),
       'attachment' => attachments.map(&:source_url).first  # TODO: support multiple attachments
     )
   end
