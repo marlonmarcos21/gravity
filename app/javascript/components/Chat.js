@@ -176,7 +176,11 @@ const Chat = (props) => {
       body = body.replace(filePreview, '').trim();
     }
 
-    handleMessage({sender_id: currentUser.id, body, attachment: URL.createObjectURL(fileUploaded)}, true);
+    handleMessage({
+      sender_id: currentUser.id,
+      body,
+      attachment: fileUploaded ? URL.createObjectURL(fileUploaded) : null,
+    }, true);
 
     const payload = {sent_by: currentUser.id, body};
 
