@@ -91,10 +91,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :chats do
+  resources :chats, only: [:index, :show] do
     collection do
-      get :conversations
-      get '/conversations/:id', to: 'chats#conversation'
+      get :conversations, constraints: { format: :json }
+      get '/conversations/:id', to: 'chats#conversation', constraints: { format: :json }
     end
   end
 

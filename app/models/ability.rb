@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     @current_user = user || User.new
 
-    can(:manage, :all) && return if current_user.id == 1
+    # can(:manage, :all) && return if current_user.id == 1
 
     post_permissions
     blog_permissions
@@ -176,8 +176,12 @@ class Ability
   end
 
   def chat_permissions
-    can [:read, :conversations, :conversation], :chat do
+    can :index, :chat do
       current_user.persisted?
+    end
+
+    can :show, Chat::Group do |chat_group|
+      chat_group.participants.where(id: current_user.id).exists?
     end
   end
 end

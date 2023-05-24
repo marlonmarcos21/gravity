@@ -132,7 +132,11 @@ const Chat = (props) => {
 
   const getMessages = (page = 1) => {
     try {
-      axios.get(`/chats/${chatGroup.id}?page=${page}`).then(r => {
+      axios.get(
+        `/chats/${chatGroup.id}?page=${page}`, {
+          headers: {'Content-Type': 'application/json'},
+        }
+      ).then(r => {
         if (r.data.length > 0) {
           r.data.forEach(msg => {
             handleMessage(msg);
@@ -149,7 +153,11 @@ const Chat = (props) => {
 
   const getConversation = () => {
     try {
-      axios.get(`/chats/conversations/${chatGroup.id}`).then(r => {
+      axios.get(
+        `/chats/conversations/${chatGroup.id}`, {
+          headers: {'Content-Type': 'application/json'},
+        }
+      ).then(r => {
         if (r.data) {
           chatGroup.firstName = r.data.firstName;
           chatGroup.message = r.data.message;

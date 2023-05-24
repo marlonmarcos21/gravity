@@ -1,12 +1,10 @@
 class ChatsController < ApplicationController
-  authorize_resource class: false
-
-  before_action :authorize_chat_group_access, only: %i(conversation show)
-
   def index
+    authorize! :index, :chat
   end
 
   def conversations
+    authorize! :index, :chat
     chat_groups =
       current_user
         .chat_groups
@@ -29,6 +27,7 @@ class ChatsController < ApplicationController
   end
 
   def conversation
+    authorize! :show, chat_group
     other_user = chat_group.users.where.not(id: current_user.id).first  # TODO: optimize
     data = {
       id: chat_group.id,
@@ -41,6 +40,7 @@ class ChatsController < ApplicationController
   end
 
   def show
+    authorize! :show, chat_group
     messages =
       chat_group
         .messages
@@ -52,15 +52,6 @@ class ChatsController < ApplicationController
   end
 
   private
-
-  def authorize_chat_group_access
-    return if chat_group&.participants&.exists?(id: current_user.id)
-
-    render(
-      json: { error: 'Invalid or unauthorized to access chat group' },
-      status: :unprocessable_entity
-    )
-  end
 
   def chat_group
     @chat_group ||= Chat::Group.find_by(id: params[:id])

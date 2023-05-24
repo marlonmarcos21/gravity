@@ -41,7 +41,11 @@ const ChatList = (props) => {
 
   const getConversations = (page = 1) => {
     try {
-      axios.get(`/chats/conversations?page=${page}`).then(r => {
+      axios.get(
+        `/chats/conversations?page=${page}`, {
+          headers: {'Content-Type': 'application/json'},
+        }
+      ).then(r => {
         if (r.data.length > 0) {
           r.data.forEach(chatGroup => {
             subscribe(chatGroup.id)
