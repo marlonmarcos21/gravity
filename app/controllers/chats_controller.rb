@@ -4,7 +4,6 @@ class ChatsController < ApplicationController
   before_action :authorize_chat_group_access, only: %i(conversation show)
 
   def index
-    @users = User.where.not(id: current_user.id)
   end
 
   def conversations

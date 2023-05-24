@@ -176,7 +176,7 @@ class Ability
   end
 
   def chat_permissions
-    can [:read, :conversations], :chat do
+    can [:read, :conversations, :conversation], :chat do
       current_user.persisted?
     end
   end
