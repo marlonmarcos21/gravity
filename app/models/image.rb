@@ -1,10 +1,26 @@
-# t.attachment :source
-# t.references :attachable, polymorphic: true
-# t.boolean    :main_image, default: false
-# t.string     :token
-# t.integer    :width
-# t.integer    :height
-# t.string     :key
+# == Schema Information
+#
+# Table name: images
+#
+#  id                  :integer          not null, primary key
+#  attachable_type     :string
+#  height              :integer
+#  key                 :string
+#  main_image          :boolean          default(FALSE)
+#  source_content_type :string
+#  source_file_name    :string
+#  source_file_size    :integer
+#  source_updated_at   :datetime
+#  token               :string
+#  width               :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  attachable_id       :integer
+#
+# Indexes
+#
+#  index_images_on_attachable_type_and_attachable_id  (attachable_type,attachable_id)
+#
 
 class Image < ApplicationRecord
   ATTACHMENT_OPTIONS = {
@@ -23,6 +39,8 @@ class Image < ApplicationRecord
   ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}
 
   include WithAttachment
+
+  validates :token, presence: true
 
   before_post_process :skip_gif
 

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   after_action :flash_to_headers
 
-  helper_method :activities, :notification_count, :recipe_categories
+  helper_method :activities, :notification_count, :message_count, :recipe_categories
 
   rescue_from CanCan::AccessDenied do |exception|
     if request.xhr?
@@ -44,6 +44,12 @@ class ApplicationController < ActionController::Base
     Rails.cache.delete "user/#{current_user.id}/notification-count"
   end
 
+  def clear_message_count
+    raise CanCan::AccessDenied.new('Unauthorized') unless current_user
+
+    Rails.cache.delete "user/#{current_user.id}/message-count"
+  end
+
   def activities
     return Activity.none unless current_user
 
@@ -59,6 +65,20 @@ class ApplicationController < ActionController::Base
       count = current_user
                 .activities_as_recipient
                 .for_notification
+                .unread
+                .count
+
+      return count if count < 10
+
+      '9+'
+    end
+  end
+
+  def message_count
+    Rails.cache.fetch("user/#{current_user.id}/message-count") do
+      count = current_user
+                .message_receipts
+                .inbox
                 .unread
                 .count
 

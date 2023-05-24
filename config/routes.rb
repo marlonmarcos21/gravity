@@ -5,9 +5,11 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { sessions: 'sessions', passwords: 'passwords' }
 
+  # rubocop:disable Style/Lambda
   authenticate :user, lambda { |u| u.id == 1 } do
     mount Sidekiq::Web => '/sidekiq'
   end
+  # rubocop:enable Style/Lambda
 
   resources :users, except: [:index] do
     member do
@@ -89,12 +91,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :chats do
+    collection do
+      get :conversations
+      get '/conversations/:id', to: 'chats#conversation'
+    end
+  end
+
   get 'search', to: 'search#search'
   get 'about',  to: 'about#index'
 
   get 'set_light_mode', to: 'application#set_light_mode'
   get 'set_dark_mode', to: 'application#set_dark_mode'
   patch 'clear_notifications', to: 'application#clear_notifications'
+  patch 'clear_message_count', to: 'application#clear_message_count'
 
   root to: 'posts#index'
 end

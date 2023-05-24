@@ -54,7 +54,8 @@ gem 'paper_trail'
 gem 'sitemap_generator'
 gem 'bootsnap'
 gem 'shrine'
-gem 'redis'
+gem 'redis', '~> 4'
+gem 'after_commit_everywhere'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -81,6 +82,7 @@ group :development do
   gem 'spring'
   gem 'parallel_tests'
   gem 'rubocop-rails'
+  gem 'annotate'
 end
 
 group :test do
@@ -95,3 +97,7 @@ group :test do
   gem 'fakeweb'
   gem 'rails-controller-testing'
 end
+
+gem "shakapacker", "= 6.6"
+
+gem "react-rails", "= 2.7"

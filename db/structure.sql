@@ -302,6 +302,175 @@ ALTER SEQUENCE public.blogs_id_seq OWNED BY public.blogs.id;
 
 
 --
+-- Name: chat_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_groups (
+    id bigint NOT NULL,
+    chat_room_name character varying,
+    is_group_chat boolean DEFAULT false,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_groups_id_seq OWNED BY public.chat_groups.id;
+
+
+--
+-- Name: chat_groups_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_groups_users (
+    id bigint NOT NULL,
+    user_id bigint,
+    chat_group_id bigint,
+    is_read boolean DEFAULT true,
+    joined boolean DEFAULT true,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_groups_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_groups_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_groups_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_groups_users_id_seq OWNED BY public.chat_groups_users.id;
+
+
+--
+-- Name: chat_message_attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_message_attachments (
+    id bigint NOT NULL,
+    source_content_type character varying,
+    source_file_name character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone,
+    chat_message_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_message_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_message_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_message_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_message_attachments_id_seq OWNED BY public.chat_message_attachments.id;
+
+
+--
+-- Name: chat_message_receipts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_message_receipts (
+    id bigint NOT NULL,
+    user_id bigint,
+    chat_group_id bigint,
+    chat_message_id bigint,
+    is_read boolean DEFAULT false,
+    receipt_type character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_message_receipts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_message_receipts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_message_receipts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_message_receipts_id_seq OWNED BY public.chat_message_receipts.id;
+
+
+--
+-- Name: chat_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_messages (
+    id bigint NOT NULL,
+    chat_group_id bigint,
+    sender_id bigint,
+    body text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_messages_id_seq OWNED BY public.chat_messages.id;
+
+
+--
 -- Name: comments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -909,6 +1078,41 @@ ALTER TABLE ONLY public.blogs ALTER COLUMN id SET DEFAULT nextval('public.blogs_
 
 
 --
+-- Name: chat_groups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups ALTER COLUMN id SET DEFAULT nextval('public.chat_groups_id_seq'::regclass);
+
+
+--
+-- Name: chat_groups_users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups_users ALTER COLUMN id SET DEFAULT nextval('public.chat_groups_users_id_seq'::regclass);
+
+
+--
+-- Name: chat_message_attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments ALTER COLUMN id SET DEFAULT nextval('public.chat_message_attachments_id_seq'::regclass);
+
+
+--
+-- Name: chat_message_receipts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_receipts ALTER COLUMN id SET DEFAULT nextval('public.chat_message_receipts_id_seq'::regclass);
+
+
+--
+-- Name: chat_messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('public.chat_messages_id_seq'::regclass);
+
+
+--
 -- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1075,6 +1279,46 @@ ALTER TABLE ONLY public.blog_media
 
 ALTER TABLE ONLY public.blogs
     ADD CONSTRAINT blogs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_groups chat_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups
+    ADD CONSTRAINT chat_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_groups_users chat_groups_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups_users
+    ADD CONSTRAINT chat_groups_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_message_attachments chat_message_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments
+    ADD CONSTRAINT chat_message_attachments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_message_receipts chat_message_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_receipts
+    ADD CONSTRAINT chat_message_receipts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_messages chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages
+    ADD CONSTRAINT chat_messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -1279,6 +1523,69 @@ CREATE INDEX index_blogs_on_tsv_name ON public.blogs USING gin (tsv_name);
 --
 
 CREATE INDEX index_blogs_on_user_id ON public.blogs USING btree (user_id);
+
+
+--
+-- Name: index_chat_groups_users_on_chat_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_groups_users_on_chat_group_id ON public.chat_groups_users USING btree (chat_group_id);
+
+
+--
+-- Name: index_chat_groups_users_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_groups_users_on_user_id ON public.chat_groups_users USING btree (user_id);
+
+
+--
+-- Name: index_chat_groups_users_on_user_id_and_chat_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_chat_groups_users_on_user_id_and_chat_group_id ON public.chat_groups_users USING btree (user_id, chat_group_id);
+
+
+--
+-- Name: index_chat_message_attachments_on_chat_message_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_message_attachments_on_chat_message_id ON public.chat_message_attachments USING btree (chat_message_id);
+
+
+--
+-- Name: index_chat_message_receipts_on_chat_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_message_receipts_on_chat_group_id ON public.chat_message_receipts USING btree (chat_group_id);
+
+
+--
+-- Name: index_chat_message_receipts_on_chat_message_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_message_receipts_on_chat_message_id ON public.chat_message_receipts USING btree (chat_message_id);
+
+
+--
+-- Name: index_chat_message_receipts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_message_receipts_on_user_id ON public.chat_message_receipts USING btree (user_id);
+
+
+--
+-- Name: index_chat_messages_on_chat_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_chat_group_id ON public.chat_messages USING btree (chat_group_id);
+
+
+--
+-- Name: index_chat_messages_on_sender_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_sender_id ON public.chat_messages USING btree (sender_id);
 
 
 --
@@ -1499,6 +1806,14 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.users FOR EACH R
 
 
 --
+-- Name: chat_message_receipts fk_rails_01f978cca9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_receipts
+    ADD CONSTRAINT fk_rails_01f978cca9 FOREIGN KEY (chat_group_id) REFERENCES public.chat_groups(id);
+
+
+--
 -- Name: events fk_rails_0cb5590091; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1523,6 +1838,38 @@ ALTER TABLE ONLY public.recipes
 
 
 --
+-- Name: chat_messages fk_rails_6223514182; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages
+    ADD CONSTRAINT fk_rails_6223514182 FOREIGN KEY (sender_id) REFERENCES public.users(id);
+
+
+--
+-- Name: chat_message_receipts fk_rails_88856e0fa2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_receipts
+    ADD CONSTRAINT fk_rails_88856e0fa2 FOREIGN KEY (chat_message_id) REFERENCES public.chat_messages(id);
+
+
+--
+-- Name: chat_groups_users fk_rails_97545eaf94; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups_users
+    ADD CONSTRAINT fk_rails_97545eaf94 FOREIGN KEY (chat_group_id) REFERENCES public.chat_groups(id);
+
+
+--
+-- Name: chat_message_receipts fk_rails_9867c36447; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_receipts
+    ADD CONSTRAINT fk_rails_9867c36447 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1531,11 +1878,35 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
+-- Name: chat_messages fk_rails_a19c3bb8bc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages
+    ADD CONSTRAINT fk_rails_a19c3bb8bc FOREIGN KEY (chat_group_id) REFERENCES public.chat_groups(id);
+
+
+--
 -- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.active_storage_attachments
     ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: chat_groups_users fk_rails_f7b37bd7d5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_groups_users
+    ADD CONSTRAINT fk_rails_f7b37bd7d5 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: chat_message_attachments fk_rails_f99b81690f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_message_attachments
+    ADD CONSTRAINT fk_rails_f99b81690f FOREIGN KEY (chat_message_id) REFERENCES public.chat_messages(id);
 
 
 --
@@ -1595,6 +1966,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210702041504'),
 ('20221109224315'),
 ('20221109230404'),
-('20221114151639');
+('20221114151639'),
+('20230426170730'),
+('20230426170739'),
+('20230426170757'),
+('20230426171448'),
+('20230522114300');
 
 

@@ -1,13 +1,25 @@
-# t.date       :date_of_birth
-# t.string     :street_address1
-# t.string     :street_address2
-# t.string     :city
-# t.string     :state
-# t.string     :country
-# t.string     :postal_code
-# t.string     :phone_number
-# t.string     :mobile_number
-# t.references :user
+# == Schema Information
+#
+# Table name: user_profiles
+#
+#  id              :integer          not null, primary key
+#  city            :string
+#  country         :string
+#  date_of_birth   :date
+#  mobile_number   :string
+#  phone_number    :string
+#  postal_code     :string
+#  state           :string
+#  street_address1 :string
+#  street_address2 :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :integer
+#
+# Indexes
+#
+#  index_user_profiles_on_user_id  (user_id)
+#
 
 class UserProfile < ApplicationRecord
   belongs_to :user

@@ -1,5 +1,52 @@
 {
+  "name": "gravity",
+  "private": true,
   "dependencies": {
-    "trix": "^1.2.0"
-  }
+    "@babel/core": "7",
+    "@babel/plugin-transform-runtime": "7",
+    "@babel/preset-env": "7",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "7",
+    "@chatscope/chat-ui-kit-react": "^1.10.1",
+    "@chatscope/chat-ui-kit-styles": "^1.4.0",
+    "@rails/actioncable": "^6.1.7",
+    "axios": "^1.4.0",
+    "babel": "^6.23.0",
+    "babel-loader": "8",
+    "babel-plugin-macros": "^3.1.0",
+    "compression-webpack-plugin": "9",
+    "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^5.0.0",
+    "mini-css-extract-plugin": "^2.7.5",
+    "postcss": "^8.4.23",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^15.1.0",
+    "postcss-loader": "^7.3.0",
+    "postcss-preset-env": "^8.3.2",
+    "prop-types": "^15.7.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react_ujs": "^2.7.0",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
+    "shakapacker": "6.6.0",
+    "style-loader": "^3.3.2",
+    "terser-webpack-plugin": "5",
+    "trix": "^1.2.0",
+    "webpack": "5",
+    "webpack-assets-manifest": "5",
+    "webpack-cli": "4",
+    "webpack-dev-server": "^4.15.0",
+    "webpack-merge": "5"
+  },
+  "version": "0.1.0",
+  "babel": {
+    "presets": [
+      "./node_modules/shakapacker/package/babel/preset.js",
+      "@babel/preset-react"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }

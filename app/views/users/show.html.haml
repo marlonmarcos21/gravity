@@ -24,18 +24,18 @@
           - elsif current_user != @user
             - if current_user.has_friend_request_from?(@user)
               Friend Request: 
-              = link_to accept_friend_request_user_path(@user), method: :patch, class: 'btn btn-default btn-xs' do
+              = link_to accept_friend_request_user_path(@user), method: :patch, remote: true, class: 'btn btn-default btn-xs', onclick: 'reloadPage()' do
                 = fa_icon 'user-plus'
                 Accept
-              = link_to reject_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger btn-xs' do
+              = link_to reject_friend_request_user_path(@user), method: :patch, remote: true, class: 'btn btn-danger btn-xs', onclick: 'reloadPage()' do
                 = fa_icon 'ban'
                 Reject
             - elsif current_user.requested_to_be_friends_with?(@user)
-              = link_to cancel_friend_request_user_path(@user), method: :patch, data: { confirm: 'Pag Sure!' }, class: 'btn btn-danger' do
+              = link_to cancel_friend_request_user_path(@user), method: :patch, class: 'btn btn-danger', remote: true, onclick: 'reloadPage()' do
                 = fa_icon 'user-times'
                 Cancel Friend Request
             - else
-              = link_to send_friend_request_user_path(@user), method: :patch, class: 'btn btn-default' do
+              = link_to send_friend_request_user_path(@user), method: :patch, remote: true, class: 'btn btn-default', onclick: 'reloadPage()' do
                 = fa_icon 'user-plus'
                 Add Friend
 
@@ -82,3 +82,12 @@
 
           #drafted-recipes-tab.tab-pane.fade
             = render 'drafted_recipes', recipes: @drafted_recipes, more_results: @more_drafted_recipes_results
+
+- content_for :footer_scripts do
+  :javascript
+    // TODO: replace html instead of reloading the page
+    function reloadPage() {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }

@@ -9,8 +9,8 @@ require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
 require 'action_text/engine'
+require 'action_cable/engine'
 # require 'active_storage/engine'
-# require 'action_cable/engine'
 # require 'action_mailbox/engine'
 # require 'rails/test_unit/railtie'
 
@@ -61,5 +61,7 @@ module Gravity
     config.to_prepare do
       ActionText::ContentHelper.allowed_tags << 'video'
     end
+
+    config.action_cable.mount_path = '/cable'
   end
 end
