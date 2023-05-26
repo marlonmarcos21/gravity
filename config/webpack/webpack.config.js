@@ -31,6 +31,4 @@ const experiments = {
   }
 }
 
-
-
 module.exports = merge(webpackConfig, customConfig, sassLoaderConfig, experiments)

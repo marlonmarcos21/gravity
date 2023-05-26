@@ -241,6 +241,8 @@ const Chat = (props) => {
         subscription.send({is_read: true});
       }, 1000);
     }
+
+    inputRef.current.focus();
   }, [chatGroup.id]);
 
   useEffect(() => {
@@ -291,6 +293,8 @@ const Chat = (props) => {
           disableOnYReachWhenNoScroll={true}
           typingIndicator={isTyping && <TypingIndicator/>}
           onYReachStart={onYReachStart}
+          autoScrollToBottom={true}
+          autoScrollToBottomOnMount={true}
         >
           {groups.map(g => (
             <MessageGroup style={{padding: '8px'}} key={g._id} data-id={g._id} direction={g.direction}>
