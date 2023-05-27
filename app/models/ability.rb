@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     @current_user = user || User.new
 
-    # can(:manage, :all) && return if current_user.id == 1
+    can(:manage, :all) && return if current_user.id == 1
 
     post_permissions
     blog_permissions
@@ -23,10 +23,14 @@ class Ability
   def post_permissions
     can :more_published_posts, Post
 
-    can :read, Post do |post|
+    can_read_post = proc do |post, current_user|
       post.public? ||
         (post.private? && (post.user == current_user ||
                             current_user.is_friends_with?(post.user)))
+    end
+
+    can :read, Post do |post|
+      can_read_post.call(post, current_user)
     end
 
     can [:update, :destroy, :editable], Post do |post|
@@ -43,8 +47,8 @@ class Ability
       current_user.persisted?
     end
 
-    can :like, Post do
-      current_user.persisted?
+    can :like, Post do |post|
+      current_user.persisted? && can_read_post.call(post, current_user)
     end
 
     can :unlike, Post do |post|

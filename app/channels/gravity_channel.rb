@@ -10,6 +10,15 @@ class GravityChannel < ApplicationCable::Channel
   end
 
   def receive(data)
+    if data['sender_id'].present?
+      data['avatar_source'] =
+        if data['sender_id'] == current_user.id
+          current_user.profile_photo_url(:thumb)
+        else
+          User.find(data['sender_id']).profile_photo_url(:thumb)
+        end
+    end
+
     broadcast_to(chat_group, data)
 
     if data.key?('body')
@@ -67,7 +76,7 @@ class GravityChannel < ApplicationCable::Channel
 
     after_commit do
       attachment_id = msg.attachments.first&.id
-      MessageAttachmentJob.perform_later(attachment_id, data['attachment']) if attachment_id
+      MessageAttachmentJob.perform_later(attachment_id, data['attachment'], data['file_name']) if attachment_id
     end
   end
 
@@ -78,5 +87,7 @@ class GravityChannel < ApplicationCable::Channel
       .unread
       .where(user: current_user)
       .update_all(is_read: true)
+
+    Rails.cache.delete "user/#{current_user.id}/message-count"
   end
 end

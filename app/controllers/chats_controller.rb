@@ -8,18 +8,18 @@ class ChatsController < ApplicationController
     chat_groups =
       current_user
         .chat_groups
-        .includes(:last_message)
+        .includes(:users, last_message: :attachments)
         .merge(Chat::GroupsUser.joined)
         .order(updated_at: :desc)
         .page(page)
 
     data = chat_groups.map do |cg|
-      other_user = cg.users.where.not(id: current_user.id).first  # TODO: optimize
+      other_users = cg.users.to_a.reject { |u| u.id == current_user.id }
       {
         id: cg.id,
-        firstName: cg.chat_room_name.presence || "#{other_user.first_name} #{other_user.last_name}",
-        message: cg.last_message&.body,
-        avatarSrc: other_user.profile_photo_url(:thumb)
+        roomName: cg.chat_room_name.presence || "#{other_users.first.first_name} #{other_users.first.last_name}",
+        message: cg.last_message&.body.presence || cg.last_message&.attachments&.first&.source_file_name,
+        avatarSources: other_users.map { |u| u.profile_photo_url(:thumb) }
       }
     end
 
@@ -28,12 +28,12 @@ class ChatsController < ApplicationController
 
   def conversation
     authorize! :show, chat_group
-    other_user = chat_group.users.where.not(id: current_user.id).first  # TODO: optimize
+    other_users = chat_group.users.where.not(id: current_user.id).to_a
     data = {
       id: chat_group.id,
-      firstName: chat_group.chat_room_name.presence || "#{other_user.first_name} #{other_user.last_name}",
+      roomName: chat_group.chat_room_name.presence || "#{other_users.first.first_name} #{other_users.first.last_name}",
       message: chat_group.last_message&.body,
-      avatarSrc: other_user.profile_photo_url(:thumb)
+      avatarSources: other_users.map { |u| u.profile_photo_url(:thumb) }
     }
 
     render json: data

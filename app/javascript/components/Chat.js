@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
+  AvatarGroup,
   ChatContainer,
   MessageList,
   Message,
@@ -47,11 +48,16 @@ const Chat = (props) => {
 
       if (lastGroup.senderId === msg.sender_id) {
         // Add to group
-        const newMsgs = [{
-          _id: `m-${++msgIdRef.current}`,
-          message: msg.body,
-          sender: String(msg.sender_id),
-        }];
+        const newMsgs = []
+
+        if (msg.body !== '') {
+          newMsgs.push({
+            _id: `m-${++msgIdRef.current}`,
+            message: msg.body,
+            sender: String(msg.sender_id),
+            avatarSrc: msg.avatar_source,
+          });
+        }
 
         if (msg.attachment) {
           newMsgs.push({
@@ -59,8 +65,11 @@ const Chat = (props) => {
             message: '',
             sender: String(msg.sender_id),
             attachment: msg.attachment,
+            avatarSrc: msg.avatar_source,
           });
         }
+
+        if (newMsgs.length === 0) return;
 
         let newMessages;
 
@@ -85,12 +94,17 @@ const Chat = (props) => {
           _id: `g-${++groupIdRef.current}`,
           direction: msg.sender_id === currentUser.id ? 'outgoing' : 'incoming',
           senderId: msg.sender_id,
-          messages: [{
+          messages: [],
+        };
+
+        if (msg.body !== '') {
+          newGroup.messages.push({
             _id: `m-${++msgIdRef.current}`,
             message: msg.body,
             sender: String(msg.sender_id),
-          }]
-        };
+            avatarSrc: msg.avatar_source,
+          });
+        }
 
         if (msg.attachment) {
           newGroup.messages.push({
@@ -98,8 +112,11 @@ const Chat = (props) => {
             message: msg.body,
             sender: String(msg.sender_id),
             attachment: msg.attachment,
+            avatarSrc: msg.avatar_source,
           });
         }
+
+        if (newGroup.messages.length === 0) return;
 
         if (append) {
           groups = groups.concat(newGroup);
@@ -112,20 +129,30 @@ const Chat = (props) => {
         _id: `g-${++groupIdRef.current}`,
         direction:  msg.sender_id === currentUser.id ? 'outgoing' : 'incoming',
         senderId: msg.sender_id,
-        messages: [{
+        messages: [],
+      };
+
+      if (msg.body !== '') {
+        newGroup.messages.push({
           _id: `m-${++msgIdRef.current}`,
           message: msg.body,
           sender: String(msg.sender_id),
-        }]
-      };
+          avatarSrc: msg.avatar_source,
+        });
+      }
+
       if (msg.attachment) {
         newGroup.messages.push({
           _id: `m-${++msgIdRef.current}`,
           message: '',
           sender: String(msg.sender_id),
           attachment: msg.attachment,
+          avatarSrc: msg.avatar_source,
         });
       }
+
+      if (newGroup.messages.length === 0) return;
+
       groups = [newGroup];
     }
   };
@@ -159,9 +186,9 @@ const Chat = (props) => {
         }
       ).then(r => {
         if (r.data) {
-          chatGroup.firstName = r.data.firstName;
+          chatGroup.roomName = r.data.roomName;
           chatGroup.message = r.data.message;
-          chatGroup.avatarSrc = r.data.avatarSrc;
+          chatGroup.avatarSources = r.data.avatarSources;
         }
       });
     } catch (err) {
@@ -184,13 +211,7 @@ const Chat = (props) => {
       body = body.replace(filePreview, '').trim();
     }
 
-    handleMessage({
-      sender_id: currentUser.id,
-      body,
-      attachment: fileUploaded ? URL.createObjectURL(fileUploaded) : null,
-    }, true);
-
-    const payload = {sent_by: currentUser.id, body};
+    const payload = {sender_id: currentUser.id, body};
 
     if (selectedFile) {
       payload.attachment = selectedFile;
@@ -209,7 +230,7 @@ const Chat = (props) => {
 
   useEffect(() => {
     getMessages();
-    if (!chatGroup.avatarSrc) getConversation();
+    if (!chatGroup.roomName) getConversation();
   }, []);
 
   useEffect(() => {
@@ -227,12 +248,12 @@ const Chat = (props) => {
               setIsTyping(data.is_typing);
             }
           } else {
-            if (currentUser.id !== data.sent_by) {
-              handleMessage({sender_id: data.sent_by, body: data.body, attachment: data.attachment}, true);
-            }
+            handleMessage({ ...data }, true);
             setMsgGroups(groups);
             setIsTyping(false);
-            this.send({is_read: true});
+            if (currentUser.id !== data.sender_id) {
+              this.send({is_read: true});
+            }
           }
         },
       });
@@ -274,7 +295,7 @@ const Chat = (props) => {
       setSelectedFile(reader.result);
     };
     reader.readAsDataURL(file);
-    const preview = `<br><img width="200" src="${blob}" />`;
+    const preview = inputValue === '' ? `<img width="200" src="${blob}" />` : `<br><img width="200" src="${blob}" />`;
     setFilePreview(preview);
     setInputValue((inputValue + preview).trim());
   };
@@ -284,8 +305,19 @@ const Chat = (props) => {
       <span id="mobile-back-to-list"><a href="/chats">&#x2190; Back to List</a></span>
       <ChatContainer>
         <ConversationHeader>
-          <Avatar src={chatGroup.avatarSrc} name={chatGroup.firstName} />
-          <ConversationHeader.Content userName={chatGroup.firstName} info="" />
+          {chatGroup.avatarSources.length > 1
+            ? (
+                <AvatarGroup
+                  size="md"
+                  hoverToFront={true}
+                  style={{width: "68px", height: "68px"}}
+                >
+                  {chatGroup.avatarSources.map((s, i) => { return (<Avatar key={`a-${chatGroup.id}-${i}`} src={s} name={chatGroup.roomName} />); })}
+                </AvatarGroup>
+              )
+            : <Avatar src={chatGroup.avatarSources[0]} name={chatGroup.roomName} />
+          }
+          <ConversationHeader.Content userName={chatGroup.roomName} info="" style={{marginLeft: chatGroup.avatarSources.length > 1 ? '15px': ''}}/>
         </ConversationHeader>
 
         <MessageList
@@ -302,7 +334,7 @@ const Chat = (props) => {
                 {g.messages.map((m, i) => (
                   <Message key={m._id} data-id={m._id} model={m} style={{padding: '2px'}} avatarSpacer={g.messages[i + 1] && g.senderId != currentUser.id}>
                     {!g.messages[i + 1] && g.senderId != currentUser.id &&
-                      <Avatar src={chatGroup.avatarSrc} />
+                      <Avatar src={m.avatarSrc} size="sm"/>
                     }
                     {m.attachment && <Message.ImageContent src={m.attachment} width={200} />}
                   </Message>
@@ -319,6 +351,7 @@ const Chat = (props) => {
           onSend={m => handleSendMessage(m)}
           onAttachClick={handleAttachClick}
           onChange={m => { notifyIsTyping(m) }}
+          sendDisabled={!inputValue}
         />
       </ChatContainer>
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
+  AvatarGroup,
   Message,
   MessageInput,
   ConversationList,
@@ -66,7 +67,7 @@ const ChatList = (props) => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const chatGroupId = urlParams.get('chat_group_id');
-    if (chatGroupId) showChatWindowHtml({id: chatGroupId});
+    if (chatGroupId) showChatWindowHtml({id: chatGroupId, avatarSources: []});
   }, []);
 
   useEffect(() => {
@@ -119,11 +120,21 @@ const ChatList = (props) => {
             return (
               <Conversation
                 key={'conversation-list-' + d.id}
-                name={d.firstName}
+                name={d.roomName}
                 info={lastMessageMapping[d.id] || d.message}
                 onClick={() => autoScroll ? showChatWindowHtml(d) : window.location.replace(`/chats?chat_group_id=${d.id}`)}
               >
-                <Avatar src={d.avatarSrc} name={d.firstName} />
+                {d.avatarSources.length > 1
+                  ? (
+                      <AvatarGroup
+                        size="sm"
+                        hoverToFront={true}
+                      >
+                        {d.avatarSources.map((s, i) => { return (<Avatar key={`a-${d.id}-${i}`} src={s} name={d.roomName} />); })}
+                      </AvatarGroup>
+                    )
+                  : <Avatar src={d.avatarSources[0]} name={d.roomName} />
+                }
               </Conversation>
             )
           })}
