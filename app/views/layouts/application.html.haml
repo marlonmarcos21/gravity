@@ -30,9 +30,7 @@
     .container.content-section
       #ajax-flash-msg
       = yield
-      #scroll-up
-        %a.page-scroll{ 'page-scroll' => true, href: '#page-top' }
-          = fa_icon 'chevron-up 2x'
+      = react_component('ScrollUp')
 
     %footer
       .container.text-center

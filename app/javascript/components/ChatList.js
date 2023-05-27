@@ -13,10 +13,6 @@ import Chat from './Chat';
 import consumer from '../packs/channels/consumer'
 import '../styles/chat.scss';
 
-const getCurrentDimension = () => {
-  return window.innerWidth;
-}
-
 const ChatList = (props) => {
   const { autoScroll, currentUser } = props;
   const [conversations, setConversations] = useState([]);
@@ -24,7 +20,7 @@ const ChatList = (props) => {
   const [stopFetching, setStopFetching] = useState(false);
   const [chatWindowHtml, setChatWindowHtml] = useState(null);
   const [lastMessageMapping, setLastMessageMapping] = useState({});
-  const [windowWidth, setWindowWidth] = useState(getCurrentDimension());
+  const [windowWidth, setWindowWidth] = useState(null);
   const pageRef = useRef(1);
 
   const subscribe = (chatGroupId) => {
@@ -60,6 +56,16 @@ const ChatList = (props) => {
       console.error(err);
     }
   };
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     getConversations();
