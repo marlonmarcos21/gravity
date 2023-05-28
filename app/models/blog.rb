@@ -11,17 +11,24 @@
 #  tsv_name     :tsvector
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  category_id  :bigint
 #  user_id      :integer
 #
 # Indexes
 #
-#  index_blogs_on_slug      (slug)
-#  index_blogs_on_tsv_name  (tsv_name) USING gin
-#  index_blogs_on_user_id   (user_id)
+#  index_blogs_on_category_id  (category_id)
+#  index_blogs_on_slug         (slug)
+#  index_blogs_on_tsv_name     (tsv_name) USING gin
+#  index_blogs_on_user_id      (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => categories.id)
 #
 
 class Blog < ApplicationRecord
   belongs_to :user
+  belongs_to :category, optional: true
 
   has_many :blog_media, as: :attachable, dependent: :destroy
 

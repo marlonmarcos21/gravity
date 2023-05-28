@@ -33,6 +33,28 @@ module DataSeeder
       end
     end
 
+    def blog_categories
+      [
+        'Asia',
+        'Canada',
+        'United States'
+      ].each do |title|
+        Category.create!(title: title, model: 'Blog')
+      end
+    end
+
+    def recipe_categories
+      [
+        'Bread',
+        'Cakes & Frosting',
+        'Cookies & Pastries',
+        'Dishes',
+        'Healthy'
+      ].each do |title|
+        Category.create!(title: title, model: 'Recipe')
+      end
+    end
+
     def messages(user1, user2, count = 50)
       participants = [user1, user2]
       chat_group = Chat::Group.between(user1, user2) || Chat::Group.new(participants: participants)

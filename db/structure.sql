@@ -278,7 +278,8 @@ CREATE TABLE public.blogs (
     slug character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tsv_name tsvector
+    tsv_name tsvector,
+    category_id bigint
 );
 
 
@@ -299,6 +300,39 @@ CREATE SEQUENCE public.blogs_id_seq
 --
 
 ALTER SEQUENCE public.blogs_id_seq OWNED BY public.blogs.id;
+
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    title character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    slug character varying,
+    model character varying
+);
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 
 
 --
@@ -723,38 +757,6 @@ ALTER SEQUENCE public.posts_id_seq OWNED BY public.posts.id;
 
 
 --
--- Name: recipe_categories; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.recipe_categories (
-    id bigint NOT NULL,
-    title character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    slug character varying
-);
-
-
---
--- Name: recipe_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.recipe_categories_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: recipe_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.recipe_categories_id_seq OWNED BY public.recipe_categories.id;
-
-
---
 -- Name: recipe_media; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1078,6 +1080,13 @@ ALTER TABLE ONLY public.blogs ALTER COLUMN id SET DEFAULT nextval('public.blogs_
 
 
 --
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
 -- Name: chat_groups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1159,13 +1168,6 @@ ALTER TABLE ONLY public.likes ALTER COLUMN id SET DEFAULT nextval('public.likes_
 --
 
 ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_id_seq'::regclass);
-
-
---
--- Name: recipe_categories id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recipe_categories ALTER COLUMN id SET DEFAULT nextval('public.recipe_categories_id_seq'::regclass);
 
 
 --
@@ -1282,6 +1284,14 @@ ALTER TABLE ONLY public.blogs
 
 
 --
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: chat_groups chat_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1375,14 +1385,6 @@ ALTER TABLE ONLY public.likes
 
 ALTER TABLE ONLY public.posts
     ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
-
-
---
--- Name: recipe_categories recipe_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recipe_categories
-    ADD CONSTRAINT recipe_categories_pkey PRIMARY KEY (id);
 
 
 --
@@ -1505,6 +1507,13 @@ CREATE INDEX index_blog_media_on_attachable_type_and_attachable_id ON public.blo
 
 
 --
+-- Name: index_blogs_on_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_blogs_on_category_id ON public.blogs USING btree (category_id);
+
+
+--
 -- Name: index_blogs_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1523,6 +1532,20 @@ CREATE INDEX index_blogs_on_tsv_name ON public.blogs USING gin (tsv_name);
 --
 
 CREATE INDEX index_blogs_on_user_id ON public.blogs USING btree (user_id);
+
+
+--
+-- Name: index_categories_on_model; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_categories_on_model ON public.categories USING btree (model);
+
+
+--
+-- Name: index_categories_on_title; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_categories_on_title ON public.categories USING btree (title);
 
 
 --
@@ -1694,13 +1717,6 @@ CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
--- Name: index_recipe_categories_on_title; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_recipe_categories_on_title ON public.recipe_categories USING btree (title);
-
-
---
 -- Name: index_recipe_media_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1834,7 +1850,7 @@ ALTER TABLE ONLY public.rsvps
 --
 
 ALTER TABLE ONLY public.recipes
-    ADD CONSTRAINT fk_rails_22f4e84158 FOREIGN KEY (category_id) REFERENCES public.recipe_categories(id);
+    ADD CONSTRAINT fk_rails_22f4e84158 FOREIGN KEY (category_id) REFERENCES public.categories(id);
 
 
 --
@@ -1843,6 +1859,14 @@ ALTER TABLE ONLY public.recipes
 
 ALTER TABLE ONLY public.chat_messages
     ADD CONSTRAINT fk_rails_6223514182 FOREIGN KEY (sender_id) REFERENCES public.users(id);
+
+
+--
+-- Name: blogs fk_rails_6ffd22a5a4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blogs
+    ADD CONSTRAINT fk_rails_6ffd22a5a4 FOREIGN KEY (category_id) REFERENCES public.categories(id);
 
 
 --
@@ -1971,6 +1995,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230426170739'),
 ('20230426170757'),
 ('20230426171448'),
-('20230522114300');
+('20230522114300'),
+('20230528033922'),
+('20230528034231'),
+('20230528034828');
 
 

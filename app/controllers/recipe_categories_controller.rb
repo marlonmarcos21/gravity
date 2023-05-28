@@ -1,5 +1,5 @@
 class RecipeCategoriesController < ApplicationController
-  load_resource
+  load_resource class: Category
 
   def recipes
     recipe_scope      = @recipe_category.recipes.includes(:user).published.descending

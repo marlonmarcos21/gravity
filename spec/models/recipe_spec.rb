@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (category_id => recipe_categories.id)
+#  fk_rails_...  (category_id => categories.id)
 #
 require 'rails_helper'
 

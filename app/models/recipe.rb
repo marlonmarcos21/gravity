@@ -19,12 +19,12 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (category_id => recipe_categories.id)
+#  fk_rails_...  (category_id => categories.id)
 #
 
 class Recipe < ApplicationRecord
   belongs_to :user
-  belongs_to :category, class_name: 'RecipeCategory'
+  belongs_to :category
 
   has_rich_text :description
   has_rich_text :ingredients

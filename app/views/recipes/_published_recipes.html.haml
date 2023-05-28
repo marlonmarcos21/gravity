@@ -25,11 +25,11 @@
       });
 
       const throughCategory = #{through_category};
+      var nextPage = 2;
       var url = '#{more_published_recipes_recipes_path}';
       if (throughCategory) {
         url = '/recipe_categories/#{@recipe_category.try(:slug)}/more_published_recipes';
       }
-      var nextPage = 2;
 
       $(window).scroll(function() {
         var scrolled = parseInt($(window).scrollTop());

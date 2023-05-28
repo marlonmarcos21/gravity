@@ -1,8 +1,9 @@
 # == Schema Information
 #
-# Table name: recipe_categories
+# Table name: categories
 #
 #  id         :bigint           not null, primary key
+#  model      :string
 #  slug       :string
 #  title      :string
 #  created_at :datetime         not null
@@ -10,14 +11,15 @@
 #
 # Indexes
 #
-#  index_recipe_categories_on_title  (title) UNIQUE
+#  index_categories_on_model  (model)
+#  index_categories_on_title  (title) UNIQUE
 #
 
-class RecipeCategory < ApplicationRecord
-  has_many :recipes,
-           foreign_key: :category_id,
-           inverse_of: :category,
-           dependent: :restrict_with_error
+class Category < ApplicationRecord
+  enum model: { Blog: 'Blog', Recipe: 'Recipe' }
+
+  has_many :blogs,   inverse_of: :category, dependent: :restrict_with_error
+  has_many :recipes, inverse_of: :category, dependent: :restrict_with_error
 
   extend FriendlyId::FinderMethods
   extend FriendlyId

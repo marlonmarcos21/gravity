@@ -118,6 +118,13 @@ form {
     .form-actions {
       margin-left: -14px;
     }
+    .blog_category_id {
+      width: 30%;
+      .form-control.select {
+        background-color: black;
+        color: white;
+      }
+    }
   }
   &.recipes {
     #recipe_title {

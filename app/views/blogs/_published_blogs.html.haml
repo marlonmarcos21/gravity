@@ -1,13 +1,18 @@
 - next_page = 2 if local_assigns[:next_page].blank?
 
-= render 'listing', blogs: @blogs
+= render 'blogs/listing', blogs: @blogs
 .text-center
   - if has_more_results
     %nav.published-blogs-pagination
       %span.published-blogs-pagination-page
-        %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_blogs_path(page: next_page) }
-          %em Loading more
-          = image_tag loading_spinner_image
+        - if through_category
+          %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_blog_category_path(@blog_category, page: next_page) }
+            %em Loading more
+            = image_tag loading_spinner_image
+        - else
+          %a.published-blogs-pagination-link{ data: { remote: 'true' }, href: more_published_blogs_blogs_path(page: next_page) }
+            %em Loading more
+            = image_tag loading_spinner_image
   - else
     %span.end-of-internet
       %em Congratulations, you have reached the end of internet!
@@ -19,7 +24,13 @@
         $(this).hide();
       });
 
+      const throughCategory = #{through_category};
       var nextPage = 2;
+      var url = '#{more_published_blogs_blogs_path}';
+      if (throughCategory) {
+        url = '/blog_categories/#{@blog_category.try(:slug)}/more_published_blogs';
+      }
+
       $(window).scroll(function() {
         var scrolled = parseInt($(window).scrollTop());
         var height = parseInt($(document).height() - $(window).height()) - 100;

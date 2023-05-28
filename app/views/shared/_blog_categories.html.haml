@@ -1,0 +1,9 @@
+#blog-categories-container
+  %ul
+    %li{ class: current_page?(blogs_path) ? 'active' : 'inactive' }
+      = link_to blogs_path do
+        All
+    - blog_categories.each do |category|
+      %li{ class: current_page?(blogs_blog_category_path(category)) ? 'active' : 'inactive' }
+        = link_to blogs_blog_category_path(category) do
+          = category.title.html_safe

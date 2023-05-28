@@ -54,6 +54,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :blog_categories, only: [] do
+    member do
+      get 'blogs'
+      get 'more_published_blogs'
+    end
+  end
+
   resources :recipe_media, except: [:index]
 
   resources :recipes do
@@ -67,19 +74,19 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :recipe_categories, only: [] do
+    member do
+      get 'recipes'
+      get 'more_published_recipes'
+    end
+  end
+
   resources :events, except: [:index] do
     member do
       post 'rsvp'
       get 'rsvps'
       patch 'publish'
       patch 'unpublish'
-    end
-  end
-
-  resources :recipe_categories, only: [] do
-    member do
-      get 'recipes'
-      get 'more_published_recipes'
     end
   end
 

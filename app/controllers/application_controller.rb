@@ -7,7 +7,8 @@ class ApplicationController < ActionController::Base
 
   after_action :flash_to_headers
 
-  helper_method :activities, :notification_count, :message_count, :recipe_categories
+  helper_method :activities, :notification_count, :message_count,
+                :recipe_categories, :blog_categories
 
   rescue_from CanCan::AccessDenied do |exception|
     if request.xhr?
@@ -90,7 +91,13 @@ class ApplicationController < ActionController::Base
 
   def recipe_categories
     Rails.cache.fetch('recipe-categories') do
-      RecipeCategory.order(:title)
+      Category.Recipe.order(:title)
+    end
+  end
+
+  def blog_categories
+    Rails.cache.fetch('blog-categories') do
+      Category.Blog.order(:title)
     end
   end
 

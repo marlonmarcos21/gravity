@@ -5,6 +5,7 @@
   = @blog.errors.full_messages.inspect unless @blog.errors.empty?
 
   = f.input :image_token, as: :fake, label: false, input_html: { class: 'hidden', value: @image_token }
+  = f.input :category_id, collection: blog_categories
   = f.input :title
 
   .form-group.blog_body
