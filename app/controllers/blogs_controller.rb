@@ -4,17 +4,19 @@ class BlogsController < ApplicationController
   before_action :image_token, only: :new
 
   def index
-    pb_scope = Blog.includes(:user).published.descending
-    @blogs   = pb_scope.page(1)
+    pb_scope          = Blog.includes(:user).published.descending
+    @blogs            = pb_scope.page(1)
     @has_more_results = pb_scope.page(2).exists?
+    @through_category = false
   end
 
   def more_published_blogs
-    pb_scope = Blog.includes(:user).published.descending
-    page = params[:page].blank? ? 2 : params[:page].to_i
-    @next_page = page + 1
-    @blogs = pb_scope.page(page)
+    pb_scope          = Blog.includes(:user).published.descending
+    page              = params[:page].blank? ? 2 : params[:page].to_i
+    @next_page        = page + 1
+    @blogs            = pb_scope.page(page)
     @has_more_results = pb_scope.page(@next_page).exists?
+    @through_category = false
 
     respond_to do |format|
       format.html { render :index }
