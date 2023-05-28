@@ -33,9 +33,9 @@ module DataSeeder
       end
     end
 
-    def messages(chat_group_id, count = 50)
-      chat_group = Chat::Group.find(chat_group_id)
-      participants = chat_group.participants
+    def messages(user1, user2, count = 50)
+      participants = [user1, user2]
+      chat_group = Chat::Group.between(user1, user2) || Chat::Group.new(participants: participants)
       total = 0
 
       until total >= 50
@@ -47,14 +47,14 @@ module DataSeeder
           )
 
           msg.receipts.build(
-            chat_group_id: chat_group.id,
+            group: chat_group,
             receipt_type: 'outbox',
             user: sender,
             message: msg
           )
 
           msg.receipts.build(
-            chat_group_id: chat_group.id,
+            group: chat_group,
             receipt_type: 'inbox',
             user: (participants - [sender]).first,
             message: msg

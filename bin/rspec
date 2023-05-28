@@ -6,6 +6,7 @@
 # The application 'rspec' is installed as part of a gem, and
 # this file is here to facilitate running it.
 #
+load File.expand_path("spring", __dir__)
 
 require "pathname"
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile",
