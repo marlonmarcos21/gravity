@@ -38,7 +38,7 @@
           $('.published-blogs-pagination').hide();
           $.ajax({
             method: 'GET',
-            url: '#{more_published_blogs_blogs_path}',
+            url: url,
             dataType: 'script',
             data: { page: nextPage }
           });
