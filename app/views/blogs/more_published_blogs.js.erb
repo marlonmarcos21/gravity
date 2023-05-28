@@ -5,6 +5,11 @@ var moreResults = "<%= @has_more_results %>"
 var nextPage = "<%= @next_page %>"
 var checker = true
 
+let url = "<%= more_published_blogs_blogs_path %>";
+if (throughCategory) {
+  url = '/blog_categories/#{@blog_category.try(:slug)}/more_published_blogs';
+}
+
 $(window).scroll(function() {
   var scrolled = parseInt($(window).scrollTop());
   var height = parseInt($(document).height() - $(window).height()) - 100;
@@ -12,7 +17,7 @@ $(window).scroll(function() {
     $('.published-blogs-pagination').hide();
     $.ajax({
       method: 'GET',
-      url: "<%= more_published_blogs_blogs_path %>",
+      url: url,
       dataType: 'script',
       data: { page: nextPage }
     });
