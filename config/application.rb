@@ -63,5 +63,7 @@ module Gravity
     end
 
     config.action_cable.mount_path = '/cable'
+
+    config.active_record.yaml_column_permitted_classes = [Symbol, Time]
   end
 end

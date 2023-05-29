@@ -13,51 +13,51 @@ Rails.application.routes.draw do
 
   resources :users, except: [:index] do
     member do
-      get 'more_published_posts'
-      get 'more_published_blogs'
-      get 'more_drafted_blogs'
-      get 'more_drafted_recipes'
-      patch 'send_friend_request'
-      patch 'accept_friend_request'
-      patch 'reject_friend_request'
-      patch 'cancel_friend_request'
+      get   :more_published_posts
+      get   :more_published_blogs
+      get   :more_drafted_blogs
+      get   :more_drafted_recipes
+      patch :send_friend_request
+      patch :accept_friend_request
+      patch :reject_friend_request
+      patch :cancel_friend_request
     end
   end
 
   resources :posts do
     collection do
-      delete 'remove_media'
-      get 'more_published_posts'
-      get 'presigned_url'
-      get 'media_upload_callback'
-      get 'pre_post_check'
+      delete :remove_media
+      get    :more_published_posts
+      get    :presigned_url
+      get    :media_upload_callback
+      get    :pre_post_check
     end
 
     member do
-      patch 'editable'
-      patch 'like'
-      patch 'unlike'
+      patch :editable
+      patch :like
+      patch :unlike
     end
   end
 
   resources :blogs do
     collection do
-      post 'tinymce_assets'
-      get 'more_published_blogs'
+      post :tinymce_assets
+      get  :more_published_blogs
     end
 
     member do
-      patch 'publish'
-      patch 'unpublish'
-      patch 'like'
-      patch 'unlike'
+      patch :publish
+      patch :unpublish
+      patch :like
+      patch :unlike
     end
   end
 
   resources :blog_categories, only: [] do
     member do
-      get 'blogs'
-      get 'more_published_blogs'
+      get :blogs
+      get :more_published_blogs
     end
   end
 
@@ -65,36 +65,36 @@ Rails.application.routes.draw do
 
   resources :recipes do
     collection do
-      get 'more_published_recipes'
+      get :more_published_recipes
     end
 
     member do
-      patch 'publish'
-      patch 'unpublish'
+      patch :publish
+      patch :unpublish
     end
   end
 
   resources :recipe_categories, only: [] do
     member do
-      get 'recipes'
-      get 'more_published_recipes'
+      get :recipes
+      get :more_published_recipes
     end
   end
 
   resources :events, except: [:index] do
     member do
-      post 'rsvp'
-      get 'rsvps'
-      patch 'publish'
-      patch 'unpublish'
+      post  :rsvp
+      get   :rsvps
+      patch :publish
+      patch :unpublish
     end
   end
 
   resources :comments, only: [:create, :destroy] do
     member do
-      patch 'editable'
-      patch 'like'
-      patch 'unlike'
+      patch :editable
+      patch :like
+      patch :unlike
     end
   end
 
@@ -105,13 +105,13 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'search', to: 'search#search'
-  get 'about',  to: 'about#index'
+  get :search, to: 'search#search'
+  get :about,  to: 'about#index'
 
-  get 'set_light_mode', to: 'application#set_light_mode'
-  get 'set_dark_mode', to: 'application#set_dark_mode'
-  patch 'clear_notifications', to: 'application#clear_notifications'
-  patch 'clear_message_count', to: 'application#clear_message_count'
+  get   :set_light_mode,      to: 'application#set_light_mode'
+  get   :set_dark_mode,       to: 'application#set_dark_mode'
+  patch :clear_notifications, to: 'application#clear_notifications'
+  patch :clear_message_count, to: 'application#clear_message_count'
 
   root to: 'posts#index'
 end
