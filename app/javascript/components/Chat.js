@@ -268,14 +268,16 @@ const Chat = (props) => {
 
   useEffect(() => {
     if (loadingMore === true) {
-      if (groups.length !== 0) {
-        ++pageRef.current;
-      }
+      setTimeout(() => {
+        if (groups.length !== 0) {
+          ++pageRef.current;
+        }
 
-      setLoadingMore(false);
-      if (!stopFetching) {
-        getMessages(pageRef.current);
-      }
+        setLoadingMore(false);
+        if (!stopFetching) {
+          getMessages(pageRef.current);
+        }
+      }, 500);
     }
   }, [loadingMore]);
 

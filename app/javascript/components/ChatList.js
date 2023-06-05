@@ -87,7 +87,7 @@ const ChatList = (props) => {
         if (!stopFetching) {
           getConversations(pageRef.current);
         }
-      }, 1000);
+      }, 500);
     }
   }, [loadingMore]);
 
