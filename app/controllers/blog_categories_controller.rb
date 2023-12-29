@@ -1,5 +1,5 @@
 class BlogCategoriesController < ApplicationController
-  load_resource class: Category
+  load_resource class: Category::Blog
 
   def blogs
     blog_scope        = @blog_category.blogs.includes(:user).published.descending

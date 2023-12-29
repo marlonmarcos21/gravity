@@ -24,7 +24,7 @@
 
 class Recipe < ApplicationRecord
   belongs_to :user
-  belongs_to :category
+  belongs_to :category, optional: true
 
   has_rich_text :description
   has_rich_text :ingredients
