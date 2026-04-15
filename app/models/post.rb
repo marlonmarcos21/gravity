@@ -40,6 +40,8 @@ class Post < ApplicationRecord
 
   has_paper_trail on: :update, only: :body
 
+  before_save :unfurl_tiktok_short_url
+
   scope :published,       -> { where(published: true) }
   scope :unpublished,     -> { where(published: false) }
   scope :descending,      -> { order(published_at: :desc) }
@@ -86,5 +88,26 @@ class Post < ApplicationRecord
 
   def set_published_at
     self.published_at = Time.zone.now
+  end
+
+  def unfurl_tiktok_short_url
+    return if body.strip.blank?
+
+    html = Nokogiri::HTML.fragment(body)
+    a_tags = html.search('a')
+    return if a_tags.empty?
+
+    a_tags.each do |node|
+      href_value = node.attributes['href'].value
+      next unless href_value.starts_with?('https://vt.tiktok.com')
+
+      uri = URI(href_value)
+      resp = Net::HTTP.get(uri)
+      inner_html = Nokogiri::HTML.fragment(resp)
+      inner_a = inner_html.search('a').first
+      node.attributes['href'].value = inner_a.attributes['href'].value
+    end
+
+    self.body = html.to_html
   end
 end
