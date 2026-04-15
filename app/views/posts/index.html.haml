@@ -1,3 +1,6 @@
+- content_for :header_scripts do
+  %script{ async: true, src: 'https://www.tiktok.com/embed.js' }
+
 #posts
   - if current_user
     .row

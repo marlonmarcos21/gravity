@@ -35,12 +35,12 @@
         - if post.private?
           = fa_icon 'lock'
         = fa_icon 'edit'
-        = post.embed_youtube.html_safe
+        = post.embed_videos.html_safe
     - else
       %p.post-body
         - if post.private?
           = fa_icon 'lock'
-        = post.embed_youtube.html_safe
+        = post.embed_videos.html_safe
 
   - if post.images.exists?
     .row

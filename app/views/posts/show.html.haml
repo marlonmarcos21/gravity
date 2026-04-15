@@ -1,3 +1,6 @@
+- content_for :header_scripts do
+  %script{ async: true, src: 'https://www.tiktok.com/embed.js' }
+
 - content_for(:meta_tags) do
   = render_meta_tags @post
 

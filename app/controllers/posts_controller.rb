@@ -75,7 +75,7 @@ class PostsController < ApplicationController
           render json: {
             message: 'success',
             post_id: @post.id,
-            content: @post.embed_youtube,
+            content: @post.embed_videos,
             private: @post.private?
           }, status: :ok
         end
