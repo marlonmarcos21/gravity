@@ -135,6 +135,11 @@ p {
   iframe, .gif-image {
     width: 100%;
   }
+
+  blockquote {
+    padding: 0 !important;
+    border-left: 0px !important;
+  }
 }
 
 .comment {
