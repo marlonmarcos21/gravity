@@ -1,6 +1,3 @@
-- content_for :header_scripts do
-  %script{ async: true, src: 'https://www.tiktok.com/embed.js' }
-
 = render 'listing', posts: @posts
 
 .text-center
@@ -14,6 +11,7 @@
       %em Congratulations, you have reached the end of internet!
 
 - content_for :footer_scripts do
+  %script{ async: true, src: 'https://www.tiktok.com/embed.js' }
   :javascript
     $(document).ready(function() {
       $('#posts-container').on('click', '.published-posts-pagination-link', function() {
