@@ -1,3 +1,6 @@
+- content_for :header_scripts do
+  %script{ async: true, src: 'https://www.tiktok.com/embed.js' }
+
 = render 'listing', posts: @posts
 
 .text-center
