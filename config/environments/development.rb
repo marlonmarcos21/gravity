@@ -84,7 +84,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'gravity.dev', port: 80 }
   config.action_mailer.preview_paths = [Rails.root.join('spec/mailers/previews')]
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = SMTP_SETTINGS
+  # config.action_mailer.smtp_settings = SMTP_SETTINGS
 
   Rack::Timeout::Logger.disable
 end

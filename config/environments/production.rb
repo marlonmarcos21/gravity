@@ -26,14 +26,21 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JS & CSS using a preprocessor.
-  config.assets.js_compressor = :uglifier
+  #
+  # :terser, not :uglifier. Action Text's engine adds activestorage.js and
+  # actiontext.js to the precompile list, and in Rails 7 those are ES2015
+  # (const/class/arrow/spread). uglify-js only parses ES5, so precompile died with
+  # "Unexpected token: keyword (const)"; Uglifier.new(harmony: true) then failed
+  # with an empty error from uglify-js itself. Terser handles modern syntax and is
+  # what Rails ships with now.
+  config.assets.js_compressor = :terser
   config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host = 'https://static-production.gravity.ph'
+  config.asset_host = 'https://static-public.gravity.ph'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
@@ -102,7 +109,8 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'gravity.ph', port: 80 }
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = SMTP_SETTINGS
+  # config.action_mailer.smtp_settings = SMTP_SETTINGS
+
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write

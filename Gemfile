@@ -22,7 +22,9 @@ gem 'pg_search'
 # Use SCSS for stylesheets
 gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+# Terser, not uglifier: uglify-js only parses ES5, and Rails 7's own Sprockets
+# assets (activestorage.js / actiontext.js) are ES2015.
+gem 'terser'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 gem 'bootstrap-sass'

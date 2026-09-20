@@ -519,6 +519,8 @@ GEM
     temple (0.10.7)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
+    terser (1.2.8)
+      execjs (>= 0.3.0, < 3)
     thor (1.5.0)
     tilt (2.9.0)
     timecop (0.9.11)
@@ -536,8 +538,6 @@ GEM
       railties (>= 5.0, < 8.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    uglifier (4.2.1)
-      execjs (>= 0.3.0, < 3)
     unaccent (0.4.0)
     unicode-display_width (3.3.0)
       unicode-emoji (~> 4.3)
@@ -635,12 +635,12 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   streamio-ffmpeg
+  terser
   timecop
   tinymce-rails (~> 4.9.4)
   tinymce-rails-imageupload!
   turbolinks
   twitter-bootstrap-rails (~> 5.0.0)
-  uglifier
   vcr
   web-console (~> 4.2)
   webmock
