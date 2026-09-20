@@ -34,7 +34,10 @@ Rails.application.configure do
   config.action_controller.allow_forgery_protection = false
 
   # Store uploaded files on the local file system in a temporary directory.
-  # config.active_storage.service = :test
+  # Required since Rails 7.1: ActionText's has_rich_text declares has_many_attached,
+  # which raises unless a service is set. Attachments themselves go to S3 via
+  # Shrine/Paperclip, so this service is never actually written to.
+  config.active_storage.service = :test
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the

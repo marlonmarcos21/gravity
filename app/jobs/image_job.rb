@@ -11,7 +11,8 @@ class ImageJob < ApplicationJob
   def process_styles(images)
     image = images.first
     object = BUCKET.object(image.key)
-    object.acl.put(acl: 'private')
+    # No acl.put here: the gateway answers PutObjectAcl with NotImplemented.
+    # Objects are private by default and only reachable via presigned URLs.
     uri = URI(object.presigned_url(:get))
     file = uri.open
     image.source = file

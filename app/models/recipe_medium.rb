@@ -24,11 +24,12 @@ class RecipeMedium < ApplicationRecord
 
   after_commit :enqueue_process_metadata, on: :create
 
+  # Public like the rest of the recipe media (see config/initializers/shrine.rb):
+  # this URL is embedded in stored Action Text bodies and must not expire.
   def screenshot_url
     return if video_meta.blank?
 
-    object = BUCKET.object(video_meta['screenshot_key'])
-    get_s3_url(object)
+    S3.public_url(video_meta['screenshot_key'])
   end
 
   def file_metadata
@@ -65,12 +66,5 @@ class RecipeMedium < ApplicationRecord
     return unless mime_type.starts_with?('video')
 
     RecipeMediumVideoJob.perform_later(id, 'process_metadata')
-  end
-
-  def get_s3_url(object)
-    uri = URI(object.public_url(virtual_host: true))
-    uri.port = nil
-    uri.scheme = 'https'
-    uri.to_s
   end
 end

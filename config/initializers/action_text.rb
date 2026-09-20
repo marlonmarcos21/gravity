@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
-require 'rails-html-sanitizer'
+# Customisations to Action Text:
+#
+#   1. A RemoteVideo attachable, so Trix attachments whose content-type is a
+#      video render through app/views/action_text/attachables/_remote_video.
+#      Upstream only recognises remote *images* (ActionText::Attachables::RemoteImage),
+#      so without this a video attachment falls back to MissingAttachable.
+#   2. Sanitizer allow-lists extended with the tags/attributes those videos need.
+#
+# Everything else is left to Action Text's own implementation. This file used to
+# carry a copy of Rails 6's ActionText::ContentHelper; that copy has been dropped
+# because it overrode rendering/sanitizing methods that have since changed.
 
 module ActionText
   module Attachables
@@ -67,46 +77,20 @@ module ActionText
   end
 end
 
-module ActionText
-  module ContentHelper
-    mattr_accessor(:sanitizer) { Rails::Html::Sanitizer.safe_list_sanitizer.new }
-    mattr_accessor(:allowed_tags) do
-      sanitizer.class.allowed_tags +
-        [ActionText::Attachment::TAG_NAME, 'figure', 'figcaption', 'video']
-    end
-    mattr_accessor(:allowed_attributes) do
-      sanitizer.class.allowed_attributes +
-        ActionText::Attachment::ATTRIBUTES +
-        %w(controls preload size poster)
-    end
-    mattr_accessor(:scrubber)
+# Mirrors ActionText::ContentHelper#sanitizer_allowed_tags / #sanitizer_allowed_attributes
+# (actiontext/app/helpers/action_text/content_helper.rb) and appends what
+# _remote_video.html.haml emits. Setting these accessors replaces the lazy
+# defaults, so the upstream entries have to be repeated here -- in particular
+# ActionText::Attachment.tag_name, without which every attachment is stripped.
+Rails.application.config.after_initialize do
+  helper = ActionText::ContentHelper
 
-    def render_action_text_content(content)
-      self.prefix_partial_path_with_controller_namespace = false
-      sanitize_action_text_content(render_action_text_attachments(content))
-    end
+  helper.allowed_tags =
+    helper.sanitizer.class.allowed_tags +
+    [ActionText::Attachment.tag_name, 'figure', 'figcaption', 'video']
 
-    def sanitize_action_text_content(content)
-      sanitizer.sanitize(content.to_html, tags: allowed_tags, attributes: allowed_attributes, scrubber: scrubber).html_safe
-    end
-
-    def render_action_text_attachments(content)
-      rendered_attachments = content.render_attachments do |attachment|
-        unless attachment.in?(content.gallery_attachments)
-          attachment.node.tap do |node|
-            node.inner_html = render(attachment, in_gallery: false).chomp
-          end
-        end
-      end
-
-      rendered_attachments.render_attachment_galleries do |attachment_gallery|
-        render(layout: attachment_gallery, object: attachment_gallery) do
-          attachment_gallery.attachments.map do |attachment|
-            attachment.node.inner_html = render(attachment, in_gallery: true).chomp
-            attachment.to_html
-          end.join.html_safe
-        end.chomp
-      end
-    end
-  end
+  helper.allowed_attributes =
+    helper.sanitizer.class.allowed_attributes +
+    ActionText::Attachment::ATTRIBUTES +
+    %w(controls preload size poster)
 end

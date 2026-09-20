@@ -152,17 +152,22 @@ class PostsController < ApplicationController
     end
   end
 
+  # Hands the browser a presigned PUT so it can upload straight to the storage
+  # backend. This used to be a presigned POST (browser form upload), which the
+  # versitygw gateway answers with 405 MethodNotAllowed -- it does not implement
+  # the POST-object API. PUT is signed per object, so the key is built here
+  # rather than via the POST policy's ${filename} expansion.
+  #
+  # Content-Type is deliberately NOT signed: the browser still sends the header
+  # and the gateway stores it, but leaving it out of the signature means a
+  # browser that normalises the type cannot invalidate the signature.
   def presigned_url
     uuid = SecureRandom.uuid
-    presigned_post = BUCKET.presigned_post(
-      key: "uploads/#{uuid}/${filename}",
-      success_action_status: '201',
-      allow_any: ['Content-Type'],
-      acl: 'public-read'
-    )
+    key  = "uploads/#{uuid}/#{sanitized_upload_filename}"
+
     render json: {
-      url: presigned_post.url,
-      fields: presigned_post.fields,
+      url: BUCKET.object(key).presigned_url(:put, expires_in: 1.hour.to_i),
+      key: key,
       uuid: uuid
     }, status: :ok
   end
@@ -265,5 +270,13 @@ class PostsController < ApplicationController
 
   def media_token
     @media_token ||= SecureRandom.urlsafe_base64(30)
+  end
+
+  # The key is signed, so it has to be byte-for-byte what the browser PUTs to.
+  # Keep it to characters that survive a URL round trip without re-encoding.
+  def sanitized_upload_filename
+    name = File.basename(params[:filename].to_s)
+    name = name.gsub(/[^a-zA-Z0-9._-]+/, '-').delete_prefix('-')
+    name.presence || 'upload'
   end
 end

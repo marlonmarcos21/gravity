@@ -24,11 +24,8 @@ class BlogMedium < ApplicationRecord
   belongs_to :attachable, polymorphic: true, optional: true
 
   has_attached_file :source,
-                    styles: { thumb: { geometry: '150x', processors: [:thumbnail] } },
-                    storage: :s3,
-                    s3_credentials: Rails.root.join('config/s3.yml'),
-                    s3_region: ENV['AWS_S3_REGION'],
-                    s3_protocol: :https
+                    **S3::PUBLIC_PAPERCLIP_OPTIONS,
+                    styles: { thumb: { geometry: '150x', processors: [:thumbnail] } }
 
   validates_attachment_presence :source
   validates_attachment_content_type :source, content_type: %r{\Aimage/(\w?jpeg|jpg|png|gif)\Z}
@@ -36,8 +33,11 @@ class BlogMedium < ApplicationRecord
 
   after_post_process :save_image_dimensions
 
+  # Lives in the public bucket, so this is a plain, non-expiring URL. That
+  # matters: TinyMCE writes it into the stored blog body, where a presigned URL
+  # would stop working once the signature lapsed.
   def source_url(style = :original)
-    source.url(style).sub("#{ENV['AWS_S3_HOST_NAME']}/", '')
+    source.url(style)
   end
 
   private

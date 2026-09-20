@@ -35,15 +35,15 @@ module ApplicationHelper
   end
 
   def home_image
-    "https://#{ENV['AWS_S3_BUCKET']}/assets/home.jpg"
+    S3.public_bucket_url('assets/home.jpg')
   end
 
   def loading_spinner_image
-    "https://#{ENV['AWS_S3_BUCKET']}/assets/loading.gif"
+    S3.public_bucket_url('assets/loading.gif')
   end
 
   def about_image
-    "https://#{ENV['AWS_S3_BUCKET']}/assets/about.jpg"
+    S3.public_bucket_url('assets/about.jpg')
   end
 
   def strip_content!(text)

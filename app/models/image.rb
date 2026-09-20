@@ -28,13 +28,8 @@ class Image < ApplicationRecord
       thumb: { geometry: '150x', processors: [:thumbnail] },
       main: { geometry: '1024x', processors: [:thumbnail] }
     },
-    storage: :s3,
-    s3_credentials: Rails.root.join('config/s3.yml'),
-    s3_region: ENV['AWS_S3_REGION'],
-    s3_protocol: :https,
-    s3_permissions: :private,
-    s3_url_options: { virtual_host: true }
-  }.freeze
+    s3_permissions: :private
+  }.merge(S3::PAPERCLIP_OPTIONS).freeze
 
   ALLOWED_CONTENT_TYPE = %r{\Aimage/(\w?jpeg|jpg|png|gif|webp)\Z}
 

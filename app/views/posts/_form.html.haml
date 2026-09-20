@@ -67,7 +67,7 @@
         parallelUploads: 1,
         paramName1: 'file',
         paramName2: [],
-        method: 'post',
+        method: 'put',
         maxFilesize: 10000,
         acceptedFiles: 'image/jpeg, image/jpg, image/png, image/gif, image/webp, video/mp4, video/quicktime',
         dictDefaultMessage: '<i class="fa fa-picture-o" aria-hidden="true"></i> Click or Drop photos/videos here to upload',
@@ -77,26 +77,35 @@
           $.ajax({
             url: '/posts/presigned_url',
             dataType: 'json',
+            data: { filename: file.name },
           }).done(function(data) {
             file.uploadURL = data.url;
-            file.uploadFields = data.fields;
+            file.uploadKey = data.key;
             file.UUID = data.uuid;
             cb();
+          }).fail(function(xhr) {
+            cb('Could not get an upload URL (' + xhr.status + ')');
           });
         },
       });
+
+      // The storage backend (versitygw) does not implement S3's POST-object
+      // form upload, so each file goes up as a presigned PUT with the raw file
+      // as the request body instead of Dropzone's default multipart form.
+      dz.submitRequest = function(xhr, formData, files) {
+        xhr.send(files[0]);
+      };
 
       dz.on('processing', function(file) {
         $('input[name=commit]').attr('disabled', true);
         dz.options.url = file.uploadURL;
       });
 
-      dz.on('sending', function(file, xhr, formData) {
+      dz.on('sending', function(file, xhr) {
         $('input[name=commit]').attr('disabled', true);
-        for (const field in file.uploadFields) {
-          formData.append(field, file.uploadFields[field]);
-        }
-        formData.append('Content-Type', file.type);
+        // Not part of the signature, but the gateway stores it as the object's
+        // Content-Type, which is what makes videos play back from a signed URL.
+        xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
       });
 
       dz.on('addedfile', function(file) {
@@ -129,15 +138,14 @@
         checkPostReadiness();
       });
 
-      dz.on('success', function(file, resp) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(resp, 'text/xml');
-        const key = xmlDoc.getElementsByTagName('Key')[0].childNodes[0].nodeValue;
+      // A presigned PUT returns an empty body, so the key comes from the
+      // presigned_url response rather than from a parsed XML <Key> element.
+      dz.on('success', function(file) {
         $.ajax({
           url: '/posts/media_upload_callback',
           data: {
             media_token: mediaToken,
-            s3_key: key,
+            s3_key: file.uploadKey,
             content_type: file.type,
           },
         });
@@ -153,7 +161,9 @@
             type: 'DELETE',
             data: {
               media_token: mediaToken,
-              s3_key: `uploads/${file.UUID}/${file.name}`,
+              // Use the key the server signed, not a rebuilt one: the filename
+              // is sanitised server-side and may differ from file.name.
+              s3_key: file.uploadKey,
             }
           });
         } else {

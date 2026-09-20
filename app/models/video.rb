@@ -26,15 +26,13 @@ class Video < ApplicationRecord
   after_commit :enqueue_process_metadata, on: :create
 
   def source_url
-    object = BUCKET.object(key)
-    get_s3_url(object)
+    S3.presigned_url(key)
   end
 
   def screenshot_url
     return if source_meta.blank?
 
-    object = BUCKET.object(source_meta['screenshot_key'])
-    get_s3_url(object)
+    S3.presigned_url(source_meta['screenshot_key'])
   end
 
   def aspect_ratio_display
@@ -67,12 +65,5 @@ class Video < ApplicationRecord
 
     object = BUCKET.object(key)
     object.delete
-  end
-
-  def get_s3_url(object)
-    uri = URI(object.presigned_url(:get, virtual_host: true))
-    uri.port = nil
-    uri.scheme = 'https'
-    uri.to_s
   end
 end

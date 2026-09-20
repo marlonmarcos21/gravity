@@ -11,9 +11,8 @@ class VideoJob < ApplicationJob
   private
 
   def process_metadata(video)
-    object = BUCKET.object(video.key)
-    object.acl.put(acl: 'private')
-
+    # No acl.put here: the gateway answers PutObjectAcl with NotImplemented.
+    # Objects are private by default and only reachable via presigned URLs.
     file      = URI(video.source_url).open
     movie     = FFMPEG::Movie.new(file.path)
     key_parts = video.key.split('/')

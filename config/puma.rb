@@ -39,11 +39,13 @@ pidfile ENV.fetch('PIDFILE', 'tmp/pids/server.pid')
 #
 preload_app!
 
+# Only run in cluster mode (i.e. when `workers` above is uncommented); Puma warns
+# about them otherwise. `on_worker_boot` was renamed in Puma 7.
 before_fork do
-  ActiveRecord::Base.connection.disconnect!
+  ActiveRecord::Base.connection_pool.disconnect!
 end
 
-on_worker_boot do
+before_worker_boot do
   ActiveRecord::Base.establish_connection
 end
 

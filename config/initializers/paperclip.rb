@@ -2,29 +2,21 @@
 
 module Paperclip
   class UrlGenerator
+    # Paperclip 6.1's escape_url calls URI.escape, which Ruby 3 removed, so #for
+    # is reimplemented to escape via #url_encode below instead. The URL itself is
+    # left exactly as Paperclip interpolated it -- each attachment picks its host
+    # through its own options (see S3::PUBLIC_PAPERCLIP_OPTIONS, which sets
+    # s3_host_alias + :s3_alias_url for the public bucket).
     def for(style_name, options)
       interpolated = attachment_options[:interpolator].interpolate(
         most_appropriate_url, @attachment, style_name
       )
 
-      url = transform_url(interpolated, options)
+      url = options[:escape] ? url_encode(interpolated) : interpolated
       timestamp_as_needed(url, options)
     end
 
     private
-
-    def transform_url(url, options)
-      parts = url.split('/').reject do |part|
-        part.blank? ||
-          part == ENV['AWS_S3_BUCKET'] ||
-          part == ENV['AWS_S3_HOST_NAME'] ||
-          part.starts_with?('http')
-      end
-
-      new_url = "https://#{ENV['AWS_S3_BUCKET']}/#{parts.join('/')}"
-
-      options[:escape] ? url_encode(new_url) : new_url
-    end
 
     # Taken from URI.encode_www_form_component
     # https://ruby-doc.org/stdlib-2.7.2/libdoc/uri/rdoc/URI.html#method-c-encode_www_form_component

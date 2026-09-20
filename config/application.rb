@@ -21,7 +21,7 @@ Bundler.require(*Rails.groups)
 module Gravity
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.1
 
     config.i18n.enforce_available_locales = true
 
@@ -58,9 +58,8 @@ module Gravity
 
     config.active_job.queue_adapter = :sidekiq
 
-    config.to_prepare do
-      ActionText::ContentHelper.allowed_tags << 'video'
-    end
+    # Action Text's allowed tags/attributes are configured in
+    # config/initializers/action_text.rb (which already allows 'video').
 
     config.action_cable.mount_path = '/cable'
 

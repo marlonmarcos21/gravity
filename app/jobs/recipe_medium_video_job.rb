@@ -23,7 +23,9 @@ class RecipeMediumVideoJob < ApplicationJob
     screenshot          = movie.screenshot(screenshot_filepath.path, seek_time: seek_time)
     screenshot_file     = File.open(screenshot.path)
 
-    screenshot_obj.upload_file(screenshot_file, acl: 'public-read')
+    # No acl: the gateway does not implement ACLs, and the screenshot is read
+    # back through a presigned URL like the rest of the recipe media.
+    screenshot_obj.upload_file(screenshot_file)
 
     video.video_meta = {
       width:  movie.width,

@@ -18,7 +18,7 @@
 class Category < ApplicationRecord
   self.inheritance_column = :model
 
-  enum model: { Blog: 'Blog', Recipe: 'Recipe' }
+  enum :model, { Blog: 'Blog', Recipe: 'Recipe' }
 
   extend FriendlyId::FinderMethods
   extend FriendlyId

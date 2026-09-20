@@ -1,14 +1,23 @@
-default: &default
+# Paperclip reads credentials, bucket and host from here; connection options
+# (endpoint / path style / checksums) come from S3::PAPERCLIP_OPTIONS in
+# config/initializers/s3.rb.
+#
+# Deliberately written without YAML anchors/aliases: Paperclip loads this with
+# YAML.load, and Psych 4 (Ruby 3.1+) raises Psych::AliasesNotEnabled on "<<: *default".
+development:
   access_key_id:     <%= ENV['AWS_ACCESS_KEY_ID'] %>
   secret_access_key: <%= ENV['AWS_ACCESS_SECRET'] %>
-  s3_host_name:      <%= ENV['AWS_S3_HOST_NAME'] %>
+  s3_host_name:      <%= ENV['AWS_S3_PUBLIC_HOST'] %>
   bucket:            <%= ENV['AWS_S3_BUCKET'] %>
 
-development:
-  <<: *default
-
 test:
-  <<: *default
+  access_key_id:     <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AWS_ACCESS_SECRET'] %>
+  s3_host_name:      <%= ENV['AWS_S3_PUBLIC_HOST'] %>
+  bucket:            <%= ENV['AWS_S3_BUCKET'] %>
 
 production:
-  <<: *default
+  access_key_id:     <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AWS_ACCESS_SECRET'] %>
+  s3_host_name:      <%= ENV['AWS_S3_PUBLIC_HOST'] %>
+  bucket:            <%= ENV['AWS_S3_BUCKET'] %>

@@ -38,7 +38,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable
 
-  DEFAULT_AVATAR = "https://#{ENV['AWS_S3_BUCKET']}/dev_files/default-avatar.png".freeze
+  DEFAULT_AVATAR_KEY = 'assets/default-avatar.png'.freeze
+  DEFAULT_AVATAR = S3.public_bucket_url(DEFAULT_AVATAR_KEY).freeze
 
   has_one :user_profile, dependent: :destroy, inverse_of: :user
 
@@ -61,11 +62,8 @@ class User < ApplicationRecord
   has_many :message_receipts, class_name: 'Chat::MessageReceipt', dependent: :destroy
 
   has_attached_file :profile_photo,
+                    **S3::PUBLIC_PAPERCLIP_OPTIONS,
                     styles: { thumb: { geometry: '150x150#', processors: [:thumbnail] } },
-                    storage: :s3,
-                    s3_credentials: Rails.root.join('config/s3.yml'),
-                    s3_region: ENV['AWS_S3_REGION'],
-                    s3_protocol: :https,
                     default_url: DEFAULT_AVATAR
 
   validates_attachment_content_type :profile_photo, content_type: %r{\Aimage/.*\Z}
@@ -197,8 +195,10 @@ class User < ApplicationRecord
     friend_request.update(status: 'rejected')
   end
 
+  # Lives in the public bucket, so this is a plain, non-expiring URL; Paperclip
+  # falls back to DEFAULT_AVATAR when nothing has been uploaded.
   def profile_photo_url(style = :original)
-    profile_photo.url(style).sub("#{ENV['AWS_S3_HOST_NAME']}/", '')
+    profile_photo.url(style)
   end
 
   def activities_as_recipient

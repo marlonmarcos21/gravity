@@ -29,7 +29,7 @@ class Rsvp < ApplicationRecord
 
   has_many :children, class_name: 'Rsvp', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
-  enum status: {
+  enum :status, {
     accepted: 'accepted',
     declined: 'declined'
   }

@@ -281,6 +281,48 @@ RSpec.describe PostsController, type: :controller do
         end
       end
 
+      describe '#presigned_url' do
+        subject do
+          get :presigned_url, params: { filename: filename }, format: :json, xhr: true
+        end
+
+        let(:filename) { 'holiday snap.JPG' }
+        let(:body) { JSON.parse(response.body) }
+
+        it 'returns a presigned PUT url, the key it signed, and a uuid' do
+          subject
+          expect(response.code).to eq('200')
+          expect(body.keys).to contain_exactly('url', 'key', 'uuid')
+        end
+
+        it 'signs a PUT, not a POST form upload' do
+          subject
+          # The storage backend answers POST-object with 405, so the browser has
+          # to be handed a presigned PUT instead.
+          expect(body['url']).to include('X-Amz-Signature')
+          expect(body['url']).to include(CGI.escape(body['key']).gsub('%2F', '/'))
+        end
+
+        it 'namespaces the key under the returned uuid' do
+          subject
+          expect(body['key']).to start_with("uploads/#{body['uuid']}/")
+        end
+
+        it 'sanitises the filename so the signed key survives a URL round trip' do
+          subject
+          expect(body['key']).to eq("uploads/#{body['uuid']}/holiday-snap.JPG")
+        end
+
+        context 'when the filename is missing or entirely unsafe' do
+          let(:filename) { '///' }
+
+          it 'falls back to a usable key' do
+            subject
+            expect(body['key']).to eq("uploads/#{body['uuid']}/upload")
+          end
+        end
+      end
+
       describe '#media_upload_callback' do
         subject do
           VCR.use_cassette 's3/upload', match_requests_on: [:host, :method], record: :new_episodes do
