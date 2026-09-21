@@ -16,7 +16,7 @@ class RecipeMediumVideoJob < ApplicationJob
     filename = video.file_metadata['metadata']['filename'].sub(/\.\S*$/, '.jpg')
     s3_key   = "#{video.file_metadata['storage']}/#{SecureRandom.uuid}/#{filename}"
 
-    screenshot_obj      = BUCKET.object(s3_key)
+    screenshot_obj      = PUBLIC_BUCKET.object(s3_key)
     duration            = movie.duration.to_i
     seek_time           = duration > 9 ? 5 : duration / 2
     screenshot_filepath = Tempfile.create(filename)
