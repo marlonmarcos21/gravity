@@ -39,16 +39,6 @@ module S3
     }.compact
   }.freeze
 
-  # Same connection, different bucket. `bucket:` overrides the one in
-  # config/s3.yml, and s3_host_alias + :s3_alias_url make Paperclip emit
-  # https://<public bucket host>/<key> -- an unsigned, non-expiring URL, which is
-  # the point of this bucket. Without the alias Paperclip would build
-  # <bucket>.<s3_host_name>, i.e. static-public.static-public.gravity.ph.
-  # :path must be given explicitly: Paperclip only derives it when :url is *not*
-  # one of the :s3_*_url styles, so with :s3_alias_url the default path is left
-  # as ":rails_root/public:url" and interpolating it recurses
-  # (Paperclip::Errors::InfiniteInterpolationError). This value is the same key
-  # layout Paperclip would have derived, so existing objects keep their keys.
   PUBLIC_PAPERCLIP_OPTIONS = PAPERCLIP_OPTIONS.merge(
     bucket: PUBLIC_BUCKET_NAME,
     s3_host_name: PUBLIC_BUCKET_HOST,
@@ -59,21 +49,10 @@ module S3
 
   module_function
 
-  # Unsigned URL for an object in the bucket, served over the gateway's own
-  # public host. This is what user uploads (profile photos) use -- they live in
-  # the bucket, so they have to be addressed on the host that fronts it.
-  def public_url(key)
-    "https://#{ENV['AWS_S3_PUBLIC_HOST']}/#{key.to_s.sub(%r{\A/}, '')}"
-  end
-
-  # Unsigned, non-expiring URL for an object in the PUBLIC bucket. Everything
-  # served anonymously goes through here: site chrome, the default avatar,
-  # blog media and profile photos.
   def public_bucket_url(key)
     "https://#{PUBLIC_BUCKET_HOST}/#{key.to_s.sub(%r{\A/}, '')}"
   end
 
-  # Presigned GET, normalised to https and without an explicit port.
   def presigned_url(key, expires_in: 3_600)
     uri = URI(BUCKET.object(key).presigned_url(:get, expires_in: expires_in.to_i))
     uri.port = nil

@@ -29,7 +29,7 @@ class RecipeMedium < ApplicationRecord
   def screenshot_url
     return if video_meta.blank?
 
-    S3.public_url(video_meta['screenshot_key'])
+    S3.public_bucket_url(video_meta['screenshot_key'])
   end
 
   def file_metadata
