@@ -290,42 +290,6 @@ a {
   margin-top: 14px;
 }
 
-.intro {
-  display: table;
-  width: 100%;
-  height: auto;
-  padding: 100px 0;
-  color: white;
-  background: url('https://static-production.gravity.ph/assets/home.jpg') no-repeat bottom center scroll;
-  background-color: black;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
-  .intro-body {
-    display: table-cell;
-    vertical-align: middle;
-    .header-text {
-      font-size: 48px;
-    }
-    .subheader-text {
-      font-size: 36px;
-    }
-    .intro-text {
-      font-size: 24px;
-    }
-  }
-  @media(min-width:768px) {
-    height: 100%;
-    padding: 0;
-    .intro-body {
-      .intro-text {
-        font-size: 30px;
-      }
-    }
-  }
-}
-
 .btn-circle {
   width: 49px;
   height: 49px;
