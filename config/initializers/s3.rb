@@ -62,5 +62,4 @@ module S3
 end
 
 BUCKET = Aws::S3::Resource.new(**S3::CLIENT_OPTIONS).bucket(S3::BUCKET_NAME)
-PUBLIC_BUCKET = S3::PUBLIC_BUCKET_NAME &&
-                Aws::S3::Resource.new(**S3::CLIENT_OPTIONS).bucket(S3::PUBLIC_BUCKET_NAME)
+PUBLIC_BUCKET = Aws::S3::Resource.new(**S3::CLIENT_OPTIONS).bucket(S3::PUBLIC_BUCKET_NAME)
