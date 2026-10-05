@@ -29,7 +29,6 @@ module ApplicationHelper
     end
 
     meta.image ||= home_image
-    meta.image = meta.image.sub('https', 'http')
 
     content_for :meta_tags, meta.render
   end
