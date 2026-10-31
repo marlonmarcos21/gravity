@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.4.9'
+ruby '3.4.12'
 
 # ActiveSupport 7.2 calls JSON.generate/parse with quirks_mode:, removed in json 3.0
 gem 'json', '~> 2.16'
